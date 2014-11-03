@@ -1,0 +1,6 @@
+module.exports = {
+  skytap: {
+    username: 'SKYTAP_USERNAME',
+    token: 'SKYTAP_TOKEN'
+  }
+}
