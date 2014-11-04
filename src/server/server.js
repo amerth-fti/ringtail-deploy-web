@@ -3,6 +3,7 @@ var path        = require('path')
   , express     = require('express')
   , serveStatic = require('serve-static')
   , Q           = require('q')
+  , _           = require('underscore')
   , config      = require('../../config')
 
 
@@ -151,6 +152,53 @@ app.get('/api/projects/:projectId/environments', function(req, res) {
     res.status(500).send(err);
   });
 });
+
+
+
+app.put ('/api/environments/:environmentId/start', function(req, res) {
+  
+  var environmentId = req.param('environmentId') 
+    , suspendOnIdle = req.param('suspend_on_idle')
+    , opts
+
+  opts = {
+    id: environmentId,
+    username: config.skytap.username,
+    token: config.skytap.token,
+    body: {
+      suspend_on_idle: suspendOnIdle,
+      runstate: 'running'
+    }
+  };
+
+  skytap.environments.update(opts, function(err, env) {
+    if(err) res.status(500).send(err);
+    else res.send(env);
+  }); 
+
+});
+
+
+app.put ('/api/environments/:environmentId/pause', function(req, res) {
+
+  var environmentId = req.param('environmentId')
+    , opts;
+
+  opts = {
+    id: environmentId,
+    username: config.skytap.username,
+    token: config.skytap.token,
+    body: {
+      runstate: 'suspended'
+    }
+  };
+
+  skytap.environments.update(opts, function(err, env) {
+    if(err) res.status(500).send(err);
+    else res.send(env);
+  });
+
+})
 
 
 console.log('Listening on port 8000');

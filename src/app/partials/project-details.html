@@ -10,8 +10,8 @@
       </div>
       <div class="col-md-2 environment-status">
         <h4><span>{{environment.runstate | uppercase}}</span></h4>
-        <button type="button" class="button btn-primary btn-lg glyphicon glyphicon-play" ng-click="openStart(environment)"></button>
-        <button type="button" class="button btn-lg glyphicon glyphicon-pause disabled"></button>
+        <button type="button" class="button btn-primary btn-lg glyphicon glyphicon-play" ng-click="start(environment)"></button>
+        <button type="button" class="button btn-lg glyphicon glyphicon-pause disabled" ng-click="pause(environment)"></button>
       </div>          
     </div>
   </li>

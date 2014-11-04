@@ -11,7 +11,12 @@ deployerControllers.controller('ProjectListCtrl', ['$scope', 'Project',
   }]);
 
 
-deployerControllers.controller('ProjectDetailsCtrl', ['$scope', '$routeParams', '$modal', 'Project', 'ProjectEnvironment',
+deployerControllers.controller('ProjectDetailsCtrl', [
+  '$scope', 
+  '$routeParams', 
+  '$modal', 
+  'Project', 
+  'ProjectEnvironment',
   function($scope, $routeParams, $modal, Project, ProjectEnvironment) {
 
     $scope.project = Project.get({projectId: $routeParams.projectId});
@@ -19,7 +24,7 @@ deployerControllers.controller('ProjectDetailsCtrl', ['$scope', '$routeParams', 
 
     var modalInstance;
 
-    $scope.openStart = function(environment) {      
+    $scope.start = function(environment) {      
       var modal = $modal.open({
         templateUrl: 'app/partials/environment-start.html',
         controller: 'EnvironmentStartCtrl',
@@ -30,9 +35,13 @@ deployerControllers.controller('ProjectDetailsCtrl', ['$scope', '$routeParams', 
         }
       });
 
-      modal.result.then(function(time) {
-
+      modal.result.then(function(minutes) {
+        environment.$start({ suspend_on_idle: minutes * 60 });
       });
+    }
+
+    $scope.pause = function(environment) {
+      environment.$pause();
     }
 
   }]);
@@ -42,9 +51,10 @@ deployerControllers.controller('EnvironmentStartCtrl', ['$scope', '$modalInstanc
   function($scope, $modalInstance, environment) {
 
     $scope.environment = environment;
+    $scope.runLength = 15;
 
     $scope.start = function() {
-      $modalInstance.close();
+      $modalInstance.close($scope.runLength);
     }
 
     $scope.cancel = function() {

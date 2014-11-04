@@ -12,6 +12,8 @@ deployerServices.factory('Project', ['$resource',
 deployerServices.factory('ProjectEnvironment', ['$resource', 
   function($resource) {
     return $resource('api/projects/:projectId/environments', {}, {
-      query: { method: 'GET', isArray: true }
+      query: { method: 'GET', isArray: true },
+      start: { method: 'PUT', url: 'api/environments/:environmentId/start', params: { environmentId: '@id' } },
+      pause: { method: 'PUT', url: 'api/environments/:environmentId/pause', params: { environmentId: '@id' } }
     });
   }]);
