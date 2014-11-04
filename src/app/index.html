@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+  <link rel="Stylesheet" type="text/css" href="/app/dep/bootstrap/dist/css/bootstrap.min.css" />
+  <link rel="Stylesheet" type="text/css" href="/app/dep/bootstrap/dist/css/bootstrap-theme.min.css" />
+  <link rel="Stylesheet" type="text/css" href="/app/css/app.css" />
+
+  <script type="text/javascript" src="/app/dep/jquery/dist/jquery.min.js"></script>
+  <script type="text/javascript" src="/app/dep/bootstrap/dist/js/bootstrap.min.js"></script>
+  <script type="text/javascript" src="/app/dep/angular/angular.js"></script>
+  <script type="text/javascript" src="/app/dep/angular-route/angular-route.js"></script>
+  <script type="text/javascript" src="/app/dep/angular-resource/angular-resource.js"></script>
+
+  <script type="text/javascript" src="/app/js/app.js"></script>
+  <script type="text/javascript" src="/app/js/controllers.js"></script>
+  <script type="text/javascript" src="/app/js/services.js"></script>
+
+</head>
+<body ng-app="deployerApp">
+
+  <nav class="navbar navbar-inverse" role="navigation">
+    <div class="container">
+      <div class="navbar-header">
+        <a class="navbar-brand" href="/">Skytap Deployer</a>
+      </div>
+    </div>
+  </nav>
+
+  <div class="container" ng-view></div>
+
+</body>
+</html>

@@ -1,7 +1,8 @@
-var debug       = require('debug')('app')
+var path        = require('path')
+  , debug       = require('debug')('app')
   , express     = require('express')
   , serveStatic = require('serve-static')
-  , config      = require('../config')
+  , config      = require('../../config')
 
 
   , skytap      = require('node-skytap')
@@ -10,10 +11,14 @@ var debug       = require('debug')('app')
 
 app = express();
 
-app.use('/pub/dep', serveStatic(__dirname + '/../bower_components'));
+app.use('/app/dep', serveStatic(__dirname + '/../app/bower_components'));
+app.use('/app/css', serveStatic(__dirname + '/../app/css'));
+app.use('/app/js',  serveStatic(__dirname + '/../app/js'));
+app.use('/app/img', serveStatic(__dirname + '/../app/img'));
+app.use('/app/partials', serveStatic(__dirname + '/../app/partials'));
 
 app.get('/', function(req, res) {
-  res.sendFile(__dirname +'/index.html');
+  res.sendFile(path.resolve(__dirname +'/../app/index.html'));
 });
 
 app.get('/api/environments', function(req, res) {
@@ -58,8 +63,8 @@ app.get('/api/projects/:projectId/', function(req, res) {
     };
 
     skytap.projects.get(opts)
-    .then(function(list) {
-      res.send(list);
+    .then(function(project) {
+      res.send(project);
     })
     .fail(function(err) {
       res.send(500, err);
