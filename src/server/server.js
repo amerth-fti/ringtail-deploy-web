@@ -22,10 +22,8 @@ app.get('/', function(req, res) {
 });
 
 app.get('/api/environments', function(req, res) {
-  var name = req.param('name')
-    , opts;
-
-  opts = {
+  
+  var opts = {
     username: config.skytap.username,
     token: config.skytap.token,
   };  
@@ -39,6 +37,24 @@ app.get('/api/environments', function(req, res) {
   });
 
 });
+
+app.get('/api/environments/:environmentId', function(req, res) {
+
+  var opts = {
+    id: req.param('environmentId'),
+    username: config.skytap.username,
+    token: config.skytap.token,
+  };  
+
+  skytap.environments.get(opts)
+  .then(function(instance) {
+    res.send(instance);
+  })
+  .fail(function(err) {
+    res.send(500, err);
+  });
+
+})
 
 app.get('/api/projects', function(req, res) {
   var opts = {

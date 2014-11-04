@@ -17,6 +17,10 @@ deployerApp.config(['$routeProvider',
       templateUrl: 'app/partials/project-details.html',
       controller: 'ProjectDetailsCtrl'
     }).
+    when('/environments/:environmentId', {
+      templateUrl: 'app/partials/environment-details.html',
+      controller: 'EnvironmentDetailsCtrl'
+    }).
     otherwise({
       redirectTo: '/projects'
     });

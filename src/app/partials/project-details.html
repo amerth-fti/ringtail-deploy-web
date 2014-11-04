@@ -3,6 +3,6 @@
 <h3>Environments ({{environments.length}})</h3>
 <ul class="list-group">
   <li ng-repeat="environment in environments" class="list-group-item">
-    {{environment.name}}
+    <a href="#/environments/{{environment.id}}">{{environment.name}}</a>
   </li>
 </ul>
