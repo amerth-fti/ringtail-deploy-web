@@ -15,8 +15,3 @@ deployerServices.factory('ProjectEnvironment', ['$resource',
       query: { method: 'GET', isArray: true }
     });
   }]);
-
-deployerServices.factory('Environment', ['$resource', 
-  function($resource) {
-    return $resource('api/environments/:environmentId');
-  }])

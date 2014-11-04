@@ -11,18 +11,44 @@ deployerControllers.controller('ProjectListCtrl', ['$scope', 'Project',
   }]);
 
 
-deployerControllers.controller('ProjectDetailsCtrl', ['$scope', '$routeParams', 'Project', 'ProjectEnvironment',
-  function($scope, $routeParams, Project, ProjectEnvironment) {
+deployerControllers.controller('ProjectDetailsCtrl', ['$scope', '$routeParams', '$modal', 'Project', 'ProjectEnvironment',
+  function($scope, $routeParams, $modal, Project, ProjectEnvironment) {
 
     $scope.project = Project.get({projectId: $routeParams.projectId});
     $scope.environments = ProjectEnvironment.query({projectId: $routeParams.projectId});
 
+    var modalInstance;
+
+    $scope.openStart = function(environment) {      
+      var modal = $modal.open({
+        templateUrl: 'app/partials/environment-start.html',
+        controller: 'EnvironmentStartCtrl',
+        resolve: {
+          environment: function() { 
+            return environment
+          }
+        }
+      });
+
+      modal.result.then(function(time) {
+
+      });
+    }
+
   }]);
 
 
-deployerControllers.controller('EnvironmentDetailsCtrl', ['$scope', '$routeParams', 'Environment', 
-  function($scope, $routeParams, Environment) {
+deployerControllers.controller('EnvironmentStartCtrl', ['$scope', '$modalInstance', 'environment',
+  function($scope, $modalInstance, environment) {
 
-    $scope.environment = Environment.get({ environmentId: $routeParams.environmentId });
+    $scope.environment = environment;
+
+    $scope.start = function() {
+      $modalInstance.close();
+    }
+
+    $scope.cancel = function() {
+      $modalInstance.dismiss();
+    }
 
   }]);
