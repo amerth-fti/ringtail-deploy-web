@@ -1,7 +1,8 @@
-var path        = require('path')
+var path        = require('path')  
   , debug       = require('debug')('app')
   , express     = require('express')
   , serveStatic = require('serve-static')
+  , Q           = require('q')
   , config      = require('../../config')
 
 
@@ -104,18 +105,50 @@ app.get('/api/projects/:projectId/templates', function(req, res) {
 });
 
 app.get('/api/projects/:projectId/environments', function(req, res) {
-  var opts = {
+
+  var simple = req.param('simple') || false
+    , opts;
+
+  opts = {
     id: req.param('projectId'),
     username: config.skytap.username,
     token: config.skytap.token
   };
 
-  skytap.projects.environments(opts)
-  .then(function(list) {
-    res.send(list);
+  skytap.projects.environments(opts)  
+  .then(function(environments) {
+
+    // send simple response
+    if(simple) {
+      res.send(environments);
+    } 
+
+    // send detailed response
+    else {
+
+      var promises = environments.map(function(environment) { 
+        debug('Requesting details for %s', environment.id);
+        return skytap.environments.get({ 
+          id: environment.id,
+          username: config.skytap.username,
+          token: config.skytap.token
+        }); 
+      });
+
+      return Q.all(promises)
+      .then(function(environments) {
+        debug('Found details for %d', environments.length)
+        res.send(environments);
+      })
+      .fail(function(err) {
+        debug('Failed retrieving details');
+        res.status(500).send(err);
+      });
+    }
+
   })
   .fail(function(err) {
-    res.send(500, err);
+    res.status(500).send(err);
   });
 });
 

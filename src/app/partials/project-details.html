@@ -3,6 +3,20 @@
 <h3>Environments ({{environments.length}})</h3>
 <ul class="list-group">
   <li ng-repeat="environment in environments" class="list-group-item">
-    <a href="#/environments/{{environment.id}}">{{environment.name}}</a>
+    <div class="row">
+      <div class="col-md-10">
+        <h4><a href="#/environments/{{environment.id}}">{{environment.name}}</a></h4>
+      </div>
+      <div class="col-md-2">
+        <h4><span>{{environment.runstate | uppercase}}</span></h4>
+        <span class="glyphicon glyphicon-play"></span>
+        <span class="glyphicon glyphicon-pause"></span>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-12">
+        <p>{{environment.description}}</p>
+      </div>
+    </div>
   </li>
 </ul>
