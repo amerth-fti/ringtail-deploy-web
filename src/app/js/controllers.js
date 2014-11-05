@@ -19,10 +19,18 @@ deployerControllers.controller('ProjectDetailsCtrl', [
   'ProjectEnvironment',
   function($scope, $routeParams, $modal, Project, ProjectEnvironment) {
 
-    $scope.project = Project.get({projectId: $routeParams.projectId});
-    $scope.environments = ProjectEnvironment.query({projectId: $routeParams.projectId});
-
     var modalInstance;
+
+    $scope.project = Project.get({projectId: $routeParams.projectId});
+    $scope.environments = ProjectEnvironment.query({projectId: $routeParams.projectId}, function(environments) {      
+      environments.forEach(setViewModelProperties);  
+      return environments;
+    });
+            
+    function setViewModelProperties(environment) {
+      environment.showStart = environment.runstate === 'suspended' || environment.runstate === 'stopped';
+      environment.showPause = environment.runstate === 'running';
+    };
 
     $scope.start = function(environment) {      
       var modal = $modal.open({
@@ -36,12 +44,12 @@ deployerControllers.controller('ProjectDetailsCtrl', [
       });
 
       modal.result.then(function(minutes) {
-        environment.$start({ suspend_on_idle: minutes * 60 });
+        environment.$start({ suspend_on_idle: minutes * 60 }, setViewModelProperties);
       });
     }
 
     $scope.pause = function(environment) {
-      environment.$pause();
+      environment.$pause(setViewModelProperties);
     }
 
   }]);
