@@ -23,6 +23,13 @@ app.get('/', function(req, res) {
 });
 
 
+
+// API - CLIENT SIDE CONFIG
+app.get('/config', function(req, res) {
+  res.send('window.appConfig = ' + JSON.stringify(config.client));
+})
+
+
 // API - PROJECT ROUTES
 app.get('/api/projects', controllers.projects.list);
 app.get('/api/projects/:projectId/', controllers.projects.get);

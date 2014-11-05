@@ -1,8 +1,11 @@
 module.exports = {
-  port: 8000,
+  port: 8080,
   skytap: {
     username: 'SKYTAP_USERNAME',
     token: 'SKYTAP_TOKEN',
     proxy: 'OPTIONAL_PROXY_SETTING'
+  },
+  client: {
+    defaultRoute: '/projects'
   }
 }

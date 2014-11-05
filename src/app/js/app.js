@@ -1,14 +1,18 @@
 'use strict';
 
+
 var deployerApp = angular.module('deployerApp', [
   'ngRoute',
   'ui.bootstrap',
   'deployerControllers',
-  'deployerServices'
+  'deployerServices'  
   ]);
 
-deployerApp.config(['$routeProvider',
-  function($routeProvider) {
+deployerApp.constant('config', window.appConfig);
+
+deployerApp.config(['$routeProvider', 'config',
+  function($routeProvider, config) {
+
     $routeProvider
     .when('/projects', {
       templateUrl: 'app/partials/project-list.html',
@@ -19,6 +23,8 @@ deployerApp.config(['$routeProvider',
       controller: 'ProjectDetailsCtrl'
     })
     .otherwise({
-      redirectTo: '/projects/'
+      redirectTo: config.defaultRoute || '/projects/'
     });
+
   }]);
+
