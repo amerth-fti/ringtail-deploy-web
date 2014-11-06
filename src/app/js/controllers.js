@@ -1,9 +1,9 @@
 'use strict';
 
-var deployerControllers = angular.module('deployerControllers', []);
+var controllers = angular.module('controllers', []);
 
 
-deployerControllers.controller('ProjectListCtrl', ['$scope', 'Project',
+controllers.controller('ProjectListCtrl', ['$scope', 'Project',
   function($scope, Project) {
 
     $scope.projects = Project.query();
@@ -11,18 +11,18 @@ deployerControllers.controller('ProjectListCtrl', ['$scope', 'Project',
   }]);
 
 
-deployerControllers.controller('ProjectDetailsCtrl', [
+controllers.controller('ProjectDetailsCtrl', [
   '$scope', 
   '$routeParams', 
   '$modal', 
   'Project', 
-  'ProjectEnvironment',
-  function($scope, $routeParams, $modal, Project, ProjectEnvironment) {
+  'Environment',
+  function($scope, $routeParams, $modal, Project, Environment) {
 
     var modalInstance;
 
     $scope.project = Project.get({projectId: $routeParams.projectId});
-    $scope.environments = ProjectEnvironment.query({projectId: $routeParams.projectId}, function(environments) {      
+    $scope.environments = Environment.query({projectId: $routeParams.projectId}, function(environments) {      
       environments.forEach(setViewModelProperties);
       environments.forEach(pollWhileBusy);
       return environments;
@@ -75,7 +75,7 @@ deployerControllers.controller('ProjectDetailsCtrl', [
   }]);
 
 
-deployerControllers.controller('EnvironmentStartCtrl', ['$scope', '$modalInstance', 'environment',
+controllers.controller('EnvironmentStartCtrl', ['$scope', '$modalInstance', 'environment',
   function($scope, $modalInstance, environment) {
 
     $scope.environment = environment;

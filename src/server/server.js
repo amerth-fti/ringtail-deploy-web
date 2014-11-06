@@ -26,7 +26,9 @@ app.get('/', function(req, res) {
 
 // API - CLIENT SIDE CONFIG
 app.get('/config', function(req, res) {
-  res.send('window.appConfig = ' + JSON.stringify(config.client));
+  res
+    .type('json')
+    .send('window.appConfig = ' + JSON.stringify(config.client));
 })
 
 

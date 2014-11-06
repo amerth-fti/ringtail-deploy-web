@@ -1,15 +1,15 @@
 'use strict';
 
-var deployerServices = angular.module('deployerServices', ['ngResource']);
+var services = angular.module('services', ['ngResource']);
 
-deployerServices.factory('Project', ['$resource', 
+services.factory('Project', ['$resource', 
   function($resource) {
     return $resource('api/projects/:projectId', {}, {
       query: { method: 'GET', isArray: true }
     });
   }]);
 
-deployerServices.factory('ProjectEnvironment', ['$resource', 
+services.factory('Environment', ['$resource', 
   function($resource) {
     return $resource('api/projects/:projectId/environments', {}, {
       query: { method: 'GET', isArray: true },

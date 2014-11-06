@@ -1,16 +1,16 @@
 'use strict';
 
 
-var deployerApp = angular.module('deployerApp', [
+var app = angular.module('app', [
   'ngRoute',
   'ui.bootstrap',
-  'deployerControllers',
-  'deployerServices'  
+  'controllers',
+  'services'
   ]);
 
-deployerApp.constant('config', window.appConfig);
+app.constant('config', window.appConfig);
 
-deployerApp.config(['$routeProvider', 'config',
+app.config(['$routeProvider', 'config',
   function($routeProvider, config) {
 
     $routeProvider

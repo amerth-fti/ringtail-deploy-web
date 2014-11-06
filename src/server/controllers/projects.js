@@ -68,13 +68,13 @@ exports.environments = function environments(req, res) {
 
       var promises = environments.map(function(environment) { 
         debug('Requesting details for %s', environment.id);
-        return skytap.environments.get({           
-          username: config.skytap.username,
-          token: config.skytap.token,
-          params: {
-            id: environment.id,
-          }
-        }); 
+
+        var opts = _.clone(config.skytap);
+        opts.params = { 
+          id: environment.id
+        };
+
+        return skytap.environments.get(opts); 
       });
 
       return Q.all(promises)
