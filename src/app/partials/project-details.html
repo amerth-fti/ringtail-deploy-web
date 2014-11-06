@@ -1,5 +1,5 @@
 <h2>{{project.name + ' Project'}}</h2>
-<pre ng-show="project.summary">{{project.summary}}</pre>
+<p ng-show="project.summary">{{project.summary | newlines | anchors | trust}}</p>
 
 <h3>Environments ({{environments.length}})</h3>
 <ul class="list-group">
@@ -9,7 +9,7 @@
         <h4>{{environment.name}}</h4>
         <p ng-bind-html="environment.description | newlines | anchors | trust"></p>
       </div>
-      <div class="col-md-2 environment-status">
+      <div class="col-md-2 environment-status" ng-hide="environment.loading">
         <h4><span>{{environment.runstate | uppercase}}</span></h4>        
         <button 
           type="button" 
@@ -24,6 +24,9 @@
           ng-disabled="!environment.showPause" 
           ng-class="{'btn-primary': environment.showPause}"></button>
       </div>          
+      <div class="col-md-2 loading" ng-show="environment.loading">
+
+      </div>
     </div>
   </li>
 </ul>

@@ -12,15 +12,17 @@ filters.filter('trust', ['$sce', function ($sce) {
 filters.filter('newlines', [ function () {
   return function(text) {
     if(!text) return null;
-    else return text.replace(/\n/g, '\n<br/>');
+    
+    return text.replace(/\n/g, '\n<br/>');
   }
 }]);
 
 
 filters.filter('anchors', [ function () {
   return function(text) {
-    var regex = /https?:\/\/[\S\/\.#-]+/g;
+    if(!text) return null;
 
+    var regex = /https?:\/\/[\S\/\.#-]+/g;
     return text.replace(regex, function(url) {
       return '<a href="' + url + '">' + url + '</a>';
     });

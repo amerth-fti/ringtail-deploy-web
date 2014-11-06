@@ -22,9 +22,23 @@ controllers.controller('ProjectDetailsCtrl', [
     var modalInstance;
 
     $scope.project = Project.get({projectId: $routeParams.projectId});
-    $scope.environments = Environment.query({projectId: $routeParams.projectId}, function(environments) {      
-      environments.forEach(setViewModelProperties);
-      environments.forEach(pollWhileBusy);
+    $scope.environments = Environment.project({projectId: $routeParams.projectId}, function(environments) {
+
+      environments.forEach(function(environment) {
+
+        // indicate that it is loading...
+        environment.loading = true;
+
+        // retrieve the actual detailed value
+        return environment.$get(function(environment) {
+
+          environments.forEach(setViewModelProperties);
+          environments.forEach(pollWhileBusy);
+          return environment;
+        });
+
+      });
+      
       return environments;
     });
             

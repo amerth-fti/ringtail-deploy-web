@@ -55,42 +55,8 @@ exports.environments = function environments(req, res) {
     id: req.param('projectId')
   }
 
-  skytap.projects.environments(opts)  
-  .then(function(environments) {
-
-    // send simple response
-    if(simple) {
-      res.send(environments);
-    } 
-
-    // send detailed response
-    else {
-
-      var promises = environments.map(function(environment) { 
-        debug('Requesting details for %s', environment.id);
-
-        var opts = _.clone(config.skytap);
-        opts.params = { 
-          id: environment.id
-        };
-
-        return skytap.environments.get(opts); 
-      });
-
-      return Q.all(promises)
-      .then(function(environments) {
-        debug('Found details for %d', environments.length)
-        res.send(environments);
-      })
-      .fail(function(err) {
-        debug('Failed retrieving details');
-        res.status(500).send(err);
-      });
-    }
-
-  })
-  .fail(function(err) {
-    res.status(500).send(err);
+  skytap.projects.environments(opts, function(err, envs) {
+    if(err) res.status(500).send(err);
+    else res.send(envs);
   });
-
 }
