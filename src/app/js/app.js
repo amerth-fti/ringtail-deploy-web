@@ -5,7 +5,8 @@ var app = angular.module('app', [
   'ngRoute',
   'ui.bootstrap',
   'controllers',
-  'services'
+  'services',
+  'filters'
   ]);
 
 app.constant('config', window.appConfig);
