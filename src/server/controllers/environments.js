@@ -1,7 +1,9 @@
-var debug   = require('debug')('deployer-environments')  
-  , Q       = require('q')  
-  , config  = require('../../../config')
-  , Skytap  = require('node-skytap')
+var debug       = require('debug')('deployer-environments')  
+  , Q           = require('q')  
+  , Skytap      = require('node-skytap')
+  , config      = require('../../../config')
+  , tasks       = require('../tasks')  
+  , taskrunner  = require('../taskrunner')
   , skytap  = Skytap.init(config.skytap);
 
 
@@ -61,4 +63,26 @@ exports.pause = function pause(req, res) {
     if(err) res.status(500).send(err);
     else res.send(env);
   });
+}
+
+
+
+exports.redeploy = function startRedeploy(req, res) {
+  debug('redeploy');
+
+  var configuration_id = req.param('environmentId')
+    , project_id = req.param('project_id')    
+    , branch = req.param('branch')
+    , task;
+
+  task = new tasks.RedeployTask({ 
+    project_id: project_id,
+    configuration_id: configuration_id,
+    branch: branch
+  });
+
+  var taskId = taskrunner.queue(task);
+  res.send({ taskId: taskId });
+
+
 }

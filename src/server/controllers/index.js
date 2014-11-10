@@ -1,5 +1,6 @@
 
 module.exports = {
   environments: require('./environments'),
-  projects: require('./projects')
+  projects: require('./projects'),
+  tasks: require('./tasks')
 };

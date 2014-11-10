@@ -44,6 +44,12 @@ app.get('/api/environments', controllers.environments.list);
 app.get('/api/environments/:environmentId', controllers.environments.get);
 app.put ('/api/environments/:environmentId/start', controllers.environments.start);
 app.put ('/api/environments/:environmentId/pause', controllers.environments.pause);
+app.put ('/api/environments/:environmentId/redeploy', controllers.environments.redeploy);
+
+
+// API - TASK ROUTES
+app.get ('/api/tasks', controllers.tasks.list);
+app.get ('/api/tasks/:taskId', controllers.tasks.get);
 
 
 console.log('Listening on port %d', config.port);
