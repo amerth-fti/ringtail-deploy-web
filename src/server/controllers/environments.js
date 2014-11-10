@@ -1,15 +1,14 @@
-var debug   = require('debug')('deployer-environments')
-  , _       = require('underscore')
-  , Q       = require('q')
-  , skytap  = require('node-skytap')
-  , config  = require('../../../config');
+var debug   = require('debug')('deployer-environments')  
+  , Q       = require('q')  
+  , config  = require('../../../config')
+  , Skytap  = require('node-skytap')
+  , skytap  = Skytap.init(config.skytap);
+
 
 
 
 exports.list = function list(req, res) {
-  var opts = _.clone(config.skytap);
-
-  skytap.environments.list(opts, function(err, envs) {
+  skytap.environments.list(function(err, envs) {
     if(err) res.status(500).send(err);
     else res.send(envs);
   });  
@@ -18,10 +17,8 @@ exports.list = function list(req, res) {
 
 
 exports.get = function get(req, res) {
-  var opts = _.clone(config.skytap);
-
-  opts.params = {
-    id: req.param('environmentId')
+  var opts = {
+    configuration_id: req.param('environmentId')
   };
 
   skytap.environments.get(opts, function(err, env) {
@@ -35,10 +32,10 @@ exports.get = function get(req, res) {
 exports.start = function start(req, res) {
   var environmentId = req.param('environmentId') 
     , suspendOnIdle = req.param('suspend_on_idle')
-    , opts = _.clone(config.skytap);
+    , opts;
 
-  opts.params = {
-    id: environmentId,
+  opts = {
+    configuration_id: environmentId,
     suspend_on_idle: suspendOnIdle,
     runstate: 'running'
   };
@@ -53,10 +50,10 @@ exports.start = function start(req, res) {
 
 exports.pause = function pause(req, res) {
   var environmentId = req.param('environmentId')
-    , opts = _.clone(config.skytap);
+    , opts;
 
-  opts.params = {
-    id: environmentId,
+  opts = {
+    configuration_id: environmentId,
     runstate: 'suspended'
   };
 

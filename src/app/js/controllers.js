@@ -35,7 +35,8 @@ controllers.controller('ProjectDetailsCtrl', [
           environments.forEach(setViewModelProperties);
           environments.forEach(pollWhileBusy);
           return environment;
-        });
+         
+         });
 
       });
       

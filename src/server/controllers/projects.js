@@ -1,15 +1,13 @@
-var debug   = require('debug')('deployer-projects')
-  , _       = require('underscore')
+var debug   = require('debug')('deployer-projects')  
   , Q       = require('q')
-  , skytap  = require('node-skytap')
-  , config  = require('../../../config');
+  , config  = require('../../../config')
+  , Skytap  = require('node-skytap')
+  , skytap  = Skytap.init(config.skytap);
 
 
 
-exports.list = function list(req, res) {
-  var opts = _.clone(config.skytap);
-
-  skytap.projects.list(opts, function(err, projects) {
+exports.list = function list(req, res) {  
+  skytap.projects.list(function(err, projects) {
     if(err) res.status(500).send(err);
     else res.send(projects);
   });  
@@ -18,10 +16,8 @@ exports.list = function list(req, res) {
 
 
 exports.get = function get(req, res) {
-  var opts = _.clone(config.skytap);
-
-  opts.params = {
-    id: req.param('projectId')    
+  var opts = {
+    project_id: req.param('projectId')    
   };
 
   skytap.projects.get(opts, function(err, project) {
@@ -33,10 +29,8 @@ exports.get = function get(req, res) {
 
 
 exports.templates = function template(req, res) {  
-  var opts = _.clone(config.skytap);
-  
-  opts.params = {
-    id: req.param('projectId')
+  var opts = {
+    project_id: req.param('projectId')
   };
 
   skytap.projects.templates(opts, function(err, templates) {
@@ -48,12 +42,9 @@ exports.templates = function template(req, res) {
 
 
 exports.environments = function environments(req, res) {
-  var simple = req.param('simple') || false
-    , opts = _.clone(config.skytap);
-
-  opts.params = {
-    id: req.param('projectId')
-  }
+  var opts = {
+    project_id: req.param('projectId')
+  };
 
   skytap.projects.environments(opts, function(err, envs) {
     if(err) res.status(500).send(err);
