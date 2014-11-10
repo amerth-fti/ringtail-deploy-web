@@ -52,6 +52,7 @@ controllers.controller('ProjectDetailsCtrl', [
       if(environment.runstate === 'busy') {
         setTimeout(function() {
           environment.$get(function(environment) {
+            setViewModelProperties(environment);
             pollWhileBusy(environment);
             return environment;
           });
