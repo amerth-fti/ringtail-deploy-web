@@ -1,6 +1,7 @@
 var debug   = require('debug')('deployer-redeploytask')  
   , Q       = require('q')  
   , _       = require('underscore')
+  , request = require('request')
   , config  = require('../../../config')
   , Skytap  = require('node-skytap')
   , skytap  = Skytap.init(config.skytap);
@@ -77,8 +78,7 @@ RedeployTask.prototype.start = function start() {
     .then(function(oldEnv) {
       debug('stopRedeploy: old environment stopped')
       scope.oldEnv = oldEnv;
-    })
-
+    });
   })
 
   // detach public ip addresses
@@ -159,6 +159,8 @@ RedeployTask.prototype.start = function start() {
   // start installation
   .then(function() {
     debug('startRedeploy: start installation')
+
+
 
   })
 
