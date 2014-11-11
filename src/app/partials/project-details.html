@@ -29,7 +29,8 @@
           type="button" 
           class="btn btn-warning glyphicon glyphicon-refresh" 
           ng-click="redeploy(environment)"          
-          title="Refresh the environment"></button>
+          title="Refresh the environment"
+          ng-show="config.enableDeployment"></button>
       </div>          
       <div class="col-md-2 loading" ng-show="environment.loading">
       </div>

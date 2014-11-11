@@ -15,11 +15,14 @@ controllers.controller('ProjectDetailsCtrl', [
   '$scope', 
   '$routeParams', 
   '$modal', 
+  'config',
   'Project', 
   'Environment',
   'Task',
-  function($scope, $routeParams, $modal, Project, Environment, Task) {
+  function($scope, $routeParams, $modal, config, Project, Environment, Task) {
     
+    $scope.config = config;
+
     // load the project
     $scope.project = Project.get({projectId: $routeParams.projectId});
 
