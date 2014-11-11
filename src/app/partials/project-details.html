@@ -10,22 +10,28 @@
         <p ng-bind-html="environment.description | newlines | anchors | trust"></p>
       </div>
       <div class="col-md-2 environment-status" ng-hide="environment.loading">
-        <h4><span>{{environment.runstate | uppercase}}</span></h4>        
+        <h4><span>{{environment.runstate | uppercase}}</span></h4>
         <button 
           type="button" 
-          class="button btn-lg glyphicon glyphicon-play" 
+          class="btn glyphicon glyphicon-play" 
           ng-click="start(environment)" 
           ng-disabled="!environment.showStart" 
-          ng-class="{'btn-primary': environment.showStart}"></button>
+          ng-class="{'btn-primary': environment.showStart}"          
+          title="Start the environment"></button>
         <button 
           type="button" 
-          class="button btn-lg glyphicon glyphicon-pause" 
+          class="btn glyphicon glyphicon-pause" 
           ng-click="pause(environment)" 
           ng-disabled="!environment.showPause" 
-          ng-class="{'btn-primary': environment.showPause}"></button>
+          ng-class="{'btn-primary': environment.showPause}"          
+          title="Stop the environment"></button>
+        <button 
+          type="button" 
+          class="btn btn-warning glyphicon glyphicon-refresh" 
+          ng-click="redeploy(environment)"          
+          title="Refresh the environment"></button>
       </div>          
       <div class="col-md-2 loading" ng-show="environment.loading">
-
       </div>
     </div>
   </li>

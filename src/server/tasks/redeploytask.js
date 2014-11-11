@@ -66,6 +66,21 @@ RedeployTask.prototype.start = function start() {
     });
   })
 
+  // stop the old environment
+  .then(function() {
+    debug('stopRedeploy: stopping old environment');
+
+    return skytap.environment.stop({ configuration_id: scope.oldEnv.id })
+    .then(function() {
+      return skytap.environment.waitForState({ configuration_id: scope.oldEnv.id, runstate: 'stopped' });
+    })
+    .then(function(oldEnv) {
+      debug('stopRedeploy: old environment stopped')
+      scope.oldEnv = oldEnv;
+    })
+
+  })
+
   // detach public ip addresses
   .then(function() {
     debug('startRedeploy: detaching public ip addresses');

@@ -67,22 +67,33 @@ exports.pause = function pause(req, res) {
 
 
 
-exports.redeploy = function startRedeploy(req, res) {
+exports.redeploy = function redeploy(req, res) {
   debug('redeploy');
 
   var configuration_id = req.param('environmentId')
     , project_id = req.param('project_id')    
     , branch = req.param('branch')
-    , task;
+    , task
+    , taskId;
 
+  // create redeploy task
   task = new tasks.RedeployTask({ 
     project_id: project_id,
     configuration_id: configuration_id,
     branch: branch
   });
 
-  var taskId = taskrunner.queue(task);
-  res.send({ taskId: taskId });
+  // enqueue task
+  taskrunner.queue(task);
 
+  // load the environment to send result
+  skytap.environments.get({ configuration_id: configuration_id }, function(err, env) {
+    if(err) res.status(500).send(err);
+    else {
 
+      // join the task before sending
+      env.redeployTask = task
+      res.send(env);
+    }    
+  });  
 }

@@ -9,3 +9,7 @@
   min-height: 32px;
   min-width: 32px;
 }
+
+button {
+  border-width: 1px !important;  
+}

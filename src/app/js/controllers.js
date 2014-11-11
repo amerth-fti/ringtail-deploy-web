@@ -17,13 +17,16 @@ controllers.controller('ProjectDetailsCtrl', [
   '$modal', 
   'Project', 
   'Environment',
-  function($scope, $routeParams, $modal, Project, Environment) {
-
-    var modalInstance;
-
+  'Task',
+  function($scope, $routeParams, $modal, Project, Environment, Task) {
+    
+    // load the project
     $scope.project = Project.get({projectId: $routeParams.projectId});
+
+    // load the environment shells
     $scope.environments = Environment.project({projectId: $routeParams.projectId}, function(environments) {
 
+      // load each environment
       environments.forEach(function(environment) {
 
         // indicate that it is loading...
@@ -42,6 +45,12 @@ controllers.controller('ProjectDetailsCtrl', [
       
       return environments;
     });
+
+    function processEnvironment(environment) {
+      setViewModelProperties(environment);
+      pollWhileBusy(environment);      
+      return environment;
+    }
             
     function setViewModelProperties(environment) {
       environment.showStart = environment.runstate === 'suspended' || environment.runstate === 'stopped';
@@ -51,11 +60,7 @@ controllers.controller('ProjectDetailsCtrl', [
     function pollWhileBusy(environment) {
       if(environment.runstate === 'busy') {
         setTimeout(function() {
-          environment.$get(function(environment) {
-            setViewModelProperties(environment);
-            pollWhileBusy(environment);
-            return environment;
-          });
+          environment.$get(processEnvironment);
         }, 10000);
       }
     }
@@ -72,21 +77,22 @@ controllers.controller('ProjectDetailsCtrl', [
       });
 
       modal.result.then(function(minutes) {
-        environment.$start({ suspend_on_idle: minutes * 60 }, function(environment) {
-          setViewModelProperties(environment);
-          pollWhileBusy(environment);
-        });
+        environment.$start({ suspend_on_idle: minutes * 60 }, processEnvironment);
       });
     }
 
     $scope.pause = function(environment) {
-      environment.$pause(function(environment) {
-        setViewModelProperties(environment);
-        pollWhileBusy(environment);
-      });
+      environment.$pause(processEnvironment);
     }
 
-
+    $scope.redeploy = function(environment) {
+      var opts = {
+        id: environment.id,
+        project_id: $scope.project.id,
+        branch: 'MAIN'
+      };
+      environment.$redeploy(opts, processEnvironment);
+    }
 
   }]);
 

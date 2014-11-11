@@ -1,3 +1,3 @@
 module.exports = {
-  RedeployTask: require('./redeploy')
+  RedeployTask: require('./redeploytask')
 }
