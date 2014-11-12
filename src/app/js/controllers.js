@@ -89,12 +89,24 @@ controllers.controller('ProjectDetailsCtrl', [
     }
 
     $scope.redeploy = function(environment) {
-      var opts = {
-        id: environment.id,
-        project_id: $scope.project.id,
-        branch: 'MAIN'
-      };
-      environment.$redeploy(opts, processEnvironment);
+      var modal = $modal.open({
+        templateUrl: 'app/partials/environment-redeploy.html',
+        controller: 'EnvironmentRedeployCtrl',
+        resolve: {
+          environment: function() {
+            return environment;
+          }
+        }
+      });
+
+      modal.result.then(function(branch) {
+        var opts = {
+          id: environment.id,
+          project_id: $scope.project.id,
+          branch: branch
+        };
+        environment.$redeploy(opts, processEnvironment);
+      })
     }
 
   }]);
@@ -108,6 +120,29 @@ controllers.controller('EnvironmentStartCtrl', ['$scope', '$modalInstance', 'env
 
     $scope.start = function() {
       $modalInstance.close($scope.runLength);
+    }
+
+    $scope.cancel = function() {
+      $modalInstance.dismiss();
+    }
+
+  }]);
+
+
+controllers.controller('EnvironmentRedeployCtrl', ['$scope', '$modalInstance', 'environment', 
+  function($scope, $modalInstance, environment) {
+
+    $scope.environment = environment;
+    $scope.selectedBranch = 'MAIN';
+
+    // TO DO pull from TFS
+    $scope.branches = [ 
+      '2014',
+      'MAIN'
+    ];
+
+    $scope.rebuild = function() {
+      $modalInstance.close($scope.selectedBranch);
     }
 
     $scope.cancel = function() {

@@ -1,0 +1,14 @@
+<div class="modal-header">
+  <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+  <h4 class="modal-title">Start {{environment.name}}</h4>
+</div>
+<div class="modal-body">
+  <p>Redeploy this environment with build from:    
+    <select ng-model="selectedBranch" ng-options="branch for branch in branches" />      
+  </p>
+
+</div>
+<div class="modal-footer">
+  <button type="button" class="btn btn-primary " ng-click="rebuild()">Start</button>
+  <button type="button" class="btn btn-default" ng-click="cancel()">Cancel</button>
+</div>
