@@ -158,17 +158,20 @@ RedeployTask.prototype.start = function start() {
   })
 
 
-  // start installation
+  // perform installation
   .then(function() {
     debug('redeploy: start installation')
               
     var vm = scope.newEnv.vms[0]
       , ip_address = vm.interfaces[0].nat_addresses.vpn_nat_addresses[0].ip_address
       , installUrl = 'http://' + ip_address + ':8080/api/installer'
-      , statusUrl  = 'http://' + ip_address + ':8080/api/status';
+      , statusUrl  = 'http://' + ip_address + ':8080/api/status'
+      , updateUrl  = 'http://' + ip_address + ':8080/api/UpdateInstallerService';
 
-    console.log(installUrl);
-    console.log(statusUrl);
+    debug('redeploy: %s', installUrl);
+    debug('redeploy: %s', statusUrl);
+    debug('redeploy: %s', updateUrl);
+
     return Q.fcall(function() {
       debug('redeploy: wait for install service');
 
@@ -186,26 +189,57 @@ RedeployTask.prototype.start = function start() {
       poll();
       return deferred.promise;
     })
+
+    .then(function() {
+      debug('redeploy: configure install service');
+
+    })
+
+    // upgrade install service
+    .then(function() {
+      debug('redeploy: update install service');
+      
+      return Q.fcall(function() {
+
+        // fire off update
+        var deferred = Q.defer();
+        request(updateUrl, function() {
+          deferred.resolve();
+        });
+        return deferred.promise;
+
+      })
+      .then(function() {
+
+        // wait for upgrade to complete
+        var deferred = Q.defer();
+        var poll = function() {
+          request(statusUrl, function(err, response, body) {
+            if(err || response.statusCode !== 200) {
+              debug('redeploy: wait for update install service');
+              setTimeout(poll, 5000);
+            } else {
+              deferred.resolve(body);
+            }
+          });
+        }
+        poll();
+        return deferred.promise;
+
+      });
+    })
         
     // start installation
     .then(function() {
       debug('redeploy: installing');
-      var deferred = Q.defer()
 
-      request(installUrl, function(error, response, body) {
-        if(!error && response.statusCode === 200) {            
-          deferred.resolve(ip_address);
-        } else {            
-          deferred.reject(response);
-        }
-      });
-
-      return deferred.promise;
+      // fire off the install    
+      request(installUrl)    
     })
 
     // wait for installation to complete  
     .then(function() {
-      debug('redeploy: wait for installation');
+      debug('redeploy: waiting for installation');
 
       var deferred = Q.defer();
       var poll = function() {        
@@ -214,18 +248,19 @@ RedeployTask.prototype.start = function start() {
           if(!err && response.statusCode === 200) {
 
             // add logic for checking status
-            if(true) {
+            if(body.indexOf('UPGRADE COMPLETE') >= 0) {
               deferred.resolve();
             } 
 
             // if not in completed status continue polling
             else {
-              debug('redeploy: wait for installation');
+              debug('redeploy: waiting for installation');
               setTimeout(poll, 15000);
             }
 
           } else {
-            deferred.reject({ err: err, response: response, body: body });
+              debug('redeploy: waiting for installation');
+              setTimeout(poll, 15000);
           }
         });        
       }
