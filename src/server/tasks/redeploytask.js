@@ -318,7 +318,25 @@ RedeployTask.prototype.start = function start() {
 
   // remove vpn connection
   .then(function() {
-    debug('redeploy: removing vpn connection');
+    debug('redeploy: attempting to remove vpn connection');
+
+    var env = scope.newEnv
+      , network = env.networks[0]
+      , attachment = network.vpn_attachments[0]
+      , vpn = attachment ? attachment.vpn : null;
+
+    if(vpn) {
+      debug('redeploy: removing vpn %s', vpn.id);
+      return skytap.vpns.detach({
+        configuration_id: env.id,
+        network_id: network.id,
+        vpn_id: vpn.id
+      })
+      .then(function() {
+        debug('redeploy: vpn successfully detached');
+      });
+    }
+
   })
 
   // rename environment
@@ -329,7 +347,7 @@ RedeployTask.prototype.start = function start() {
       , name = newEnv.name;
 
     name = name.substring(0, name.indexOf(' - DEPLOYING'));
-    skytap.environments.update({
+    return skytap.environments.update({
       configuration_id: newEnv.id,
       name: name
     })
