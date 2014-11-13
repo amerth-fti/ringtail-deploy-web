@@ -31,7 +31,8 @@ RedeployTask.prototype.start = function start() {
     detachIps: null,
     attachIps: null,
     newEnv: null,
-    envName: null
+    envName: null,
+    userdata: null
   };
 
   // find the newest template
@@ -53,10 +54,20 @@ RedeployTask.prototype.start = function start() {
 
     return skytap.environments.get({ configuration_id: configuration_id })
     .then(function(oldEnv) {
-      debug('redeploy: old environment %s', oldEnv.id);
+      debug('redeploy: environment %s found', oldEnv.id);
       scope.oldEnv = oldEnv;
       scope.envName = oldEnv.name;
-    });  
+    })
+    .then(function() {
+      debug('redeploy: getting environment userdata');
+      return skytap.environments.userdata({ configuration_id: configuration_id })
+      .then(function(userdata) {        
+        scope.userdata = JSON.parse(userdata.contents);      
+        if(!scope.userdata || !scope.userdata.installer) {
+          throw new Error('Environment must have user_data configured with installer information');
+        }
+      });      
+    })
   })
 
   // rename the old environment
@@ -82,7 +93,7 @@ RedeployTask.prototype.start = function start() {
 
     return skytap.environments.suspend({ configuration_id: scope.oldEnv.id })
     .then(function() {
-      debug('redeploy: waitiing for suspended state');
+      debug('redeploy: waiting for suspended state');
       return skytap.environments.waitForState({ configuration_id: scope.oldEnv.id, runstate: 'suspended' });
     })
     .then(function(oldEnv) {
@@ -176,11 +187,13 @@ RedeployTask.prototype.start = function start() {
       , ip_address = vm.interfaces[0].nat_addresses.vpn_nat_addresses[0].ip_address
       , installUrl = 'http://' + ip_address + ':8080/api/installer'
       , statusUrl  = 'http://' + ip_address + ':8080/api/status'
-      , updateUrl  = 'http://' + ip_address + ':8080/api/UpdateInstallerService';
+      , updateUrl  = 'http://' + ip_address + ':8080/api/UpdateInstallerService'
+      , configUrl  = 'http://' + ip_address + ':8080/api/config';
 
     debug('redeploy: %s', installUrl);
     debug('redeploy: %s', statusUrl);
     debug('redeploy: %s', updateUrl);
+    debug('redeploy: %s', configUrl);
 
     return Q.fcall(function() {
       debug('redeploy: wait for install service');
@@ -200,11 +213,6 @@ RedeployTask.prototype.start = function start() {
       }
       poll();
       return deferred.promise;
-    })
-
-    .then(function() {
-      debug('redeploy: configure install service');
-
     })
 
     // upgrade install service
@@ -240,6 +248,50 @@ RedeployTask.prototype.start = function start() {
         poll();
         return deferred.promise;
 
+      });
+    })
+
+    // configure install service
+    .then(function() {
+      debug('redeploy: configure install service');
+
+      var config = scope.userdata
+        , keys = _.keys(config.installer);
+
+      // update the branch config
+      return Q.fcall(function() {        
+        var deferred = new Q.defer();
+        
+        request(configUrl + '?key=Common|BRANCH_NAME&value=' + branch, function(err) {
+          if(err) deferred.reject(err);
+          else deferred.resolve();
+        })
+
+        return deferred.promise;  
+      })
+
+      // update all configures
+      .then(function() {
+        
+        // create functions to execute config
+        var funcs = keys.map(function(key) {
+          return function() {
+            var deferred = new Q.defer()
+              , value = config.installer[key]
+              , url;
+            
+            url = configUrl + '?key=' + key + '&value=' + value;
+            debug('redeploy: configuring %s', url);
+            request(url, function(err) {
+              if(err) deferred.reject(err);
+              else deferred.resolve();
+            })
+
+            return deferred.promise;  
+          };
+        });
+
+        return funcs.reduce(Q.when, Q(0));
       });
     })
         
@@ -356,5 +408,15 @@ RedeployTask.prototype.start = function start() {
       scope.newEnv = newEnv;
     });
 
+  })
+
+  // saving config data
+  .then(function() {
+    debug('redeploy: saving user_data to new environment');
+
+    var newenv = scope.newEnv
+      , userdata = scope.userdata;
+
+    return skytap.environments.updateUserdata({ configuration_id: newenv.id, contents: JSON.stringify(userdata) });
   });
 }
