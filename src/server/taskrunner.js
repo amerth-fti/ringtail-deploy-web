@@ -12,7 +12,7 @@ var debug   = require('debug')('deployer-taskrunner')
  * @return {Array} array of tasks
  */
 exports.getTasks = function getTasks() {  
-  return _.pluck(_.values(tasks), 'task'); 
+  return _.values(tasks); 
 }
 
 
@@ -41,17 +41,14 @@ exports.queue = function queue(task) {
   task.id = (taskId += 1);
 
   // add to memory store
-  tasks[task.id.toString()] = {
-    task: task,
-    promise: null
-  };
-
+  tasks[task.id.toString()] = task;
 
   // start task on next tick
   process.nextTick(function() {
     task.status = 'Running'
     
-    var promise = task.start()    
+    // start the task
+    task.promise = task.start()    
 
     // mark as complete
     .then(function() {
@@ -65,9 +62,7 @@ exports.queue = function queue(task) {
       task.status = 'Error';
       task.error = err;      
     });
-
-    tasks[task.id.toString()].promise = promise;
-      
+    
   });
 
   return task.id;

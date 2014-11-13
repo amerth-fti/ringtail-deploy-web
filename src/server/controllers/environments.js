@@ -84,16 +84,7 @@ exports.redeploy = function redeploy(req, res) {
   });
 
   // enqueue task
-  taskrunner.queue(task);
+  var taskId = taskrunner.queue(task);
 
-  // load the environment to send result
-  skytap.environments.get({ configuration_id: configuration_id }, function(err, env) {
-    if(err) res.status(500).send(err);
-    else {
-
-      // join the task before sending
-      env.redeployTask = task
-      res.send(env);
-    }    
-  });  
+  res.send({ taskId: taskId });
 }

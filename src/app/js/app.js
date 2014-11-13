@@ -22,6 +22,10 @@ app.config(['$routeProvider', 'config',
       templateUrl: 'app/partials/project-details.html',
       controller: 'ProjectDetailsCtrl'
     })
+    .when('/tasks/:taskId', {
+      templateUrl: 'app/partials/task-details.html',
+      controller: 'TaskDetailsCtrl'
+    })
     .otherwise({
       redirectTo: config.defaultRoute || '/projects/'
     });

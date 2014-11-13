@@ -4,9 +4,7 @@ var services = angular.module('services', ['ngResource']);
 
 services.factory('Project', ['$resource', 
   function($resource) {
-    return $resource('api/projects/:projectId', {}, {
-      query: { method: 'GET', isArray: true }
-    });
+    return $resource('api/projects/:projectId');
   }]);
 
 services.factory('Environment', ['$resource', 
@@ -28,9 +26,6 @@ services.factory('Task', ['$resource',
   function($resource) {
     return $resource(
       'api/tasks/:taskId',
-      { taskId: '@id' },
-      {
-        get  : { method: 'GET' }        
-      }
+      { taskId: '@id' }      
     );
   }]);

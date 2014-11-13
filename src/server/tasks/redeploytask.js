@@ -7,6 +7,7 @@ var debug   = require('debug')('deployer-redeploytask')
   , skytap  = Skytap.init(config.skytap);
 
 
+
 function RedeployTask(params) {
   this.status = 'Pending';
   this.project_id = params.project_id;
@@ -234,7 +235,7 @@ RedeployTask.prototype.start = function start() {
       debug('redeploy: installing');
 
       // fire off the install    
-      request(installUrl)    
+      request(installUrl);  
     })
 
     // wait for installation to complete  

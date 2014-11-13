@@ -15,11 +15,12 @@ controllers.controller('ProjectDetailsCtrl', [
   '$scope', 
   '$routeParams', 
   '$modal', 
+  '$location',
   'config',
   'Project', 
   'Environment',
   'Task',
-  function($scope, $routeParams, $modal, config, Project, Environment, Task) {
+  function($scope, $routeParams, $modal, $location, config, Project, Environment, Task) {
     
     $scope.config = config;
 
@@ -100,12 +101,16 @@ controllers.controller('ProjectDetailsCtrl', [
       });
 
       modal.result.then(function(branch) {
-        var opts = {
-          id: environment.id,
+        var opts = {          
           project_id: $scope.project.id,
           branch: branch
         };
-        environment.$redeploy(opts, processEnvironment);
+        environment.$redeploy(opts, function(results) {          
+          var path = '/tasks/' + results.taskId;
+          console.log(path);
+          $location.path(path);
+        });
+        
       })
     }
 
@@ -147,6 +152,35 @@ controllers.controller('EnvironmentRedeployCtrl', ['$scope', '$modalInstance', '
 
     $scope.cancel = function() {
       $modalInstance.dismiss();
+    }
+
+  }]);
+
+
+/**
+ * Controller for showing task details
+ */
+controllers.controller('TaskDetailsCtrl', [
+  '$scope', 
+  '$routeParams', 
+  '$modal',  
+  'Task',
+  function($scope, $routeParams, $modal, Task) {    
+
+    // load the task
+    $scope.task = Task.get({taskId: $routeParams.taskId}, loadTaskComplete);
+
+    function loadTaskComplete(result) {      
+      $scope.task = result;      
+      pollWhileRunning(result);
+    }
+
+    function pollWhileRunning(task) {
+      if(task.status === 'Running') {
+        setTimeout(function() {
+          task.$get(loadTaskComplete);
+        }, 10000);
+      }
     }
 
   }]);
