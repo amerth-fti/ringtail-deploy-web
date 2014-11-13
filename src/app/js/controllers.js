@@ -134,17 +134,12 @@ controllers.controller('EnvironmentStartCtrl', ['$scope', '$modalInstance', 'env
   }]);
 
 
-controllers.controller('EnvironmentRedeployCtrl', ['$scope', '$modalInstance', 'environment', 
-  function($scope, $modalInstance, environment) {
+controllers.controller('EnvironmentRedeployCtrl', ['$scope', '$modalInstance', 'config', 'environment', 
+  function($scope, $modalInstance, config, environment) {
 
     $scope.environment = environment;
-    $scope.selectedBranch = 'MAIN';
-
-    // TO DO pull from TFS
-    $scope.branches = [ 
-      '2014',
-      'MAIN'
-    ];
+    $scope.branches = config.branches;
+    $scope.selectedBranch;    
 
     $scope.rebuild = function() {
       $modalInstance.close($scope.selectedBranch);
