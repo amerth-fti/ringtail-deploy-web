@@ -52,5 +52,9 @@ app.get ('/api/tasks', controllers.tasks.list);
 app.get ('/api/tasks/:taskId', controllers.tasks.get);
 
 
-console.log('Listening on port %d', config.port);
-app.listen(config.port);
+console.log('Listening on %s:%d ', (config.host ? config.host : '*'), config.port);
+if(config.host) {
+  app.listen(config.port, config.host);
+} else {
+  app.listen(config.port);
+}
