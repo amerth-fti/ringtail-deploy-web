@@ -1,18 +1,17 @@
 
 
-<h2>Redeploy {{task.id}}</h2>
+<h2>Redeploying {{task.scope.envName}}</h2>
+
 <div class="alert alert-warning" role="alert" ng-show="task.status === 'Running'">This process can take up to 30 minutes.</div>
-<p>Status: {{task.status}}</p>
+<h4>Status: {{task.status}}</h4>
 
-<h4>Redeployment Info</h4>
-<div class="row">
-
-  <div class="col-md-4">
-    <div>Show Old Env Info</div>
-    <div>Show New Env Info</div>
-  </div>
-  <div class="col-md-8">    
-    Log Info goes here
+<div class="row">  
+  <div class="col-md-8">
+    <ul class="list-group">      
+      <li class="list-group-item" ng-repeat="entry in task.runlog | reverse">
+        <strong>{{entry.date | date:'shortTime' }}:</strong> {{entry.value}}
+      </li>
+    </ul>
   </div>
 </div
 

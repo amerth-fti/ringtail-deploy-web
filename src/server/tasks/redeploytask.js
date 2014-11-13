@@ -1,4 +1,5 @@
-var debug   = require('debug')('deployer-redeploytask')  
+var ndebug   = require('debug')('deployer-redeploytask')  
+  , util    = require('util')
   , Q       = require('q')  
   , _       = require('underscore')
   , request = require('request')
@@ -13,6 +14,7 @@ function RedeployTask(params) {
   this.project_id = params.project_id;
   this.configuration_id = params.configuration_id;
   this.branch = params.branch;
+  this.runlog = [];
 }
 
 
@@ -22,8 +24,9 @@ module.exports = RedeployTask;
 RedeployTask.prototype.start = function start() {
   var project_id = this.project_id
     , configuration_id = this.configuration_id
-    , branch = this.branch
-    , scope;
+    , branch = this.branch    
+    , scope
+    , self = this;
 
   this.scope = scope = {
     template: null,
@@ -35,31 +38,36 @@ RedeployTask.prototype.start = function start() {
     userdata: null
   };
 
+  debug = function() {
+    ndebug.apply(this, arguments);
+    self.runlog.push({ date: new Date(), value: util.format.apply(this, arguments) });
+  };
+
   // find the newest template
   return Q.fcall(function() {
-    debug('redeploy: finding newest template');
+    debug('finding newest template');
 
     return skytap.projects.templates({ project_id: project_id })  
     .then(function(templates) {      
       scope.template = _.max(templates, function(template) {
         return template.id;
       });  
-      debug('redeploy: found newest template %s', scope.template.id);
+      debug('found newest template %s', scope.template.id);
     })    
   })  
 
   // retrieve the old environment 
   .then(function() {      
-    debug('redeploy: finding the environment');
+    debug('finding the environment');
 
     return skytap.environments.get({ configuration_id: configuration_id })
     .then(function(oldEnv) {
-      debug('redeploy: environment %s found', oldEnv.id);
+      debug('environment %s found', oldEnv.id);
       scope.oldEnv = oldEnv;
       scope.envName = oldEnv.name;
     })
     .then(function() {
-      debug('redeploy: getting environment userdata');
+      debug('getting environment userdata');
       return skytap.environments.userdata({ configuration_id: configuration_id })
       .then(function(userdata) {        
         scope.userdata = JSON.parse(userdata.contents);      
@@ -72,7 +80,7 @@ RedeployTask.prototype.start = function start() {
 
   // rename the old environment
   .then(function() {      
-    debug('redeploy: update status on environment');
+    debug('update status on environment');
 
     var newName = scope.oldEnv.name;    
     if(newName.indexOf(' - DECOMISSIONING') <=0) {
@@ -81,7 +89,7 @@ RedeployTask.prototype.start = function start() {
 
     return skytap.environments.update({ configuration_id: scope.oldEnv.id, name: newName })    
     .then(function(oldEnv) {
-      debug('redeploy: renamed old environment');
+      debug('renamed old environment');
       scope.oldEnv = oldEnv;
     });
 
@@ -89,22 +97,22 @@ RedeployTask.prototype.start = function start() {
 
   // stop the old environment
   .then(function() {
-    debug('redeploy: suspending old environment');
+    debug('suspending old environment');
 
     return skytap.environments.suspend({ configuration_id: scope.oldEnv.id })
     .then(function() {
-      debug('redeploy: waiting for suspended state');
+      debug('waiting for suspended state');
       return skytap.environments.waitForState({ configuration_id: scope.oldEnv.id, runstate: 'suspended' });
     })
     .then(function(oldEnv) {
-      debug('redeploy: old environment suspended')
+      debug('old environment suspended')
       scope.oldEnv = oldEnv;
     });
   })
 
   // detach public ip addresses
   .then(function() {
-    debug('redeploy: detaching public ip addresses');
+    debug('detaching public ip addresses');
 
     // get the ip addresses to detach
     scope.detachIps = scope.oldEnv.vms.map(function(vm) {
@@ -122,23 +130,23 @@ RedeployTask.prototype.start = function start() {
     // perform the detaches
     return Q.all(scope.detachIps.map(function (detachIp) {          
       if(detachIp.ip) {
-        debug('redeploy: detaching: %j', detachIp);
+        debug('detaching: %j', detachIp);
         return skytap.ips.detach(detachIp);
       }        
       return null;          
     }))
     .then(function() {
-      debug('redeploy: all public ips detached');
+      debug('all public ips detached');
     });    
   })
 
   // create the new environment
   .then(function() {      
-    debug('redeploy: creating new environment');
+    debug('creating new environment');
     var name = scope.envName + ' - DEPLOYING';
     return skytap.environments.create({ template_id: scope.template.id, name: name })
     .then(function(newEnv) {
-      debug('redeploy: new environment created %s', newEnv.id);
+      debug('new environment created %s', newEnv.id);
       scope.newEnv = newEnv;
     });
   })
@@ -146,26 +154,26 @@ RedeployTask.prototype.start = function start() {
 
   // add new environment to project
   .then(function() {      
-    debug('redeploy: adding environment to project %s', project_id);
+    debug('adding environment to project %s', project_id);
     return skytap.projects.addEnvironment({ 
       project_id: project_id,
       configuration_id: scope.newEnv.id    
     })
     .then(function() {
-      debug('redeploy: added environment to project');
+      debug('added environment to project');
     });
   })  
 
   // start environemnt
   .then(function() {
-    debug('redeploy: start new envionrment');
+    debug('start new envionrment');
 
     return skytap.environments.update({
       configuration_id: scope.newEnv.id,
       runstate: 'running'
     })
     .then(function(environment) {
-      debug('redeploy: waiting for running state');
+      debug('waiting for running state');
 
       return skytap.environments.waitForState({
         configuration_id: environment.id,
@@ -173,7 +181,7 @@ RedeployTask.prototype.start = function start() {
       });
     })
     .then(function(environment) {
-      debug('redeploy: new environment has been started')
+      debug('new environment has been started')
       scope.newEnv = environment;
     });
   })
@@ -181,7 +189,7 @@ RedeployTask.prototype.start = function start() {
 
   // perform installation
   .then(function() {
-    debug('redeploy: start installation')
+    debug('start installation')
               
     var vm = scope.newEnv.vms[0]
       , ip_address = vm.interfaces[0].nat_addresses.vpn_nat_addresses[0].ip_address
@@ -190,17 +198,17 @@ RedeployTask.prototype.start = function start() {
       , updateUrl  = 'http://' + ip_address + ':8080/api/UpdateInstallerService'
       , configUrl  = 'http://' + ip_address + ':8080/api/config';
 
-    debug('redeploy: %s', installUrl);
-    debug('redeploy: %s', statusUrl);
-    debug('redeploy: %s', updateUrl);
-    debug('redeploy: %s', configUrl);
+    debug('%s', installUrl);
+    debug('%s', statusUrl);
+    debug('%s', updateUrl);
+    debug('%s', configUrl);
 
     return Q.fcall(function() {
-      debug('redeploy: wait for install service');
+      debug('wait for install service');
 
       var deferred = Q.defer();
       var poll = function() {
-        debug('redeploy: wait for install service');
+        debug('wait for install service');
         setTimeout(function() {
           request(statusUrl, function(err, response, body) {
             if(err || response.statusCode !== 200) {
@@ -217,7 +225,7 @@ RedeployTask.prototype.start = function start() {
 
     // upgrade install service
     .then(function() {
-      debug('redeploy: update install service');
+      debug('update install service');
       
       return Q.fcall(function() {
 
@@ -234,7 +242,7 @@ RedeployTask.prototype.start = function start() {
         // wait for upgrade to complete
         var deferred = Q.defer();
         var poll = function() {
-          debug('redeploy: wait for update install service');
+          debug('wait for update install service');
           setTimeout(function() {
             request(statusUrl, function(err, response, body) {
               if(err || response.statusCode !== 200) {                
@@ -253,7 +261,7 @@ RedeployTask.prototype.start = function start() {
 
     // configure install service
     .then(function() {
-      debug('redeploy: configure install service');
+      debug('configure install service');
 
       var config = scope.userdata
         , keys = _.keys(config.installer);
@@ -281,7 +289,7 @@ RedeployTask.prototype.start = function start() {
               , url;
             
             url = configUrl + '?key=' + key + '&value=' + value;
-            debug('redeploy: configuring %s', url);
+            debug('configuring %s', url);
             request(url, function(err) {
               if(err) deferred.reject(err);
               else deferred.resolve();
@@ -297,7 +305,7 @@ RedeployTask.prototype.start = function start() {
         
     // start installation
     .then(function() {
-      debug('redeploy: installing');
+      debug('installing');
 
       // fire off the install    
       request(installUrl);  
@@ -305,11 +313,11 @@ RedeployTask.prototype.start = function start() {
 
     // wait for installation to complete  
     .then(function() {
-      debug('redeploy: waiting for installation');
+      debug('waiting for installation');
 
       var deferred = Q.defer();
       var poll = function() {        
-        debug('redeploy: waiting for installation');
+        debug('waiting for installation');
         setTimeout(function() {
           request(statusUrl, function(err, response, body) {          
             if(!err && response.statusCode === 200) {
@@ -336,14 +344,14 @@ RedeployTask.prototype.start = function start() {
 
     // signal completion for installation
     .then(function() {
-      debug('redeploy: installations complete');
+      debug('installations complete');
     });
   })
 
 
   // attach public ip addresses
   .then(function() {
-    debug('redeploy: attach public ip addresses');
+    debug('attach public ip addresses');
 
     // get the ip addresses to attach
     scope.attachIps = scope.newEnv.vms.map(function(vm, idx) {
@@ -358,19 +366,19 @@ RedeployTask.prototype.start = function start() {
     // attach IPs  
     return Q.all(scope.attachIps.map(function(attachIp) {    
       if(attachIp.ip) {
-        debug('redeploy: attaching: %j', attachIp);
+        debug('attaching: %j', attachIp);
         return skytap.ips.attach(attachIp);
       }
       return null;
     }))  
     .then(function() {
-      debug('redeploy: all public ips attached');
+      debug('all public ips attached');
     });
   })
 
   // remove vpn connection
   .then(function() {
-    debug('redeploy: attempting to remove vpn connection');
+    debug('attempting to remove vpn connection');
 
     var env = scope.newEnv
       , network = env.networks[0]
@@ -378,14 +386,14 @@ RedeployTask.prototype.start = function start() {
       , vpn = attachment ? attachment.vpn : null;
 
     if(vpn) {
-      debug('redeploy: removing vpn %s', vpn.id);
+      debug('removing vpn %s', vpn.id);
       return skytap.vpns.detach({
         configuration_id: env.id,
         network_id: network.id,
         vpn_id: vpn.id
       })
       .then(function() {
-        debug('redeploy: vpn successfully detached');
+        debug('vpn successfully detached');
       });
     }
 
@@ -393,7 +401,7 @@ RedeployTask.prototype.start = function start() {
 
   // rename environment
   .then(function() {
-    debug('redeploy: renaming new environment');
+    debug('renaming new environment');
 
     var newEnv = scope.newEnv
       , name = newEnv.name;
@@ -404,7 +412,7 @@ RedeployTask.prototype.start = function start() {
       name: name
     })
     .then(function(newEnv) {
-      debug('redeploy: new environment renamed');
+      debug('new environment renamed');
       scope.newEnv = newEnv;
     });
 
@@ -412,7 +420,7 @@ RedeployTask.prototype.start = function start() {
 
   // saving config data
   .then(function() {
-    debug('redeploy: saving user_data to new environment');
+    debug('saving user_data to new environment');
 
     var newenv = scope.newEnv
       , userdata = scope.userdata;

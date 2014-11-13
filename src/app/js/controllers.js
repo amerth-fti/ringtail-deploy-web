@@ -179,7 +179,7 @@ controllers.controller('TaskDetailsCtrl', [
       if(task.status === 'Running') {
         setTimeout(function() {
           task.$get(loadTaskComplete);
-        }, 10000);
+        }, 5000);
       }
     }
 
