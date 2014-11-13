@@ -31,6 +31,7 @@ RedeployTask.prototype.start = function start() {
     detachIps: null,
     attachIps: null,
     newEnv: null,
+    envName: null
   };
 
   // find the newest template
@@ -54,18 +55,25 @@ RedeployTask.prototype.start = function start() {
     .then(function(oldEnv) {
       debug('redeploy: old environment %s', oldEnv.id);
       scope.oldEnv = oldEnv;
+      scope.envName = oldEnv.name;
     });  
   })
 
   // rename the old environment
   .then(function() {      
-    debug('redeploy: renaming old environment');
+    debug('redeploy: update status on environment');
 
-    return skytap.environments.update({ configuration_id: scope.oldEnv.id, name: scope.oldEnv.name + ' - DECOMMISIONING' })    
+    var newName = scope.oldEnv.name;    
+    if(newName.indexOf(' - DECOMISSIONING') <=0) {
+      newName += ' - DECOMISSIONING';
+    }
+
+    return skytap.environments.update({ configuration_id: scope.oldEnv.id, name: newName })    
     .then(function(oldEnv) {
-      debug('redeploy: renamed old environment to %s', oldEnv.name);
+      debug('redeploy: renamed old environment');
       scope.oldEnv = oldEnv;
     });
+
   })
 
   // stop the old environment
@@ -74,7 +82,7 @@ RedeployTask.prototype.start = function start() {
 
     return skytap.environments.suspend({ configuration_id: scope.oldEnv.id })
     .then(function() {
-      debug('redeploy: waitigin for suspended state');
+      debug('redeploy: waitiing for suspended state');
       return skytap.environments.waitForState({ configuration_id: scope.oldEnv.id, runstate: 'suspended' });
     })
     .then(function(oldEnv) {
@@ -116,7 +124,8 @@ RedeployTask.prototype.start = function start() {
   // create the new environment
   .then(function() {      
     debug('redeploy: creating new environment');
-    return skytap.environments.create({ template_id: scope.template.id })
+    var name = scope.envName + ' - DEPLOYING';
+    return skytap.environments.create({ template_id: scope.template.id, name: name })
     .then(function(newEnv) {
       debug('redeploy: new environment created %s', newEnv.id);
       scope.newEnv = newEnv;
@@ -178,14 +187,16 @@ RedeployTask.prototype.start = function start() {
 
       var deferred = Q.defer();
       var poll = function() {
-        request(statusUrl, function(err, response, body) {
-          if(err || response.statusCode !== 200) {
-            debug('redeploy: wait for install service');
-            setTimeout(poll, 15000);
-          } else {
-            deferred.resolve(body);
-          }
-        });
+        debug('redeploy: wait for install service');
+        setTimeout(function() {
+          request(statusUrl, function(err, response, body) {
+            if(err || response.statusCode !== 200) {
+              poll();              
+            } else {
+              deferred.resolve(body);
+            }
+          });
+        }, 5000);
       }
       poll();
       return deferred.promise;
@@ -215,14 +226,16 @@ RedeployTask.prototype.start = function start() {
         // wait for upgrade to complete
         var deferred = Q.defer();
         var poll = function() {
-          request(statusUrl, function(err, response, body) {
-            if(err || response.statusCode !== 200) {
-              debug('redeploy: wait for update install service');
-              setTimeout(poll, 5000);
-            } else {
-              deferred.resolve(body);
-            }
-          });
+          debug('redeploy: wait for update install service');
+          setTimeout(function() {
+            request(statusUrl, function(err, response, body) {
+              if(err || response.statusCode !== 200) {                
+                poll();
+              } else {
+                deferred.resolve(body);
+              }
+            });
+          }, 5000);
         }
         poll();
         return deferred.promise;
@@ -244,29 +257,28 @@ RedeployTask.prototype.start = function start() {
 
       var deferred = Q.defer();
       var poll = function() {        
-        
-        request(statusUrl, function(err, response, body) {          
-          if(!err && response.statusCode === 200) {
+        debug('redeploy: waiting for installation');
+        setTimeout(function() {
+          request(statusUrl, function(err, response, body) {          
+            if(!err && response.statusCode === 200) {
 
-            // add logic for checking status
-            if(body.indexOf('UPGRADE COMPLETE') >= 0) {
-              deferred.resolve();
-            } 
+              // add logic for checking status
+              if(body.indexOf('UPGRADE COMPLETE') >= 0) {
+                deferred.resolve();
+              } 
 
-            // if not in completed status continue polling
-            else {
-              debug('redeploy: waiting for installation');
-              setTimeout(poll, 15000);
+              // if not in completed status continue polling
+              else {              
+                poll();
+              }
+
+            } else {
+                poll();
             }
-
-          } else {
-              debug('redeploy: waiting for installation');
-              setTimeout(poll, 15000);
-          }
-        });        
-      }
-
-      poll();
+          });
+        }, 15000);
+      };
+      poll();      
       return deferred.promise;
     })
 
@@ -307,5 +319,24 @@ RedeployTask.prototype.start = function start() {
   // remove vpn connection
   .then(function() {
     debug('redeploy: removing vpn connection');
+  })
+
+  // rename environment
+  .then(function() {
+    debug('redeploy: renaming new environment');
+
+    var newEnv = scope.newEnv
+      , name = newEnv.name;
+
+    name = name.substring(0, name.indexOf(' - DEPLOYING'));
+    skytap.environments.update({
+      configuration_id: newEnv.id,
+      name: name
+    })
+    .then(function(newEnv) {
+      debug('redeploy: new environment renamed');
+      scope.newEnv = newEnv;
+    });
+
   });
 }
