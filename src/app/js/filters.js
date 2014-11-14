@@ -36,3 +36,14 @@ filters.filter('reverse', function() {
     return items.slice().reverse();  
   };
 });
+
+filters.filter('elapsed', function() {
+  return function(elapsed) {
+    console.log(elapsed);
+    if(!elapsed) return '0m';
+    else {
+      elapsed = elapsed / 1000 / 60;
+      return Math.floor(elapsed) + 'm';
+    }
+  }
+});

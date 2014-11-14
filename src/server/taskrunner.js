@@ -39,6 +39,8 @@ exports.queue = function queue(task) {
   // initialize the task data
   task.status = 'Pending';
   task.id = (taskId += 1);
+  task.started = new Date();
+  task.stopped = null;  
 
   // add to memory store
   tasks[task.id.toString()] = task;
@@ -54,13 +56,15 @@ exports.queue = function queue(task) {
     .then(function() {
       debug('task %d completed', task.id);
       task.status = 'Completed';
+      task.stopped = new Date();
     })
 
     // mark as failed
     .fail(function(err) {
       debug('task %d error %j', task.id, err);
       task.status = 'Error';
-      task.error = err;      
+      task.error = err;   
+      task.stopped = new Date();   
     });
     
   });

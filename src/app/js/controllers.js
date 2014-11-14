@@ -198,8 +198,10 @@ controllers.controller('TaskDetailsCtrl', [
     // load the task
     $scope.task = Task.get({taskId: $routeParams.taskId}, loadTaskComplete);
 
+
     function loadTaskComplete(result) {      
       $scope.task = result;      
+      $scope.task.elapsed = ($scope.task.stopped ? new Date($scope.task.stopped) : new Date()) - new Date($scope.task.started);      
       pollWhileRunning(result);
     }
 
