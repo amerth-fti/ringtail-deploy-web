@@ -6,11 +6,26 @@
   <li ng-repeat="environment in environments" class="list-group-item">    
     <div class="row">
       <div class="col-md-10">
-        <h4>
-          <span ng-click="configure(environment)" class="configure glyphicon glyphicon-cog" />
+        <h4>          
           {{environment.name}}
+          <span ng-click="configure(environment)" class="configure glyphicon glyphicon-cog" />
         </h4>
-        <p ng-bind-html="environment.description | newlines | anchors | trust"></p>
+
+        <div class="row" ng-show="environment.deployment.date">
+          <div class="col-md-1"><strong>Date:</strong></div>
+          <div class="col-md-11">{{environment.deployment.date | date:'MMMM d'}}</div>        
+        </div>        
+
+        <div class="row" ng-repeat="option in environment.deployment.options">
+          <div class="col-md-1"><strong>{{option.key}}:</strong></div>
+          <div class="col-md-11">{{option.value}}</div>
+        </div>        
+
+        <div class="row" ng-show="environment.description">
+          <div class="col-md-1"><strong>Info:</strong></div>
+          <div class="col-md-11" ng-bind-html="environment.description | newlines | anchors | trust"></div>
+        </div>
+        
       </div>
       <div class="col-md-2 environment-status" ng-hide="environment.loading || environment.deployment.status !== 'deployed'">
         <h4><span>{{environment.runstate | uppercase}}</span></h4>

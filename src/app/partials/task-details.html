@@ -1,6 +1,6 @@
 
 
-<h2>Redeploying {{task.scope.envName}}</h2>
+<h2>Redeploying {{task.scope.oldEnv.name}}</h2>
 
 <div class="alert alert-warning" role="alert" ng-show="task.status === 'Running'">This process can take a while</div>
 <h4>Status: {{task.status}} ({{task.elapsed | elapsed}})</h4>
