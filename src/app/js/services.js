@@ -13,6 +13,7 @@ services.factory('Environment', ['$resource',
       'api/environments/:environmentId', 
       { environmentId: '@id' }, 
       {
+        update  : { method: 'PUT', url: 'api/environments/:environmentId' },              
         project : { method: 'GET', url: 'api/projects/:projectId/environments', isArray: true },
         start   : { method: 'PUT', url: 'api/environments/:environmentId/start' },
         pause   : { method: 'PUT', url: 'api/environments/:environmentId/pause' },

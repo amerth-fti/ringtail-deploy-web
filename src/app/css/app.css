@@ -10,6 +10,14 @@
   min-width: 32px;
 }
 
+.configure {
+  cursor: pointer;
+  color: #f0ad4e;
+}
+.configure:hover {
+  color: #ec971f;
+}
+
 button {
   border-width: 1px !important;  
 }

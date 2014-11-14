@@ -6,6 +6,7 @@
   "author": "Brian Mancini <bmancini@gmail.com>",
   "license": "MIT",
   "dependencies": {
+    "body-parser": "^1.9.2",
     "debug": "^2.1.0",
     "express": "^4.10.1",
     "node-skytap": "^0.1.0",

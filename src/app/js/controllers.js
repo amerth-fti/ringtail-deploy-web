@@ -114,6 +114,23 @@ controllers.controller('ProjectDetailsCtrl', [
       })
     }
 
+    $scope.configure = function(environment) {      
+      var modal = $modal.open({
+        size: 'lg',
+        templateUrl: 'app/partials/environment-config.html',
+        controller: 'EnvironmentConfigCtrl',
+        resolve: {
+          environment: function() {
+            return environment;
+          }
+        }
+      });
+
+      modal.result.then(function() {
+        environment.$update(processEnvironment);
+      })
+    }
+
   }]);
 
 
@@ -152,6 +169,22 @@ controllers.controller('EnvironmentRedeployCtrl', ['$scope', '$modalInstance', '
   }]);
 
 
+controllers.controller('EnvironmentConfigCtrl', ['$scope', '$modalInstance', 'config', 'environment', 
+  function($scope, $modalInstance, config, environment) {
+
+    $scope.environment = environment;
+
+    $scope.save = function() {           
+      $modalInstance.close();
+    }
+
+    $scope.cancel = function() {
+      $modalInstance.dismiss();      
+    }
+
+  }]);
+
+
 /**
  * Controller for showing task details
  */
@@ -179,3 +212,6 @@ controllers.controller('TaskDetailsCtrl', [
     }
 
   }]);
+
+
+

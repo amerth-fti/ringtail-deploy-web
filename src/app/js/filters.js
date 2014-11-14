@@ -32,6 +32,7 @@ filters.filter('anchors', [ function () {
 
 filters.filter('reverse', function() {
   return function(items) {
-    return items.slice().reverse();
+    if(!items) return null;
+    return items.slice().reverse();  
   };
 });
