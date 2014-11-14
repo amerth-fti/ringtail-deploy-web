@@ -140,7 +140,12 @@ controllers.controller('ProjectDetailsCtrl', [
 
       modal.result.then(function() {
         environment.$update(processEnvironment);
-      })
+      });
+    }
+
+    $scope.initialize = function(environment) {
+      environment.user_data.contents = JSON.stringify(config.intialize, null, 2);
+      environment.$update(processEnvironment);
     }
 
   }]);

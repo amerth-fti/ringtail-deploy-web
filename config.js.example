@@ -8,6 +8,9 @@ module.exports = {
   },
   client: {
     defaultRoute: '/projects',
-    enableDeployment: true
+    enableDeployment: true,
+    intialize: {
+      "status": "deployed"      
+    }
   }
 }

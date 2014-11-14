@@ -33,9 +33,14 @@
           ng-show="config.enableDeployment"></button>          
       </div>              
       <div class="col-md-2 loading" ng-show="environment.loading">
-      </div>
-      <div class="col-md-2 environment-status" ng-show="environment.deployment.status !== 'deployed'">
+      </div>      
+      <div class="col-md-2 environment-status" ng-show="environment.deployment.status !== 'deployed'">        
         <h4>{{environment.deployment.status | uppercase }}</h4>
+        <button
+          type="button"
+          class="btn btn-success glyphicon glyphicon-off"
+          ng-click="initialize(environment)"
+          ng-show="environment.deployment.status === 'initialize'"></button>
       </div>
     </div>
   </li>
