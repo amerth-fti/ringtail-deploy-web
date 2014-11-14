@@ -143,12 +143,22 @@ RedeployTask.prototype.start = function start() {
 
   // create the new environment
   .then(function() {      
-    debug('creating new environment');
-    var name = scope.envName + ' - DEPLOYING';
-    return skytap.environments.create({ template_id: scope.template.id, name: name })
+    debug('creating new environment');    
+    return skytap.environments.create({ template_id: scope.template.id })    
     .then(function(newEnv) {
       debug('new environment created %s', newEnv.id);
       scope.newEnv = newEnv;
+    })
+    .then(function() {
+      var configuration_id = scope.newEnv.id
+        , name = scope.envName + ' - DEPLOYING'
+        , description = scope.oldEnv.description;
+      return skytap.environments.update({
+        configuration_id: configuration_id,
+        name: name, 
+        description: description
+      });
+
     });
   })
 
