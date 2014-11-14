@@ -55,8 +55,7 @@ exports.update = function update(req, res) {
     name: name,
     description: description
   })  
-  .then(function (env) {
-    console.log(user_data_contents);
+  .then(function (env) {    
     return skytap.environments.updateUserdata({ 
       configuration_id: configuration_id,
       contents: user_data_contents

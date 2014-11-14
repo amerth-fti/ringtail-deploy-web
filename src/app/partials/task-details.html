@@ -9,7 +9,7 @@
   <div class="col-md-8">
     <ul class="list-group">      
       <li class="list-group-item" ng-repeat="entry in task.runlog | reverse">
-        <strong>{{entry.date | date:'shortTime' }}:</strong> {{entry.value}}
+        <strong>{{entry.date | date:'mediumTime' }}:</strong> {{entry.value}}
       </li>
     </ul>
   </div>
