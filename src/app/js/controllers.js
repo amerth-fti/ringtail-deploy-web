@@ -59,6 +59,18 @@ controllers.controller('ProjectDetailsCtrl', [
     function setViewModelProperties(environment) {
       environment.showStart = environment.runstate === 'suspended' || environment.runstate === 'stopped';
       environment.showPause = environment.runstate === 'running';
+
+      try
+      {
+        environment.deployment = JSON.parse(environment.user_data.contents);
+        environment.deployment.status = environment.deployment.status || 'deployed';
+      }
+      catch (ex)
+      {
+        // TODO - manage lack of deployment info by showing a init dialog?
+        environment.deployment = {}
+        environment.deployment.status = 'initialize';
+      }
     };
 
     function pollWhileBusy(environment) {

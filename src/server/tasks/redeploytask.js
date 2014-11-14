@@ -32,11 +32,10 @@ RedeployTask.prototype.start = function start() {
   this.scope = scope = {
     template: null,
     oldEnv: null,
+    newEnv: null,
     detachIps: null,
     attachIps: null,
-    newEnv: null,
-    envName: null,
-    userdata: null
+    user_data: null
   };
 
   debug = function() {
@@ -59,41 +58,45 @@ RedeployTask.prototype.start = function start() {
 
   // retrieve the old environment 
   .then(function() {      
-    debug('finding the environment');
+    debug('finding old environment');
 
     return skytap.environments.get({ configuration_id: configuration_id })
     .then(function(oldEnv) {
       debug('environment %s found', oldEnv.id);
-      scope.oldEnv = oldEnv;
-      scope.envName = oldEnv.name;
+      scope.oldEnv = oldEnv;      
     })
-    .then(function() {
-      debug('getting environment userdata');
+    .then(function() {     
+      debug('finding old environment user_data'); 
       return skytap.environments.userdata({ configuration_id: configuration_id })
-      .then(function(userdata) {        
-        scope.userdata = JSON.parse(userdata.contents);      
-        if(!scope.userdata || !scope.userdata.installer) {
-          throw new Error('Environment must have user_data configured with installer information');
+      .then(function(user_data) {        
+        if(!user_data) {
+          throw new Error('Environment must have user_data configured');
         }
-      });      
+        scope.user_data = user_data;        
+      });
     })
   })
 
-  // rename the old environment
+  // update status on old environment
   .then(function() {      
-    debug('update status on environment');
+    debug('update status of old environment');  
 
-    var newName = scope.oldEnv.name;    
-    if(newName.indexOf(' - DECOMISSIONING') <=0) {
-      newName += ' - DECOMISSIONING';
-    }
+    var oldEnv = scope.oldEnv
+      , json = JSON.parse(scope.user_data.contents)
+      , opts;
 
-    return skytap.environments.update({ configuration_id: scope.oldEnv.id, name: newName })    
-    .then(function(oldEnv) {
-      debug('renamed old environment');
-      scope.oldEnv = oldEnv;
-    });
+    json.status = 'redeploying';
 
+    opts = { 
+      configuration_id: oldEnv.id,
+      contents:  JSON.stringify(json, null, 2)
+    };
+
+    return skytap.environments.updateUserdata(opts)
+    .then(function(user_data) {
+      debug('updated status on old environment');        
+      scope.user_data = user_data;      
+    });    
   })
 
   // stop the old environment
@@ -150,14 +153,43 @@ RedeployTask.prototype.start = function start() {
       scope.newEnv = newEnv;
     })
     .then(function() {
+      debug('updating new environment details');
       var configuration_id = scope.newEnv.id
-        , name = scope.envName + ' - DEPLOYING'
+        , name = scope.oldEnv.name
         , description = scope.oldEnv.description;
+
       return skytap.environments.update({
         configuration_id: configuration_id,
         name: name, 
         description: description
       });
+    })
+    .then(function() {
+      debug('setting new environment user_data');
+
+try
+{
+      var newEnv = scope.newEnv
+        , user_data = scope.user_data
+        , json = JSON.parse(user_data.contents)
+        , opts;
+
+      json.status = 'deploying';
+
+      var opts = {
+        configuration_id: newEnv.id,
+        contents: JSON.stringify(json, null, 2)
+      };
+      
+      return skytap.environments.updateUserdata(opts)
+      .then(function(user_data) {
+        debug('new environment user_data configured')
+        scope.user_data = user_data;        
+      })
+}
+catch (ex) {
+  console.log(ex);
+}
 
     });
   })
@@ -272,7 +304,7 @@ RedeployTask.prototype.start = function start() {
     .then(function() {
       debug('configure install service');
 
-      var config = scope.userdata
+      var config = scope.user_data
         , keys = _.keys(config.installer);
 
       // update the branch config
@@ -424,33 +456,25 @@ RedeployTask.prototype.start = function start() {
     }
   })
 
-  // rename environment
-  .then(function() {
-    debug('renaming new environment');
-
-    var newEnv = scope.newEnv
-      , name = newEnv.name;
-
-    name = name.substring(0, name.indexOf(' - DEPLOYING'));
-    return skytap.environments.update({
-      configuration_id: newEnv.id,
-      name: name
-    })
-    .then(function(newEnv) {
-      debug('new environment renamed');
-      scope.newEnv = newEnv;
-    });
-
-  })
-
   // saving config data
   .then(function() {
-    debug('saving user_data to new environment');
+    debug('updating status of new environment');
 
-    var newenv = scope.newEnv
-      , userdata = scope.userdata;
+    var newEnv = scope.newEnv
+      , user_data = scope.user_data
+      , json = JSON.parse(user_data.contents)
+      , opts;
 
-    return skytap.environments.updateUserdata({ configuration_id: newenv.id, contents: JSON.stringify(userdata) });
+    json.status = 'deployed'
+    opts = {
+      configuration_id: newEnv.id, 
+      contents: JSON.stringify(json, null, 2) 
+    };
+
+    return skytap.environments.updateUserdata(opts)
+    .then(function(user_data){
+      scope.user_data = user_data;      
+    })    
   })
 
   .then(function() {
