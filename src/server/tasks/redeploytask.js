@@ -26,6 +26,7 @@ RedeployTask.prototype.start = function start() {
     , configuration_id = this.configuration_id
     , branch = this.branch    
     , scope
+    , debug
     , self = this;
 
   this.scope = scope = {
@@ -204,11 +205,10 @@ RedeployTask.prototype.start = function start() {
     debug('%s', configUrl);
 
     return Q.fcall(function() {
-      debug('wait for install service');
+      debug('waiting for install service');
 
       var deferred = Q.defer();
-      var poll = function() {
-        debug('wait for install service');
+      var poll = function() {  
         setTimeout(function() {
           request(statusUrl, function(err, response, body) {
             if(err || response.statusCode !== 200) {
@@ -238,11 +238,10 @@ RedeployTask.prototype.start = function start() {
 
       })
       .then(function() {
-
+        debug('waiting for install service to update');
         // wait for upgrade to complete
         var deferred = Q.defer();
         var poll = function() {
-          debug('wait for update install service');
           setTimeout(function() {
             request(statusUrl, function(err, response, body) {
               if(err || response.statusCode !== 200) {                
@@ -305,7 +304,7 @@ RedeployTask.prototype.start = function start() {
         
     // start installation
     .then(function() {
-      debug('installing');
+      debug('starting installation');
 
       // fire off the install    
       request(installUrl);  
@@ -313,11 +312,10 @@ RedeployTask.prototype.start = function start() {
 
     // wait for installation to complete  
     .then(function() {
-      debug('waiting for installation');
+      debug('waiting for install to complete');
 
       var deferred = Q.defer();
       var poll = function() {        
-        debug('waiting for installation');
         setTimeout(function() {
           request(statusUrl, function(err, response, body) {          
             if(!err && response.statusCode === 200) {
@@ -376,27 +374,44 @@ RedeployTask.prototype.start = function start() {
     });
   })
 
-  // remove vpn connection
+  // // remove vpn connection
   .then(function() {
     debug('attempting to remove vpn connection');
 
     var env = scope.newEnv
       , network = env.networks[0]
       , attachment = network.vpn_attachments[0]
-      , vpn = attachment ? attachment.vpn : null;
+      , vpn = attachment ? attachment.vpn : null
+      , opts
+      , deferred = Q.defer();
 
     if(vpn) {
       debug('removing vpn %s', vpn.id);
-      return skytap.vpns.detach({
+      
+      opts = {
         configuration_id: env.id,
         network_id: network.id,
         vpn_id: vpn.id
-      })
-      .then(function() {
-        debug('vpn successfully detached');
-      });
-    }
+      };
 
+      var poll = function() {        
+        setTimeout(function() {
+          skytap.vpns.detach(opts, function(err) {
+            if(err) {
+              debug('error detaching vpn: %j, will retry shortly', err);
+              poll();
+            } 
+            else {
+              debug('vpn successfully detached');
+              deferred.resolve();
+            }
+          })
+        }, 15000);
+      };
+
+      poll();
+      return deferred.promise;        
+    }
   })
 
   // rename environment
@@ -426,5 +441,9 @@ RedeployTask.prototype.start = function start() {
       , userdata = scope.userdata;
 
     return skytap.environments.updateUserdata({ configuration_id: newenv.id, contents: JSON.stringify(userdata) });
+  })
+
+  .then(function() {
+    debug('environment deployed complete!');
   });
 }
