@@ -47,6 +47,15 @@ exports.environments = function environments(req, res) {
   };
 
   skytap.projects.environments(opts, function(err, envs) {
+
+    envs = envs.sort(function(a, b) {
+      var aname = a.name.toLowerCase()
+        , bname = b.name.toLowerCase();
+      if(aname < bname) return -1;
+      else if (aname > bname) return 1;
+      else return 0;
+    });
+    
     if(err) res.status(500).send(err);
     else res.send(envs);
   });
