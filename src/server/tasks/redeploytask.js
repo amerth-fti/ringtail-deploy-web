@@ -243,25 +243,26 @@ RedeployTask.prototype.start = function start() {
       , updateUrl  = 'http://' + ip_address + ':8080/api/UpdateInstallerService'
       , configUrl  = 'http://' + ip_address + ':8080/api/config';
 
-    debug('%s', installUrl);
-    debug('%s', statusUrl);
-    debug('%s', updateUrl);
-    debug('%s', configUrl);
+    debug('Will use: %s', installUrl);
+    debug('Will use: %s', statusUrl);
+    debug('Will use: %s', updateUrl);
+    debug('Will use: %s', configUrl);
 
     return Q.fcall(function() {
-      debug('waiting for install service');
 
       var deferred = Q.defer();
       var poll = function() {  
-        setTimeout(function() {
+        debug('waiting for install service');
+        setTimeout(function() {          
           request(statusUrl, function(err, response, body) {
-            if(err || response.statusCode !== 200) {
+            debug('%j %j', err, response);
+            if(err || response.statusCode !== 200) {              
               poll();              
             } else {
               deferred.resolve(body);
             }
           });
-        }, 5000);
+        }, 15000);
       }
       poll();
       return deferred.promise;
@@ -281,12 +282,12 @@ RedeployTask.prototype.start = function start() {
         return deferred.promise;
 
       })
-      .then(function() {
-        debug('waiting for install service to update');
-        // wait for upgrade to complete
+      .then(function() {        
+
         var deferred = Q.defer();
         var poll = function() {
-          setTimeout(function() {
+          debug('waiting for install service to update');
+          setTimeout(function() {            
             request(statusUrl, function(err, response, body) {
               if(err || response.statusCode !== 200) {                
                 poll();
@@ -294,7 +295,7 @@ RedeployTask.prototype.start = function start() {
                 deferred.resolve(body);
               }
             });
-          }, 5000);
+          }, 15000);
         }
         poll();
         return deferred.promise;
@@ -306,17 +307,21 @@ RedeployTask.prototype.start = function start() {
     .then(function() {
       debug('configure install service');
 
-      var config = scope.user_data
-        , keys = _.keys(config.installer);
+      var user_data = scope.user_data
+        , json = JSON.parse(user_data.contents)
+        , keys = _.keys(json.installer);
 
       // update the branch config
       return Q.fcall(function() {        
-        var deferred = new Q.defer();
+        var deferred = new Q.defer()
+          , url;
         
-        request(configUrl + '?key=Common|BRANCH_NAME&value=' + branch, function(err) {
+        url = configUrl + '?key=Common|BRANCH_NAME&value=' + branch;
+        debug('configuring %s', url);
+        request(url, function(err) {
           if(err) deferred.reject(err);
           else deferred.resolve();
-        })
+        });
 
         return deferred.promise;  
       })
@@ -328,7 +333,7 @@ RedeployTask.prototype.start = function start() {
         var funcs = keys.map(function(key) {
           return function() {
             var deferred = new Q.defer()
-              , value = config.installer[key]
+              , value = json.installer[key]
               , url;
             
             url = configUrl + '?key=' + key + '&value=' + value;
@@ -336,13 +341,13 @@ RedeployTask.prototype.start = function start() {
             request(url, function(err) {
               if(err) deferred.reject(err);
               else deferred.resolve();
-            })
+            });
 
             return deferred.promise;  
           };
         });
 
-        return funcs.reduce(Q.when, Q(0));
+        return funcs.reduce(Q.when, Q(0));        
       });
     })
         
@@ -356,11 +361,11 @@ RedeployTask.prototype.start = function start() {
 
     // wait for installation to complete  
     .then(function() {
-      debug('waiting for install to complete');
-
+      
       var deferred = Q.defer();
       var poll = function() {        
-        setTimeout(function() {
+        debug('waiting for install to complete');
+        setTimeout(function() {          
           request(statusUrl, function(err, response, body) {          
             if(!err && response.statusCode === 200) {
 
@@ -378,7 +383,7 @@ RedeployTask.prototype.start = function start() {
                 poll();
             }
           });
-        }, 15000);
+        }, 60000);
       };
       poll();      
       return deferred.promise;
