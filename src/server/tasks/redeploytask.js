@@ -254,7 +254,7 @@ RedeployTask.prototype.start = function start() {
       var poll = function() {  
         debug('waiting for install service');
         setTimeout(function() {          
-          request(statusUrl, function(err, response, body) {
+          request({ url: statusUrl, timeout: 15000 }, function(err, response, body) {
             debug('%j %j', err, response);
             if(err || response.statusCode !== 200) {              
               poll();              
@@ -288,7 +288,7 @@ RedeployTask.prototype.start = function start() {
         var poll = function() {
           debug('waiting for install service to update');
           setTimeout(function() {            
-            request(statusUrl, function(err, response, body) {
+            request({ url: statusUrl, timeout: 15000 }, function(err, response, body) {
               if(err || response.statusCode !== 200) {                
                 poll();
               } else {
