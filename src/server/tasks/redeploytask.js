@@ -489,17 +489,8 @@ RedeployTask.prototype.start = function start() {
   .then(function() {
     debug('deleting old environment');
 
-    var oldEnv = scope.oldEnv
-      , user_data = scope.user_data
-      , json = JSON.parse(user_data.contents);
-
-    json.status = 'deleted';
-    opts = {
-      configuration_id: oldEnv.id,
-      contents: JSON.stringify(json, null, 2)
-    };
-
-    return skytap.environments.updateUserdata(opts)    
+    var oldEnv = scope.oldEnv;    
+    return skytap.environments.del({ configuration_id: oldEnv.id });
   })
 
   .then(function() {
