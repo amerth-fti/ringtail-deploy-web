@@ -19,8 +19,8 @@ controllers.controller('ProjectDetailsCtrl', [
   'config',
   'Project', 
   'Environment',
-  'Task',
-  function($scope, $routeParams, $modal, $location, config, Project, Environment, Task) {
+  'Job',
+  function($scope, $routeParams, $modal, $location, config, Project, Environment, Job) {
     
     $scope.config = config;
 
@@ -66,8 +66,7 @@ controllers.controller('ProjectDetailsCtrl', [
         environment.deployment.status = environment.deployment.status || 'deployed';
       }
       catch (ex)
-      {
-        // TODO - manage lack of deployment info by showing a init dialog?
+      {        
         environment.deployment = {}
         environment.deployment.status = 'initialize';
       }
@@ -112,14 +111,12 @@ controllers.controller('ProjectDetailsCtrl', [
         }
       });
 
-      modal.result.then(function(branch) {
-        var opts = {          
-          project_id: $scope.project.id,
-          branch: branch
-        };
-        environment.$redeploy(opts, function(results) {          
-          var path = '/tasks/' + results.taskId;
-          console.log(path);
+      modal.result.then(function(data) {
+        
+        data.project_id = $scope.project.id;
+
+        environment.$redeploy(data, function(results) {          
+          var path = '/jobs/' + results.jobId;          
           $location.path(path);
         });
         
@@ -174,13 +171,35 @@ controllers.controller('EnvironmentRedeployCtrl', ['$scope', '$modalInstance', '
     $scope.environment = environment;
     $scope.branches = config.branches;
     $scope.selectedBranch;    
+    $scope.showAdvanced = false;    
+    
+    if(environment.deployment.taskdefs) {      
+      $scope.selectedTasks = environment.deployment.taskdefs.slice(0);
+    }
 
-    $scope.rebuild = function() {
-      $modalInstance.close($scope.selectedBranch);
+    $scope.rebuild = function() {      
+      environment.deployment.taskdefs = $scope.selectedTasks;
+      $modalInstance.close({
+        branch: $scope.selectedBranch,        
+      });
     }
 
     $scope.cancel = function() {
       $modalInstance.dismiss();
+    }
+
+    $scope.toggleAdvanced = function() {
+      $scope.showAdvanced = !$scope.showAdvanced;
+    }
+
+    $scope.toggleSelectedTask = function(taskdef) {
+      var index = $scope.selectedTasks.indexOf(taskdef);
+      if(index > -1) {
+        $scope.selectedTasks.splice(index,1);
+      }
+      else {
+        $scope.selectedTasks.push(taskdef);
+      };
     }
 
   }]);
@@ -203,31 +222,50 @@ controllers.controller('EnvironmentConfigCtrl', ['$scope', '$modalInstance', 'co
 
 
 /**
- * Controller for showing task details
+ * Controller for showing job details
  */
-controllers.controller('TaskDetailsCtrl', [
+controllers.controller('JobDetailsCtrl', [
   '$scope', 
   '$routeParams', 
   '$modal',  
-  'Task',
-  function($scope, $routeParams, $modal, Task) {    
+  'Job',
+  function($scope, $routeParams, $modal, Job) {    
+    console.log('JobDetailsCtrl');
 
-    // load the task
-    $scope.task = Task.get({taskId: $routeParams.taskId}, loadTaskComplete);
+    // load the job
+    $scope.job = Job.get({jobId: $routeParams.jobId}, loadJobComplete);
 
 
-    function loadTaskComplete(result) {      
-      $scope.task = result;      
-      $scope.task.elapsed = ($scope.task.stopped ? new Date($scope.task.stopped) : new Date()) - new Date($scope.task.started);      
+    function loadJobComplete(result) {      
+      $scope.job = result;      
+      $scope.job.elapsed = ($scope.job.stopped ? new Date($scope.job.stopped) : new Date()) - new Date($scope.job.started);      
+
+
+      $scope.selectedTask = null;
+      result.tasks.forEach(function(task) {
+        if(task.status === 'Running') {
+          $scope.selectedTask = task;
+        }
+      });
+      
+      if($scope.selectedTask == null) {
+        $scope.selectedTask = result.tasks[0];
+      }
+
       pollWhileRunning(result);
     }
 
-    function pollWhileRunning(task) {
-      if(task.status === 'Running') {
+    function pollWhileRunning(job) {
+      if(job.status === 'Running') {
         setTimeout(function() {
-          task.$get(loadTaskComplete);
+          job.$get(loadJobComplete);
         }, 5000);
       }
+    }
+
+
+    $scope.taskClick = function(task) {
+      $scope.selectedTask = task;
     }
 
   }]);

@@ -21,3 +21,25 @@
 button {
   border-width: 1px !important;  
 }
+
+
+.badge.status-glyph {  
+  background-color: inherit !important;
+}
+.active .badge.status-glyph {
+  background-color: #fff !important;
+}
+.badge.status-glyph.Running {
+  color: #31708f !important;
+}
+
+.badge.status-glyph.Pending {
+  color: inherit !important;
+}
+
+.badge.status-glyph.Failed {
+  color: #a94442 !important;
+}
+.badge.status-glyph.Succeeded {
+  color: #3c763d !important;
+}

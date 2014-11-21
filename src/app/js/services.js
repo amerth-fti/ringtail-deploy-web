@@ -23,10 +23,10 @@ services.factory('Environment', ['$resource',
   }]);
 
 
-services.factory('Task', ['$resource',
+services.factory('Job', ['$resource',
   function($resource) {
     return $resource(
-      'api/tasks/:taskId',
-      { taskId: '@id' }      
+      'api/jobs/:jobId',
+      { jobId: '@id' }      
     );
   }]);

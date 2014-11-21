@@ -22,9 +22,9 @@ app.config(['$routeProvider', 'config',
       templateUrl: 'app/partials/project-details.html',
       controller: 'ProjectDetailsCtrl'
     })
-    .when('/tasks/:taskId', {
-      templateUrl: 'app/partials/task-details.html',
-      controller: 'TaskDetailsCtrl'
+    .when('/jobs/:jobId', {
+      templateUrl: 'app/partials/job-details.html',
+      controller: 'JobDetailsCtrl'
     })
     .otherwise({
       redirectTo: config.defaultRoute || '/projects/'

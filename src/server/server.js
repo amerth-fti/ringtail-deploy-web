@@ -53,8 +53,8 @@ app.put ('/api/environments/:environmentId/redeploy', controllers.environments.r
 
 
 // API - TASK ROUTES
-app.get ('/api/tasks', controllers.tasks.list);
-app.get ('/api/tasks/:taskId', controllers.tasks.get);
+app.get ('/api/jobs', controllers.jobs.list);
+app.get ('/api/jobs/:jobId', controllers.jobs.get);
 
 
 console.log('Listening on %s:%d ', (config.host ? config.host : '*'), config.port);

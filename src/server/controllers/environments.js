@@ -2,8 +2,9 @@ var debug       = require('debug')('deployer-environments')
   , Q           = require('q')  
   , Skytap      = require('node-skytap')
   , config      = require('../../../config')
-  , tasks       = require('../tasks')  
-  , taskrunner  = require('../taskrunner')
+  , Job         = require('../job')  
+  , jobrunner   = require('../jobrunner')
+  , taskfactory = require('../taskfactory')
   , skytap  = Skytap.init(config.skytap);
 
 
@@ -148,23 +149,35 @@ exports.stop = function stop(req, res) {
 exports.redeploy = function redeploy(req, res) {
   debug('redeploy');
 
-  var configuration_id = req.param('environmentId')
-    , project_id = req.param('project_id')    
+  var configuration_id = req.param('environmentId')  
+    , job
+    , jobId
+    , user_data = req.param('user_data')
+    , deployment = req.param('deployment')
+    , project_id = req.param('project_id')
     , branch = req.param('branch')
-    , task
-    , taskId;
+    , taskdefs = deployment.taskdefs
+
 
   // create redeploy task
-  task = new tasks.RedeployTask({ 
-    project_id: project_id,
-    configuration_id: configuration_id,
-    branch: branch
+  job = new Job({
+    name: 'Redeploy environment ' + configuration_id,
+    tasks: taskfactory.createTasks(taskdefs),
+    rundata: { 
+      project_id: project_id,
+      configuration_id: configuration_id,
+      branch: branch,
+      user_data: user_data
+    }
   });
 
-  // enqueue task
-  var taskId = taskrunner.queue(task);
+  // enqueue task  
+  jobId = jobrunner.add(job);
 
-  res.send({ taskId: taskId });
+  // start the job
+  job.start();
+
+  res.send({ jobId: jobId });
 };
 
 

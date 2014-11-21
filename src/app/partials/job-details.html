@@ -1,0 +1,45 @@
+
+
+<h2>{{job.name}}</h2>
+
+<h4>Status: {{job.status}} ({{job.elapsed | elapsed}})</h4>
+
+
+<div class="row">  
+  <div class="col-md-3">
+    <div class="list-group">      
+      <a class="list-group-item " 
+         ng-repeat="task in job.tasks"
+         ng-class="{ active: task == selectedTask }"
+         ng-click="taskClick(task)">         
+        {{$index + 1}}. {{task.name}}
+        <span class="badge status-glyph {{task.status}}">
+          <span 
+            class="glyphicon" 
+            ng-class="{ 'glyphicon-time': task.status === 'Pending', 'glyphicon-ok': task.status === 'Succeeded', 'glyphicon-fire': task.status === 'Failed', 'glyphicon-road': task.status === 'Running' }"></span>
+        </span>
+      </a>
+    </div>
+  </div>
+  <div class="col-md-9">
+
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h3 class="panel-title">{{selectedTask.name}}
+          <span class="badge status-glyph {{selectedTask.status}}">
+            <span 
+              class="glyphicon" 
+              ng-class="{ 'glyphicon-time': selectedTask.status === 'Pending', 'glyphicon-ok': selectedTask.status === 'Succeeded', 'glyphicon-fire': selectedTask.status === 'Failed', 'glyphicon-road': selectedTask.status === 'Running' }"></span>
+            </span>
+          </h3>
+        </span>
+      </div>      
+      <ul class="list-group">
+        <li class="list-group-item" ng-repeat="entry in selectedTask.runlog">
+          <strong>{{entry.date | date:'mediumTime' }}:</strong> {{entry.data}}
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>
+

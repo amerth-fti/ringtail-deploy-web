@@ -290,6 +290,7 @@ RedeployTask.prototype.start = function start() {
           setTimeout(function() {            
             request({ url: statusUrl, timeout: 15000 }, function(err, response, body) {
               if(err || response.statusCode !== 200) {                
+                if(err) debug(err);
                 poll();
               } else {
                 deferred.resolve(body);

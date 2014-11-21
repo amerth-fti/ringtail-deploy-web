@@ -1,18 +1,18 @@
 var debug       = require('debug')('deployer-projects')  
   , Q           = require('q')
   , _           = require('underscore')
-  , taskrunner  = require('../taskrunner');
+  , jobrunner  = require('../jobrunner');
 
 
 
 
 exports.list = function list(req, res) {
-  res.send(taskrunner.getTasks());
+  res.send(jobrunner.getJobs());
 }
 
 
 
 exports.get = function get(req, res) {
-  var taskId = req.param('taskId');
-  res.send(taskrunner.getTask(taskId));
+  var jobId = req.param('jobId');
+  res.send(jobrunner.getJob(jobId));
 }
