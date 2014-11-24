@@ -17,16 +17,13 @@ function TaskImpl() {
       log('deleting old environment');
 
       var oldEnv = scope.oldEnv
-        , user_data = scope.user_data
-        , json = JSON.parse(user_data.contents);
-
-      json.status = 'deleted';
+        , opts;
+                
       opts = {
-        configuration_id: oldEnv.id,
-        contents: JSON.stringify(json, null, 2)
+        configuration_id: oldEnv.id,        
       };
 
-      return skytap.environments.updateUserdata(opts)    
+      return skytap.environments.del(opts)    
     })
 
     .then(function() {
