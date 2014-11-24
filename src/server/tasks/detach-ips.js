@@ -32,16 +32,32 @@ function TaskImplementation() {
       });
 
       // perform the detaches
-      return Q.all(scope.detachIps.map(function (detachIp) {          
-        if(detachIp.ip) {
-          log('detaching: %j', detachIp);
-          return skytap.ips.detach(detachIp);
-        }        
-        return null;          
-      }))
+      var promises = scope.detachIps.map(function(detachIp) {    
+
+        var deferred = new Q.defer();
+        var poll = function() {        
+          setTimeout(function() {
+            skytap.ips.detach(detachIp, function(err) {
+              if(err) {
+                log('error detaching ip: %j, will retry shortly', err);
+                poll();
+              } 
+              else {
+                log('ip successfully detached');
+                deferred.resolve();
+              }
+            })
+          }, 5000);
+        };
+        poll();
+
+        return deferred.promise;
+      });
+
+      return Q.all(promises)
       .then(function() {
-        log('all public ips detached');
-      });    
+        log('all ips detached');
+      }); 
     })
   };
 }

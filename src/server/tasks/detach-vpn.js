@@ -44,7 +44,7 @@ function TaskImpl() {
                 deferred.resolve();
               }
             })
-          }, 15000);
+          }, 5000);
         };
 
         poll();
