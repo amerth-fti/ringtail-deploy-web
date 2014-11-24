@@ -33,25 +33,29 @@ function TaskImplementation() {
 
       // perform the detaches
       var promises = scope.detachIps.map(function(detachIp) {    
+        if(detachIp.ip) {
+          var deferred = new Q.defer();
+          var poll = function() {        
+            setTimeout(function() {
+              skytap.ips.detach(detachIp, function(err) {
+                if(err) {
+                  log('error detaching ip: %j, will retry shortly', err);
+                  poll();
+                } 
+                else {
+                  log('ip successfully detached');
+                  deferred.resolve();
+                }
+              })
+            }, 5000);
+          };
+          poll();
 
-        var deferred = new Q.defer();
-        var poll = function() {        
-          setTimeout(function() {
-            skytap.ips.detach(detachIp, function(err) {
-              if(err) {
-                log('error detaching ip: %j, will retry shortly', err);
-                poll();
-              } 
-              else {
-                log('ip successfully detached');
-                deferred.resolve();
-              }
-            })
-          }, 5000);
-        };
-        poll();
-
-        return deferred.promise;
+          return deferred.promise;
+        }
+        else {
+          return null;
+        }
       });
 
       return Q.all(promises)

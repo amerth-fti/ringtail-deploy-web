@@ -27,26 +27,30 @@ function TaskImpl() {
       });        
         
       // attach IPs  
-      var promises = scope.attachIps.map(function(attachIp) {    
+      var promises = scope.attachIps.map(function(attachIp) {            
+        if(attachIp.ip) {
+          var deferred = new Q.defer();
+          var poll = function() {        
+            setTimeout(function() {
+              skytap.ips.attach(attachIp, function(err) {
+                if(err) {
+                  log('error attaching ip: %j, will retry shortly', err);
+                  poll();
+                } 
+                else {
+                  log('ip successfully attached');
+                  deferred.resolve();
+                }
+              })
+            }, 5000);
+          };
+          poll();
 
-        var deferred = new Q.defer();
-        var poll = function() {        
-          setTimeout(function() {
-            skytap.ips.attach(attachIp, function(err) {
-              if(err) {
-                log('error attaching ip: %j, will retry shortly', err);
-                poll();
-              } 
-              else {
-                log('ip successfully attached');
-                deferred.resolve();
-              }
-            })
-          }, 5000);
-        };
-        poll();
-
-        return deferred.promise;
+          return deferred.promise;
+        }
+        else {
+          return null;
+        }
       });
 
       return Q.all(promises)
