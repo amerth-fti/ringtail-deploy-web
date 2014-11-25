@@ -10,8 +10,8 @@ var app = angular.module('app', [
 
 app.constant('config', window.appConfig);
 
-app.config(['$routeProvider', 'config',
-  function($routeProvider, config) {
+app.config(['$routeProvider', '$httpProvider', 'config',
+  function($routeProvider, $httpProvider, config) {
 
     $routeProvider
     .when('/projects', {
@@ -29,6 +29,16 @@ app.config(['$routeProvider', 'config',
     .otherwise({
       redirectTo: config.defaultRoute || '/projects/'
     });
+
+
+    // add cache busting
+    if (!$httpProvider.defaults.headers.get) {
+      $httpProvider.defaults.headers.common = {};
+    }
+    
+    $httpProvider.defaults.headers.common["Cache-Control"] = "no-cache";
+    $httpProvider.defaults.headers.common.Pragma = "no-cache";
+    $httpProvider.defaults.headers.common["If-Modified-Since"] = "0";
 
   }]);
 
