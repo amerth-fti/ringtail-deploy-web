@@ -5,7 +5,7 @@ var events  = require('events')
   , _       = require('underscore');
 
 
-function Task() {
+function Task(options) {
   events.EventEmitter.call(this);
 
   this.name = null;  
@@ -14,6 +14,13 @@ function Task() {
   this.stopped = null;
   this.runlog = [];
   this.err = null;
+
+  // apply options
+  if(options) {
+    for(var key in options) {
+      this[key] = options[key];
+    }
+  }
 
   var self = this;  
   this.log = function log() {
@@ -46,6 +53,11 @@ Task.prototype.start = function start(scope) {
   var self = this;
 
   return this.execute(scope, this.log)
+  .then(function(result) {
+    if(this.storeIn) {
+      scope[storeIn] = result;
+    }
+  })
   .then(function() {    
     self.endTime = new Date();
     self.status = 'Succeeded';

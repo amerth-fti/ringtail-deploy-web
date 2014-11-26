@@ -152,6 +152,7 @@ exports.redeploy = function redeploy(req, res) {
   var configuration_id = req.param('environmentId')  
     , job
     , jobId
+    , environment = req.body
     , user_data = req.param('user_data')
     , deployment = req.param('deployment')
     , project_id = req.param('project_id')
@@ -161,13 +162,14 @@ exports.redeploy = function redeploy(req, res) {
 
   // create redeploy task
   job = new Job({
-    name: 'Redeploy environment ' + configuration_id,
+    name: 'Redeploy environment ' + environment.name,
     tasks: taskfactory.createTasks(taskdefs),
     rundata: { 
-      project_id: project_id,
-      configuration_id: configuration_id,
-      branch: branch,
-      user_data: user_data
+      me: environment
+      //project_id: project_id
+      //configuration_id: configuration_id,
+      //branch: branch,
+      //user_data: user_data
     }
   });
 
