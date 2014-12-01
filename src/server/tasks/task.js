@@ -14,6 +14,7 @@ function Task(options) {
   this.stopped = null;
   this.runlog = [];
   this.err = null;
+  this.data = {};
 
   // apply options
   if(options) {
@@ -52,13 +53,20 @@ Task.prototype.start = function start(scope) {
   this.emit('start', this);  
   var self = this;
 
-  return this.execute(scope, this.log)
-  .then(function(result) {
-    if(this.storeIn) {
-      scope[storeIn] = result;
+  return Q.fcall(function() {
+    return self.execute(scope, self.log);
+  })
+  .then(function(result) {    
+    if(self.storeIn) {
+      self.log('stroring scope variable "%s"', self.storeIn);
+      scope[self.storeIn] = result;
+    } else {
+      self.log('skipping scope storage');
     }
+
   })
   .then(function() {    
+    self.log('task complete');
     self.endTime = new Date();
     self.status = 'Succeeded';
     self.emit('success');
@@ -75,4 +83,40 @@ Task.prototype.start = function start(scope) {
     throw err;
   });
 
+}
+
+
+
+Task.prototype.getData = function getData(scope, key) {  
+  try
+  {
+    //return eval(this.data[key]);        
+    return getDataFromObject(scope, this.data, key);
+  }
+  catch (ex) {    
+    return this.data[key];
+  }
+}
+
+function getDataFromObject(scope, obj, key) {    
+  'use strict';
+  try
+  {           
+    var val = eval(obj[key])
+      , temp;
+    
+    if(typeof(val) === 'object') {
+      temp = {};
+
+      for(var valkey in val) {
+        temp[valkey] = getDataFromObject(scope, val, valkey)
+      }
+      val = temp;
+    }
+    
+    return val;
+  }
+  catch (ex) {    
+    return obj[key];
+  }
 }

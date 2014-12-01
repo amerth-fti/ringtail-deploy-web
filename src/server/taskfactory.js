@@ -3,7 +3,8 @@
 function createTask(taskdef) {
   var path = './tasks/'
     , name
-    , options;
+    , options
+    , data;
 
   if(typeof taskdef === 'string') {     
     name = taskdef;
@@ -14,10 +15,11 @@ function createTask(taskdef) {
   else if (taskdef.task) {
     name = taskdef.task;
     options = taskdef.options;
+    data = taskdef.data;
   }
 
   var Task = require(path + name);  
-  return new Task(options);
+  return new Task(options, data);
 }
 
 

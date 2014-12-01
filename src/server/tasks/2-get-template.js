@@ -9,24 +9,26 @@ var util    = require('util')
   , Task    = require('./task');
 
 
-function TaskImplementation(options) {  
+function TaskImplementation(options) {    
+  this.name = 'Get template';
   Task.call(this, options);  
+
+  this.execute = function execute(scope, log) {
+    var template_id = this.getData(scope, 'template_id')
+      , project_id = this.getData(scope, 'project_id');
+
+    if(template_id === "newest") {        
+      return getNewestTemplate(project_id, scope, log);
+    } else {
+      throw new Error('Find by id not implement');
+    }    
+
+  };
 }
 
 util.inherits(TaskImplementation, Task);
 
 module.exports = TaskImplementation;
-
-
-TaskImplementation.prototype.execute = function execute(scope, log) {  
-
-  var template_id = this.template_id;  
-  if(template_id === "newest") {
-    var project_id = this.project_id;
-    return getNewestTemplate(project_id, scope, log);
-  }
-
-};
 
 
 function getNewestTemplate(project_id, scope, log) {  

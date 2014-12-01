@@ -8,58 +8,39 @@ var util    = require('util')
 
 
 function TaskImpl(options) {  
-  this.name = 'Create new environment';  
+  this.name = 'Create environment';  
   Task.call(this, options);
 
   this.execute = function execute(scope, log) {  
-    var self = this;
+    var template_id = this.getData(scope, 'template_id')
+      , deployment = scope.deployment;
 
-    return Q.fcall(function() {      
-
-      var template_id = eval(self.template_id);
-
+    return Q.fcall(function() {
       log('creating new environment');    
-      return skytap.environments.create({ template_id: template_id })    
-      .then(function(newEnv) {
-        log('new environment created %s', newEnv.id);
-        scope.newEnv = newEnv;
+      return skytap.environments.create({ template_id: template_id });        
+    })
+
+    .then(function(newEnv) {
+      log('new environment %s created', newEnv.id);        
+      return newEnv;
+    })
+
+    .then(function(newEnv) {
+      log('setting deployment info for %s', newEnv.id);      
+      return skytap.environments.updateUserdata({ 
+        configuration_id: newEnv.id,
+        contents: JSON.stringify(deployment, null, 2)
       })
-
-      .then(function() {
-        log('updating new environment details');
-        var configuration_id = scope.newEnv.id
-          , name = scope.oldEnv.name
-          , description = scope.oldEnv.description;
-
-        return skytap.environments.update({
-          configuration_id: configuration_id,
-          name: name, 
-          description: description
-        });
-      })
-      .then(function() {
-        log('setting new environment user_data');
-
-        var newEnv = scope.newEnv
-          , user_data = scope.user_data
-          , json = JSON.parse(user_data.contents)
-          , opts;
-
-        json.status = 'deploying';
-
-        var opts = {
-          configuration_id: newEnv.id,
-          contents: JSON.stringify(json, null, 2)
-        };
-        
-        return skytap.environments.updateUserdata(opts)
-        .then(function(user_data) {
-          log('new environment user_data configured')
-          scope.user_data = user_data;        
-        });
-
+      .then(function(user_data) {
+        return newEnv;
       });
-    });
+    })
+
+    .then(function(newEnv) {
+      log('deployment info has been set');
+      return newEnv;
+    })
+
   }
 }
 

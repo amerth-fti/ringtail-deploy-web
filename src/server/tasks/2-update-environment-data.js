@@ -10,20 +10,12 @@ var util    = require('util')
 
 
 function TaskImplementation(options) {  
+  this.name = 'Update environment data';
   Task.call(this, options);    
-}
 
-util.inherits(TaskImplementation, Task);
-
-module.exports = TaskImplementation;
-
-
-TaskImplementation.prototype.execute = function execute(scope, log) {  
-  var self = this;
-
-  return Q.fcall(function() {
-
-    var configuration_id = eval(self.configuration_id);    
+  this.execute = function execute(scope, log) {  
+    var configuration_id = this.getData(scope, 'configuration_id')
+      , update = this.getData(scope, 'update');
 
     return Q.fcall(function() {
       log('getting user_data');
@@ -43,8 +35,8 @@ TaskImplementation.prototype.execute = function execute(scope, log) {
     .then(function(json) {
       log('updating user_data');
 
-      for(var key in self.contents) {
-        json[key] = self.contents[key];
+      for(var key in update) {
+        json[key] = update[key];
       }
 
       return skytap.environments.updateUserdata({ 
@@ -58,35 +50,9 @@ TaskImplementation.prototype.execute = function execute(scope, log) {
       return user_data;
     });
 
-  });
-};
+  };
+}
 
+util.inherits(TaskImplementation, Task);
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+module.exports = TaskImplementation;

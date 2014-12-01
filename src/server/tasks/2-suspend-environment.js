@@ -12,18 +12,9 @@ var util    = require('util')
 function TaskImplementation(options) {  
   this.name = 'Suspend environment';
   Task.call(this, options);  
-}
 
-util.inherits(TaskImplementation, Task);
-
-module.exports = TaskImplementation;
-
-
-TaskImplementation.prototype.execute = function execute(scope, log) {  
-  var self = this;
-    
-  return Q.fcall(function() {
-    var configuration_id = eval(self.configuration_id);
+  this.execute = function execute(scope, log) {  
+    var configuration_id = this.getData(scope, 'configuration_id');
 
     return Q.fcall(function() {
       log('suspending environment %d', configuration_id);
@@ -39,5 +30,11 @@ TaskImplementation.prototype.execute = function execute(scope, log) {
       log('environment %d suspended', configuration_id)
       return env;
     });
-  });
-};
+    
+  };
+
+}
+
+util.inherits(TaskImplementation, Task);
+
+module.exports = TaskImplementation;

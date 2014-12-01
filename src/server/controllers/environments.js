@@ -165,7 +165,8 @@ exports.redeploy = function redeploy(req, res) {
     name: 'Redeploy environment ' + environment.name,
     tasks: taskfactory.createTasks(taskdefs),
     rundata: { 
-      me: environment
+      me: environment,
+      deployment: deployment
       //project_id: project_id
       //configuration_id: configuration_id,
       //branch: branch,
