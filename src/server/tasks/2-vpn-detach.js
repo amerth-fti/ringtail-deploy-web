@@ -7,9 +7,9 @@ var util    = require('util')
   , Task    = require('./task');
 
 
-function TaskImpl() {  
-  Task.call(this);
+function TaskImpl(options) {  
   this.name = 'Detach VPN';  
+  Task.call(this, options);  
 
   this.execute = function execute(scope, log) {  
     var configuration_id = this.getData(scope, 'configuration_id');
@@ -58,7 +58,7 @@ function TaskImpl() {
         return deferred.promise;
       }
     });
-        
+
   };
 }
 
