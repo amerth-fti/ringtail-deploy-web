@@ -25,7 +25,7 @@ function TaskImplementation(options) {
 
     .then(function(env) {
       log('found %d vms', env.vms.length);
-      returne evn;
+      return evn;
     })
 
     .then(function(env) {
