@@ -1,20 +1,18 @@
 var util    = require('util')  
   , Q       = require('Q')
   , _       = require('underscore')
-
   , config  = require('../../../config')
   , Skytap  = require('node-skytap')
   , skytap  = Skytap.init(config.skytap)
-
   , Task    = require('./task');
 
 
-function TaskImplementation(options) {    
-  this.name = 'Detach public IPs';
-  Task.call(this, options);  
+function TaskImpl(options) {  
+  this.name = 'Attach public IPs';
+  Task.call(this, options);
 
   this.execute = function execute(scope, log) {  
-    var configuration_id = this.getData(scope, 'configuration_id');
+    var configuration_id = this.getData(scope, 'configuration_id')
       , ips = this.getData(scope, 'ips');
 
 
@@ -29,29 +27,29 @@ function TaskImplementation(options) {
     })
 
     .then(function(env) {
-      log('detaching public ip addresses');
+      log('attaching public ip addresses');
 
-      // get the ip addresses to detach
-      detachIps = env.vms.map(function(vm, idx) {
+      // get the ip addresses to attach
+      var attachIps = env.vms.map(function(vm, idx) {
         return {
           vm_id: vm.id,
           interface_id: vm.interfaces[0].id,
           ip: ips[idx]
         };
-      });
-
-      // perform the detaches
-      var promises = detachIps.map(function(detachIp) {    
-        if(detachIp.ip) {
+      });        
+        
+      // attach IPs  
+      var promises = sattachIps.map(function(attachIp) {            
+        if(attachIp.ip) {
           var deferred = new Q.defer();
           var poll = function() {        
             setTimeout(function() {
-              log('detaching ip %s', detachIp.ip);
-              skytap.ips.detach(detachIp, function(err) {
+              log('attaching ip %s', attachIp.ip);
+              skytap.ips.attach(attachIp, function(err) {
                 if(err) poll();
                 else {
-                  log('ip %s detached', detachIp.ip);
-                  deferred.resolve(detachIp.ip);
+                  log('ip %s attached', attachIp.ip);
+                  deferred.resolve(ip);
                 }
               })
             }, 5000);
@@ -64,17 +62,17 @@ function TaskImplementation(options) {
         }
       });
 
-      return Q.all(promises)
+      return Q.all(promises);
+
     })
 
     .then(function(ips) {
-      log('all ips detached');
+      log('all ips attached');
       return ips;
     });
-
-  };
+  }
 }
 
-util.inherits(TaskImplementation, Task);
+util.inherits(TaskImpl, Task);
 
-module.exports = TaskImplementation;
+module.exports = TaskImpl;
