@@ -12,26 +12,17 @@ function TaskImpl(options) {
   Task.call(this, options);  
 
   this.execute = function execute(scope, log) {  
-    var configuration_id = this.getData(scope, 'configuration_id');
-
+    var env = this.getData(scope, 'env');
+    
     return Q.fcall(function() {
-      log('getting vms for environment %s', configuration_id);
-      return skytap.environments.get({ configuration_id: configuration_id })
-    })
-
-    .then(function(env) {
-      log('found %d vms', env.vms.length);
-      return evn;
-    })
-  
-    .then(function(env) {
-      log('removing vpn connections');
+      log('removing vpn for %s', env.id);
 
       var network = env.networks[0]
-        , attachment = network.vpn_attachments[0]
+        , attachment = network.vpn_attachments[0] ? network.vpn_attachments[0] : null
         , vpn = attachment ? attachment.vpn : null
         , opts
         , deferred = Q.defer();
+
 
       if(vpn) {
         log('removing vpn %s', vpn.id);

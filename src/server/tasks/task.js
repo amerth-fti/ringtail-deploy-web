@@ -61,7 +61,7 @@ Task.prototype.start = function start(scope) {
       self.log('stroring scope variable "%s"', self.storeIn);
       scope[self.storeIn] = result;
     } else {
-      self.log('skipping scope storage');
+      self.log('no scope storage');
     }
 
   })
@@ -87,11 +87,13 @@ Task.prototype.start = function start(scope) {
 
 
 
-Task.prototype.getData = function getData(scope, key) {  
+Task.prototype.getData = function getData(scope, key, expand) {  
   try
   {
-    //return eval(this.data[key]);        
-    return getDataFromObject(scope, this.data, key);
+    if(expand)
+      return getDataFromObject(scope, this.data, key);
+    else 
+      return eval(this.data[key]);  
   }
   catch (ex) {    
     return this.data[key];
@@ -105,13 +107,16 @@ function getDataFromObject(scope, obj, key) {
     var val = eval(obj[key])
       , temp;
     
-    if(typeof(val) === 'object') {
+    if(Object.prototype.toString.call(val) === '[object Object]') {
       temp = {};
 
       for(var valkey in val) {
         temp[valkey] = getDataFromObject(scope, val, valkey)
       }
       val = temp;
+    }
+    else {
+      val = eval(val); // perform double eval
     }
     
     return val;

@@ -12,22 +12,11 @@ function TaskImpl(options) {
   Task.call(this, options);
 
   this.execute = function execute(scope, log) {  
-    var configuration_id = this.getData(scope, 'configuration_id')
+    var env = this.getData(scope, 'env')
       , ips = this.getData(scope, 'ips');
 
-
     return Q.fcall(function() {
-      log('getting vms for environment %s', configuration_id);
-      return skytap.environments.get({ configuration_id: configuration_id })
-    })
-
-    .then(function(env) {
-      log('found %d vms', env.vms.length);
-      return evn;
-    })
-
-    .then(function(env) {
-      log('attaching public ip addresses');
+      log('attaching public ips %j for %s', ips, env.id);
 
       // get the ip addresses to attach
       var attachIps = env.vms.map(function(vm, idx) {
@@ -39,17 +28,18 @@ function TaskImpl(options) {
       });        
         
       // attach IPs  
-      var promises = sattachIps.map(function(attachIp) {            
+      var promises = attachIps.map(function(attachIp) {            
         if(attachIp.ip) {
           var deferred = new Q.defer();
           var poll = function() {        
+
             setTimeout(function() {
-              log('attaching ip %s', attachIp.ip);
+              log('attempting to attach ip %s', attachIp.ip);              
               skytap.ips.attach(attachIp, function(err) {
-                if(err) poll();
+                if(err) { console.log(err); poll(); }
                 else {
                   log('ip %s attached', attachIp.ip);
-                  deferred.resolve(ip);
+                  deferred.resolve(attachIp.ip);
                 }
               })
             }, 5000);

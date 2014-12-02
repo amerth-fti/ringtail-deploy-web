@@ -15,7 +15,7 @@ function TaskImplementation(options) {
 
   this.execute = function execute(scope, log) {  
     var configuration_id = this.getData(scope, 'configuration_id')      
-      , update = this.getData(scope, 'update')
+      , update = this.getData(scope, 'update', true)
       , args;
 
       args = {

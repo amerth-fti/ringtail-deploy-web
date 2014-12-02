@@ -15,7 +15,7 @@ function TaskImplementation(options) {
 
   this.execute = function execute(scope, log) {  
     var configuration_id = this.getData(scope, 'configuration_id')
-      , update = this.getData(scope, 'update');
+      , update = this.getData(scope, 'update', true);
 
     return Q.fcall(function() {
       log('getting user_data');
@@ -36,6 +36,7 @@ function TaskImplementation(options) {
       log('updating user_data');
 
       for(var key in update) {
+        log('setting %s to %j', key, update[key]);
         json[key] = update[key];
       }
 
