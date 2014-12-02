@@ -1,5 +1,6 @@
 var debug       = require('debug')('deployer-environments')  
   , Q           = require('q')  
+  , _           = require('underscore')
   , Skytap      = require('node-skytap')
   , config      = require('../../../config')
   , Job         = require('../job')  
@@ -152,26 +153,22 @@ exports.redeploy = function redeploy(req, res) {
   var configuration_id = req.param('environmentId')  
     , job
     , jobId
-    , environment = req.body
-    , user_data = req.param('user_data')
-    , deployment = req.param('deployment')
-    , project_id = req.param('project_id')
-    , branch = req.param('branch')
+    , environment = req.body    
+    , deployment = req.param('deployment')    
     , taskdefs = deployment.taskdefs
+    , rundata;
 
+  rundata = { 
+    me: environment,
+    deployment: deployment
+  };
+  rundata = _.extend(rundata, req.query);
 
   // create redeploy task
   job = new Job({
     name: 'Redeploy environment ' + environment.name,
     tasks: taskfactory.createTasks(taskdefs),
-    rundata: { 
-      me: environment,
-      deployment: deployment
-      //project_id: project_id
-      //configuration_id: configuration_id,
-      //branch: branch,
-      //user_data: user_data
-    }
+    rundata: rundata
   });
 
   // enqueue task  

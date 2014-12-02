@@ -14,12 +14,15 @@ function TaskImpl(options) {
 
   this.execute = function execute(scope, log) {  
     
+    var branch = this.getData(scope, "branch")
+      , host = this.getData(scope, "host")
+      , env = this.getData(scope, "env");
+
     return Q.fcall(function() {
       log('start installation')
-                
-      var branch = this.getData(scope, "branch")
-        , environment = this.getData(scope, "env")
-        , ip_address = this.getData(scope, "ip_address")
+                      
+      var vm = env.vms[0]
+        , ip_address = vm.interfaces[0].nat_addresses.vpn_nat_addresses[0].ip_address
         , installUrl = 'http://' + ip_address + ':8080/api/installer'
         , statusUrl  = 'http://' + ip_address + ':8080/api/status'
         , updateUrl  = 'http://' + ip_address + ':8080/api/UpdateInstallerService'
@@ -90,9 +93,20 @@ function TaskImpl(options) {
       .then(function() {
         log('configure install service');
 
-        var user_data = scope.user_data
-          , json = JSON.parse(user_data.contents)
-          , keys = _.keys(json.installer);
+        var installerConfigs
+          , keys;
+
+        installer = {
+          "Common|RINGTAILUISTATICCONTENTURL": host + "/UIStatic/",
+          "Common|RINGTAILSTSURL": host + "/RingtailSTS/",
+          "Common|RINGTAILIISWEBAPPLICATIONURL": host + "/Ringtail8/",
+          "Common|RINGTAILHELPURL": host + "/RingtailHelp/",
+          "Common|RINGTAILCLASSICURL": host + "/classic",
+          "Common|RINGTAILLEGALURL": host + "/RTLC",
+          "Common|RMCIISWEBAPPLICATIONURL": host + "/RMC"
+        };
+        
+        keys = _.keys(installer);
 
         // update the branch config
         return Q.fcall(function() {        
@@ -116,7 +130,7 @@ function TaskImpl(options) {
           var funcs = keys.map(function(key) {
             return function() {
               var deferred = new Q.defer()
-                , value = json.installer[key]
+                , value = installer[key]
                 , url;
               
               url = configUrl + '?key=' + key + '&value=' + value;
