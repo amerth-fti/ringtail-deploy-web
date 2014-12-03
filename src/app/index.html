@@ -1,13 +1,12 @@
 <!DOCTYPE html>
-<html lang="en" ng-app="app">
+<html lang="en">
 <head>
   <meta charset="utf-8">
   <meta http-equiv="x-ua-compatible" content="IE=Edge"/>
   
   <title>Skytap Deployer</title>
 
-  <link rel="Stylesheet" type="text/css" href="/app/dep/bootstrap/dist/css/bootstrap.min.css" />
-  
+  <link rel="Stylesheet" type="text/css" href="/app/dep/bootstrap/dist/css/bootstrap.min.css" />  
   <link rel="Stylesheet" type="text/css" href="/app/css/app.css" />
 
   <script type="text/javascript" src="/app/dep/jquery/dist/jquery.min.js"></script>
@@ -15,6 +14,7 @@
   <script type="text/javascript" src="/app/dep/angular/angular.js"></script>
   <script type="text/javascript" src="/app/dep/angular-route/angular-route.js"></script>
   <script type="text/javascript" src="/app/dep/angular-resource/angular-resource.js"></script>
+  <script type="text/javascript" src="/app/dep/angular-animate/angular-animate.js"></script>
   <script type="text/javascript" src="/app/dep/angular-bootstrap/ui-bootstrap.js"></script>
   <script type="text/javascript" src="/app/dep/angular-bootstrap/ui-bootstrap-tpls.js"></script>
 
@@ -23,23 +23,24 @@
   <script type="text/javascript" src="/app/js/controllers.js"></script>
   <script type="text/javascript" src="/app/js/services.js"></script>  
   <script type="text/javascript" src="/app/js/filters.js"></script>
-
-
+  
 </head>
-<body >
+<body ng-app="app">
 
-  <nav class="navbar navbar-default" role="navigation">
-    <div class="container">
-      <div class="navbar-header">
-        <a class="navbar-brand" href="/">
-          <span class="glyphicon glyphicon-cloud"></span>
-          Skytap Deployer
-        </a>
+  <div ng-controller="MainCtrl">
+
+    <nav class="navbar navbar-default" role="navigation">
+      <div class="container">
+        <div class="navbar-header">
+          <a class="navbar-brand" href="/">
+            <span class="glyphicon glyphicon-cloud"></span>
+            Skytap Deployer
+          </a>
+        </div>
       </div>
-    </div>
-  </nav>
+    </nav>
+    <div ng-view class="container"></div>
 
-  <div class="container" ng-view></div>
-
+  </div>
 </body>
 </html>

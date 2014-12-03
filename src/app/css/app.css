@@ -8,6 +8,7 @@
   background-repeat: no-repeat;
   min-height: 32px;
   min-width: 32px;
+  float: right;  
 }
 
 .configure {
@@ -42,4 +43,20 @@ button {
 }
 .badge.status-glyph.Succeeded {
   color: #3c763d !important;
+}
+
+.animate-show {
+  opacity: 1;
+}
+
+.animate-show.ng-hide-add.ng-hide-add-active,
+.animate-show.ng-hide-remove.ng-hide-remove-active {
+  -webkit-transition: opacity linear 0.25s;
+  transition: opacity linear 0.25s;
+}
+
+.animate-show.ng-hide {
+  line-height: 0;
+  opacity: 0;
+  padding: 0 10px;
 }

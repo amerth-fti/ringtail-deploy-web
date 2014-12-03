@@ -1,7 +1,8 @@
 'use strict';
 
 var app = angular.module('app', [
-  'ngRoute',
+  'ngRoute',  
+  'ngAnimate',
   'ui.bootstrap',
   'controllers',
   'services',
@@ -9,6 +10,7 @@ var app = angular.module('app', [
   ]);
 
 app.constant('config', window.appConfig);
+app.constant('globals', { loading: 0 });
 
 app.config(['$routeProvider', '$httpProvider', 'config',
   function($routeProvider, $httpProvider, config) {
@@ -39,6 +41,36 @@ app.config(['$routeProvider', '$httpProvider', 'config',
     $httpProvider.defaults.headers.common["Cache-Control"] = "no-cache";
     $httpProvider.defaults.headers.common.Pragma = "no-cache";
     $httpProvider.defaults.headers.common["If-Modified-Since"] = "0";
-
+  
+    $httpProvider.interceptors.push('loadingInterceptor')
   }]);
 
+
+
+app.factory('loadingInterceptor', function($q, globals) {
+  return {
+    // request success
+    'request': function(config) {
+      globals.loading += 1;
+      console.log(globals.loading);
+      return config;
+    },
+    // requet failure
+    'requestError': function(rejection) {
+      globals.loading -= 1;
+      console.log(globals.loading);
+      return rejection;
+    },
+    // response success
+    'response': function(response) {
+      globals.loading -= 1;
+      console.log(globals.loading);
+      return response;
+    },
+    'responseError': function(rejection) {
+      globals.loading -= 1;
+      console.log(globals.loading);
+      return rejection
+    }
+  }
+})

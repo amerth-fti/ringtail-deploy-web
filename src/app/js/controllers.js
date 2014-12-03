@@ -3,6 +3,11 @@
 var controllers = angular.module('controllers', []);
 
 
+controllers.controller('MainCtrl', ['$scope', 'globals',
+  function($scope, globals) {
+    $scope.globals = globals;    
+  }]);
+
 controllers.controller('ProjectListCtrl', ['$scope', 'Project',
   function($scope, Project) {
 
@@ -25,26 +30,19 @@ controllers.controller('ProjectDetailsCtrl', [
     $scope.config = config;
 
     // load the project
-    $scope.project = Project.get({projectId: $routeParams.projectId});
+    $scope.project = Project.get({projectId: $routeParams.projectId});    
 
     // load the environment shells
     $scope.environments = Environment.project({projectId: $routeParams.projectId}, function(environments) {
 
-      // load each environment
-      environments.forEach(function(environment) {
+      var loadCounter = environments.length;
 
-        // indicate that it is loading...
-        environment.loading = true;
-
-        // retrieve the actual detailed value
-        return environment.$get(function(environment) {
-
-          environments.forEach(setViewModelProperties);
-          environments.forEach(pollWhileBusy);
-          return environment;
-         
-         });
-
+      // load environment details
+      environments.forEach(function(environment) {      
+        return environment.$get(function(environment) {          
+          processEnvironment(environment);
+          
+        });          
       });
       
       return environments;
@@ -58,18 +56,20 @@ controllers.controller('ProjectDetailsCtrl', [
             
     function setViewModelProperties(environment) {
       environment.showStart = environment.runstate === 'suspended' || environment.runstate === 'stopped';
-      environment.showPause = environment.runstate === 'running';
-
+      environment.showPause = environment.runstate === 'running';      
       try
-      {
+      {        
         environment.deployment = JSON.parse(environment.user_data.contents);
         environment.deployment.status = environment.deployment.status || 'deployed';
+        
       }
       catch (ex)
       {        
         environment.deployment = {}
-        environment.deployment.status = 'initialize';
+        environment.deployment.status = 'initialize';        
       }
+
+      environment.show = environment.deployment.status !== 'hidden';
     };
 
     function pollWhileBusy(environment) {
