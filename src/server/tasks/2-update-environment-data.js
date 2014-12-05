@@ -37,7 +37,11 @@ function TaskImplementation(options) {
 
       for(var key in update) {
         log('setting %s to %j', key, update[key]);
-        json[key] = update[key];
+        if(update[key] === null) {
+          delete json[key];
+        } else {
+          json[key] = update[key];
+        }
       }
 
       return skytap.environments.updateUserdata({ 

@@ -27,21 +27,41 @@ controllers.controller('ProjectDetailsCtrl', [
   'Job',
   function($scope, $routeParams, $modal, $location, config, Project, Environment, Job) {
     
-    $scope.config = config;
+    $scope.config = config;    
 
     // load the project
     $scope.project = Project.get({projectId: $routeParams.projectId});    
 
-    // load the environment shells
-    $scope.environments = Environment.project({projectId: $routeParams.projectId}, function(environments) {
+    // create empty environments
+    $scope.environments = [];
 
-      var loadCounter = environments.length;
+    function showEnv(env) {
+      $scope.environments.push(env);
+      $scope.environments.sort(function(env1, env2) {
+        return env1.name.toLowerCase() > env2.name.toLowerCase();
+      });
+    };
+
+    function hideEnv(env) {
+      var indexLookup = {};
+      $scope.environments.forEach(function(env, idx) {
+        indexLookup[env.id] = idx;
+      });
+      if(indexLookup[env.id]) {
+        $scope.environments.splice(indexLookup[env.id], 1);
+      }
+    }
+
+    // load the environment shells
+    Environment.project({projectId: $routeParams.projectId}, function(environments) {
 
       // load environment details
-      environments.forEach(function(environment) {      
-        return environment.$get(function(environment) {          
+      environments.forEach(function(environment) {
+        environment.$get(function(environment) {        
           processEnvironment(environment);
-          
+
+          if(environment.deployment.status !== 'hidden')
+            showEnv(environment);
         });          
       });
       
@@ -51,6 +71,7 @@ controllers.controller('ProjectDetailsCtrl', [
     function processEnvironment(environment) {
       setViewModelProperties(environment);
       pollWhileBusy(environment);      
+      performRedploymentRedirect(environment);      
       return environment;
     }
             
@@ -72,11 +93,19 @@ controllers.controller('ProjectDetailsCtrl', [
       environment.show = environment.deployment.status !== 'hidden';
     };
 
-    function pollWhileBusy(environment) {
-      if(environment.runstate === 'busy') {
+    function pollWhileBusy(environment) {      
+      if(environment.runstate === 'busy' || environment.deployment.status === 'deploying') {
         setTimeout(function() {
           environment.$get(processEnvironment);
-        }, 10000);
+        }, 15000);
+      }
+    }
+
+    function performRedploymentRedirect(environment) {
+      if(environment.deployment.status === 'hidden' && environment.deployment.deployingTo) {
+        // swap id's so we can load the newly deployed one
+        environment.id = environment.deployment.deployingTo;
+        environment.$get(processEnvironment);
       }
     }
 

@@ -38,6 +38,7 @@ exports.add = function queue(job) {
   
   // increment job id 
   job.id = (jobId += 1);
+  job.rundata.jobid = job.id;
   
   // add to memory store
   jobs[job.id.toString()] = job;

@@ -27,7 +27,7 @@
         </div>
         
       </div>
-      <div class="col-md-2 environment-status" ng-hide="environment.loading || environment.deployment.status !== 'deployed'">
+      <div class="col-md-2 environment-status" ng-show="environment.deployment.status === 'deployed'">
         <h4><span>{{environment.runstate | uppercase}}</span></h4>
         <button 
           type="button" 
@@ -57,7 +57,10 @@
           class="btn btn-success glyphicon glyphicon-off"
           ng-click="initialize(environment)"
           ng-show="environment.deployment.status === 'initialize'"></button>
-      </div>
+
+        <!-- Show deployment job details when deploying -->
+        <a href="#/jobs/{{environment.deployment.deploymentJob}}" ng-show="environment.deployment.status === 'deploying'">Info</a>
+      </div>      
     </div>
   </li>
 </ul>
