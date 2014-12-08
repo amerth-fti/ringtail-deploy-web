@@ -25,7 +25,7 @@ function TaskImpl(options) {
         log('added environment to project');
       });
     });  
-  }
+  };
 }
 
 util.inherits(TaskImpl, Task);

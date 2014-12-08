@@ -19,7 +19,7 @@ function TaskImplementation(options) {
 
     return Q.fcall(function() {
       log('getting user_data');
-      return skytap.environments.userdata({ configuration_id: configuration_id })
+      return skytap.environments.userdata({ configuration_id: configuration_id });
     })
 
     .then(function(user_data) {

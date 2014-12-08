@@ -39,9 +39,9 @@ function TaskImpl(options) {
     .then(function(newEnv) {
       log('deployment info has been set');
       return newEnv;
-    })
+    });
 
-  }
+  };
 }
 
 util.inherits(TaskImpl, Task);

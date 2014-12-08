@@ -13,7 +13,7 @@ var debug   = require('debug')('deployer-jobrunner')
  */
 exports.getJobs = function getjobs() {  
   return _.values(jobs); 
-}
+};
 
 
 /** 
@@ -23,7 +23,7 @@ exports.getJobs = function getjobs() {
  */
 exports.getJob = function getjob(jobId) {
   return jobs[jobId];
-}
+};
 
 
 /** 
@@ -44,4 +44,4 @@ exports.add = function queue(job) {
   jobs[job.id.toString()] = job;
 
   return job.id;
-}
+};

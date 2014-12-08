@@ -9,7 +9,7 @@ function Task(options) {
   events.EventEmitter.call(this);
 
   this.name = null;  
-  this.status = 'Pending'
+  this.status = 'Pending';
   this.started = null;
   this.stopped = null;
   this.runlog = [];
@@ -83,7 +83,7 @@ Task.prototype.start = function start(scope) {
     throw err;
   });
 
-}
+};
 
 
 
@@ -92,18 +92,20 @@ Task.prototype.getData = function getData(scope, key, expand) {
   {
     if(expand)
       return getDataFromObject(scope, this.data, key);
-    else 
+    else       
+      /*jshint evil:true */
       return eval(this.data[key]);  
   }
   catch (ex) {    
     return this.data[key];
   }
-}
+};
 
 function getDataFromObject(scope, obj, key) {    
   
   try
-  {           
+  {     
+    /*jshint evil:true */      
     var val = eval(obj[key])
       , temp;
     
@@ -111,7 +113,7 @@ function getDataFromObject(scope, obj, key) {
       temp = {};
 
       for(var valkey in val) {
-        temp[valkey] = getDataFromObject(scope, val, valkey)
+        temp[valkey] = getDataFromObject(scope, val, valkey);
       }
       val = temp;
     }    

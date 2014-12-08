@@ -20,7 +20,7 @@ function TaskImplementation(options) {
 
     return Q.fcall(function() {
       log('finding environment %s', configuration_id);  
-      return skytap.environments.get({ configuration_id: configuration_id })
+      return skytap.environments.get({ configuration_id: configuration_id });
     })
 
     .then(function(env) {

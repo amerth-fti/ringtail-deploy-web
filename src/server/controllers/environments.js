@@ -22,7 +22,7 @@ exports.list = function list(req, res) {
   .fail(function(err){
     res.status(500).send(err);
   });
-}
+};
 
 
 
@@ -62,7 +62,7 @@ exports.update = function update(req, res) {
       configuration_id: configuration_id,
       contents: user_data_contents
     })    
-    .then(function() { return env; })
+    .then(function() { return env; });
   })
   .then(function (env) {
     return joinUserData(env);

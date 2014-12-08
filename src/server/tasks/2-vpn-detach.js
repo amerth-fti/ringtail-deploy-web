@@ -41,7 +41,7 @@ function TaskImpl(options) {
                 log('vpn %s successfully detached', vpn.id);
                 deferred.resolve(vpn.id);
               }
-            })
+            });
           }, 5000);
         };
 

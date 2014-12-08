@@ -18,7 +18,7 @@ function TaskImplementation(options) {
 
     return Q.fcall(function() {
       log('suspending environment %d', configuration_id);
-      return skytap.environments.suspend({ configuration_id: configuration_id })
+      return skytap.environments.suspend({ configuration_id: configuration_id });
     })
 
     .then(function() {
@@ -27,7 +27,7 @@ function TaskImplementation(options) {
     })
 
     .then(function(env) {
-      log('environment %d suspended', configuration_id)
+      log('environment %d suspended', configuration_id);
       return env;
     });
     

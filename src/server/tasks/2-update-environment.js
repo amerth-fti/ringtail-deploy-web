@@ -32,7 +32,7 @@ function TaskImplementation(options) {
     .then(function(env) {
       log('environment succesfully updated');
       return env;
-    })
+    });
 
   };
 }

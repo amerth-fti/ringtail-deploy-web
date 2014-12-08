@@ -11,7 +11,7 @@ exports.list = function list(req, res) {
     if(err) res.status(500).send(err);
     else res.send(projects);
   });  
-}
+};
 
 
 
@@ -24,7 +24,7 @@ exports.get = function get(req, res) {
     if(err) res.status(500).send(err);
     else res.send(project);
   });
-}
+};
 
 
 
@@ -37,7 +37,7 @@ exports.templates = function template(req, res) {
     if(err) res.status(500).send(err);
     else res.send(project);
   });
-}
+};
 
 
 
@@ -59,4 +59,4 @@ exports.environments = function environments(req, res) {
     if(err) res.status(500).send(err);
     else res.send(envs);
   });
-}
+};

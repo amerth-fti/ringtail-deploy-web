@@ -29,7 +29,7 @@ Job.prototype.start = function start() {
 
   // start job on next tick
   process.nextTick(function() {
-    job.status = 'Running'
+    job.status = 'Running';
     
     // create task chain    
     job.tasks.forEach(function(task) {    
@@ -54,4 +54,4 @@ Job.prototype.start = function start() {
     });
     
   });
-}
+};

@@ -44,6 +44,6 @@ function getNewestTemplate(project_id, scope, log) {
 
       log('found newest template %s', result.id);
       return result;
-    })
+    });
   });
 }

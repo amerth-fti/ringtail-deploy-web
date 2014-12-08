@@ -1,6 +1,7 @@
 module.exports = function(grunt) {
   
   grunt.loadNpmTasks('grunt-traceur');
+  grunt.loadNpmTasks('grunt-contrib-jshint');
 
   grunt.initConfig({
     traceur: {
@@ -16,7 +17,22 @@ module.exports = function(grunt) {
           dest: 'build'
         }]
       }
-    }
+    },
+    jshint: {
+      server: {
+        options: {
+          "laxcomma": true
+        },
+        src: [ 'src/server/**/*.js' ]        
+      },
+      test: {
+        options: {
+          "laxcomma": true,
+          "expr": true
+        },
+        src: [ 'test/**/*.js' ]  
+      }
+    }    
   });
 
 }

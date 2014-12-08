@@ -8,11 +8,11 @@ var debug       = require('debug')('deployer-projects')
 
 exports.list = function list(req, res) {
   res.send(jobrunner.getJobs());
-}
+};
 
 
 
 exports.get = function get(req, res) {
   var jobId = req.param('jobId');
   res.send(jobrunner.getJob(jobId));
-}
+};

@@ -42,8 +42,8 @@ function TaskImpl(options) {
     .then(function(body) {
       log('found installed builds for %s', env.id);
       var result = body.replace(/"/g, '');
-      result = result.replace(/\<p\>/g, '');
-      result = result.replace(/\<\/p\>/g, '\n');
+      result = result.replace(/<p\>/g, '');
+      result = result.replace(/<\/p\>/g, '\n');
       result = result.split('\n');
       result.splice(result.length - 1); // remove empty string at end
       log(result);

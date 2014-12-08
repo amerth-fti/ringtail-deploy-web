@@ -41,7 +41,7 @@ function TaskImpl(options) {
                   log('ip %s attached', attachIp.ip);
                   deferred.resolve(attachIp.ip);
                 }
-              })
+              });
             }, 5000);
           };
           poll();
@@ -60,7 +60,7 @@ function TaskImpl(options) {
       log('all ips attached');
       return ips;
     });
-  }
+  };
 }
 
 util.inherits(TaskImpl, Task);

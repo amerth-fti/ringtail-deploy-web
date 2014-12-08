@@ -33,7 +33,7 @@ app.get('/config', function(req, res) {
   res
     .type('json')
     .send('window.appConfig = ' + JSON.stringify(config.client));
-})
+});
 
 
 // API - PROJECT ROUTES

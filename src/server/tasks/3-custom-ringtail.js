@@ -19,7 +19,7 @@ function TaskImpl(options) {
       , env = this.getData(scope, "env");
 
     return Q.fcall(function() {
-      log('start installation')
+      log('start installation');
                       
       var vm = env.vms[0]
         , ip_address = vm.interfaces[0].nat_addresses.vpn_nat_addresses[0].ip_address
@@ -48,7 +48,7 @@ function TaskImpl(options) {
               }
             });
           }, 15000);
-        }
+        };
         poll();
         return deferred.promise;
       })
@@ -82,7 +82,7 @@ function TaskImpl(options) {
                 }
               });
             }, 15000);
-          }
+          };
           poll();
           return deferred.promise;
 
@@ -190,8 +190,8 @@ function TaskImpl(options) {
       .then(function() {
         log('installations complete');
       });
-    }) 
-  }
+    });
+  };
 }
 
 util.inherits(TaskImpl, Task);

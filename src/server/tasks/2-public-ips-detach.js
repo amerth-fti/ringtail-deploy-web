@@ -25,7 +25,7 @@ function TaskImplementation(options) {
           vm_id: vm.id,
           interface_id: vm.interfaces[0].id,
           ip: null
-        }        
+        };   
         if(vm.interfaces[0].public_ips.length > 0) {
           result.ip = vm.interfaces[0].public_ips[0].id;
         }
@@ -45,7 +45,7 @@ function TaskImplementation(options) {
                   log('ip %s detached', detachIp.ip);
                   deferred.resolve(detachIp.ip);
                 }
-              })
+              });
             }, 5000);
           };
           poll();
@@ -56,7 +56,7 @@ function TaskImplementation(options) {
         }
       });
 
-      return Q.all(promises)
+      return Q.all(promises);
     })
 
     .then(function(ips) {

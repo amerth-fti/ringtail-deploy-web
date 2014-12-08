@@ -31,7 +31,7 @@ function TaskImpl(options) {
     })
 
     .then(function(environment) {
-      log('new environment has been started')
+      log('new environment has been started');
       return environment;
     });
 
