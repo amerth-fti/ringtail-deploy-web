@@ -2,7 +2,9 @@ module.exports = function(grunt) {
   
   grunt.loadNpmTasks('grunt-traceur');
   grunt.loadNpmTasks('grunt-contrib-jshint');
-
+  grunt.loadNpmTasks('grunt-mocha-test');
+  grunt.loadNpmTasks('grunt-shell');
+  
   grunt.initConfig({
     traceur: {
       options: {
@@ -19,6 +21,12 @@ module.exports = function(grunt) {
       }
     },
     jshint: {
+      grunt: {
+        options: {
+          "laxcomma": true
+        },
+        src: [ 'GruntFile.js' ]        
+      },
       server: {
         options: {
           "laxcomma": true
@@ -32,7 +40,22 @@ module.exports = function(grunt) {
         },
         src: [ 'test/**/*.js' ]  
       }
-    }    
+    },
+    mochaTest: {
+      test: {
+        options: 'spec',        
+        src: ['test/**/*.js']
+      }      
+    },
+    shell: {
+      debug: {        
+        command: 'node src/server/server.js'
+      }
+    }
   });
 
-}
+
+  grunt.registerTask('build', [ 'jshint', 'mochaTest' ]);
+  grunt.registerTask('run', [ 'build', 'shell']);
+  
+};
