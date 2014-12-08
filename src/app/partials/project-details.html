@@ -14,11 +14,18 @@
         <div class="row" ng-show="environment.deployment.date">
           <div class="col-md-1"><strong>Date:</strong></div>
           <div class="col-md-11">{{environment.deployment.date | date:'MMMM d'}}</div>        
-        </div>        
+        </div>
 
-        <div class="row" ng-repeat="option in environment.deployment.options">
-          <div class="col-md-1"><strong>{{option.key}}:</strong></div>
-          <div class="col-md-11">{{option.value}}</div>
+        <div class="row" ng-show="environment.deployment.branch" ng-show="environment.deployment.branch">
+          <div class="col-md-1"><strong>Branch:</strong></div>
+          <div class="col-md-11">{{environment.deployment.branch}}</div>        
+        </div>
+
+        <div class="row" ng-show="environment.deployment.ringtail">
+          <div class="col-md-1"><strong>Builds:</strong></div>
+          <div class="col-md-11">
+            <div ng-repeat="installer in environment.deployment.ringtail">{{installer}}</div>
+          </div>
         </div>        
 
         <div class="row" ng-show="environment.description">
