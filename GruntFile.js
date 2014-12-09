@@ -4,7 +4,7 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-traceur');
   grunt.loadNpmTasks('grunt-contrib-jshint');
   grunt.loadNpmTasks('grunt-mocha-test');
-  grunt.loadNpmTasks('grunt-shell');
+  grunt.loadNpmTasks('grunt-express-runner');
   
   grunt.initConfig({
     traceur: {
@@ -50,7 +50,7 @@ module.exports = function(grunt) {
         src: ['test/**/*.js']
       }      
     },
-    express: {
+    expressrunner: {
       options: {
         script: 'src/server/server.js',
         debug: 'deployer*'
@@ -58,20 +58,7 @@ module.exports = function(grunt) {
     }
   });
 
-
-  grunt.registerTask('express', function() {
-    var options = this.options({})
-      , done = this.async()
-      , path = require('path');
-    
-    if(options.debug) {
-      process.env.DEBUG = options.debug;
-    }
-
-    require(path.resolve(options.script));
-  });
-
   grunt.registerTask('validate', [ 'jshint', 'mochaTest' ]);
-  grunt.registerTask('run', [ 'validate', 'express']);
+  grunt.registerTask('run', [ 'validate', 'expressrunner']);
   
 };
