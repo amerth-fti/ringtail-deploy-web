@@ -1,3 +1,4 @@
+
 module.exports = function(grunt) {
   
   grunt.loadNpmTasks('grunt-traceur');
@@ -47,15 +48,28 @@ module.exports = function(grunt) {
         src: ['test/**/*.js']
       }      
     },
-    shell: {
-      debug: {        
-        command: 'node src/server/server.js'
+    express: {
+      options: {
+        script: 'src/server/server.js',
+        debug: 'deployer*'
       }
     }
   });
 
 
+  grunt.registerTask('express', function() {
+    var options = this.options({})
+      , done = this.async()
+      , path = require('path');
+    
+    if(options.debug) {
+      process.env.DEBUG = options.debug;
+    }
+
+    require(path.resolve(options.script));
+  });
+
   grunt.registerTask('build', [ 'jshint', 'mochaTest' ]);
-  grunt.registerTask('run', [ 'build', 'shell']);
+  grunt.registerTask('run', [ 'build', 'express']);
   
 };
