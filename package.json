@@ -2,9 +2,11 @@
   "name": "skytap-deployer",
   "version": "0.1.0",
   "description": "Deployment tool for skytap environments",
-  "main": "build/app.js",
   "author": "Brian Mancini <bmancini@gmail.com>",
   "license": "MIT",
+  "scripts": {
+    "test": "grunt validate"
+  },
   "dependencies": {
     "body-parser": "^1.9.2",
     "debug": "^2.1.0",

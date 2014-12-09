@@ -44,7 +44,9 @@ module.exports = function(grunt) {
     },
     mochaTest: {
       test: {
-        options: 'spec',        
+        options: {
+          reporter: 'spec'
+        },        
         src: ['test/**/*.js']
       }      
     },
@@ -69,7 +71,7 @@ module.exports = function(grunt) {
     require(path.resolve(options.script));
   });
 
-  grunt.registerTask('build', [ 'jshint', 'mochaTest' ]);
-  grunt.registerTask('run', [ 'build', 'express']);
+  grunt.registerTask('validate', [ 'jshint', 'mochaTest' ]);
+  grunt.registerTask('run', [ 'validate', 'express']);
   
 };
