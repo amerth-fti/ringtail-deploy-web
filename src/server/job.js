@@ -48,6 +48,7 @@ Job.prototype.start = function start() {
 
     // mark as failed
     .fail(function(err) {
+      debug(err);
       job.stopped = new Date();
       job.status = 'Failed';
       job.error = err;         

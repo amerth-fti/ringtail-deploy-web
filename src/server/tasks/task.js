@@ -7,8 +7,7 @@ var events  = require('events')
 
 function Task(options) {
   events.EventEmitter.call(this);
-
-  this.name = null;  
+  
   this.status = 'Pending';
   this.started = null;
   this.stopped = null;
@@ -24,7 +23,7 @@ function Task(options) {
   }
 
   var self = this;  
-  this.log = function log() {
+  this.log = function log() {    
 
     // format the log data
     var data = util.format.apply(this, arguments);  
@@ -40,7 +39,6 @@ function Task(options) {
 util.inherits(Task, events.EventEmitter);
 
 module.exports = Task;
-
 
 
 

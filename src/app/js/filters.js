@@ -39,7 +39,7 @@ filters.filter('reverse', function() {
 
 filters.filter('elapsed', function() {
   return function(elapsed) {
-    console.log(elapsed);
+    
     if(!elapsed) return '0m';
     else {
       elapsed = elapsed / 1000 / 60;

@@ -262,13 +262,12 @@ controllers.controller('JobDetailsCtrl', [
     console.log('JobDetailsCtrl');
 
     // load the job
-    $scope.job = Job.get({jobId: $routeParams.jobId}, loadJobComplete);
+    $scope.job = Job.get({jobId: $routeParams.jobId}, loadJobComplete);    
 
 
     function loadJobComplete(result) {      
       $scope.job = result;      
       $scope.job.elapsed = ($scope.job.stopped ? new Date($scope.job.stopped) : new Date()) - new Date($scope.job.started);      
-
 
       $scope.selectedTask = null;
       result.tasks.forEach(function(task) {
@@ -299,5 +298,44 @@ controllers.controller('JobDetailsCtrl', [
 
   }]);
 
+
+controllers.controller('TaskDetailsCtrl', [ '$scope', 
+  function($scope) {
+    console.log('TaskDetailsCtrl');
+    
+    $scope.$parent.job.$promise
+    .then(function() {
+      $scope.$watch('selectedTask', onTaskUpdate);
+    });
+
+    $scope.selectedTab = 0;
+
+    function onTaskUpdate(rootTask) {
+      $scope.tabs = [];
+
+      $scope.tabs.push({
+        title: rootTask.name,
+        task: rootTask,
+        active: $scope.selectedTab === 0,
+        disabled: false
+      });
+
+      rootTask.tasks.forEach(function(task, idx) {
+        $scope.tabs.push({
+          title: task.name,
+          task: task,
+          active: $scope.selectedTab === idx + 1,
+          disabled: false
+        });
+      });       
+    }
+
+    $scope.tabSelected = function(index) {      
+      $scope.selectedTab = index;
+    }
+
+  }
+
+]);
 
 

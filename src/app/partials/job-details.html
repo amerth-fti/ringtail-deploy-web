@@ -22,24 +22,29 @@
     </div>
   </div>
   <div class="col-md-9">
+    <div ng-controller="TaskDetailsCtrl">
 
-    <div class="panel panel-default">
-      <div class="panel-heading">
-        <h3 class="panel-title">{{selectedTask.name}}
-          <span class="badge status-glyph {{selectedTask.status}}">
-            <span 
-              class="glyphicon" 
-              ng-class="{ 'glyphicon-time': selectedTask.status === 'Pending', 'glyphicon-ok': selectedTask.status === 'Succeeded', 'glyphicon-fire': selectedTask.status === 'Failed', 'glyphicon-road': selectedTask.status === 'Running' }"></span>
-            </span>
-          </h3>
+    <tabset>
+      <tab ng-repeat="tab in tabs" active="tab.active" disabled="tab.disabled" select="tabSelected($index)">
+        <tab-heading>
+          {{tab.title}}
+          <span class="badge status-glyph {{tab.task.status}}">
+          <span 
+            class="glyphicon" 
+            ng-class="{ 'glyphicon-time': tab.task.status === 'Pending', 'glyphicon-ok': tab.task.status === 'Succeeded', 'glyphicon-fire': tab.task.status === 'Failed', 'glyphicon-road': tab.task.status === 'Running' }"></span>
         </span>
-      </div>      
-      <ul class="list-group">
-        <li class="list-group-item" ng-repeat="entry in selectedTask.runlog">
-          <strong>{{entry.date | date:'mediumTime' }}:</strong> {{entry.data}}
-        </li>
-      </ul>
+        </tab-heading>
+        <p></p>
+        <ul class="list-group">
+          <li class="list-group-item" ng-repeat="entry in tab.task.runlog">
+            <strong>{{entry.date | date:'mediumTime' }}:</strong> {{entry.data}}
+          </li>
+        </ul>
+      </tab>      
+      </tabset>
+
     </div>
+   
   </div>
 </div>
 

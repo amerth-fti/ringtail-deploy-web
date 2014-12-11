@@ -51,25 +51,21 @@ app.factory('loadingInterceptor', function($q, globals) {
   return {
     // request success
     'request': function(config) {
-      globals.loading += 1;
-      console.log(globals.loading);
+      globals.loading += 1;      
       return config;
     },
     // requet failure
     'requestError': function(rejection) {
-      globals.loading -= 1;
-      console.log(globals.loading);
+      globals.loading -= 1;      
       return rejection;
     },
     // response success
     'response': function(response) {
-      globals.loading -= 1;
-      console.log(globals.loading);
+      globals.loading -= 1;      
       return response;
     },
     'responseError': function(rejection) {
-      globals.loading -= 1;
-      console.log(globals.loading);
+      globals.loading -= 1;      
       return rejection
     }
   }
