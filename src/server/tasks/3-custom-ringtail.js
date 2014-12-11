@@ -16,13 +16,12 @@ function TaskImpl(options) {
     
     var branch = this.getData(scope, "branch")
       , host = this.getData(scope, "host")
-      , env = this.getData(scope, "env");
+      , vm = this.getData(scope, "vm");
 
     return Q.fcall(function() {
       log('start installation');
                       
-      var vm = env.vms[0]
-        , ip_address = vm.interfaces[0].nat_addresses.vpn_nat_addresses[0].ip_address
+      var ip_address = vm.interfaces[0].nat_addresses.vpn_nat_addresses[0].ip_address
         , installUrl = 'http://' + ip_address + ':8080/api/installer'
         , statusUrl  = 'http://' + ip_address + ':8080/api/status'
         , updateUrl  = 'http://' + ip_address + ':8080/api/UpdateInstallerService'
