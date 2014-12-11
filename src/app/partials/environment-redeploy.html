@@ -1,11 +1,16 @@
 <div class="modal-header">
-  <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-  <h4 class="modal-title">Start {{environment.name}}</h4>
+  <button type="button" class="close" data-dismiss="modal" ng-click="close()"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+  <h4 class="modal-title">Redeploy {{environment.name}}</h4>
 </div>
 <div class="modal-body">
-  <p>Redeploy this environment with build from:    
-    <select ng-model="selectedBranch" ng-options="branch for branch in branches" />      
-  </p>  
+  
+  <form role="form">
+    <div class="form-group">
+      <label>Install build from branch:</label>
+      <select class="form-control" ng-model="selectedBranch" ng-options="branch for branch in branches" />
+    </div>
+    <deployinfo deployinfo="deployinfo"></deployinfo>    
+  </form>
 
   <div class="advanced" ng-show="showAdvanced">    
     <div ng-repeat="taskdef in environment.deployment.taskdefs">
@@ -18,8 +23,8 @@
       >
       {{taskdef}}
     </div>
-
   </div>
+
 </div>
 <div class="modal-footer">  
   <a style="float: left" ng-click="toggleAdvanced()">Advanced</a> 

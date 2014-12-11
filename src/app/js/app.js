@@ -6,7 +6,8 @@ var app = angular.module('app', [
   'ui.bootstrap',
   'controllers',
   'services',
-  'filters'
+  'filters',
+  'directives'
   ]);
 
 app.constant('config', window.appConfig);

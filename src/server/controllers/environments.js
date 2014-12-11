@@ -163,6 +163,7 @@ exports.redeploy = function redeploy(req, res) {
     deployment: deployment
   };
   rundata = _.extend(rundata, req.query);
+  console.log(rundata);
 
   // create redeploy task
   job = new Job({

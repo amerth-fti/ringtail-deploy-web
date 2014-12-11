@@ -30,3 +30,13 @@ services.factory('Job', ['$resource',
       { jobId: '@id' }      
     );
   }]);
+
+
+
+services.factory('DeployInfo', [ function() {  
+  return function() {
+    this.name = '';
+    this.when = new Date();    
+    this.notes = '';
+  }
+}])

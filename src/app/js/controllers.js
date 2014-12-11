@@ -142,8 +142,11 @@ controllers.controller('ProjectDetailsCtrl', [
 
       modal.result.then(function(data) {
         
-        data.project_id = $scope.project.id;
+        // send these in the post body
+        environment.deployment.taskdefs = data.taskdefs;  
+        delete data.taskdefs
 
+        // post the change and include querystring data
         environment.$redeploy(data, function(results) {          
           var path = '/jobs/' + results.jobId;          
           $location.path(path);
@@ -194,22 +197,25 @@ controllers.controller('EnvironmentStartCtrl', ['$scope', '$modalInstance', 'env
   }]);
 
 
-controllers.controller('EnvironmentRedeployCtrl', ['$scope', '$modalInstance', 'config', 'environment', 
-  function($scope, $modalInstance, config, environment) {
+controllers.controller('EnvironmentRedeployCtrl', ['$scope', '$modalInstance', 'DeployInfo', 'config', 'environment', 
+  function($scope, $modalInstance, DeployInfo, config, environment) {
 
     $scope.environment = environment;
     $scope.branches = config.branches;
     $scope.selectedBranch;    
-    $scope.showAdvanced = false;    
+    $scope.duration = 120;
+    $scope.showAdvanced = false;      
+    $scope.deployinfo = new DeployInfo();    
     
     if(environment.deployment.taskdefs) {      
       $scope.selectedTasks = environment.deployment.taskdefs.slice(0);
     }
 
-    $scope.rebuild = function() {      
-      environment.deployment.taskdefs = $scope.selectedTasks;
+    $scope.rebuild = function() {
       $modalInstance.close({
-        branch: $scope.selectedBranch,        
+        branch: $scope.selectedBranch,
+        taskdefs: $scope.selectedTasks,
+        deployinfo: $scope.deployinfo     
       });
     }
 
@@ -339,3 +345,35 @@ controllers.controller('TaskDetailsCtrl', [ '$scope',
 ]);
 
 
+controllers.controller('DeployInfoCtrl', [ '$scope', '$filter', function($scope, $filter) {  
+  $scope.duration = $scope.duration || 120;
+  $scope.mindate = new Date();
+  $scope.format = 'dd-MMMM-yyyy';
+  $scope.opened = false;  
+  $scope.date = $filter('date')(new Date(), $scope.format);    
+  $scope.time = new Date(new Date().getTime() + $scope.duration * 60 * 1000);  
+
+  $scope.open = function($event) {
+    $event.preventDefault();
+    $event.stopPropagation();
+    $scope.opened = true;
+  }
+
+  $scope.dateTimeChanged = function() {
+
+    var date = new Date($scope.date)
+      , time = $scope.time
+      , newdate;
+
+    newdate = new Date(
+      date.getFullYear(),
+      date.getMonth(),
+      date.getDate(),
+      time.getHours(),
+      time.getMinutes(),
+      0);
+
+    $scope.deployinfo.when = newdate;    
+  }
+
+}]);
