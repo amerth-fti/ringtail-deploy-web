@@ -15,7 +15,7 @@ function TaskImpl(options) {
   this.execute = function execute(scope, log) {  
     
     var branch = this.getData(scope, "branch")
-      , host = this.getData(scope, "host")
+      , installer = this.getData(scope, "installer")
       , vm = this.getData(scope, "vm");
 
     return Q.fcall(function() {
@@ -92,20 +92,7 @@ function TaskImpl(options) {
       .then(function() {
         log('configure install service');
 
-        var installerConfigs
-          , keys;
-
-        installer = {
-          "Common|RINGTAILUISTATICCONTENTURL": host + "/UIStatic/",
-          "Common|RINGTAILSTSURL": host + "/RingtailSTS/",
-          "Common|RINGTAILIISWEBAPPLICATIONURL": host + "/Ringtail8/",
-          "Common|RINGTAILHELPURL": host + "/RingtailHelp/",
-          "Common|RINGTAILCLASSICURL": host + "/classic",
-          "Common|RINGTAILLEGALURL": host + "/RTLC",
-          "Common|RMCIISWEBAPPLICATIONURL": host + "/RMC"
-        };
-        
-        keys = _.keys(installer);
+        var keys = _.keys(installer);
 
         // update the branch config
         return Q.fcall(function() {        

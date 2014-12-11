@@ -16,7 +16,7 @@ function TaskImpl(options) {
     var promises
       , self = this;
 
-    this.tasks = taskfactory.createTasks(this.rundata.taskdefs);    
+    this.tasks = taskfactory.createTasks(this.taskdefs);    
             
     promises = this.tasks.map(function(task) { 
       log('starting subtask %s', task.name);
