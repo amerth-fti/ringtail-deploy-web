@@ -182,14 +182,15 @@ exports.redeploy = function redeploy(req, res) {
 
     rundata = { 
       me: environment,
-      deployment: deployment
+      deployment: deployment,
+      deployinfo: deployinfo
     };
     rundata = _.extend(rundata, req.query);
 
     // create redeploy task
     job = new Job({
       name: 'Redeploy environment ' + environment.name,
-      tasks: taskfactory.createTasks(taskdefs),
+      tasks: taskfactory.createTasks(taskdefs),      
       rundata: rundata
     });
 

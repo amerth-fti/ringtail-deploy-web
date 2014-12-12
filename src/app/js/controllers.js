@@ -339,14 +339,16 @@ controllers.controller('TaskDetailsCtrl', [ '$scope',
         disabled: false
       });
 
-      rootTask.tasks.forEach(function(task, idx) {
-        $scope.tabs.push({
-          title: task.name,
-          task: task,
-          active: $scope.selectedTab === idx + 1,
-          disabled: false
-        });
-      });       
+      if(rootTask.tasks) {
+        rootTask.tasks.forEach(function(task, idx) {
+          $scope.tabs.push({
+            title: task.name,
+            task: task,
+            active: $scope.selectedTab === idx + 1,
+            disabled: false
+          });
+        });       
+      }
     }
 
     $scope.tabSelected = function(index) {      
