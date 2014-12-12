@@ -47,3 +47,12 @@ filters.filter('elapsed', function() {
     }
   }
 });
+
+filters.filter('fromDateString', function() {
+  return function(dateStr) {
+    if(!dateStr) return '';
+    else {
+      return new Date(dateStr);
+    }
+  }
+});

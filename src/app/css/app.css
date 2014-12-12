@@ -66,3 +66,7 @@ button {
   margin-top: -34px;
   margin-bottom: -18px;
 }
+
+.row .top-buffer {
+  padding-top: 20px;
+}

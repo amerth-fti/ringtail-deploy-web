@@ -32,11 +32,35 @@ services.factory('Job', ['$resource',
   }]);
 
 
-
-services.factory('DeployInfo', [ function() {  
+services.factory('DeployInfo', [ function() {
   return function() {
-    this.name = '';
-    this.when = new Date();    
-    this.notes = '';
-  }
-}])
+    this.who = '',
+    this.until = new Date(),
+    this.notes = ''
+  };
+}]);
+
+
+services.factory('dateHelpers', [ function() {
+  return {
+    quarterHour: function quarterHour(date) {
+      var newDate = new Date(date.getTime());
+      var minutes = newDate.getMinutes();
+      newDate.setMinutes(Math.round(minutes/15) * 15);
+      return newDate;
+    },
+    addMinutes: function addMinutes(date, minutes) {
+      return new Date(date.getTime() + (minutes * 60 * 1000));
+    },
+    combineDateTime: function combineDateTime(date, time) {
+      return new Date(
+        date.getFullYear(),
+        date.getMonth(),
+        date.getDate(),
+        time.getHours(),
+        time.getMinutes(),
+        0
+      );
+    }
+  };
+}]);

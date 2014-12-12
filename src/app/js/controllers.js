@@ -144,7 +144,9 @@ controllers.controller('ProjectDetailsCtrl', [
         
         // send these in the post body
         environment.deployment.taskdefs = data.taskdefs;  
+        environment.deployment.deployinfo = data.deployinfo;
         delete data.taskdefs
+        delete data.deployinfo;
 
         // post the change and include querystring data
         environment.$redeploy(data, function(results) {          
@@ -197,15 +199,17 @@ controllers.controller('EnvironmentStartCtrl', ['$scope', '$modalInstance', 'env
   }]);
 
 
-controllers.controller('EnvironmentRedeployCtrl', ['$scope', '$modalInstance', 'DeployInfo', 'config', 'environment', 
-  function($scope, $modalInstance, DeployInfo, config, environment) {
+controllers.controller('EnvironmentRedeployCtrl', [
+  '$scope', '$modalInstance', 'config', 'environment', 'DeployInfo', 
+  function($scope, $modalInstance, config, environment, DeployInfo) {
 
     $scope.environment = environment;
     $scope.branches = config.branches;
     $scope.selectedBranch;    
     $scope.duration = 120;
     $scope.showAdvanced = false;      
-    $scope.deployinfo = new DeployInfo();    
+    $scope.deployinfo = new DeployInfo(); 
+
     
     if(environment.deployment.taskdefs) {      
       $scope.selectedTasks = environment.deployment.taskdefs.slice(0);
@@ -215,7 +219,7 @@ controllers.controller('EnvironmentRedeployCtrl', ['$scope', '$modalInstance', '
       $modalInstance.close({
         branch: $scope.selectedBranch,
         taskdefs: $scope.selectedTasks,
-        deployinfo: $scope.deployinfo     
+        deployinfo: $scope.deployinfo
       });
     }
 
@@ -345,13 +349,17 @@ controllers.controller('TaskDetailsCtrl', [ '$scope',
 ]);
 
 
-controllers.controller('DeployInfoCtrl', [ '$scope', '$filter', function($scope, $filter) {  
+controllers.controller('DeployInfoCtrl', [ '$scope', '$filter', 'dateHelpers', function($scope, $filter, dateHelpers) {  
   $scope.duration = $scope.duration || 120;
-  $scope.mindate = new Date();
-  $scope.format = 'dd-MMMM-yyyy';
-  $scope.opened = false;  
-  $scope.date = $filter('date')(new Date(), $scope.format);    
-  $scope.time = new Date(new Date().getTime() + $scope.duration * 60 * 1000);  
+  $scope.mindate  = new Date();
+  $scope.format   = 'dd-MMMM-yyyy';
+  $scope.opened   = false;  
+
+  var untilDate = dateHelpers.quarterHour(new Date());
+  untilDate     = dateHelpers.addMinutes(untilDate, $scope.duration);
+  $scope.date   = untilDate;
+  $scope.time   = untilDate;
+
 
   $scope.open = function($event) {
     $event.preventDefault();
@@ -360,20 +368,11 @@ controllers.controller('DeployInfoCtrl', [ '$scope', '$filter', function($scope,
   }
 
   $scope.dateTimeChanged = function() {
-
     var date = new Date($scope.date)
       , time = $scope.time
-      , newdate;
-
-    newdate = new Date(
-      date.getFullYear(),
-      date.getMonth(),
-      date.getDate(),
-      time.getHours(),
-      time.getMinutes(),
-      0);
-
-    $scope.deployinfo.when = newdate;    
+      , newDate;
+    newDate = dateHelpers.combineDateTime(date, time);
+    $scope.deployinfo.until = newDate.toUTCString();
   }
 
 }]);

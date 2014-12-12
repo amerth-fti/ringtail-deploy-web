@@ -11,27 +11,43 @@
           <span ng-click="configure(environment)" class="configure glyphicon glyphicon-cog" />
         </h4>
 
-        <div class="row" ng-show="environment.deployment.date">
-          <div class="col-md-1"><strong>Date:</strong></div>
-          <div class="col-md-11">{{environment.deployment.date | date:'MMMM d'}}</div>        
+        <div class="row" ng-show="environment.description">
+          <div class="col-md-2"><strong>Info:</strong></div>
+          <div class="col-md-10" ng-bind-html="environment.description | newlines | anchors | trust"></div>
+        </div>
+      
+
+        <div class="row top-buffer" ng-show="environment.deployment.deployedBy">
+          <div class="col-md-2"><strong>Requested by:</strong></div>
+          <div class="col-md-10">{{environment.deployment.deployedBy}}</div>
         </div>
 
-        <div class="row" ng-show="environment.deployment.branch" ng-show="environment.deployment.branch">
-          <div class="col-md-1"><strong>Branch:</strong></div>
-          <div class="col-md-11">{{environment.deployment.branch}}</div>        
+        <div class="row" ng-show="environment.deployment.deployedUntil">
+          <div class="col-md-2"><strong>Requested until:</strong></div>
+          <div class="col-md-10">{{environment.deployment.deployedUntil | fromDateString | date: 'dd-MMMM-yyyy hh:mma (LOCAL)' }}</div>
+        </div>
+
+        <div class="row" ng-show="environment.deployment.deployedNotes">
+          <div class="col-md-2"><strong>Request notes:</strong></div>
+          <div class="col-md-10" ng-bind-html="environment.deployment.deployedNotes | newlines | anchors | trust"></div>
+        </div>
+
+        <div class="row top-buffer" ng-show="environment.deployment.date">
+          <div class="col-md-2"><strong>Build installed:</strong></div>
+          <div class="col-md-10">{{environment.deployment.date | date:'MMMM d'}}</div>        
+        </div>
+
+        <div class="row" ng-show="environment.deployment.branch">
+          <div class="col-md-2"><strong>Branch:</strong></div>
+          <div class="col-md-10">{{environment.deployment.branch}}</div>        
         </div>
 
         <div class="row" ng-show="environment.deployment.ringtail">
-          <div class="col-md-1"><strong>Builds:</strong></div>
-          <div class="col-md-11">
+          <div class="col-md-2"><strong>Builds:</strong></div>
+          <div class="col-md-10">
             <div ng-repeat="installer in environment.deployment.ringtail">{{installer}}</div>
           </div>
-        </div>        
-
-        <div class="row" ng-show="environment.description">
-          <div class="col-md-1"><strong>Info:</strong></div>
-          <div class="col-md-11" ng-bind-html="environment.description | newlines | anchors | trust"></div>
-        </div>
+        </div>  
         
       </div>
       <div class="col-md-2 environment-status" ng-show="environment.deployment.status === 'deployed'">
