@@ -89,23 +89,14 @@ exports.start = function start(req, res) {
     runstate: 'running'
   };
   
-
-  skytap.environments.get(opts)
-  //skytap.environments.update(opts)
+  
+  skytap.environments.update(opts)
   .then(function (env) {
     return joinUserData(env)
 
     // update deploy info for the environment
     .then(function (env) {
-      var json = JSON.parse(env.user_data.contents);
-      json.deployedBy     = deployinfo.who;
-      json.deployedUntil  = deployinfo.until;
-      json.deployedNotes  = deployinfo.notes;
-
-      return skytap.environments.updateUserdata({
-        configuration_id: environmentId,
-        contents: JSON.stringify(json, null, 2)
-      });
+      return updateDeployinfo(env.id, deployinfo);
     })
 
     // join the new updated deploy info
@@ -119,6 +110,7 @@ exports.start = function start(req, res) {
     res.send(env);  
   })
   .fail(function(err){
+    console.error(err);
     res.status(500).send(err);
   });
 };
@@ -173,36 +165,91 @@ exports.stop = function stop(req, res) {
 exports.redeploy = function redeploy(req, res) {
   debug('redeploy');
 
-  var configuration_id = req.param('environmentId')  
-    , job
-    , jobId
-    , environment = req.body    
-    , deployment = req.param('deployment')    
-    , taskdefs = deployment.taskdefs
-    , rundata;
+  var configuration_id = req.param('environmentId')      
+    , environment      = req.body    
+    , deployment       = req.param('deployment')    
+    , deployinfo       = deployment.deployinfo
+    , taskdefs         = deployment.taskdefs;    
 
-  rundata = { 
-    me: environment,
-    deployment: deployment
-  };
-  rundata = _.extend(rundata, req.query);
+  Q.fcall(function() { 
+    return updateDeployinfo(configuration_id, deployment.deployinfo);
+  })
 
-  // create redeploy task
-  job = new Job({
-    name: 'Redeploy environment ' + environment.name,
-    tasks: taskfactory.createTasks(taskdefs),
-    rundata: rundata
+  .then(function() {
+    var job
+      , jobId
+      , rundata;
+
+    rundata = { 
+      me: environment,
+      deployment: deployment
+    };
+    rundata = _.extend(rundata, req.query);
+
+    // create redeploy task
+    job = new Job({
+      name: 'Redeploy environment ' + environment.name,
+      tasks: taskfactory.createTasks(taskdefs),
+      rundata: rundata
+    });
+
+    // enqueue task  
+    jobId = jobrunner.add(job);
+
+    // start the job
+    job.start();
+
+    return jobId;
+  })
+
+  .then(function(jobId) {
+    res.send({ jobId: jobId });
+  })
+
+  .fail(function(err) {
+    console.error(err);
+    res.status(500).send(err);
   });
-
-  // enqueue task  
-  jobId = jobrunner.add(job);
-
-  // start the job
-  job.start();
-
-  res.send({ jobId: jobId });
+  
 };
 
+
+
+/**
+ * Updates an environment's deployinfo
+ *
+ * @param {number} id
+ * @param {object} deployinfo
+ * @return {Promise}
+ */
+function updateDeployinfo(id, deployinfo) {
+
+  var args = {
+    configuration_id: id
+  };
+
+  // get the user data
+  return Q.fcall(function() {
+    return skytap.environments.userdata(args);
+  })
+
+  //
+  .then(function(user_data) {
+    var json = JSON.parse(user_data.contents);
+    json.deployedBy     = deployinfo.who;
+    json.deployedUntil  = deployinfo.until;
+    json.deployedNotes  = deployinfo.notes;
+    return json;    
+  })
+
+  .then(function(json) {
+    return skytap.environments.updateUserdata({
+      configuration_id: id,
+      contents: JSON.stringify(json, null, 2)
+    });
+  });
+
+}
 
 
 /**
