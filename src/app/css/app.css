@@ -70,3 +70,7 @@ button {
 .row .top-buffer {
   padding-top: 20px;
 }
+
+.environment-list .inner .row { 
+  margin-left: 10px;
+}

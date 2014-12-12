@@ -4,7 +4,8 @@ angular.module('directives', [])
   return { 
     restrict: 'E',
     scope: {
-      deployinfo: '='
+      deployinfo: '=',
+      duration: '=?'
     },
     templateUrl: '/app/partials/deploy-info.html',
     controller: 'DeployInfoCtrl'

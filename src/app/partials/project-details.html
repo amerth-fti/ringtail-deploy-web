@@ -2,13 +2,13 @@
 <p ng-show="project.summary">{{project.summary | newlines | anchors | trust}}</p>
 
 <h3>Environments</h3>
-<ul class="list-group">
-  <li ng-repeat="environment in environments" class="list-group-item animate-show" ng-show="environment.show">     
+<ul class="list-group environment-list">
+  <li ng-repeat="environment in environments" class="list-group-item animate-show environment" ng-show="environment.show">     
     <div class="row">
-      <div class="col-md-10">
+      <div class="col-md-10 inner">
         <h4>          
-          {{environment.name}}
           <span ng-click="configure(environment)" class="configure glyphicon glyphicon-cog" />
+          {{environment.name}}
         </h4>
 
         <div class="row" ng-show="environment.description">

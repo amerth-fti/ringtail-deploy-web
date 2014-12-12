@@ -120,8 +120,12 @@ controllers.controller('ProjectDetailsCtrl', [
         }
       });
 
-      modal.result.then(function(minutes) {
-        environment.$start({ suspend_on_idle: minutes * 60 }, processEnvironment);
+      modal.result.then(function(startinfo) {
+        var qs = {
+          suspend_on_idle: startinfo.duration * 60,
+        }
+        environment.deployinfo = startinfo.deployinfo;
+        environment.$start(qs, processEnvironment);
       });
     }
 
@@ -182,14 +186,19 @@ controllers.controller('ProjectDetailsCtrl', [
   }]);
 
 
-controllers.controller('EnvironmentStartCtrl', ['$scope', '$modalInstance', 'environment',
-  function($scope, $modalInstance, environment) {
+controllers.controller('EnvironmentStartCtrl', [
+  '$scope', '$modalInstance', 'environment', 'DeployInfo',
+  function($scope, $modalInstance, environment, DeployInfo) {
 
     $scope.environment = environment;
-    $scope.runLength = 15;
+    $scope.deployinfo = new DeployInfo();
+    $scope.duration = 15;
 
     $scope.start = function() {
-      $modalInstance.close($scope.runLength);
+      $modalInstance.close({ 
+        duration: $scope.duration, 
+        deployinfo: $scope.deployinfo
+      });
     }
 
     $scope.cancel = function() {
@@ -355,11 +364,14 @@ controllers.controller('DeployInfoCtrl', [ '$scope', '$filter', 'dateHelpers', f
   $scope.format   = 'dd-MMMM-yyyy';
   $scope.opened   = false;  
 
-  var untilDate = dateHelpers.quarterHour(new Date());
-  untilDate     = dateHelpers.addMinutes(untilDate, $scope.duration);
-  $scope.date   = untilDate;
-  $scope.time   = untilDate;
+  $scope.$watch('duration', updateDateTime);
 
+  function updateDateTime() {
+    var untilDate = dateHelpers.quarterHour(new Date());
+    untilDate     = dateHelpers.addMinutes(untilDate, $scope.duration);
+    $scope.date   = untilDate;
+    $scope.time   = untilDate;
+  }
 
   $scope.open = function($event) {
     $event.preventDefault();
@@ -374,5 +386,8 @@ controllers.controller('DeployInfoCtrl', [ '$scope', '$filter', 'dateHelpers', f
     newDate = dateHelpers.combineDateTime(date, time);
     $scope.deployinfo.until = newDate.toUTCString();
   }
+
+  updateDateTime();
+  $scope.dateTimeChanged();
 
 }]);

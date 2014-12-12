@@ -80,6 +80,7 @@ exports.update = function update(req, res) {
 exports.start = function start(req, res) {
   var environmentId = req.param('environmentId') 
     , suspendOnIdle = req.param('suspend_on_idle')
+    , deployinfo    = req.param('deployinfo')
     , opts;
 
   opts = {
@@ -87,10 +88,32 @@ exports.start = function start(req, res) {
     suspend_on_idle: suspendOnIdle,
     runstate: 'running'
   };
+  
 
-  skytap.environments.update(opts)
+  skytap.environments.get(opts)
+  //skytap.environments.update(opts)
   .then(function (env) {
-    return joinUserData(env);    
+    return joinUserData(env)
+
+    // update deploy info for the environment
+    .then(function (env) {
+      var json = JSON.parse(env.user_data.contents);
+      json.deployedBy     = deployinfo.who;
+      json.deployedUntil  = deployinfo.until;
+      json.deployedNotes  = deployinfo.notes;
+
+      return skytap.environments.updateUserdata({
+        configuration_id: environmentId,
+        contents: JSON.stringify(json, null, 2)
+      });
+    })
+
+    // join the new updated deploy info
+    .then(function(user_data) {
+      env.user_data = user_data;
+      return env;
+    });
+
   })
   .then(function(env) {    
     res.send(env);  
