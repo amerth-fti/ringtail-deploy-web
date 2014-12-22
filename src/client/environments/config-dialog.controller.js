@@ -5,19 +5,23 @@
     .module('app')
     .controller('EnvironmentConfigController', EnvironmentConfigController);
 
-  EnvironmentConfigController.$inject = ['$scope', '$modalInstance', 'config', 'environment'];
+  EnvironmentConfigController.$inject = [ '$modalInstance', 'config', 'environment' ];
 
-  function EnvironmentConfigController($scope, $modalInstance, config, environment) {
-    $scope.environment = environment;
+  function EnvironmentConfigController($modalInstance, config, environment) {
+    var vm = this;
+    vm.environment = environment;
+    vm.cancel = cancel;
+    vm.save = save;
 
-    $scope.save = function() {           
+    //////////
+
+    function save() {           
       $modalInstance.close();
     }
 
-    $scope.cancel = function() {
+    function cancel() {
       $modalInstance.dismiss();      
     }
-
   }
 
 }());

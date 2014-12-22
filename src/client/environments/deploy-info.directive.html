@@ -1,6 +1,6 @@
   <div class="form-group">
     <label>Your name:</label>    
-    <input type="text" class="form-control" ng-model="deployinfo.who" />    
+    <input type="text" class="form-control" ng-model="vm.deployinfo.who" />    
   </div>
 
   <div class="form-group">        
@@ -12,26 +12,26 @@
           <input 
             type="text" 
             class="form-control" 
-            ng-model="date" 
-            datepicker-popup="{{format}}"
-            min-date="mindate" 
+            ng-model="vm.date" 
+            datepicker-popup="{{vm.format}}"
+            min-date="vm.mindate" 
             show-button-bar="false" 
-            is-open="opened" 
+            is-open="vm.opened" 
             ng-required="true"
-            ng-change="dateTimeChanged()"
+            ng-change="vm.dateTimeChanged()"
           />      
           <span class="input-group-btn">
-            <button type="button" class="btn btn-default" ng-click="open($event)"><i class="glyphicon glyphicon-calendar"></i></button>
+            <button type="button" class="btn btn-default" ng-click="vm.openCalendar($event)"><i class="glyphicon glyphicon-calendar"></i></button>
           </span>
         </div>    
       </div>
       <div class="col-xs-6">
         <timepicker
-          ng-model="time"           
+          ng-model="vm.time"           
           hour-step="1" 
           minute-step="15" 
           show-meridian="true"
-          ng-change="dateTimeChanged()"
+          ng-change="vm.dateTimeChanged()"
           class="deployinfo-timepicker">
         </timepicker>        
       </div>
@@ -40,5 +40,5 @@
 
   <div class="form-group">
     <label>Notes:</label>    
-    <textarea class="form-control" ng-model="deployinfo.notes" rows="5" />    
+    <textarea class="form-control" ng-model="vm.deployinfo.notes" rows="5" />    
   </div>

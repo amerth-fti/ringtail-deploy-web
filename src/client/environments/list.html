@@ -1,90 +1,10 @@
-<h2>{{project.name + ' Project'}}<div ng-show="globals.loading" class="loading float"></div></h2>
-<p ng-show="project.summary">{{project.summary | newlines | anchors | trust}}</p>
+<h2>{{vm.project.name + ' Project'}}<div ng-show="globals.loading" class="loading float"></div></h2>
+<p ng-show="vm.project.summary">{{vm.project.summary | newlines | anchors | trust}}</p>
 
 <h3>Environments</h3>
 <ul class="list-group environment-list">
-  <li ng-repeat="environment in environments" class="list-group-item animate-show environment" ng-show="environment.show">     
-    <div class="row">
-      <div class="col-md-10 inner">
-        <h4>          
-          <span ng-click="configure(environment)" class="configure glyphicon glyphicon-cog" />
-          {{environment.name}}
-        </h4>
-
-        <div class="row" ng-show="environment.description">
-          <div class="col-md-2"><strong>Info:</strong></div>
-          <div class="col-md-10" ng-bind-html="environment.description | newlines | anchors | trust"></div>
-        </div>
-      
-
-        <div class="row top-buffer" ng-show="environment.deployment.deployedBy">
-          <div class="col-md-2"><strong>Requested by:</strong></div>
-          <div class="col-md-10">{{environment.deployment.deployedBy}}</div>
-        </div>
-
-        <div class="row" ng-show="environment.deployment.deployedUntil">
-          <div class="col-md-2"><strong>Requested until:</strong></div>
-          <div class="col-md-10">{{environment.deployment.deployedUntil | fromDateString | date: 'dd-MMMM-yyyy hh:mma (LOCAL)' }}</div>
-        </div>
-
-        <div class="row" ng-show="environment.deployment.deployedNotes">
-          <div class="col-md-2"><strong>Request notes:</strong></div>
-          <div class="col-md-10" ng-bind-html="environment.deployment.deployedNotes | newlines | anchors | trust"></div>
-        </div>
-
-        <div class="row top-buffer" ng-show="environment.deployment.date">
-          <div class="col-md-2"><strong>Build installed:</strong></div>
-          <div class="col-md-10">{{environment.deployment.date | date:'MMMM d'}}</div>        
-        </div>
-
-        <div class="row" ng-show="environment.deployment.branch">
-          <div class="col-md-2"><strong>Branch:</strong></div>
-          <div class="col-md-10">{{environment.deployment.branch}}</div>        
-        </div>
-
-        <div class="row" ng-show="environment.deployment.ringtail">
-          <div class="col-md-2"><strong>Builds:</strong></div>
-          <div class="col-md-10">
-            <div ng-repeat="installer in environment.deployment.ringtail">{{installer}}</div>
-          </div>
-        </div>  
-        
-      </div>
-      <div class="col-md-2 environment-status" ng-show="environment.deployment.status === 'deployed'">
-        <h4><span>{{environment.runstate | uppercase}}</span></h4>
-        <button 
-          type="button" 
-          class="btn glyphicon glyphicon-play" 
-          ng-click="start(environment)" 
-          ng-disabled="!environment.showStart" 
-          ng-class="{'btn-primary': environment.showStart}"          
-          title="Start the environment"></button>
-        <button 
-          type="button" 
-          class="btn glyphicon glyphicon-pause" 
-          ng-click="pause(environment)" 
-          ng-disabled="!environment.showPause" 
-          ng-class="{'btn-primary': environment.showPause}"          
-          title="Stop the environment"></button>
-        <button 
-          type="button" 
-          class="btn btn-warning glyphicon glyphicon-refresh" 
-          ng-click="redeploy(environment)"          
-          title="Refresh the environment"
-          ng-show="config.enableDeployment"></button>          
-      </div>          
-      <div class="col-md-2 environment-status" ng-show="environment.deployment.status !== 'deployed'">        
-        <h4>{{environment.deployment.status | uppercase }}</h4>
-        <button
-          type="button"
-          class="btn btn-success glyphicon glyphicon-off"
-          ng-click="initialize(environment)"
-          ng-show="environment.deployment.status === 'initialize'"></button>
-
-        <!-- Show deployment job details when deploying -->
-        <a href="#/jobs/{{environment.deployment.deploymentJob}}" ng-show="environment.deployment.status === 'deploying'">Info</a>
-      </div>      
-    </div>
+  <li ng-repeat="environment in vm.environments" class="list-group-item animate-show environment" ng-show="environment.show"> 
+    <list-item environment="environment"></list-item>
   </li>
 </ul>
 

@@ -1,4 +1,3 @@
-'use strict';
 
 var services = angular.module('services', ['ngResource']);
 
@@ -13,13 +12,31 @@ services.factory('Environment', ['$resource',
       'api/environments/:environmentId', 
       { environmentId: '@id' }, 
       {
-        update  : { method: 'PUT', url: 'api/environments/:environmentId' },              
         project : { method: 'GET', url: 'api/projects/:projectId/environments', isArray: true },
-        start   : { method: 'PUT', url: 'api/environments/:environmentId/start' },
-        pause   : { method: 'PUT', url: 'api/environments/:environmentId/pause' },
-        redeploy: { method: 'PUT', url: 'api/environments/:environmentId/redeploy' }
+        get     : { method: 'GET', url: 'api/environments/:environmentId', transformResponse: parse },
+        update  : { method: 'PUT', url: 'api/environments/:environmentId', transformResponse: parse },              
+        start   : { method: 'PUT', url: 'api/environments/:environmentId/start', transformResponse: parse },
+        pause   : { method: 'PUT', url: 'api/environments/:environmentId/pause', transformResponse: parse },
+        redeploy: { method: 'PUT', url: 'api/environments/:environmentId/redeploy', transformResponse: parse }
       }
     );
+    
+    function parse(data) {
+      var environment = JSON.parse(data);
+      try
+      {        
+        environment.deployment = JSON.parse(environment.user_data.contents);
+        environment.deployment.status = environment.deployment.status || 'deployed';        
+      }
+      catch (ex) {  
+        environment.deployment = {};
+        environment.deployment.status = 'initialize';        
+      }
+      environment.show = environment.deployment.status !== 'hidden'; 
+      return environment;
+    }
+    
+    return Environment;
   }]);
 
 
@@ -34,9 +51,9 @@ services.factory('Job', ['$resource',
 
 services.factory('DeployInfo', [ function() {
   return function() {
-    this.who = '',
-    this.until = new Date(),
-    this.notes = ''
+    this.who = '';
+    this.until = new Date();
+    this.notes = '';
   };
 }]);
 

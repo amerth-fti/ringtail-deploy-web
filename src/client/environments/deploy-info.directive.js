@@ -1,5 +1,5 @@
 (function() {
-  'use strict'
+  'use strict';
 
   angular
     .module('app')
@@ -9,47 +9,55 @@
     return { 
       restrict: 'E',
       scope: {
-        deployinfo: '=',
-        duration: '=?'
+        deployinfo: '='
       },
       templateUrl: 'client/environments/deploy-info.directive.html',
-      controller: DeployInfoController
+      controller: DeployInfoController,
+      controllerAs: 'vm'
     };
   }
 
-  DeployInfoController.$inject = [ '$scope', '$filter', 'dateHelpers' ];
+  DeployInfoController.$inject = [ '$scope', 'dateHelpers' ];
 
-  function DeployInfoController($scope, $filter, dateHelpers) {
-    $scope.duration = $scope.duration || 120;
-    $scope.mindate  = new Date();
-    $scope.format   = 'dd-MMMM-yyyy';
-    $scope.opened   = false;  
+  function DeployInfoController($scope, dateHelpers) {
+    var vm = this;
+    vm.deployinfo       = $scope.deployinfo;
+    vm.format           = 'dd-MMMM-yyyy';
+    vm.mindate          = new Date();
+    vm.opened           = false;
+    vm.openCalendar     = openCalendar;
+    vm.dateTimeChanged  = dateTimeChanged;
+    
+    activate();
 
-    $scope.$watch('duration', updateDateTime);
+    //////////
 
-    function updateDateTime() {
-      var untilDate = dateHelpers.quarterHour(new Date());
-      untilDate     = dateHelpers.addMinutes(untilDate, $scope.duration);
-      $scope.date   = untilDate;
-      $scope.time   = untilDate;
+    function activate() {
+      $scope.$parent.$watch('vm.duration', durationChanged);      
+      durationChanged(15);
     }
 
-    $scope.open = function($event) {
+    function openCalendar($event) {
       $event.preventDefault();
       $event.stopPropagation();
-      $scope.opened = true;
+      vm.opened = true;
     }
 
-    $scope.dateTimeChanged = function() {
-      var date = new Date($scope.date)
-        , time = $scope.time
+    function durationChanged(duration) {
+      var untilDate = dateHelpers.quarterHour(new Date());
+      untilDate     = dateHelpers.addMinutes(untilDate, duration);
+      vm.date       = untilDate;
+      vm.time       = untilDate;
+      dateTimeChanged();
+    }
+
+    function dateTimeChanged() {
+      var date = new Date(vm.date)
+        , time = vm.time
         , newDate;
       newDate = dateHelpers.combineDateTime(date, time);
-      $scope.deployinfo.until = newDate.toUTCString();
+      vm.deployinfo.until = newDate.toUTCString();
     }
-
-    updateDateTime();
-    $scope.dateTimeChanged();      
   }
 
 }());

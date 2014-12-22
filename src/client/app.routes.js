@@ -11,7 +11,8 @@
     $routeProvider
     .when('/projects/:projectId', {
       templateUrl: 'client/environments/list.html',
-      controller: 'EnvironmentListController'
+      controller: 'EnvironmentListController',
+      controllerAs: 'vm'
     })
     .when('/jobs/:jobId', {
       templateUrl: 'client/jobs/details.html',

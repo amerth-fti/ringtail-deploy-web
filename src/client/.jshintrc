@@ -1,0 +1,6 @@
+{
+  "laxcomma": true,
+  "globals": {
+   "angular": true 
+  }
+}

@@ -1,25 +1,25 @@
 <div class="modal-header">
-  <button type="button" class="close" data-dismiss="modal" ng-click="close()"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-  <h4 class="modal-title">Redeploy {{environment.name}}</h4>
+  <button type="button" class="close" data-dismiss="modal" ng-click="vm.close()"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+  <h4 class="modal-title">Redeploy {{vm.environment.name}}</h4>
 </div>
 <div class="modal-body">
   
   <form role="form">
     <div class="form-group">
       <label>Install build from branch:</label>
-      <select class="form-control" ng-model="selectedBranch" ng-options="branch for branch in branches" />
+      <select class="form-control" ng-model="vm.selectedBranch" ng-options="branch for branch in vm.branches" />
     </div>
-    <deployinfo deployinfo="deployinfo"></deployinfo>    
+    <deployinfo deployinfo="vm.deployinfo"></deployinfo>    
   </form>
 
-  <div class="advanced" ng-show="showAdvanced">    
-    <div ng-repeat="taskdef in environment.deployment.taskdefs">
+  <div class="advanced" ng-show="vm.showAdvanced">    
+    <div ng-repeat="taskdef in vm.environment.deployment.taskdefs">
       <input 
         type="checkbox"
         name="selectedTaskDefs[]"
         value="{{taskdef}}"
-        ng-checked="selectedTasks.indexOf(taskdef) > -1"
-        ng-click="toggleSelectedTask(taskdef)"
+        ng-checked="vm.selectedTasks.indexOf(taskdef) > -1"
+        ng-click="vm.toggleSelectedTask(taskdef)"
       >
       {{taskdef}}
     </div>
@@ -27,7 +27,7 @@
 
 </div>
 <div class="modal-footer">  
-  <a style="float: left" ng-click="toggleAdvanced()">Advanced</a> 
-  <button type="button" class="btn btn-primary " ng-click="rebuild()">Start</button>
-  <button type="button" class="btn btn-default" ng-click="cancel()">Cancel</button>
+  <a style="float: left" ng-click="vm.toggleAdvanced()">Advanced</a> 
+  <button type="button" class="btn btn-primary " ng-click="vm.rebuild()">Start</button>
+  <button type="button" class="btn btn-default" ng-click="vm.cancel()">Cancel</button>
 </div>

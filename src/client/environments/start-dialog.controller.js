@@ -5,22 +5,27 @@
     .module('app')
     .controller('EnvironmentStartController', EnvironmentStartController);
 
-  EnvironmentStartController.$inject = [ '$scope', '$modalInstance', 'environment', 'DeployInfo' ]; 
+  EnvironmentStartController.$inject = [ '$modalInstance', 'environment', 'DeployInfo' ]; 
 
-  function EnvironmentStartController($scope, $modalInstance, environment, DeployInfo) {
-    $scope.environment = environment;
-    $scope.deployinfo = new DeployInfo();
-    $scope.duration = 15;
+  function EnvironmentStartController($modalInstance, environment, DeployInfo) {
+    var vm          = this;
+    vm.environment  = environment;
+    vm.deployinfo   = new DeployInfo();
+    vm.duration     = 15;
+    vm.cancel       = cancel;
+    vm.start        = start;
 
-    $scope.start = function() {
-      $modalInstance.close({ 
-        duration: $scope.duration, 
-        deployinfo: $scope.deployinfo
-      });
+    //////////
+
+    function cancel() {
+      $modalInstance.dismiss();
     }
 
-    $scope.cancel = function() {
-      $modalInstance.dismiss();
+    function start() {
+      $modalInstance.close({ 
+        duration: vm.duration, 
+        deployinfo: vm.deployinfo
+      });
     }
   }
 
