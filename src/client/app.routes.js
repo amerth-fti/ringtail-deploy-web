@@ -16,7 +16,8 @@
     })
     .when('/jobs/:jobId', {
       templateUrl: 'client/jobs/details.html',
-      controller: 'JobDetailsController'
+      controller: 'JobDetailsController',
+      controllerAs: 'vm'
     })
     .otherwise({
       redirectTo: config.defaultRoute || '/projects/34440'

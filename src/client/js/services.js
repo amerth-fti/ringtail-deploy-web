@@ -42,10 +42,21 @@ services.factory('Environment', ['$resource',
 
 services.factory('Job', ['$resource',
   function($resource) {
-    return $resource(
+    var Job = $resource(
       'api/jobs/:jobId',
-      { jobId: '@id' }      
+      { jobId: '@id' },
+      {
+        get: { method: 'GET', transformResponse: parse } 
+      }
     );
+    
+    function parse(data) {
+      var job = JSON.parse(data);
+      job.elapsed = (job.stopped ? new Date(job.stopped) : new Date()) - new Date(job.started);
+      return job;
+    }
+    
+    return Job;
   }]);
 
 
