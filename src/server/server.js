@@ -14,16 +14,13 @@ app.use(bodyParser.json());
 
 
 // STATIC FILE ROUTES
-app.use('/app/dep', serveStatic(__dirname + '/../app/bower_components'));
-app.use('/app/css', serveStatic(__dirname + '/../app/css'));
-app.use('/app/js',  serveStatic(__dirname + '/../app/js'));
-app.use('/app/img', serveStatic(__dirname + '/../app/img'));
-app.use('/app/partials', serveStatic(__dirname + '/../app/partials'));
+app.use('/client/dep', serveStatic(__dirname + '/../client/bower_components'));
+app.use('/client', serveStatic(__dirname + '/../client'));
 
 
 // DEFAULT ROUTE
 app.get('/', function(req, res) {
-  res.sendFile(path.resolve(__dirname +'/../app/index.html'));
+  res.sendFile(path.resolve(__dirname +'/../client/index.html'));
 });
 
 

@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="x-ua-compatible" content="IE=Edge"/>
+  
+  <title>Skytap Deployer</title>
+
+  <link rel="Stylesheet" type="text/css" href="/client/dep/bootstrap/dist/css/bootstrap.css" />  
+  <link rel="Stylesheet" type="text/css" href="/client/assets/css/app.css" />
+
+  <script type="text/javascript" src="/client/dep/jquery/dist/jquery.min.js"></script>
+  <script type="text/javascript" src="/client/dep/bootstrap/dist/js/bootstrap.min.js"></script>
+  <script type="text/javascript" src="/client/dep/angular/angular.js"></script>
+  <script type="text/javascript" src="/client/dep/angular-route/angular-route.js"></script>
+  <script type="text/javascript" src="/client/dep/angular-resource/angular-resource.js"></script>
+  <script type="text/javascript" src="/client/dep/angular-animate/angular-animate.js"></script>
+  <script type="text/javascript" src="/client/dep/angular-bootstrap/ui-bootstrap.js"></script>
+  <script type="text/javascript" src="/client/dep/angular-bootstrap/ui-bootstrap-tpls.js"></script>
+
+  <script type="text/javascript" src="/config"></script>
+  <script type="text/javascript" src="/client/app.module.js"></script>
+  <script type="text/javascript" src="/client/app.routes.js"></script>
+  <script type="text/javascript" src="/client/app.config.js"></script>
+  <script type="text/javascript" src="/client/app-config.constant.js"></script>
+  <script type="text/javascript" src="/client/app-globals.constant.js"></script>
+
+  <script type="text/javascript" src="/client/layout/main.controller.js"></script>
+
+  <script type="text/javascript" src="/client/environments/config-dialog.controller.js"></script>
+  <script type="text/javascript" src="/client/environments/deploy-info.directive.js"></script>
+  <script type="text/javascript" src="/client/environments/list.controller.js"></script>
+  <script type="text/javascript" src="/client/environments/redeploy-dialog.controller.js"></script>
+  <script type="text/javascript" src="/client/environments/start-dialog.controller.js"></script>
+
+  <script type="text/javascript" src="/client/jobs/details.controller.js"></script>
+  <script type="text/javascript" src="/client/jobs/task-details.controller.js"></script>
+
+  <script type="text/javascript" src="/client/js/filters.js"></script>
+  <script type="text/javascript" src="/client/js/services.js"></script>
+
+  <script type="text/javascript" src="/client/shared/datepicker-popup.directive.js"></script>
+  <script type="text/javascript" src="/client/shared/loading.factory.js"></script>
+  
+  
+</head>
+<body ng-app="app">
+
+  <div ng-controller="MainController">
+
+    <nav class="navbar navbar-default" role="navigation">
+      <div class="container">
+        <div class="navbar-header">
+          <a class="navbar-brand" href="/">
+            <span class="glyphicon glyphicon-cloud"></span>
+            Skytap Deployer
+          </a>
+        </div>
+      </div>
+    </nav>
+    <div ng-view class="container"></div>
+
+  </div>
+</body>
+</html>
