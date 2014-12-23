@@ -6,7 +6,7 @@
     'ngAnimate',
     'ui.bootstrap',
     'services',
-    'filters',
+    'shared.filters',
     'shared.loading',
     'shared.datepicker'
   ]);
