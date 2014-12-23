@@ -2,7 +2,7 @@
   'use strict';
 
   angular
-    .module('shared.loading', [])
+    .module('shared')
     .factory('loadingInterceptor', loadingInterceptor);
 
   loadingInterceptor.$inject = ['$q', 'globals'];
@@ -26,9 +26,9 @@
       },
       'responseError': function(rejection) {
         globals.loading -= 1;      
-        return rejection
+        return rejection;
       }
-    }
+    };
   }
 
 }());

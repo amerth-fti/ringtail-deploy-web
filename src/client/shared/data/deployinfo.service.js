@@ -1,0 +1,26 @@
+(function() {
+  'use strict';
+
+  angular
+    .module('shared.data')
+    .service('DeployInfo', DeployInfo);
+
+  DeployInfo.$inject = [ '$resource' ];
+ 
+  function DeployInfo($resource) {
+    return $resource(
+      'api/jobs/:jobId',
+      { jobId: '@id' },
+      {
+        get: { method: 'GET', transformResponse: parse } 
+      }
+    );
+    
+    function parse(data) {
+      var job = JSON.parse(data);
+      job.elapsed = (job.stopped ? new Date(job.stopped) : new Date()) - new Date(job.started);
+      return job;
+    }
+  }
+
+}());

@@ -5,10 +5,7 @@
     'ngRoute',  
     'ngAnimate',
     'ui.bootstrap',
-    'services',
-    'shared.filters',
-    'shared.loading',
-    'shared.datepicker'
+    'shared'
   ]);
 
 }());

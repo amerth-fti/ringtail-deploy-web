@@ -2,7 +2,7 @@
   'use strict';
 
   angular
-    .module('shared.datepicker', [])
+    .module('shared')
     .directive('datepickerPopup', datepickerPopup);
 
   // fix for date picker failing to display unformatted on changes
