@@ -22,23 +22,16 @@ module.exports = function(grunt) {
       }
     },
     jshint: {
+      options: {
+        jshintrc: true
+      },
       grunt: {
-        options: {
-          "laxcomma": true
-        },
         src: [ 'GruntFile.js' ]        
       },
       server: {
-        options: {
-          "laxcomma": true
-        },
         src: [ 'src/server/**/*.js' ]        
       },
       test: {
-        options: {
-          "laxcomma": true,
-          "expr": true
-        },
         src: [ 'test/**/*.js' ]  
       }
     },
