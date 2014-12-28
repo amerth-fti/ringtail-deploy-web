@@ -11,10 +11,12 @@
     "body-parser": "^1.9.2",
     "debug": "^2.1.0",
     "express": "^4.10.1",
+    "migrate": "^0.2.0",
     "node-skytap": "^0.1.0",
     "q": "^1.0.1",
     "request": "^2.51.0",
     "serve-static": "^1.7.1",
+    "statements": "^0.1.0",
     "underscore": "^1.7.0"
   },
   "devDependencies": {
