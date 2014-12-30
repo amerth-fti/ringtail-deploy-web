@@ -48,6 +48,11 @@ app.put ('/api/environments/:environmentId/start', controllers.environments.star
 app.put ('/api/environments/:environmentId/pause', controllers.environments.pause);
 app.put ('/api/environments/:environmentId/redeploy', controllers.environments.redeploy);
 
+app.get ('/api/env', controllers.env.list);
+app.post('/api/env', controllers.env.create);
+app.put ('/api/env/:envId', controllers.env.update);
+//app.del ('/api/env/:envId', controllers.env.del);
+//app.get ('/api/env/:envId', controllers.env.get);
 
 // API - TASK ROUTES
 app.get ('/api/jobs', controllers.jobs.list);

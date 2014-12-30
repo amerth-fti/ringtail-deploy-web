@@ -20,6 +20,7 @@ exports.list = function list(req, res) {
     res.send(envs);  
   })
   .fail(function(err){
+    console.error(err);
     res.status(500).send(err);
   });
 };
@@ -39,6 +40,7 @@ exports.get = function get(req, res) {
     res.send(env);  
   })
   .fail(function(err){
+    console.error(err);
     res.status(500).send(err);
   });
 };

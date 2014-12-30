@@ -2,11 +2,10 @@
 CREATE TABLE env (
   envId INTEGER PRIMARY KEY AUTOINCREMENT,
   envName NVARCHAR(255) NOT NULL,
-  evnDescription TEXT,
+  envDesc TEXT,
   remoteType INTEGER,
   remoteId INTEGER,
   configId INTEGER,
-  roleId INTEGER,
   deployedBy NVARCYAR(255),
   deployedOn TIMESTAMP,
   deployedUntil TIMESTAMP,
@@ -17,3 +16,19 @@ CREATE TABLE env (
 
 -- dropEnv
 DROP TABLE env;
+
+-- createVM
+CREATE TABLE vm (
+  vmId INTEGER PRIMARY KEY AUTOINCREMENT,
+  vmName NVARCHAR(255) NOT NULL,
+  vmDesc TEXT,
+  intIP NVARCHAR(255),
+  extIP NVARCHAR(255),
+  roleId INTEGER,
+  installNotes TEXT,
+  registryNotes TEXT
+);
+
+-- dropVM
+DROP TABLE vm;
+

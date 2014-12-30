@@ -15,7 +15,6 @@ schema = {
     { "name": "remoteType", "required": true },
     { "name": "remoteId" },
     { "name": "configId" },
-    { "name": "roleId" },
     { "name": "deployedBy" },
     { "name": "deployedOn" },
     { "name": "deployedUntil" },

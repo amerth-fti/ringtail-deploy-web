@@ -1,7 +1,8 @@
 var Q         = require('q')
   , skytap    = require('node-skytap')
   , EnvMapper = require('../mappers/envMapper')
-  , envMapper
+  , Env       = require('../models/env')
+  , envMapper = new EnvMapper(__dirname + '/../../../deployer.db')
   ;
 
 /** 
@@ -13,11 +14,36 @@ var Q         = require('q')
  * @return {Promise} resolves to Array[Env]
  */
 module.exports.list = function list(paging, next) {
+  paging = paging || {};
+  paging.pagesize = paging.pagesize || 25;
+  paging.page = paging.page || 1;
+
   return envMapper
-    .list(paging)
-    .then(joinSkytap)
+    .findAll(paging)
     .nodeify(next);
 };
+
+module.exports.create = function create(data, next) {
+  var env = new Env(data);
+  
+  return env
+    .validate()
+    .then(function() {
+      return envMapper.insert(env);
+    })
+    .then(function(result) {
+      env.envId = result.lastID;
+      return env;
+    })
+    .nodeify(next);
+};
+
+module.exports.update = function update(env, next) {
+  return EnvMapper
+    .update(env)
+    .nodeify(next);
+};
+
 
 /**
  * Helper function to join skytap data

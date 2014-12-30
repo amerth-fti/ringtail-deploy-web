@@ -3,22 +3,32 @@ var util          = require('util')
   , Q             = require('q')
   , statements    = require('statements')
   , SqliteMapper  = require('sweetener-sqlite')
-  , envSql        = statements.read('environment.sql')
+  , Env           = require('../models/env')
+  , envSql        = statements.read(__dirname + '/sql/env.sql')
   ;
 
 
 
-function EnvironmentMapper() {
+function EnvMapper() {
   SqliteMapper.apply(this, arguments);
 }
-util.inherits(EnvironmentMapper, SqliteMapper);
+util.inherits(EnvMapper, SqliteMapper);
 
-EnvironmentMapper.prototype.parse = function(record) {
-  
+module.exports = EnvMapper;
+
+EnvMapper.prototype.parse = function parse(record) {
+  return new Env(record);
+};
+
+EnvMapper.prototype.parseArray = function parseArray(array) {
+  var self = this;
+  return array.map(function(record) {
+    return new Env(record);
+  });
 };
 
 
-EnvironmentMapper.prototype.insert = function insert(env, next) {
+EnvMapper.prototype.insert = function insert(env, next) {
   var sql = envSql.insert
     , params
     ;
@@ -30,7 +40,6 @@ EnvironmentMapper.prototype.insert = function insert(env, next) {
     $remoteType: env.remoteType,
     $remoteId: env.remoteId,
     $configId: env.configId,
-    $roleId: env.roleId,
     $deployedBy: env.deployedBy,
     $deployedOn: env.deployedOn,
     $deployedUntil: env.deployedUntil,
@@ -38,10 +47,10 @@ EnvironmentMapper.prototype.insert = function insert(env, next) {
     $deployedBranch: env.deployedBranch
   };
 
-  return this.executeNonQuery(sql, params, next);
+  return this.run(sql, params, next);
 };
 
-EnvironmentMapper.prototype.update = function update(env, next) {
+EnvMapper.prototype.update = function update(env, next) {
 var sql = envSql.update
     , params
     ;
@@ -53,7 +62,6 @@ var sql = envSql.update
     $remoteType: env.remoteType,
     $remoteId: env.remoteId,
     $configId: env.configId,
-    $roleId: env.roleId,
     $deployedBy: env.deployedBy,
     $deployedOn: env.deployedOn,
     $deployedUntil: env.deployedUntil,
@@ -65,7 +73,7 @@ var sql = envSql.update
 };
 
 
-EnvironmentMapper.prototype.del = function del(envId, next) {
+EnvMapper.prototype.del = function del(envId, next) {
   var sql = envSql.delete
     , params;
 
@@ -73,11 +81,11 @@ EnvironmentMapper.prototype.del = function del(envId, next) {
     $envId: envId
   };
 
-  return this.executeNonQuery(sql, params, next);
+  return this.run(sql, params, next);
 };
 
 
-EnvironmentMapper.prototype.findAll = function findAll(paging, next) {
+EnvMapper.prototype.findAll = function findAll(paging, next) {
   var sql = envSql.findAll
     , params
     ;
@@ -87,10 +95,13 @@ EnvironmentMapper.prototype.findAll = function findAll(paging, next) {
     $offset: (paging.page - 1) * paging.pagesize
   };
 
-  return this.executeReaderList(sql, params, next);
+  return this
+    .all(sql, params)
+    .then(this.parseArray)
+    .nodeify(next);
 };
 
-EnvironmentMapper.prototype.findById = function findById(envId, next) {
+EnvMapper.prototype.findById = function findById(envId, next) {
   var sql = envSql.findById
     , params
     ;
@@ -99,5 +110,8 @@ EnvironmentMapper.prototype.findById = function findById(envId, next) {
     $envId: envId
   };
 
-  return this.executeReader(sql, params, next);
+  return this
+    .get(sql, params)
+    .then(this.parse)
+    .nodeify(next);
 };
