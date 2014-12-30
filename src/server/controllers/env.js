@@ -8,7 +8,6 @@ var debug       = require('debug')('deployer-environments')
   , taskfactory = require('../taskfactory')
   , skytap      = Skytap.init(config.skytap)
   , envService  = require('../services/envService')
-  , Env         = require('../models/env')
   ;
 
 
@@ -39,13 +38,14 @@ exports.create = function create(req, res) {
 };
 
 exports.update = function update(req, res) {
-  var env = new Env(req.body);
+  var data = req.body;
   envService
-    .update(env)
+    .update(data)
     .then(function(result) {
       res.send(result);
     })
     .fail(function(err) {
+      console.error(err);
       res.status(500).send(err);
     });
 };

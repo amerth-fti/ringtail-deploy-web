@@ -69,7 +69,7 @@ var sql = envSql.update
     $deployedBranch: env.deployedBranch
   };
 
-  return this.executeNonQuery(sql, params, next);
+  return this.run(sql, params, next);
 };
 
 

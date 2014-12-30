@@ -38,9 +38,17 @@ module.exports.create = function create(data, next) {
     .nodeify(next);
 };
 
-module.exports.update = function update(env, next) {
-  return EnvMapper
-    .update(env)
+module.exports.update = function update(data, next) {
+  var env = new Env(data);
+
+  return env
+    .validate()
+    .then(function() {
+      return envMapper.update(env);
+    })
+    .then(function() {
+      return env;
+    })
     .nodeify(next);
 };
 
