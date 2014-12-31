@@ -34,3 +34,16 @@ CREATE TABLE machine (
 
 -- dropMachine
 DROP TABLE machine;
+
+
+-- createConfig
+CREATE TABLE config (
+  configId INTEGER PRIMARY KEY AUTOINCREMENT,
+  configName NVARCHAR(255) NOT NULL,
+  configDesc TEXT,
+  configData TEXT NOT NULL
+);
+
+
+-- dropConfig
+DROP TABLE config;
