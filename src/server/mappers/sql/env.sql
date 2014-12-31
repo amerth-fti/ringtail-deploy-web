@@ -26,6 +26,7 @@ where envId = $envId;
 -- findAll
 select *
 from env
+order by envName
 limit $pagesize offset $offset;
 
 

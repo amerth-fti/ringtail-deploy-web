@@ -9,14 +9,13 @@ db  = new Sqlite(__dirname + '/../deployer.db');
 
 exports.up = function(next){
   db  
-    .run(sql.createVM)
+    .run(sql.createMachine)
     .then(function() { next(); })
     .done();
 };
 
 exports.down = function(next){
   db
-    .run(sql.dropVM)
-    .then(function() { next(); })
-    .done();
+    .run(sql.dropMachine)
+    .fin(function() { next(); });
 };

@@ -17,18 +17,20 @@ CREATE TABLE env (
 -- dropEnv
 DROP TABLE env;
 
--- createVM
-CREATE TABLE vm (
-  vmId INTEGER PRIMARY KEY AUTOINCREMENT,
-  vmName NVARCHAR(255) NOT NULL,
-  vmDesc TEXT,
+-- createMachine
+CREATE TABLE machine (
+  machineId INTEGER PRIMARY KEY AUTOINCREMENT,
+  envId INTEGER NOT NULL,
+  machineName NVARCHAR(255) NOT NULL,
+  machineDesc TEXT,
+  remoteId INTEGER,
   intIP NVARCHAR(255),
   extIP NVARCHAR(255),
   roleId INTEGER,
   installNotes TEXT,
-  registryNotes TEXT
+  registryNotes TEXT,
+  FOREIGN KEY (envId) REFERENCES env(envId)
 );
 
--- dropVM
-DROP TABLE vm;
-
+-- dropMachine
+DROP TABLE machine;

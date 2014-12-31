@@ -1,8 +1,13 @@
-var Q         = require('q')
-  , skytap    = require('node-skytap')
-  , EnvMapper = require('../mappers/envMapper')
-  , Env       = require('../models/env')
-  , envMapper = new EnvMapper(__dirname + '/../../../deployer.db')
+var Q             = require('q')
+  , Skytap        = require('node-skytap')
+  , EnvMapper     = require('../mappers/envMapper')
+  , MachineMapper = require('../mappers/machineMapper')
+  , Env           = require('../models/env')
+  , config        = require('../../../config')
+  , dbPath        = __dirname + '/../../../deployer.db'
+  , skytap        = Skytap.init(config.skytap)
+  , envMapper     = new EnvMapper(dbPath)
+  , machineMapper = new MachineMapper(dbPath)
   ;
 
 /** 
@@ -20,8 +25,12 @@ module.exports.list = function list(paging, next) {
 
   return envMapper
     .findAll(paging)
+    .then(joinMachines)
+    .then(joinSkytap)
     .nodeify(next);
 };
+
+
 
 module.exports.create = function create(data, next) {
   var env = new Env(data);
@@ -52,6 +61,35 @@ module.exports.update = function update(data, next) {
     .nodeify(next);
 };
 
+/**
+ * Helper function to join vms
+ * 
+ * @api private
+ * @param {Array|Machin}
+ */
+function joinMachines(envs) {
+  var array = []
+    , promises
+    ;
+
+  if(!Array.isArray(envs)) {
+    array.push(envs);
+  } else {
+    array = envs;
+  }
+
+  promises = array.map(function(env) {
+    return machineMapper
+      .findByEnv(env.envId)
+      .then(function(vms) {
+        env.vms = vms;
+        return env;
+      });
+  });
+
+  return Q.all(promises);
+}
+
 
 /**
  * Helper function to join skytap data
@@ -65,11 +103,16 @@ function joinSkytap(envs) {
     , promises;
 
   promises = envs.map(function(env) {
-    return skytap.environments
-      .get({ configuration_id: env.remoteId })
-      .then(function(skyenv) {
-        env.skytap = skyenv;
-      });
+    if(env.remoteType === 'skytap' && env.remoteId) {
+      return skytap.environments
+        .get({ configuration_id: env.remoteId })
+        .then(function(skyenv) {
+          env.skytap = skyenv;
+          return env;
+        });
+    } else {
+      return null;
+    } 
   });
 
   return Q.all(promises);

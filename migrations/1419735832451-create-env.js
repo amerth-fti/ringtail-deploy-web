@@ -17,6 +17,5 @@ exports.up = function(next){
 exports.down = function(next){
   db  
     .run(sql.dropEnv)
-    .then(function() { next(); })
-    .done();
+    .fin(function() { next(); });
 };
