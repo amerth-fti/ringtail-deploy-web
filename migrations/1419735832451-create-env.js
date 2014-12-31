@@ -1,5 +1,5 @@
 var statements  = require('statements')
-  , Sqlite      = require('sweetener-sqlite')
+  , Sqlite      = require('hops-sqlite')
   , db
   , sql
   ;

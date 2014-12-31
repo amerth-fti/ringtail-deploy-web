@@ -1,8 +1,7 @@
 var util          = require('util')
-  , sqlite3       = require('sqlite3').verbose()
   , Q             = require('q')
   , statements    = require('statements')
-  , SqliteMapper  = require('sweetener-sqlite')
+  , SqliteMapper  = require('hops-sqlite')
   , Machine            = require('../models/machine')
   , machineSql         = statements.read(__dirname + '/sql/machine.sql')
   ;

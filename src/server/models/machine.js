@@ -1,28 +1,22 @@
-var Model       = require('sweetener-model')
+var Model       = require('hops-model')
   , schema
-  , Machine
+  , Config
   ;
 
 /* jshint es5:false */
 /* jshint ignore:start */
 schema = {
   "properties": [
-    { "name": "machineId" },
-    { "name": "envId" },
+    { "name": "configId" },
     { "name": "created" },
     { "name": "updated" },
-    { "name": "machineName", "required": true },
-    { "name": "machineDesc" }, 
-    { "name": "remoteId" },
-    { "name": "intIP" },
-    { "name": "extIP" },
-    { "name": "roleId" },
-    { "name": "instalNotes" },
-    { "name": "registryNotes" }
+    { "name": "configName", "required": true },
+    { "name": "configDesc" },     
+    { "name": "json" }
   ]
 };
 /* jshint ignore:end */
 
 
-Machine = Model.extend(schema);
-module.exports = Machine;
+Config = Model.extend(schema);
+module.exports = Config;

@@ -1,4 +1,4 @@
-var Model       = require('sweetener-model')
+var Model       = require('hops-model')
   , schema
   , Environment
   ;
