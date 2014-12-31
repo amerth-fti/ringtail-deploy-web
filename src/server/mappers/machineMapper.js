@@ -34,6 +34,7 @@ MachineMapper.prototype.insert = function insert(machine, next) {
     ;
 
   params = {
+    $envId: machine.envId,
     $machineName: machine.machineName,
     $machineDesc: machine.machineDesc,
     $remoteId: machine.remoteId,
@@ -54,6 +55,7 @@ var sql = machineSql.update
 
   params = {
     $machineId: machine.machineId,
+    $envId: machine.envId,
     $machineName: machine.machineName,
     $machineDesc: machine.machineDesc,
     $remoteId: machine.remoteId,

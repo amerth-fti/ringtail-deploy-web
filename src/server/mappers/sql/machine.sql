@@ -1,14 +1,14 @@
--- createMachine
+-- insert
 insert into machine (envId, machineName, machineDesc, remoteId, intIP, extIP, roleId, installNotes, registryNotes)
-values ($envId, $machineName, $machineDesc, remoteId, $intIP, $extIP, $roleId, $installNotes, $registryNotes);
+values ($envId, $machineName, $machineDesc, $remoteId, $intIP, $extIP, $roleId, $installNotes, $registryNotes);
 
--- updateMachine
+-- update
 update machine set
   envId = $envId, machineName = $machineName, machineDesc = $machineDesc, remoteId = $remoteId, 
   intIP = $intIP, extIP = $extIP, roleId = $roleId, installNotes = $installNotes, registryNotes = $registryNotes
 where machineId = $machineId;
 
--- deleteMachine
+-- delete
 delete machine
 where machineId = $machineId;
 

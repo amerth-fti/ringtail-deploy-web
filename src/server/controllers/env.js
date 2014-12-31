@@ -15,7 +15,7 @@ exports.list = function list(req, res) {
   envService
     .list(null)
     .then(function(result) {
-      res.send(result);
+      res.send(result.map(function(x) { return x.toClient(); }));
     })
     .fail(function(err) {
       console.error(err);

@@ -26,7 +26,7 @@ module.exports.list = function list(paging, next) {
   return envMapper
     .findAll(paging)
     .then(joinMachines)
-    .then(joinSkytap)
+    //.then(joinSkytap)
     .nodeify(next);
 };
 

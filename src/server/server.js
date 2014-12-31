@@ -54,6 +54,8 @@ app.put ('/api/env/:envId', controllers.env.update);
 //app.del ('/api/env/:envId', controllers.env.del);
 //app.get ('/api/env/:envId', controllers.env.get);
 
+app.post('/api/imports/skytap', controllers.imports.skytap);
+
 // API - TASK ROUTES
 app.get ('/api/jobs', controllers.jobs.list);
 app.get ('/api/jobs/:jobId', controllers.jobs.get);
