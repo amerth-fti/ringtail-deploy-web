@@ -11,6 +11,8 @@
     "body-parser": "^1.9.2",
     "debug": "^2.1.0",
     "express": "^4.10.1",
+    "hops-model": "^0.3.0",
+    "hops-sqlite": "^0.1.0",
     "migrate": "^0.2.0",
     "node-skytap": "^0.1.0",
     "q": "^1.0.1",
