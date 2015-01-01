@@ -26,7 +26,7 @@ CREATE TABLE machine (
   remoteId INTEGER,
   intIP NVARCHAR(255),
   extIP NVARCHAR(255),
-  roleId INTEGER,
+  role NVARCHAR(255),
   installNotes TEXT,
   registryNotes TEXT,
   FOREIGN KEY (envId) REFERENCES env(envId)

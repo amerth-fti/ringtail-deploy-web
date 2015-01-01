@@ -1,22 +1,28 @@
 var Model       = require('hops-model')
   , schema
-  , Config
+  , Machine
   ;
 
 /* jshint es5:false */
 /* jshint ignore:start */
 schema = {
   "properties": [
-    { "name": "configId" },
+    { "name": "machineId" },
+    { "name": "envId" },
     { "name": "created" },
     { "name": "updated" },
-    { "name": "configName", "required": true },
-    { "name": "configDesc" },     
-    { "name": "json" }
+    { "name": "machineName", "required": true },
+    { "name": "machineDesc" }, 
+    { "name": "remoteId" },
+    { "name": "intIP" },
+    { "name": "extIP" },
+    { "name": "roleId" },
+    { "name": "instalNotes" },
+    { "name": "registryNotes" }
   ]
 };
 /* jshint ignore:end */
 
 
-Config = Model.extend(schema);
-module.exports = Config;
+Machine = Model.extend(schema);
+module.exports = Machine;

@@ -39,7 +39,7 @@ MachineMapper.prototype.insert = function insert(machine, next) {
     $remoteId: machine.remoteId,
     $intIP: machine.intIP,
     $extIP: machine.extIP,
-    $roleId: machine.roleId,
+    $role: machine.role,
     $installNotes: machine.installNotes,
     $registryNotes: machine.registryNotes
   };
@@ -60,7 +60,7 @@ var sql = machineSql.update
     $remoteId: machine.remoteId,
     $intIP: machine.intIP,
     $extIP: machine.extIP,
-    $roleId: machine.roleId,
+    $role: machine.role,
     $installNotes: machine.installNotes,
     $registryNotes: machine.registryNotes
   };
