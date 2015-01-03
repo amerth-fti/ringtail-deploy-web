@@ -33,7 +33,7 @@ bower_components
 build
 
 # Configuration file
-config.js
+/config.js
 
 # Database files
 *.db
