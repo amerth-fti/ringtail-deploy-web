@@ -1,7 +1,7 @@
 var Q             = require('q')
   , MachineMapper = require('../mappers/machineMapper')
   , Machine       = require('../models/machine')
-  , dbPath        = __dirname + '/../../../deployer.db'
+  , dbPath        = __dirname + '/../../../data/deployer.db'
   , machineMapper = new MachineMapper(dbPath)
   ;
 

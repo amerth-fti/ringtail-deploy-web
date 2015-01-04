@@ -3,7 +3,7 @@ var util          = require('util')
   , statements    = require('statements')
   , SqliteMapper  = require('hops-sqlite')
   , Env           = require('../models/env')
-  , envSql        = statements.read(__dirname + '/sql/env.sql')
+  , envSql        = statements.read(__dirname + '/env.sql')
   ;
 
 
@@ -38,7 +38,7 @@ EnvMapper.prototype.insert = function insert(env, next) {
     $envDesc: env.envDesc,
     $remoteType: env.remoteType,
     $remoteId: env.remoteId,
-    $configId: env.configId,
+    $config: env.config,
     $deployedBy: env.deployedBy,
     $deployedOn: env.deployedOn,
     $deployedUntil: env.deployedUntil,
@@ -60,7 +60,7 @@ var sql = envSql.update
     $envDesc: env.envDesc,
     $remoteType: env.remoteType,
     $remoteId: env.remoteId,
-    $configId: env.configId,
+    $config: env.config,
     $deployedBy: env.deployedBy,
     $deployedOn: env.deployedOn,
     $deployedUntil: env.deployedUntil,

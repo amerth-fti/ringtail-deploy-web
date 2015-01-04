@@ -15,7 +15,7 @@ schema = {
     { "name": "status", "required": true, "default": "deployed" }, 
     { "name": "remoteType", "required": true },
     { "name": "remoteId" },
-    { "name": "configId" },
+    { "name": "config" },
     { "name": "deployedBy" },
     { "name": "deployedOn" },
     { "name": "deployedUntil" },
@@ -30,3 +30,12 @@ schema = {
 
 Environment = Model.extend(schema);
 module.exports = Environment;
+
+Environment.prototype.readConfig = function readConfig() {
+  try {
+    return JSON.parse(this.config);
+  }
+  catch(ex) {
+    return {};
+  }
+};

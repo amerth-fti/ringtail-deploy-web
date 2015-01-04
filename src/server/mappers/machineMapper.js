@@ -3,7 +3,7 @@ var util          = require('util')
   , statements    = require('statements')
   , SqliteMapper  = require('hops-sqlite')
   , Machine            = require('../models/machine')
-  , machineSql         = statements.read(__dirname + '/sql/machine.sql')
+  , machineSql         = statements.read(__dirname + '/machine.sql')
   ;
 
 

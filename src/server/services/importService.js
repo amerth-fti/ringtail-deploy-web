@@ -9,20 +9,35 @@ var Q               = require('q')
 exports.skytap = function (configuration_id, next) {
   var scope = {};
   // get from skytap
-  return skytap.environments
-    .get({ configuration_id: configuration_id })
-    .then(function(skytapEnv) {
-      scope.skytapEnv = skytapEnv;
+  return Q
+
+    // get the environment from skytap
+    .fcall(function() {
+      return skytap.environments.get({ configuration_id: configuration_id })
+        .then(function(skytapEnv) {
+          scope.skytapEnv = skytapEnv;
+        });
+    })
+
+    // join the userdata
+    .then(function() {
+      return skytap.environments.userdata({ configuration_id: configuration_id })
+        .then(function(userdata) {
+          scope.skytapUserdata = userdata.contents;
+        });
     })
 
     // create the env
     .then(function() {
-      var skytapEnv = scope.skytapEnv;
+      var skytapEnv = scope.skytapEnv
+        , userdata = scope.skytapUserdata;
+
       return envService.create({ 
         envName: skytapEnv.name,
         envDesc: skytapEnv.description,
         remoteType: 'skytap',
-        remoteId: skytapEnv.id
+        remoteId: skytapEnv.id,
+        config: userdata
       });
     })
     .then(function(env) {

@@ -41,13 +41,6 @@ app.get('/api/projects/:projectId/environments', controllers.projects.environmen
 
 
 // API - ENVIRONMENT ROUTES
-// app.get ('/api/environments', controllers.environments.list);
-// app.get ('/api/environments/:environmentId', controllers.environments.get);
-// app.put ('/api/environments/:environmentId', controllers.environments.update);
-// app.put ('/api/environments/:environmentId/start', controllers.environments.start);
-// app.put ('/api/environments/:environmentId/pause', controllers.environments.pause);
-// app.put ('/api/environments/:environmentId/redeploy', controllers.environments.redeploy);
-
 app.get ('/api/envs', controllers.envs.list);
 app.post('/api/envs', controllers.envs.create);
 app.get ('/api/envs/:envId', controllers.envs.get);
@@ -58,11 +51,6 @@ app.put ('/api/envs/:envId/pause', controllers.envs.pause);
 
 app.post('/api/imports/skytap', controllers.imports.skytap);
 
-app.get ('/api/configs', controllers.configs.list);
-app.post('/api/configs', controllers.configs.create);
-app.put ('/api/configs/:configId', controllers.configs.update);
-//app.del ('/api/configs/:configId', controllers.configs.del);
-//app.get ('/api/configs/:configId', controllers.configs.get);
 
 // API - TASK ROUTES
 app.get ('/api/jobs', controllers.jobs.list);

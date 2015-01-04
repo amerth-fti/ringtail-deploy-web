@@ -4,8 +4,8 @@ var statements  = require('statements')
   , sql
   ;
 
-sql = statements.read(__dirname + '/sql/migrations.sql');
-db  = new Sqlite(__dirname + '/../deployer.db');
+sql = statements.read(__dirname + '/migrations.sql');
+db  = new Sqlite(__dirname + '/../data/deployer.db');
 
 exports.up = function(next){
   db 
