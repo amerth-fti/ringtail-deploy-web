@@ -1,11 +1,6 @@
-<h2>{{vm.project.name + ' Project'}}<div ng-show="globals.loading" class="loading float"></div></h2>
-<p ng-show="vm.project.summary">{{vm.project.summary | newlines | anchors | trust}}</p>
-
-<h3>Environments</h3>
+<h2>Environments<div ng-show="globals.loading" class="loading float"></div></h2>
 <ul class="list-group environment-list">
-  <li ng-repeat="environment in vm.environments" class="list-group-item animate-show environment" ng-show="environment.show"> 
+  <li ng-repeat="environment in vm.environments" class="list-group-item animate-show environment"> 
     <list-item environment="environment"></list-item>
   </li>
 </ul>
-
-

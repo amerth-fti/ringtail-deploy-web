@@ -17,9 +17,9 @@
     };
   }
   
-  ListItemController.$inject = [ '$scope', '$modal','$location', 'config', 'Environment', 'Job' ];
+  ListItemController.$inject = [ '$scope', '$modal','$location', 'config' ];
   
-  function ListItemController($scope, $modal, $location, config, Environment, Job) {
+  function ListItemController($scope, $modal, $location, config) {
     var vm = this;
     vm.enableDeploy = config.enableDeployment;
     vm.environment  = $scope.environment; 
@@ -42,31 +42,22 @@
       vm.environment    = environment;
       vm.showStart      = runstate === 'suspended' || runstate === 'stopped';
       vm.showPause      = runstate === 'running';
-      vm.showInitialize = environment.deployment.status === 'initialize';
-      vm.showButtons    = environment.deployment.status === 'deployed';
-      vm.showDeployLnk  = environment.deployment.status === 'deploying';
+      vm.showInitialize = environment.status === 'initialize';
+      vm.showButtons    = environment.status === 'deployed';
+      vm.showDeployLnk  = environment.status === 'deploying';
       
-      pollWhileBusy(environment);      
-      performRedploymentRedirect(environment);      
+      pollWhileBusy(environment);
     }
 
     function pollWhileBusy(environment) {
-      if(environment.runstate === 'busy' || environment.deployment.status === 'deploying') {
+      if(environment.runstate === 'busy' || environment.status === 'deploying') {
         setTimeout(function() {
           environment.$get(activate);
         }, 15000);
       }
     }
 
-    function performRedploymentRedirect(environment) {
-      if(environment.deployment.status === 'hidden' && environment.deployment.deployingTo) {
-        // swap id's so we can load the newly deployed one
-        environment.id = environment.deployment.deployingTo;
-        environment.$get(activate);
-      }
-    }
-
-    function start() {      
+    function start() {
       var modal = $modal.open({
         templateUrl: 'client/environments/start-dialog.html',
         controller: 'EnvironmentStartController',
@@ -82,7 +73,6 @@
         var qs = {
           suspend_on_idle: startinfo.duration * 60,
         };
-        vm.environment.deployinfo = startinfo.deployinfo;
         vm.environment.$start(qs, activate);
       });
     }

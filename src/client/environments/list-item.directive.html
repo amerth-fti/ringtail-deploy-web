@@ -2,44 +2,44 @@
   <div class="col-md-10 inner">
     <h4>          
       <span ng-click="vm.configure(environment)" class="configure glyphicon glyphicon-cog" />
-      {{vm.environment.name}}
+      {{vm.environment.envName}}
     </h4>
 
-    <div class="row" ng-show="vm.environment.description">
+    <div class="row" ng-show="vm.environment.envDesc">
       <div class="col-md-2"><strong>Info:</strong></div>
-      <div class="col-md-10" ng-bind-html="vm.environment.description | newlines | anchors | trust"></div>
+      <div class="col-md-10" ng-bind-html="vm.environment.envDesc | newlines | anchors | trust"></div>
     </div>
 
 
-    <div class="row top-buffer" ng-show="vm.environment.deployment.deployedBy">
+    <div class="row top-buffer" ng-show="vm.environment.deployedBy">
       <div class="col-md-2"><strong>Requested by:</strong></div>
-      <div class="col-md-10">{{vm.environment.deployment.deployedBy}}</div>
+      <div class="col-md-10">{{vm.environment.deployedBy}}</div>
     </div>
 
-    <div class="row" ng-show="vm.environment.deployment.deployedUntil">
+    <div class="row" ng-show="vm.environment.deployedUntil">
       <div class="col-md-2"><strong>Requested until:</strong></div>
-      <div class="col-md-10">{{vm.environment.deployment.deployedUntil | fromDateString | date: 'dd-MMMM-yyyy hh:mma (LOCAL)' }}</div>
+      <div class="col-md-10">{{vm.environment.deployedUntil | fromDateString | date: 'MMMM dd, yyyy hh:mma (LOCAL)' }}</div>
     </div>
 
-    <div class="row" ng-show="vm.environment.deployment.deployedNotes">
+    <div class="row" ng-show="vm.environment.deployedNotes">
       <div class="col-md-2"><strong>Request notes:</strong></div>
-      <div class="col-md-10" ng-bind-html="vm.environment.deployment.deployedNotes | newlines | anchors | trust"></div>
+      <div class="col-md-10" ng-bind-html="vm.environment.deployedNotes | newlines | anchors | trust"></div>
     </div>
 
-    <div class="row top-buffer" ng-show="vm.environment.deployment.date">
+    <div class="row top-buffer" ng-show="vm.environment.deployedOn">
       <div class="col-md-2"><strong>Build installed:</strong></div>
       <div class="col-md-10">{{vm.environment.deployment.date | date:'MMMM d'}}</div>        
     </div>
 
-    <div class="row" ng-show="vm.environment.deployment.branch">
+    <div class="row" ng-show="vm.environment.deployment.deployedBranch">
       <div class="col-md-2"><strong>Branch:</strong></div>
       <div class="col-md-10">{{vm.environment.deployment.branch}}</div>        
     </div>
 
-    <div class="row" ng-show="vm.environment.deployment.ringtail">
+    <div class="row" ng-show="vm.environment.ringtail">
       <div class="col-md-2"><strong>Builds:</strong></div>
       <div class="col-md-10">
-        <div ng-repeat="installer in vm.environment.deployment.ringtail">{{installer}}</div>
+        <div ng-repeat="installer in vm.environment.ringtail">{{installer}}</div>
       </div>
     </div>  
 
@@ -70,7 +70,7 @@
         ng-show="vm.enableDeploy"></button>
     </div>
     
-    <h4 ng-show="vm.showInitialize || vm.showDeployLink"><span>{{ vm.environment.deployment.status | uppercase }}</span></h4>
+    <h4 ng-show="vm.showInitialize || vm.showDeployLink"><span>{{ vm.environment.status | uppercase }}</span></h4>
     
     <div ng-show="vm.showInitialize">
       <button
@@ -82,7 +82,7 @@
     
     <div ng-show="vm.showDeployLink">
       <!-- Show deployment job details when deploying -->
-      <a href="#/jobs/{{vm.environment.deployment.deploymentJob}}" ng-show="vm.showDeploying">Info</a>
+      <a href="#/jobs/{{vm.environment.deploymentJob}}" ng-show="vm.showDeploying">Info</a>
     </div>
     
     

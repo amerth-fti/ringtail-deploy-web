@@ -9,7 +9,7 @@
 
   function routes($routeProvider, config) {
     $routeProvider
-    .when('/projects/:projectId', {
+    .when('/environments', {
       templateUrl: 'client/environments/list.html',
       controller: 'EnvironmentListController',
       controllerAs: 'vm'
@@ -20,7 +20,7 @@
       controllerAs: 'vm'
     })
     .otherwise({
-      redirectTo: config.defaultRoute || '/projects/34440'
+      redirectTo: '/environments'
     });
   }
 

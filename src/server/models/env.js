@@ -11,7 +11,8 @@ schema = {
     { "name": "created" },
     { "name": "updated" },
     { "name": "envName", "required": true },
-    { "name": "envDesc" }, 
+    { "name": "envDesc" },
+    { "name": "status", "required": true, "default": "deployed" }, 
     { "name": "remoteType", "required": true },
     { "name": "remoteId" },
     { "name": "configId" },
@@ -19,7 +20,9 @@ schema = {
     { "name": "deployedOn" },
     { "name": "deployedUntil" },
     { "name": "deployedNotes" },
-    { "name": "deployedBranch" }
+    { "name": "deployedBranch" },    
+    { "name": "runstate" },
+    { "name": "machines" }
   ]
 };
 /* jshint ignore:end */

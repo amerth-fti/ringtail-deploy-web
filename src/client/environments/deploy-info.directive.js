@@ -9,7 +9,7 @@
     return { 
       restrict: 'E',
       scope: {
-        deployinfo: '='
+        environment: '='
       },
       templateUrl: 'client/environments/deploy-info.directive.html',
       controller: DeployInfoController,
@@ -20,19 +20,23 @@
   DeployInfoController.$inject = [ '$scope', 'dateHelpers' ];
 
   function DeployInfoController($scope, dateHelpers) {
-    var vm = this;
-    vm.deployinfo       = $scope.deployinfo;
+    var vm = this;    
     vm.format           = 'dd-MMMM-yyyy';
     vm.mindate          = new Date();
     vm.opened           = false;
     vm.openCalendar     = openCalendar;
     vm.dateTimeChanged  = dateTimeChanged;
+    vm.environment      = $scope.environment;
     
     activate();
 
     //////////
 
     function activate() {
+      vm.environment.deployedBy       = null;
+      vm.environment.deployedUntil    = null;
+      vm.environment.deployedNotes    = null;
+
       $scope.$parent.$watch('vm.duration', durationChanged);      
       durationChanged(15);
     }
@@ -56,7 +60,7 @@
         , time = vm.time
         , newDate;
       newDate = dateHelpers.combineDateTime(date, time);
-      vm.deployinfo.until = newDate.toUTCString();
+      vm.environment.deployedUntil = newDate.toUTCString();
     }
   }
 

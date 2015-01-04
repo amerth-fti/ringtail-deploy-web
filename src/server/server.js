@@ -41,18 +41,20 @@ app.get('/api/projects/:projectId/environments', controllers.projects.environmen
 
 
 // API - ENVIRONMENT ROUTES
-app.get ('/api/environments', controllers.environments.list);
-app.get ('/api/environments/:environmentId', controllers.environments.get);
-app.put ('/api/environments/:environmentId', controllers.environments.update);
-app.put ('/api/environments/:environmentId/start', controllers.environments.start);
-app.put ('/api/environments/:environmentId/pause', controllers.environments.pause);
-app.put ('/api/environments/:environmentId/redeploy', controllers.environments.redeploy);
+// app.get ('/api/environments', controllers.environments.list);
+// app.get ('/api/environments/:environmentId', controllers.environments.get);
+// app.put ('/api/environments/:environmentId', controllers.environments.update);
+// app.put ('/api/environments/:environmentId/start', controllers.environments.start);
+// app.put ('/api/environments/:environmentId/pause', controllers.environments.pause);
+// app.put ('/api/environments/:environmentId/redeploy', controllers.environments.redeploy);
 
-app.get ('/api/env', controllers.env.list);
-app.post('/api/env', controllers.env.create);
-app.put ('/api/env/:envId', controllers.env.update);
-//app.del ('/api/env/:envId', controllers.env.del);
-//app.get ('/api/env/:envId', controllers.env.get);
+app.get ('/api/envs', controllers.envs.list);
+app.post('/api/envs', controllers.envs.create);
+app.get ('/api/envs/:envId', controllers.envs.get);
+app.put ('/api/envs/:envId', controllers.envs.update);
+app.put ('/api/envs/:envId/start', controllers.envs.start);
+app.put ('/api/envs/:envId/pause', controllers.envs.pause);
+
 
 app.post('/api/imports/skytap', controllers.imports.skytap);
 
@@ -65,6 +67,50 @@ app.put ('/api/configs/:configId', controllers.configs.update);
 // API - TASK ROUTES
 app.get ('/api/jobs', controllers.jobs.list);
 app.get ('/api/jobs/:jobId', controllers.jobs.get);
+
+
+
+
+
+
+// CONVERT TO UNIVERSAL HANDLER
+app.all ('/api/*', function(req, res) {
+
+  if(res.result) {
+    var client = convertToClient(res.result);
+    res.status(200).send(client);
+  } else if (res.err) {
+    console.error(res.err);
+    console.error(res.err.trace);
+    res.status(500).send(res.err);
+  }
+
+});
+
+function convertToClient(results) {
+  var util = require('util');
+  if(results && results.toClient) {
+    results = results.toClient();
+  }
+  else if(util.isArray(results)) {    
+    results = results.map(function(result) {
+      if(result.toClient) {
+        result = result.toClient();
+      }
+      return result;
+    });
+  }
+  else if (results instanceof Object) {
+    for(var prop in results) {
+      if(results[prop] instanceof Object) {
+        results[prop] = convertToClient(results[prop]);
+      }
+    }
+  }
+  return results;
+}
+
+
 
 
 console.log('Listening on %s:%d ', (config.host ? config.host : '*'), config.port);

@@ -18,102 +18,137 @@ var Q             = require('q')
  * @param {Function} next
  * @return {Promise} resolves to Array[Env]
  */
-module.exports.list = function list(paging, next) {
+exports.findAll = function list(paging, next) {
   paging = paging || {};
   paging.pagesize = paging.pagesize || 25;
   paging.page = paging.page || 1;
 
-  return envMapper
-    .findAll(paging)
-    .then(joinMachines)
-    //.then(joinSkytap)
+  return envMapper.findAll(paging)
+    .then(joinEnvsMachines)
+    .then(joinEnvsSkytap)
+    .nodeify(next);
+};
+
+
+exports.findById = function get(envId, next) {
+  return envMapper.findById(envId)
+    .then(joinEnvMachines)
+    .then(joinEnvSkytap)
     .nodeify(next);
 };
 
 
 
-module.exports.create = function create(data, next) {
+exports.create = function create(data, next) {
   var env = new Env(data);
   
-  return env
-    .validate()
-    .then(function() {
-      return envMapper.insert(env);
-    })
+  return env.validate()
+    .then(function() { return envMapper.insert(env); })
     .then(function(result) {
       env.envId = result.lastID;
       return env;
     })
+    .then(joinEnvMachines)
+    .then(joinEnvSkytap)
     .nodeify(next);
 };
 
-module.exports.update = function update(data, next) {
+exports.update = function update(data, next) {
   var env = new Env(data);
 
-  return env
-    .validate()
-    .then(function() {
-      return envMapper.update(env);
-    })
-    .then(function() {
-      return env;
-    })
+  return env.validate()
+    .then(function() { return envMapper.update(env); })
+    .then(function(result) { return env; })
+    .then(joinEnvMachines)
+    .then(joinEnvSkytap)
+    .nodeify(next);
+};
+
+exports.start = function start(data, suspendOnIdle, next) {  
+  var env = new Env(data)
+    , opts;
+
+  opts = {
+    configuration_id: env.remoteId,
+    suspend_on_idle: suspendOnIdle,
+    runstate: 'running'
+  };
+    
+  return skytap.environments.update(opts)
+    .then(function() { return envMapper.update(env); })
+    .then(function(result) { return env; })
+    .then(joinEnvMachines)
+    .then(joinEnvSkytap)
+    .nodeify(next);
+};
+
+
+exports.pause = function pause(data, next) {
+  var env = new Env(data)
+    , opts;
+
+  opts = {
+    configuration_id: env.remoteId,
+    runstate: 'suspended'
+  };
+
+  return skytap.environments.update(opts)
+    .then(function() { return env; })
+    .then(joinEnvMachines)
+    .then(joinEnvSkytap)
     .nodeify(next);
 };
 
 /**
- * Helper function to join vms
+ * Helper function to join machines for the list of envs
  * 
  * @api private
- * @param {Array|Machin}
+ * @param {Array} envs
  */
-function joinMachines(envs) {
-  var array = []
-    , promises
-    ;
-
-  if(!Array.isArray(envs)) {
-    array.push(envs);
-  } else {
-    array = envs;
-  }
-
-  promises = array.map(function(env) {
-    return machineMapper
-      .findByEnv(env.envId)
-      .then(function(vms) {
-        env.vms = vms;
-        return env;
-      });
-  });
-
-  return Q.all(promises);
+function joinEnvsMachines(envs) {
+  var promises = envs.map(joinEnvMachines);
+  return Q.all(promises);    
 }
 
+/**
+ * Helper function to join machines for an env
+ *
+ * @api private
+ * @param {Env} env
+ */
+function joinEnvMachines(env) {
+  return machineMapper.findByEnv(env.envId)
+    .then(function(machines) {
+      env.machines = machines;
+      return env;
+    });
+}
 
 /**
- * Helper function to join skytap data
+ * Helper function to join skytap data for a list of envs
  * 
  * @api private
  * @param {Array[Env]} envs
- * @param {Function} next
  */
-function joinSkytap(envs) {
-  var lookup = {}
-    , promises;
-
-  promises = envs.map(function(env) {
-    if(env.remoteType === 'skytap' && env.remoteId) {
-      return skytap.environments
-        .get({ configuration_id: env.remoteId })
-        .then(function(skyenv) {
-          env.skytap = skyenv;
-          return env;
-        });
-    } else {
-      return null;
-    } 
-  });
-
+function joinEnvsSkytap(envs) {
+  var promises = envs.map(joinEnvSkytap);
   return Q.all(promises);
+}
+
+/**
+ * Helper function to join skytap data for a list of envs
+ * 
+ * @api private
+ * @param {Env} env
+ */
+function joinEnvSkytap(env) {
+  if(env.remoteType === 'skytap' && env.remoteId) {
+    return skytap.environments.get({ configuration_id: env.remoteId })
+      .then(function(skyenv) {
+        env.runstate = skyenv.runstate;
+        return env;
+      });
+  } else {
+    return env;
+  }
 }
