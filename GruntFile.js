@@ -5,6 +5,7 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-jshint');
   grunt.loadNpmTasks('grunt-mocha-test');
   grunt.loadNpmTasks('grunt-express-runner');
+  grunt.loadNpmTasks('grunt-contrib-watch');
   
   grunt.initConfig({
     traceur: {
@@ -48,10 +49,20 @@ module.exports = function(grunt) {
         script: 'src/server/server.js',
         debug: 'deployer*'
       }
+    },
+    watch: {
+      server: { 
+        files: 'src/server/**/*',
+        tasks: ['run'],
+        options: {
+          interrupt: true,
+          atBegin: true
+        }
+      }
     }
   });
 
-  grunt.registerTask('validate', [ 'jshint', 'mochaTest' ]);
-  grunt.registerTask('run', [ 'validate', 'expressrunner']);
+  grunt.registerTask('validate', [ 'jshint', 'mochaTest' ]);  
+  grunt.registerTask('run', [ 'expressrunner']);
   
 };
