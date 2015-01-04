@@ -6,19 +6,20 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-mocha-test');
   grunt.loadNpmTasks('grunt-express-runner');
   grunt.loadNpmTasks('grunt-contrib-watch');
+  grunt.loadNpmTasks('grunt-contrib-copy');
   
   grunt.initConfig({
     traceur: {
       options: {
         experimental: true,
-        modules: 'inline'
+        modules: 'commonjs'
       },
-      custom: {
+      server: {
         files: [{
           expand: true,
-          cwd: 'src',
-          src: ['*.js'],
-          dest: 'build'
+          cwd: 'src/server',
+          src: ['**/*.js'],
+          dest: 'build/server'
         }]
       }
     },
@@ -46,23 +47,37 @@ module.exports = function(grunt) {
     },
     expressrunner: {
       options: {
-        script: 'src/server/server.js',
+        script: 'build/server/server.js',
         debug: 'deployer*'
       }
     },
     watch: {
       server: { 
         files: 'src/server/**/*',
-        tasks: ['run'],
+        tasks: [ 'build', 'expressrunner' ],
         options: {
           interrupt: true,
           atBegin: true
         }
       }
+    },
+    copy: {
+      options: {
+        verbose: true
+      },
+      server: {
+        files: [{
+          expand: true,
+          cwd: 'src/server',
+          src: ['**/*.sql' ],
+          dest: 'build/server'
+        }]
+      }
     }
   });
 
   grunt.registerTask('validate', [ 'jshint', 'mochaTest' ]);  
-  grunt.registerTask('run', [ 'expressrunner']);
+  grunt.registerTask('build', [ 'traceur', 'copy' ]);
+  grunt.registerTask('run', [ 'watch' ]);
   
 };
