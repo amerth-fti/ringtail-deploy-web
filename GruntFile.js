@@ -12,7 +12,8 @@ module.exports = function(grunt) {
     traceur: {
       options: {
         experimental: true,
-        modules: 'commonjs'
+        modules: 'commonjs',
+        silent: true
       },
       server: {
         files: [{
@@ -47,14 +48,14 @@ module.exports = function(grunt) {
     },
     expressrunner: {
       options: {
-        script: 'build/server/server.js',
+        script: 'src/server/server.js',
         debug: 'deployer*'
       }
     },
     watch: {
       server: { 
         files: 'src/server/**/*',
-        tasks: [ 'build', 'expressrunner' ],
+        tasks: [ 'expressrunner' ],
         options: {
           interrupt: true,
           atBegin: true
@@ -62,15 +63,20 @@ module.exports = function(grunt) {
       }
     },
     copy: {
-      options: {
-        verbose: true
-      },
       server: {
         files: [{
           expand: true,
           cwd: 'src/server',
-          src: ['**/*.sql' ],
+          src: [ '**/*.sql', '**/*.json' ],
           dest: 'build/server'
+        }]
+      },
+      client: {
+        files: [{
+          expand: true,
+          cwd: 'src/client',
+          src: [ '**/*' ],
+          dest: 'build/client'
         }]
       }
     }
