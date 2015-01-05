@@ -33,13 +33,6 @@ app.get('/config', function(req, res) {
 });
 
 
-// API - PROJECT ROUTES
-app.get('/api/projects', controllers.projects.list);
-app.get('/api/projects/:projectId/', controllers.projects.get);
-app.get('/api/projects/:projectId/templates', controllers.projects.templates);
-app.get('/api/projects/:projectId/environments', controllers.projects.environments);
-
-
 // API - ENVIRONMENT ROUTES
 app.get ('/api/envs', controllers.envs.list);
 app.post('/api/envs', controllers.envs.create);

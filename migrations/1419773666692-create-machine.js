@@ -1,13 +1,13 @@
 var statements  = require('statements')
   , Sqlite      = require('hops-sqlite')
-  , db
-  , sql
+  , sqlPath     = __dirname + '/migrations.sql'
+  , dbPath      = __dirname + '/../data/deployer.db'
   ;
 
-sql = statements.read(__dirname + '/migrations.sql');
-db  = new Sqlite(__dirname + '/../data/deployer.db');
-
 exports.up = function(next){
+  var sql = statements.read(sqlPath)
+    , db  = new Sqlite(dbPath);
+
   db  
     .run(sql.createMachine)
     .then(function() { next(); })
@@ -15,6 +15,9 @@ exports.up = function(next){
 };
 
 exports.down = function(next){
+  var sql = statements.read(sqlPath)
+    , db  = new Sqlite(dbPath);
+    
   db
     .run(sql.dropMachine)
     .fin(function() { next(); });
