@@ -17,7 +17,7 @@ function TaskImplementation(options) {
     var template_id = this.getData(scope, 'template_id')
       , project_id = this.getData(scope, 'project_id');
 
-    if(template_id === "newest") {        
+    if(template_id === 'newest') {        
       return getNewestTemplate(project_id, scope, log);
     } else {
       throw new Error('Find by id not implement');

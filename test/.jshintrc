@@ -5,6 +5,7 @@
   "quotmark": "single",
   "curly": false,
   "es3": false,
+  "singleGroups": false,
 
   // chai specific
   "expr": true,

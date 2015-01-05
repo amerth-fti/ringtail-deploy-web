@@ -18,7 +18,9 @@ function Task(options) {
   // apply options
   if(options) {
     for(var key in options) {
-      this[key] = options[key];
+      if(options.hasOwnProperty(key)) {
+        this[key] = options[key];
+      }
     }
   }
 
@@ -90,7 +92,8 @@ Task.prototype.getData = function getData(scope, key, expand) {
   {
     if(expand)
       return getDataFromObject(scope, this.data, key);
-    else       
+    else  
+      /*jshint es5:false */     
       /*jshint evil:true */
       return eval(this.data[key]);  
   }
@@ -103,6 +106,7 @@ function getDataFromObject(scope, obj, key) {
   
   try
   {     
+    /*jshint es5:false */
     /*jshint evil:true */      
     var val = eval(obj[key])
       , temp;
@@ -110,6 +114,8 @@ function getDataFromObject(scope, obj, key) {
     if(Object.prototype.toString.call(val) === '[object Object]') {
       temp = {};
 
+      /*jshint es5:false */
+      /*jshint forin:false */
       for(var valkey in val) {
         temp[valkey] = getDataFromObject(scope, val, valkey);
       }

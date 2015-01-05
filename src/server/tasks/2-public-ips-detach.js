@@ -14,7 +14,8 @@ function TaskImplementation(options) {
   Task.call(this, options);  
 
   this.execute = function execute(scope, log) {  
-    var env = this.getData(scope, 'env');
+    var env = this.getData(scope, 'env')
+      , detachIps;
 
     return Q.fcall(function() {
       log('detaching public ip for %s', env.id);      

@@ -36,11 +36,13 @@ function TaskImplementation(options) {
       log('updating user_data');
 
       for(var key in update) {
-        log('setting %s to %j', key, update[key]);
-        if(update[key] === null) {
-          delete json[key];
-        } else {
-          json[key] = update[key];
+        if(update.hasOwnProperty(key)) {
+          log('setting %s to %j', key, update[key]);
+          if(update[key] === null) {
+            delete json[key];
+          } else {
+            json[key] = update[key];
+          }
         }
       }
 

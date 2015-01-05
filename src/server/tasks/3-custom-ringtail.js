@@ -14,9 +14,9 @@ function TaskImpl(options) {
 
   this.execute = function execute(scope, log) {  
     
-    var branch = this.getData(scope, "branch")
-      , installer = this.getData(scope, "installer")
-      , vm = this.getData(scope, "vm");
+    var branch = this.getData(scope, 'branch')
+      , installer = this.getData(scope, 'installer')
+      , vm = this.getData(scope, 'vm');
 
     return Q.fcall(function() {
       log('start installation');
@@ -130,6 +130,8 @@ function TaskImpl(options) {
             };
           });
 
+          /* jshint es5:false */
+          /* jshint newcap:false */
           return funcs.reduce(Q.when, Q(0));        
         });
       })

@@ -6,5 +6,6 @@
   "curly": false,
   "es3": false,
   "nocomma": false,
-  "camelcase": false
+  "camelcase": false,
+  "singleGroups": false
 }

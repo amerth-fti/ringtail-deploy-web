@@ -11,7 +11,9 @@ function Job(params) {
   this.rundata =  { };  
 
   for(var key in params) {
-    this[key] = params[key];
+    if(params.hasOwnProperty(key)) {
+      this[key] = params[key];
+    }
   }
 }
 
@@ -20,6 +22,8 @@ module.exports = Job;
 
 Job.prototype.start = function start() {
 
+  /* jshint es5:false */
+  /* jshint newcap:false */
   var chain = Q(0)
     , job = this;
 
