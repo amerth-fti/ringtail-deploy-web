@@ -2,7 +2,7 @@
   'use strict';
   
   angular
-    .module('app')
+    .module('app.environments')
     .directive('listItem', listItem);
   
   function listItem() {

@@ -74,3 +74,15 @@ button {
 .environment-list .inner .row { 
   margin-left: 10px;
 }
+
+
+.btn-add {
+  cursor: pointer;
+  color: #5cb85c !important;
+  border-color: #4cae4c !important;
+}
+
+.btn-add:hover {
+  color: #449d44 !important;
+  border-color: #398439 !important;
+};

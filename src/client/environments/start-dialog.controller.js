@@ -2,7 +2,7 @@
   'use strict';
 
   angular
-    .module('app')
+    .module('app.environments')
     .controller('EnvironmentStartController', EnvironmentStartController);
 
   EnvironmentStartController.$inject = [ '$modalInstance', 'environment' ]; 

@@ -2,7 +2,7 @@
   'use strict';
 
   angular
-    .module('app')
+    .module('app.environments')
     .controller('EnvironmentRedeployController', EnvironmentRedeployController);
 
   EnvironmentRedeployController.$inject = [ '$modalInstance', 'config', 'environment' ];
