@@ -44,7 +44,7 @@
       vm.showPause      = runstate === 'running';
       vm.showInitialize = environment.status === 'initialize';
       vm.showButtons    = environment.status === 'deployed';
-      vm.showDeployLnk  = environment.status === 'deploying';
+      vm.showDeployLink  = environment.status === 'deploying';
       
       pollWhileBusy(environment);
     }
