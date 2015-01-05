@@ -17,9 +17,9 @@
     };
   }
   
-  ListItemController.$inject = [ '$scope', '$modal','$location', 'config' ];
+  ListItemController.$inject = [ '$scope', '$modal','$location', '$timeout', 'config' ];
   
-  function ListItemController($scope, $modal, $location, config) {
+  function ListItemController($scope, $modal, $location, $timeout, config) {
     var vm = this;
     vm.enableDeploy = config.enableDeployment;
     vm.environment  = $scope.environment; 
@@ -51,7 +51,7 @@
 
     function pollWhileBusy(environment) {
       if(environment.runstate === 'busy' || environment.status === 'deploying') {
-        setTimeout(function() {
+        $timeout(function() {
           environment.$get(activate);
         }, 15000);
       }

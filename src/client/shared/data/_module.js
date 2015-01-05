@@ -2,7 +2,7 @@
   'use strict';
 
   angular
-    .module("shared.data", [ 
+    .module('shared.data', [ 
       'ngResource' 
     ]);
 

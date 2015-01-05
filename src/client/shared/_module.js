@@ -2,7 +2,7 @@
   'use strict';
 
   angular
-    .module("shared", [
+    .module('shared', [
       'shared.data',
       'shared.filters'
     ]);

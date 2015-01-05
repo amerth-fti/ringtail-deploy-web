@@ -5,9 +5,9 @@
     .module('app')
     .controller('JobDetailsController', JobDetailsController);
 
-  JobDetailsController.$inject = [ '$routeParams', 'Job' ];
+  JobDetailsController.$inject = [ '$routeParams', '$timeout', 'Job' ];
 
-  function JobDetailsController($routeParams, Job) {    
+  function JobDetailsController($routeParams, $timeout, Job) {    
     var vm          = this;
     vm.job          = null;
     vm.selectedTask = null;
@@ -43,7 +43,7 @@
 
     function pollWhileRunning(job) {
       if(job.status === 'Running') {
-        setTimeout(function() {
+        $timeout(function() {
           job.$get(loadJobComplete);
         }, 5000);
       }

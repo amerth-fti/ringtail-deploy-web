@@ -1,6 +1,14 @@
 {
+  "enforceall": true,
   "laxcomma": true,
+  "quotmark": "single",
+  "curly": false,
+  "es3": false,
+  "nocomma": false,
+  "camelcase": false,
+  "singleGroups": false,
   "globals": {
-   "angular": true 
+   "angular": true,
+   "window": true
   }
 }
