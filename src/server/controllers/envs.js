@@ -87,3 +87,16 @@ exports.redeploy = function redeploy(req, res, next) {
       next();
     });
 };
+
+
+exports.reset = function reset(req, res, next) {
+  debug('reset');
+  var envId = req.param('envId');
+
+  envService
+    .reset(envId, function(err, result) {
+      res.result = result;
+      res.err = err;
+      next();
+    });
+};

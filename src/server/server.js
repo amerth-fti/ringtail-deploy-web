@@ -48,6 +48,7 @@ app.put ('/api/envs/:envId', controllers.envs.update);
 app.put ('/api/envs/:envId/start', controllers.envs.start);
 app.put ('/api/envs/:envId/pause', controllers.envs.pause);
 app.put ('/api/envs/:envId/redeploy', controllers.envs.redeploy);
+app.put ('/api/envs/:envId/reset', controllers.envs.reset);
 
 
 app.post('/api/imports/skytap', controllers.imports.skytap);

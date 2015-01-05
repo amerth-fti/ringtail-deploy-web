@@ -101,6 +101,26 @@ exports.pause = function pause(data, next) {
     .nodeify(next);
 };
 
+
+exports.reset = function reset(envId, next) {
+  var env;  
+
+  return envMapper.findById(envId)
+    .then(function(found) {
+      env = found;
+      env.status = 'deployed';
+    })
+    .then(function() {
+      return envMapper.update(env)
+        .then(function() {
+          return env;
+        });
+    }) 
+    .then(joinEnvMachines)
+    .then(joinEnvSkytap)
+    .nodeify(next);
+};
+
 /**
  * Helper function to join machines for the list of envs
  * 
