@@ -16,14 +16,13 @@ util.inherits(EnvMapper, SqliteMapper);
 module.exports = EnvMapper;
 
 EnvMapper.prototype.parse = function parse(record) {
-  return new Env(record);
+  var result = new Env(record);
+  result.config = tryParseConfig(result.config);
+  return result;
 };
 
-EnvMapper.prototype.parseArray = function parseArray(array) {
-  var self = this;
-  return array.map(function(record) {
-    return new Env(record);
-  });
+EnvMapper.prototype.parseArray = function parseArray(array) {  
+  return array.map(this.parse);
 };
 
 
@@ -36,14 +35,16 @@ EnvMapper.prototype.insert = function insert(env, next) {
     $envId: env.envId,
     $envName: env.envName,
     $envDesc: env.envDesc,
+    $status: env.status,
     $remoteType: env.remoteType,
     $remoteId: env.remoteId,
-    $config: env.config,
+    $config: stringifyConfig(env.config),
     $deployedBy: env.deployedBy,
     $deployedOn: env.deployedOn,
     $deployedUntil: env.deployedUntil,
     $deployedNotes: env.deployedNotes,
-    $deployedBranch: env.deployedBranch
+    $deployedBranch: env.deployedBranch,
+    $deployedJobId: env.deployedJobId
   };
 
   return this.run(sql, params, next);
@@ -58,14 +59,16 @@ var sql = envSql.update
     $envId: env.envId,
     $envName: env.envName,
     $envDesc: env.envDesc,
+    $status: env.status,
     $remoteType: env.remoteType,
     $remoteId: env.remoteId,
-    $config: env.config,
+    $config: stringifyConfig(env.config),
     $deployedBy: env.deployedBy,
     $deployedOn: env.deployedOn,
     $deployedUntil: env.deployedUntil,
     $deployedNotes: env.deployedNotes,
-    $deployedBranch: env.deployedBranch
+    $deployedBranch: env.deployedBranch,
+    $deployedJobId: env.deployedJobId
   };
 
   return this.run(sql, params, next);
@@ -96,7 +99,7 @@ EnvMapper.prototype.findAll = function findAll(paging, next) {
 
   return this
     .all(sql, params)
-    .then(this.parseArray)
+    .then(this.parseArray.bind(this))
     .nodeify(next);
 };
 
@@ -114,3 +117,17 @@ EnvMapper.prototype.findById = function findById(envId, next) {
     .then(this.parse)
     .nodeify(next);
 };
+
+
+function tryParseConfig(string) {
+  try {
+    return JSON.parse(string);
+  }
+  catch(ex) {
+    return {};
+  }
+}
+
+function stringifyConfig(json) {
+  return JSON.stringify(json, null, 2);
+}

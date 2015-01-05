@@ -1,19 +1,19 @@
 -- insert
 insert into env (
-  envId, envName, envDesc, remoteType, remoteId, config,
-  deployedBy, deployedOn, deployedUntil, deployedNotes, deployedBranch
+  envId, envName, envDesc, status, remoteType, remoteId, config,
+  deployedBy, deployedOn, deployedUntil, deployedNotes, deployedBranch, deployedJobId
 )
 values (
-  $envId, $envName, $envDesc, $remoteType, $remoteId, $config,
-  $deployedBy, $deployedOn, $deployedUntil, $deployedNotes, $deployedBranch
+  $envId, $envName, $envDesc, $status, $remoteType, $remoteId, $config,
+  $deployedBy, $deployedOn, $deployedUntil, $deployedNotes, $deployedBranch, $deployedJobId
 );
 
 
 -- update
 update env
 set 
-  envName = $envName, envDesc = $envDesc, remoteType = $remoteType, remoteId = $remoteId, config = $config,
-  deployedBy = $deployedBy, deployedOn = $deployedOn, deployedUntil = $deployedUntil, deployedNotes = $deployedNotes, deployedBranch = $deployedBranch
+  envName = $envName, envDesc = $envDesc, status = $status, remoteType = $remoteType, remoteId = $remoteId, config = $config,
+  deployedBy = $deployedBy, deployedOn = $deployedOn, deployedUntil = $deployedUntil, deployedNotes = $deployedNotes, deployedBranch = $deployedBranch, deployedJobId = $deployedJobId
 where envId = $envId;
 
 

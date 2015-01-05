@@ -1,5 +1,7 @@
-var debug       = require('debug')('deployer-environments')
-  , envService  = require('../services/envService')
+var debug           = require('debug')('deployer-environments')
+  , Q               = require('Q')
+  , envService      = require('../services/envService')
+  , redeployService = require('../services/redeployService')
   ;
 
 
@@ -69,6 +71,19 @@ exports.pause = function pause(req, res, next) {
     .pause(data, function(err, result) {
       res.result  = result;
       res.err     = err;
+      next();
+    });
+};
+
+
+exports.redeploy = function redeploy(req, res, next) {
+  debug('redeploy');
+  var data = req.body;    
+
+  redeployService
+    .redeploy(data, function(err, result) {
+      res.result = result;
+      res.err = err;
       next();
     });
 };

@@ -5,15 +5,14 @@
     .module('app')
     .controller('EnvironmentRedeployController', EnvironmentRedeployController);
 
-  EnvironmentRedeployController.$inject = [ '$modalInstance', 'config', 'environment', 'DeployInfo' ];
+  EnvironmentRedeployController.$inject = [ '$modalInstance', 'config', 'environment' ];
 
-  function EnvironmentRedeployController($modalInstance, config, environment, DeployInfo) {
+  function EnvironmentRedeployController($modalInstance, config, environment) {
     var vm = this;
     vm.branches           = config.branches;
-    vm.deployinfo         = new DeployInfo(); 
     vm.duration           = 120;
     vm.environment        = environment;
-    vm.selectedBranch     = null;    
+    vm.selectedTasks      = null;
     vm.showAdvanced       = false;
     vm.cancel             = cancel;
     vm.rebuild            = rebuild;
@@ -25,8 +24,10 @@
     //////////
 
     function activate() {
-      if(environment.deployment.taskdefs) {      
-        vm.selectedTasks = environment.deployment.taskdefs.slice(0);
+      vm.environment = angular.copy(environment);
+
+      if(environment.config.taskdefs) {      
+        vm.selectedTasks = vm.environment.config.taskdefs.slice(0);
       }  
     }
     
@@ -35,11 +36,9 @@
     }
 
     function rebuild() {
-      $modalInstance.close({
-        branch:     vm.selectedBranch,
-        taskdefs:   vm.selectedTasks,
-        deployinfo: vm.deployinfo
-      });
+      angular.copy(vm.environment, environment);
+      environment.selectedTasks = vm.selectedTasks;
+      $modalInstance.close();
     }
 
     function toggleAdvanced() {

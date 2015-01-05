@@ -93,20 +93,12 @@
         }
       });
 
-      modal.result.then(function(data) {
-        
-        // send these in the post body
-        vm.environment.deployment.taskdefs = data.taskdefs;  
-        vm.environment.deployment.deployinfo = data.deployinfo;
-        delete data.taskdefs;
-        delete data.deployinfo;
-
-        // post the change and include querystring data
-        vm.environment.$redeploy(data, function(results) {          
-          var path = '/jobs/' + results.jobId;          
+      modal.result.then(function() {
+        vm.environment.$redeploy()
+        .then(function(environment) {
+          var path = '/jobs/' + environment.deployedJobId;          
           $location.path(path);
-        });
-        
+        });     
       });
     }
 

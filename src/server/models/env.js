@@ -21,6 +21,7 @@ schema = {
     { "name": "deployedUntil" },
     { "name": "deployedNotes" },
     { "name": "deployedBranch" },    
+    { "name": "deployedJobId" },
     { "name": "runstate" },
     { "name": "machines" }
   ]
@@ -30,12 +31,3 @@ schema = {
 
 Environment = Model.extend(schema);
 module.exports = Environment;
-
-Environment.prototype.readConfig = function readConfig() {
-  try {
-    return JSON.parse(this.config);
-  }
-  catch(ex) {
-    return {};
-  }
-};

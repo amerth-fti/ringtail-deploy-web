@@ -1,4 +1,5 @@
-var Q             = require('q')
+var debug         = require('debug')('deployer-envservice')
+  , Q             = require('q')
   , Skytap        = require('node-skytap')
   , EnvMapper     = require('../mappers/envMapper')
   , MachineMapper = require('../mappers/machineMapper')
@@ -54,8 +55,9 @@ exports.create = function create(data, next) {
 };
 
 exports.update = function update(data, next) {
+  debug('update environment');
   var env = new Env(data);
-
+  
   return env.validate()
     .then(function() { return envMapper.update(env); })
     .then(function(result) { return env; })

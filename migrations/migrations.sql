@@ -5,12 +5,14 @@ CREATE TABLE env (
   envDesc TEXT,
   remoteType INTEGER,
   remoteId INTEGER,
+  status NVARCHAR(255),
   config TEXT,
-  deployedBy NVARCYAR(255),
+  deployedBy NVARCHAR(255),
   deployedOn TIMESTAMP,
   deployedUntil TIMESTAMP,
   deployedNotes TEXT,
-  deployedBranch NVARCHAR(255)
+  deployedBranch NVARCHAR(255),
+  deployedJobId INTEGER
 );
 
 
