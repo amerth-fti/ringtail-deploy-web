@@ -1,10 +1,40 @@
 
 <div class="model-body">
-  Local machine info stuff goes here...
+  <div class="row">
+    <div class="col-sm-3">
+      
+      <div class="machine" ng-repeat="machine in vm.environment.machines">
+        <h4>{{machine.machineName}}</h4>        
+        Role Icon Goes Here
+
+        <span class="btn-remove glyphicon glyphicon-remove-sign" ng-click="vm.removeMachine(machine)"></span>
+      </div>
+
+    </div>
+    <div class="col-sm-9">
+      <form>
+        <div class="form-group">
+          <label for="envName">Name</label>
+          <input type="text" class="form-control" id="envName" placeholder="Name" ng-model="vm.machine.machineName" />
+        </div>        
+        <div class="form-group">
+          <label for="machineIP">IP Address</label>
+          <input type="text" class="form-control" id="machineIP" placeholder="IP Address" ng-model="vm.machine.intIP" />
+        </div>
+        <div class="form-group">
+          <label for="machineRole">Role</label>
+          Add roles as checkboxes?!?
+        </div>
+        <button type="button" class="btn btn-primary pull-right" ng-click="vm.addMachine()">
+          Add Machine <span class="glyphicon glyphicon-plus-sign"></span>
+        </button>
+      </form>
+    </div>  
+  </div>
 </div>
 
 <div class="modal-footer">
   <button type="button" class="btn btn-default" ng-click="vm.prev()">Previous</button>
-  <button type="button" class="btn btn-primary" ng-click="vm.next()">Next</button>
+  <button type="button" class="btn btn-primary" ng-click="vm.create()">Create</button>
   <button type="button" class="btn btn-default" ng-click="vm.cancel()">Cancel</button>
 </div>

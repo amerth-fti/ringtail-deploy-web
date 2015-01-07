@@ -3,7 +3,37 @@
   <h4 class="modal-title">New Environment Wizard</h4>
 </div>
 
-<method environment="vm.environment" wizard="vm.wizard" ng-show="vm.wizard.stage === 'method'"></method>
-<env-local-info environment="vm.environment" wizard="vm.wizard" ng-show="vm.wizard.stage === 'local-info'"></env-local-info>
-<env-local-machines environment="vm.environment" wizard="vm.wizard" ng-show="vm.wizard.stage === 'local-machines'"></env-local-machines>
-<env-skytap environment="vm.environment" wizard="vm.wizard" ng-show="vm.wizard.stage === 'skytap'"></env-skytap>
+<envwizard-method 
+  ng-show="vm.wizard.stage === 'method'"
+  environment="vm.environment" 
+  wizard="vm.wizard" 
+  cancel="vm.cancel"
+  >
+</envwizard-method>
+
+
+<envwizard-local-info 
+  ng-show="vm.wizard.stage === 'local-info'"
+  environment="vm.environment" 
+  wizard="vm.wizard"  
+  cancel="vm.cancel"
+  >
+</envwizard-local-info>
+
+
+<envwizard-local-machines 
+  ng-show="vm.wizard.stage === 'local-machines'"
+  environment="vm.environment"  
+  wizard="vm.wizard" 
+  cancel="vm.cancel"
+  >
+</envwizard-local-machines>
+
+
+<envwizard-skytap 
+  ng-show="vm.wizard.stage === 'skytap'"
+  environment="vm.environment" 
+  wizard="vm.wizard" 
+  cancel="vm.cancel"
+  >
+</envwizard-skytap>

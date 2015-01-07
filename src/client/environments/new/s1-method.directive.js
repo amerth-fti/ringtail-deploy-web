@@ -3,14 +3,15 @@
   
   angular
     .module('app.environments.new')
-    .directive('method', method);
+    .directive('envwizardMethod', envwizardMethod);
   
-  function method() {
+  function envwizardMethod() {
     return { 
       restrict: 'E',
       scope: {
+        cancel: '=',
         environment: '=',
-        wizard: '='
+        wizard: '='   
       },
       templateUrl: 'client/environments/new/s1-method.html',
       controller: NewEnvironmentMethodController,
@@ -22,25 +23,28 @@
   
   function NewEnvironmentMethodController($scope) {
     var vm = this;
+    vm.cancel       = $scope.cancel;
     vm.environment  = $scope.environment;
-    vm.wizard       = $scope.wizard;
-    vm.select       = select;
+    vm.wizard       = $scope.wizard;    
+    vm.selectLocal  = selectLocal;
+    vm.selectSkytap = selectSkytap;
     
     activate();
     
     //////////
     
     function activate() {
+      console.log(vm.cancel);
     }
 
-    function select(method) {
-      if(method === 'local') {
-        vm.environment.remoteType = null;
-        vm.wizard.stage = 'local-info';
-      } else if (method === 'skytap') {
-        vm.environment.remoteType = 'skytap';
-        vm.wizard.stage = 'skytap';
-      }
+    function selectLocal() {
+      vm.environment.remoteType = null;
+      vm.wizard.stage = 'local-info';
+    }
+
+    function selectSkytap() {
+      vm.environment.remoteType = 'skytap';
+      vm.wizard.stage = 'skytap';
     }
   }
   

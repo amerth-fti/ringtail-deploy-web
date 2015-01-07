@@ -87,6 +87,15 @@ button {
   border-color: #398439 !important;
 }
 
+.btn-remove {
+  color: #d9534f;
+  border-color: #d43f3a;
+}
+.btn-remove {
+  color: #c9302c;
+  border-color: #ac2925;
+}
+
 .col-centered {
   text-align: center;
 }
@@ -94,4 +103,10 @@ button {
 .skytap-logo {
   height: 60px;
   margin-top: 10px;
+}
+
+.model-body .row {
+  margin-top: 15px;
+  margin-left: 15px;
+  margin-right: 15px;
 }

@@ -3,12 +3,13 @@
   
   angular
     .module('app.environments.new')
-    .directive('envSkytap', envSkytap);
+    .directive('envwizardSkytap', envwizardSkytap);
   
-  function envSkytap() {
+  function envwizardSkytap() {
     return { 
       restrict: 'E',
       scope: {
+        cancel: '=',
         environment: '=',
         wizard: '=',
       },
@@ -23,12 +24,23 @@
   function NewEnvironmentSkytapController($scope) {
     var vm = this;
     vm.environment  = $scope.environment;
+    vm.wizard       = $scope.wizard;
+    vm.create       = create;
+    vm.prev         = prev;
     
     activate();
     
     //////////
     
     function activate() {
+    }
+
+    function create() {
+      // do something  
+    }
+
+    function prev() {
+      vm.wizard.stage = 'method';
     }
   }
   
