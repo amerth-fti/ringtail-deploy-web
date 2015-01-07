@@ -9,9 +9,12 @@
 
   function NewEnvironmentController($routeParams, $modalInstance, Environment) {
     var vm          = this;
-    vm.environments = [];  
+    vm.environment  = new Environment();
     vm.cancel       = cancel;
-    vm.create       = create;  
+
+    vm.wizard       = {
+      stage: 'method'
+    };
     
     activate();
 
@@ -23,12 +26,6 @@
 
     function cancel() {
       $modalInstance.dismiss();
-    }
-
-    function create() {
-
-          
-      $modalInstance.close();
     }
   }
 

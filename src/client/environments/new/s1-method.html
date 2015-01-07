@@ -1,4 +1,14 @@
 
-
-<label><input type="radio" ng-model="vm.environment.remoteType" value="" /> Local</label>
-<label><input type="radio" ng-model="vm.environment.remoteType" value="skytap" /> Skytap</label>
+<div class="modal-body">
+  <div class="row">
+    <div class="col-md-12">Choose an environment type:</div>
+  </div>
+  <div class="row">
+    <div class="col-md-6 col-centered">
+      <h1 ng-click="vm.select('local')">Local</h1>
+    </div>
+    <div class="col-md-6 col-centered">
+      <img src="/client/assets/img/skytap-logo.png" alt="skytap" class="skytap-logo" ng-click="vm.select('skytap')" />
+    </div>
+  </div>
+</div>

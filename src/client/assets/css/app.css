@@ -85,4 +85,13 @@ button {
 .btn-add:hover {
   color: #449d44 !important;
   border-color: #398439 !important;
-};
+}
+
+.col-centered {
+  text-align: center;
+}
+
+.skytap-logo {
+  height: 60px;
+  margin-top: 10px;
+}

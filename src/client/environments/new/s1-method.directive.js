@@ -9,7 +9,8 @@
     return { 
       restrict: 'E',
       scope: {
-        environment: '='
+        environment: '=',
+        wizard: '='
       },
       templateUrl: 'client/environments/new/s1-method.html',
       controller: NewEnvironmentMethodController,
@@ -22,12 +23,24 @@
   function NewEnvironmentMethodController($scope) {
     var vm = this;
     vm.environment  = $scope.environment;
+    vm.wizard       = $scope.wizard;
+    vm.select       = select;
     
     activate();
     
     //////////
     
     function activate() {
+    }
+
+    function select(method) {
+      if(method === 'local') {
+        vm.environment.remoteType = null;
+        vm.wizard.stage = 'local-info';
+      } else if (method === 'skytap') {
+        vm.environment.remoteType = 'skytap';
+        vm.wizard.stage = 'skytap';
+      }
     }
   }
   
