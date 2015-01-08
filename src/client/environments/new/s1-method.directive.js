@@ -34,7 +34,6 @@
     //////////
     
     function activate() {
-      console.log(vm.cancel);
     }
 
     function selectLocal() {

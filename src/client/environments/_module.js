@@ -4,7 +4,8 @@
   angular
     .module('app.environments', [ 
       'ngResource',
-      'app.environments.new'
+      'app.environments.new',
+      'app.environments.machine'
     ]);
 
 }());

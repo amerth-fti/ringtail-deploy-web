@@ -23,6 +23,9 @@ button {
   border-width: 1px !important;  
 }
 
+.text-muted {
+  color: #777;
+}
 
 .badge.status-glyph {  
   background-color: inherit !important;
@@ -107,6 +110,68 @@ button {
 
 .model-body .row {
   margin-top: 15px;
+  margin-bottom: 15px;
   margin-left: 15px;
   margin-right: 15px;
+}
+.model-body {
+  min-height: 50px;
+}
+
+.machine-details {
+  text-align: center;
+}
+.machine-details .machine-role {
+  border-radius: 50%;
+  padding-top: 15px;
+  padding-bottom: 15px;
+  font-weight: bold;
+}
+.machine-details .role-DEV-FULL {
+  background-color: #66CCFF;
+}
+.machine-details .role-WEBSERVER {
+  background-color: #99CCFF;
+}
+.machine-details .role-AGENT {
+  background-color: #CC99FF;
+}
+.machine-details .role-AGENT {
+  background-color: #FF99FF;
+}
+.machine-details .role-WEBAGENT {
+  background-color: #FF99CC;
+}
+.machine-details .role-RPF {
+  background-color: #FF9999;
+}
+.machine-details .role-DATABASE {
+  background-color: #FFCC99;
+}
+.machine-details .role-SKYTAP-ALLINONE {
+  background-color: #FFFF99;
+}
+.machine-details .role-SKYTAP-WEB {
+  background-color: #CCFF99;
+}
+.machine-details .role-SKYTAP-WEBAGENT {
+  background-color: #99FF99;
+}
+.machine-details .role-SKYTAP-DB {
+  background-color: #99FFCC;
+}
+.machine-details .role-SKYTAP-RPF {
+  background-color: #66FFFF;
+}
+
+.machine-details .machine-name {
+  margin-bottom: 0;
+}
+
+.machine-details.editable {
+  cursor: pointer;
+}
+
+.remove-machine {
+  cursor: pointer;
 }

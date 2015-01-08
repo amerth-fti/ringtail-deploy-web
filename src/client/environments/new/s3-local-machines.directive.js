@@ -19,16 +19,17 @@
     };
   }
   
-  NewEnvironmentLocalMachineController.$inject = [ '$scope' ];
+  NewEnvironmentLocalMachineController.$inject = [ '$scope', 'MachineEditor' ];
   
-  function NewEnvironmentLocalMachineController($scope) {
+  function NewEnvironmentLocalMachineController($scope, MachineEditor) {
     var vm = this;
     vm.cancel       = $scope.cancel;
     vm.environment  = $scope.environment;
     vm.wizard       = $scope.wizard;
-    vm.machine      = {};
-    vm.addMachine   = addMachine;
+    vm.roles        = null;
+    vm.addMachine   = addMachine;    
     vm.create       = create;
+    vm.editMachine  = editMachine;
     vm.prev         = prev;
     vm.removeMachine = removeMachine;
     
@@ -37,12 +38,24 @@
     //////////
     
     function activate() {
+      vm.machine = {};
+    }
+
+    function newMachine() {
+
     }
 
     function addMachine() {
-      vm.environment.machines = vm.environment.machines || [];
-      vm.environment.machines.push(vm.machine);
-      vm.machine = {};
+      MachineEditor.open(null)
+      .result
+      .then(function(result) {
+        vm.environment.machines = vm.environment.machines || [];
+        vm.environment.machines.push(result);
+      });
+    }
+
+    function editMachine(machine) {
+      MachineEditor.open(machine);
     }
 
     function removeMachine(machine) {

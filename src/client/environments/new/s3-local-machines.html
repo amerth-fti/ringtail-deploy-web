@@ -1,40 +1,25 @@
 
 <div class="model-body">
-  <div class="row">
-    <div class="col-sm-3">
-      
-      <div class="machine" ng-repeat="machine in vm.environment.machines">
-        <h4>{{machine.machineName}}</h4>        
-        Role Icon Goes Here
-
-        <span class="btn-remove glyphicon glyphicon-remove-sign" ng-click="vm.removeMachine(machine)"></span>
-      </div>
-
+  <div class="row"  ng-hide="vm.environment.machines.length > 0">
+    <div class="col-sm-12">
+      Add machines to this environment.
     </div>
-    <div class="col-sm-9">
-      <form>
-        <div class="form-group">
-          <label for="envName">Name</label>
-          <input type="text" class="form-control" id="envName" placeholder="Name" ng-model="vm.machine.machineName" />
-        </div>        
-        <div class="form-group">
-          <label for="machineIP">IP Address</label>
-          <input type="text" class="form-control" id="machineIP" placeholder="IP Address" ng-model="vm.machine.intIP" />
-        </div>
-        <div class="form-group">
-          <label for="machineRole">Role</label>
-          Add roles as checkboxes?!?
-        </div>
-        <button type="button" class="btn btn-primary pull-right" ng-click="vm.addMachine()">
-          Add Machine <span class="glyphicon glyphicon-plus-sign"></span>
-        </button>
-      </form>
-    </div>  
+  </div>
+  <div class="row">         
+    <div class="col-sm-3" ng-repeat="machine in vm.environment.machines">
+      <span class="pull-left btn-remove glyphicon glyphicon-remove-sign remove-machine" ng-click="vm.removeMachine(machine)"></span>
+      <machine-details machine="machine" editable="true" ng-click="vm.editMachine(machine)"></machine-details>
+    </div>
   </div>
 </div>
 
 <div class="modal-footer">
+  <button class="pull-left btn btn-primary" ng-click="vm.addMachine()">
+    <span>Add Machine</span>
+    <span class="glyphicon glyphicon-plus-sign"></span>
+  </button>
+
   <button type="button" class="btn btn-default" ng-click="vm.prev()">Previous</button>
   <button type="button" class="btn btn-primary" ng-click="vm.create()">Create</button>
-  <button type="button" class="btn btn-default" ng-click="vm.cancel()">Cancel</button>
+  <button type="button" class="btn btn-warning" ng-click="vm.cancel()">Cancel</button>
 </div>

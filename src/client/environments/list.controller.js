@@ -25,7 +25,7 @@
         .open({
           templateUrl: 'client/environments/new/dialog.html',
           controller: 'NewEnvironmentController',
-          controllerAs: 'vm'        
+          controllerAs: 'vm'
         })
         .result
         .then(function(env) {
