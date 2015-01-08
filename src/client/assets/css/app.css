@@ -175,3 +175,7 @@ button {
 .remove-machine {
   cursor: pointer;
 }
+
+.cursor-pointer {
+  cursor: pointer;
+}

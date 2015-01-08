@@ -1,6 +1,17 @@
 
 <div class="model-body">
-  Retrieve list of environments from skytap and put them here...
+  <div class="row">
+    <div class="col-sm-12">
+      <div ng-repeat="environment in vm.pageData">
+        {{environment.id}} - {{environment.name}}
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-sm-12 col-centered" ng-show="vm.pagingActive">
+      <pagination total-items="vm.totalItems" ng-model="vm.currentPage" ng-change="vm.pageChanged()"></pagination>
+    </div>
+  </div>
 </div>
 
 <div class="modal-footer">
