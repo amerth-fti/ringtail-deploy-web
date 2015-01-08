@@ -11,6 +11,7 @@
     var vm          = this;
     vm.environment  = new Environment();
     vm.cancel       = cancel;
+    vm.create       = create;
 
     vm.wizard       = {
       stage: 'method'
@@ -26,6 +27,13 @@
 
     function cancel() {
       $modalInstance.dismiss();
+    }
+
+    function create() {
+      vm.environment.$save()
+      .then(function(environment) {
+        $modalInstance.close(environment);  
+      });      
     }
   }
 

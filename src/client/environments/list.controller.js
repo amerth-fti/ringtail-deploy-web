@@ -29,7 +29,7 @@
         })
         .result
         .then(function(env) {
-          vm.environments.push(vm);
+          vm.environments.push(env);
         });        
     }
   }

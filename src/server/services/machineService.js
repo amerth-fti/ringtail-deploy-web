@@ -6,9 +6,7 @@ var Q             = require('q')
   ;
 
 
-
-
-module.exports.create = function create(data, next) {
+exports.create = function create(data, next) {
   var machine = new Machine(data);
   
   return machine
@@ -17,8 +15,19 @@ module.exports.create = function create(data, next) {
       return machineMapper.insert(machine);
     })
     .then(function(result) {
-      machine.machinId = result.lastID;
+      machine.machineId = result.lastID;
       return machine;
+    })
+    .nodeify(next);
+};
+
+exports.update = function update(data, next) {
+  var machine = new Machine(data);
+
+  return machine
+    .validate()
+    .then(function() {
+      return machineMapper.update(machine);      
     })
     .nodeify(next);
 };

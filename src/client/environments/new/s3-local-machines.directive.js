@@ -10,6 +10,7 @@
       restrict: 'E',
       scope: {
         cancel: '=',
+        create: '=',
         environment: '=',
         wizard: '='
       },
@@ -24,11 +25,11 @@
   function NewEnvironmentLocalMachineController($scope, MachineEditor) {
     var vm = this;
     vm.cancel       = $scope.cancel;
+    vm.create       = $scope.create;
     vm.environment  = $scope.environment;
     vm.wizard       = $scope.wizard;
     vm.roles        = null;
-    vm.addMachine   = addMachine;    
-    vm.create       = create;
+    vm.addMachine   = addMachine;
     vm.editMachine  = editMachine;
     vm.prev         = prev;
     vm.removeMachine = removeMachine;
@@ -39,10 +40,6 @@
     
     function activate() {
       vm.machine = {};
-    }
-
-    function newMachine() {
-
     }
 
     function addMachine() {
@@ -61,10 +58,6 @@
     function removeMachine(machine) {
       var index = vm.environment.machines.indexOf(machine);
       vm.environment.machines.splice(index, 1);
-    }
-
-    function create() {
-      // do some stuff
     }
 
     function prev() {

@@ -1,14 +1,15 @@
-var debug         = require('debug')('deployer-envservice')
-  , Q             = require('q')
-  , Skytap        = require('node-skytap')
-  , EnvMapper     = require('../mappers/envMapper')
-  , MachineMapper = require('../mappers/machineMapper')
-  , Env           = require('../models/env')
-  , config        = require('../../../config')
-  , dbPath        = __dirname + '/../../../data/deployer.db'
-  , skytap        = Skytap.init(config.skytap)
-  , envMapper     = new EnvMapper(dbPath)
-  , machineMapper = new MachineMapper(dbPath)
+var debug           = require('debug')('deployer-envservice')
+  , Q               = require('q')
+  , Skytap          = require('node-skytap')
+  , EnvMapper       = require('../mappers/envMapper')
+  , MachineMapper   = require('../mappers/machineMapper')
+  , Env             = require('../models/env')
+  , config          = require('../../../config')
+  , dbPath          = __dirname + '/../../../data/deployer.db'
+  , machineService  = require('./machineService')
+  , skytap          = Skytap.init(config.skytap)
+  , envMapper       = new EnvMapper(dbPath)
+  , machineMapper   = new MachineMapper(dbPath)  
   ;
 
 /** 
@@ -44,12 +45,29 @@ exports.create = function create(data, next) {
   var env = new Env(data);
   
   return env.validate()
-    .then(function() { return envMapper.insert(env); })
-    .then(function(result) {
-      env.envId = result.lastID;
-      return env;
+    .then(function() { 
+      return envMapper
+        .insert(env)
+        .then(function(result) {
+          env.envId = result.lastID;
+          return env;
+        });
     })
-    .then(joinEnvMachines)
+    .then(function() {
+      var promises = [];
+      if(env.machines) {
+        promises = env.machines.map(function(machine) {
+          machine.envId = env.envId;
+          return machineService.create(machine);
+        });
+      }
+      return Q
+        .all(promises)
+        .then(function(machines) {
+          env.machines = machines;
+          return env;
+        });
+    })    
     .then(joinEnvSkytap)
     .nodeify(next);
 };
