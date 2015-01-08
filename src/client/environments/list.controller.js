@@ -5,11 +5,11 @@
     .module('app.environments')
     .controller('EnvironmentListController', EnvironmentListController);
 
-  EnvironmentListController.$inject = [ '$routeParams', '$modal', 'Environment' ];
+  EnvironmentListController.$inject = [ '$routeParams', 'Environment', 'EnvironmentEditor' ];
 
-  function EnvironmentListController($routeParams, $modal, Environment) {
-    var vm          = this;
-    vm.environments = [];
+  function EnvironmentListController($routeParams, Environment, EnvironmentEditor) {
+    var vm            = this;
+    vm.environments   = [];
     vm.newEnvironment = newEnvironment;
     
     activate();
@@ -21,16 +21,11 @@
     }
 
     function newEnvironment() {
-      $modal
-        .open({
-          templateUrl: 'client/environments/new/dialog.html',
-          controller: 'NewEnvironmentController',
-          controllerAs: 'vm'
-        })
+      EnvironmentEditor.open()
         .result
         .then(function(env) {
           vm.environments.push(env);
-        });        
+        });
     }
   }
 
