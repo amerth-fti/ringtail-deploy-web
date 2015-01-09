@@ -32,7 +32,7 @@ module.exports = function(grunt) {
         src: [ 'GruntFile.js' ]        
       },
       client: {
-        src: [ 'src/client/**/*.js' ]
+        src: [ 'src/client/**/*.js', '!src/client/assets/**/*' ]
       },
       server: {
         src: [ 'src/server/**/*.js' ]        
