@@ -108,12 +108,25 @@ button {
   margin-top: 10px;
 }
 
-.model-body .row {
-  margin-top: 15px;
-  margin-bottom: 15px;
-  margin-left: 15px;
-  margin-right: 15px;
+.model-body.pad-all {
+  padding-top: 15px;
+  padding-bottom: 15px;
+  padding-left: 15px;
+  padding-right: 15px;
 }
+.model-body.pad-left {
+  padding-left: 15px;
+}
+.model-body.pad-right {
+  padding-right: 15px;  
+}
+.model-body.pad-top {
+  padding-top: 15px;  
+}
+.model-body.pad-bottom {
+  padding-bottom: 15px;
+}
+
 .model-body {
   min-height: 50px;
 }
@@ -126,6 +139,9 @@ button {
   padding-top: 15px;
   padding-bottom: 15px;
   font-weight: bold;
+}
+.machine-details .role- {
+  background-color: #b0b0b0;
 }
 .machine-details .role-DEV-FULL {
   background-color: #66CCFF;
@@ -178,4 +194,12 @@ button {
 
 .cursor-pointer {
   cursor: pointer;
+}
+
+.skytap-selectlist {
+  min-height: 220px;
+}
+.skytap-selectlist-item {
+  overflow: hidden;
+  text-overflow: ellipsis;
 }

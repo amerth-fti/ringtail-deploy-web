@@ -24,7 +24,7 @@
   function NewEnvironmentLocalInfoController($scope) {
     var vm = this;
     vm.cancel       = $scope.cancel;
-    vm.environment  = $scope.environment;
+    vm.environment  = null;
     vm.wizard       = $scope.wizard;
     vm.next         = next;
     vm.prev         = prev;
@@ -34,6 +34,9 @@
     //////////
     
     function activate() {
+      $scope.$watch('environment', function(value) {
+        vm.environment = value;
+      });
     }
 
     function next() {

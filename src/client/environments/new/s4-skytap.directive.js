@@ -20,9 +20,9 @@
     };
   }
   
-  NewEnvironmentSkytapController.$inject = [ '$scope', 'SkytapEnvironment' ];
+  NewEnvironmentSkytapController.$inject = [ '$scope', 'SkytapEnvironment', 'environmentFactory' ];
   
-  function NewEnvironmentSkytapController($scope, SkytapEnvironment) {
+  function NewEnvironmentSkytapController($scope, SkytapEnvironment, environmentFactory) {
     var vm = this;
     vm.cancel       = $scope.cancel;
     vm.create       = $scope.create;
@@ -36,10 +36,10 @@
     vm.pageSize     = 10;
     vm.selected     = null;
     vm.totalItems   = 0;
-    
+
+    vm.next         = next;
     vm.pageChanged  = pageChanged;
     vm.prev         = prev;
-
     
     activate();
     
@@ -47,11 +47,21 @@
     
     function activate() {
       SkytapEnvironment.query(function(environments) {
-        vm.environments = environments;        
+        vm.environments = sortEnvs(environments);
         vm.totalItems = environments.length;
         vm.pagingActive = vm.totalItems > vm.pageSize;
+        vm.selected = environments[0];
         pageChanged();
       });
+    }
+
+    function next() {      
+      SkytapEnvironment.get({ id: vm.selected.id })
+        .$promise
+        .then(function(env) {
+          $scope.$parent.vm.environment = environmentFactory.fromSkytap(env);
+          vm.wizard.stage = 'local-info';
+        });      
     }
 
     function pageChanged() {
@@ -61,6 +71,25 @@
 
     function prev() {
       vm.wizard.stage = 'method';
+    }
+
+    function sortEnvs(envs) {
+      return envs.sort(function(a, b) {
+        var result;
+        if(String.prototype.localeCompare) {
+          result = a.name.localeCompare(b.name);
+        } else {
+          if(a.name > b.name) {
+            result = 1;
+          } else if (a.name < b.name) {
+            result = -1;
+          } else {
+            result = 0;
+          }
+        }
+        return result;
+      });
+      
     }
   }
   

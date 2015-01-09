@@ -26,9 +26,9 @@
     }
   }
     
-  EnvironmentEditorController.$inject = [ '$scope', '$modalInstance', 'Environment', 'environment' ];
+  EnvironmentEditorController.$inject = [ '$modalInstance', 'Environment', 'environment' ];
 
-  function EnvironmentEditorController($scope, $modalInstance, Environment, environment) {
+  function EnvironmentEditorController($modalInstance, Environment, environment) {
     var vm          = this;
     vm.environment  = environment || new Environment();
     vm.cancel       = cancel;
@@ -54,6 +54,10 @@
       .then(function(environment) {
         $modalInstance.close(environment);  
       });      
+    }
+
+    function setEnv(env) {
+      vm.environment = env;
     }
   }
 

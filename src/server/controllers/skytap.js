@@ -1,4 +1,4 @@
-var debug           = require('debug')('deployer-environments')
+var debug           = require('debug')('deployer-skytap')
   , Q               = require('Q')
   , Skytap          = require('node-skytap')
   , config          = require('../../../config')
@@ -12,5 +12,15 @@ exports.environments = function environments(req, res, next) {
     res.err = err;
     next();
   });
-  
+};
+
+
+exports.environment = function environment(req, res, next) {
+  var configuration_id = req.param('configuration_id');
+
+  skytap.environments.get({ configuration_id: configuration_id }, function(err, result) {
+    res.result = result;
+    res.err    = err;
+    next();
+  });
 };

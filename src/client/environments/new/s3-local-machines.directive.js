@@ -40,6 +40,9 @@
     
     function activate() {
       vm.machine = {};
+      $scope.$watch('environment', function(value) {
+        vm.environment = value;
+      });
     }
 
     function addMachine() {

@@ -54,7 +54,7 @@ app.get ('/api/jobs/:jobId', controllers.jobs.get);
 
 // API - SKYTAP PROXY ROUTES
 app.get ('/api/skytap/environments', controllers.skytap.environments);
-
+app.get ('/api/skytap/environments/:configuration_id', controllers.skytap.environment);
 
 
 

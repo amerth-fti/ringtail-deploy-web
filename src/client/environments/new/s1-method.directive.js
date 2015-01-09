@@ -19,12 +19,11 @@
     };
   }
   
-  NewEnvironmentMethodController.$inject = [ '$scope' ];
+  NewEnvironmentMethodController.$inject = [ '$scope', 'Environment' ];
   
-  function NewEnvironmentMethodController($scope) {
+  function NewEnvironmentMethodController($scope, Environment ) {
     var vm = this;
     vm.cancel       = $scope.cancel;
-    vm.environment  = $scope.environment;
     vm.wizard       = $scope.wizard;    
     vm.selectLocal  = selectLocal;
     vm.selectSkytap = selectSkytap;
@@ -37,12 +36,10 @@
     }
 
     function selectLocal() {
-      vm.environment.remoteType = null;
-      vm.wizard.stage = 'local-info';
+      vm.wizard.stage = 'local-info';      
     }
 
     function selectSkytap() {
-      vm.environment.remoteType = 'skytap';
       vm.wizard.stage = 'skytap';
     }
   }

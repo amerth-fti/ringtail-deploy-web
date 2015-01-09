@@ -1,9 +1,15 @@
 
-<div class="model-body">
+<div class="model-body pad-left pad-right pad-top">
   <div class="row">
     <div class="col-sm-12">
-      <div ng-repeat="environment in vm.pageData">
-        {{environment.id}} - {{environment.name}}
+      <p>Select an environment to import...</p>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-sm-12 skytap-selectlist">      
+      <div ng-repeat="environment in vm.pageData" class="text-nowrap skytap-selectlist-item">
+        <input type="radio" ng-model="vm.selected" ng-value="environment" />
+        <span>{{environment.id}} - {{environment.name}}</span>
       </div>
     </div>
   </div>
@@ -16,6 +22,6 @@
 
 <div class="modal-footer">
   <button type="button" class="btn btn-default" ng-click="vm.prev()">Previous</button>
-  <button type="button" class="btn btn-primary" ng-click="vm.create()">Add</button>
-  <button type="button" class="btn btn-default" ng-click="vm.cancel()">Cancel</button>
+  <button type="button" class="btn btn-primary" ng-click="vm.next()">Next</button>
+  <button type="button" class="btn btn-warning" ng-click="vm.cancel()">Cancel</button>
 </div>
