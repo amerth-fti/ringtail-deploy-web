@@ -14,23 +14,23 @@
 </envwizard-method>
 
 
-<envwizard-local-info 
-  ng-show="vm.wizard.stage === 'local-info'"
+<envwizard-info 
+  ng-show="vm.wizard.stage === 'info'"
   environment="vm.environment" 
   wizard="vm.wizard"  
   cancel="vm.cancel"
   >
-</envwizard-local-info>
+</envwizard-info>
 
 
-<envwizard-local-machines 
-  ng-show="vm.wizard.stage === 'local-machines'"
+<envwizard-machines 
+  ng-show="vm.wizard.stage === 'machines'"
   environment="vm.environment"  
   wizard="vm.wizard" 
   cancel="vm.cancel"
   create="vm.create"
   >
-</envwizard-local-machines>
+</envwizard-machines>
 
 
 <envwizard-skytap 

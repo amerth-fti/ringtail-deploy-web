@@ -3,9 +3,9 @@
   
   angular
     .module('app.environments.new')
-    .directive('envwizardLocalInfo', envwizardLocalInfo);
+    .directive('envwizardInfo', envwizardInfo);
   
-  function envwizardLocalInfo() {
+  function envwizardInfo() {
     return { 
       restrict: 'E',
       scope: {        
@@ -13,15 +13,15 @@
         environment: '=',
         wizard: '='
       },
-      templateUrl: 'client/environments/new/s2-local-info.html',
-      controller: NewEnvironmentLocalInfoController,
+      templateUrl: 'client/environments/new/s2-info.html',
+      controller: NewEnvironmentInfoController,
       controllerAs: 'vm'
     };
   }
   
-  NewEnvironmentLocalInfoController.$inject = [ '$scope' ];
+  NewEnvironmentInfoController.$inject = [ '$scope' ];
   
-  function NewEnvironmentLocalInfoController($scope) {
+  function NewEnvironmentInfoController($scope) {
     var vm = this;
     vm.cancel       = $scope.cancel;
     vm.environment  = null;
@@ -40,7 +40,7 @@
     }
 
     function next() {
-      vm.wizard.stage = 'local-machines';      
+      vm.wizard.stage = 'machines';      
     }
 
     function prev() {

@@ -59,7 +59,7 @@
         .$promise
         .then(function(env) {
           $scope.$parent.vm.environment = environmentFactory.fromSkytap(env);
-          vm.wizard.stage = 'local-info';
+          vm.wizard.stage = 'info';
         });      
     }
 

@@ -3,9 +3,9 @@
   
   angular
     .module('app.environments.new')
-    .directive('envwizardLocalMachines', envwizardLocalMachines);
+    .directive('envwizardMachines', envwizardMachines);
   
-  function envwizardLocalMachines() {
+  function envwizardMachines() {
     return { 
       restrict: 'E',
       scope: {
@@ -14,15 +14,15 @@
         environment: '=',
         wizard: '='
       },
-      templateUrl: 'client/environments/new/s3-local-machines.html',
-      controller: NewEnvironmentLocalMachineController,
+      templateUrl: 'client/environments/new/s3-machines.html',
+      controller: NewEnvironmentMachinesController,
       controllerAs: 'vm'
     };
   }
   
-  NewEnvironmentLocalMachineController.$inject = [ '$scope', 'MachineEditor' ];
+  NewEnvironmentMachinesController.$inject = [ '$scope', 'MachineEditor' ];
   
-  function NewEnvironmentLocalMachineController($scope, MachineEditor) {
+  function NewEnvironmentMachinesController($scope, MachineEditor) {
     var vm = this;
     vm.cancel       = $scope.cancel;
     vm.create       = $scope.create;
@@ -70,7 +70,7 @@
     }
 
     function prev() {
-      vm.wizard.stage = 'local-info';
+      vm.wizard.stage = 'info';
     }
   }
   

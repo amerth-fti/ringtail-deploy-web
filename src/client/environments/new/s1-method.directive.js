@@ -38,7 +38,7 @@
     function selectLocal() {
       $scope.environment = new Environment();
       $scope.environment.remoteType = null;
-      vm.wizard.stage = 'local-info';      
+      vm.wizard.stage = 'info';      
     }
 
     function selectSkytap() {
