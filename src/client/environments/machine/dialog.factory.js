@@ -40,7 +40,7 @@
     //////////
 
     function activate() {
-      vm.mode = vm.machine === 'edit' ? 'edit' : 'create';
+      vm.mode = vm.machine ? 'edit' : 'create';
     }
 
 
