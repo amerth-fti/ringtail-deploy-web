@@ -26,7 +26,6 @@
     var vm = this;
     vm.cancel       = $scope.cancel;
     vm.create       = $scope.create;
-    vm.environment  = $scope.environment;
     vm.wizard       = $scope.wizard;
 
     vm.pageData     = null;

@@ -11,20 +11,28 @@
 
     var roles = [
       'DEV-FULL',
-      'WEBSERVER',
       'AGENT',
-      'WEBAGENT',
       'RPF',
+      'WEBAGENT',
+      'WEBSERVER',      
       'DATABASE',
-      'SKYTAP-ALLINONE',
+      'SKYTAP-ALLINONE',      
+      'SKYTAP-DB',
+      'SKYTAP-RPF',
       'SKYTAP-WEB',
-      'SKYTAP-WEBAGENT',
-      'SKYTAP-DB'
+      'SKYTAP-WEBAGENT'
     ];
 
     return {
-      query: function() {
-        return roles;
+      query: function(opts) {
+        opts = opts || {
+          remoteType: null
+        };
+
+        return roles.filter(function(role) {
+          return  (opts.remoteType === 'skytap' && role.toLowerCase().indexOf('skytap') >= 0) ||
+                  (opts.remoteType === null     && role.toLowerCase().indexOf('skytap') === -1);
+        });
       }
     };
   }

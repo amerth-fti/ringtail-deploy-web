@@ -46,7 +46,10 @@
     }
 
     function addMachine() {
-      MachineEditor.open(null)
+      var opts = { 
+        remoteType: vm.environment.remoteType
+      };
+      MachineEditor.open(null, opts)
       .result
       .then(function(result) {
         vm.environment.machines = vm.environment.machines || [];
@@ -55,7 +58,10 @@
     }
 
     function editMachine(machine) {
-      MachineEditor.open(machine);
+      var opts = { 
+        remoteType: vm.environment.remoteType
+      };
+      MachineEditor.open(machine, opts);
     }
 
     function removeMachine(machine) {

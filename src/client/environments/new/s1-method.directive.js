@@ -36,10 +36,14 @@
     }
 
     function selectLocal() {
+      $scope.environment = new Environment();
+      $scope.environment.remoteType = null;
       vm.wizard.stage = 'local-info';      
     }
 
     function selectSkytap() {
+      $scope.environment = new Environment();
+      $scope.environment.remoteType = 'skytap';
       vm.wizard.stage = 'skytap';
     }
   }

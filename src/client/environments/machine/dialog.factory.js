@@ -12,7 +12,7 @@
       open: open
     };
 
-    function open(machine) {
+    function open(machine, opts) {
       return $modal.open({
         templateUrl: 'client/environments/machine/dialog.html',
         controller: MachineEditorController,
@@ -20,18 +20,22 @@
         resolve: {
           machine: function() {
             return machine;
+          },
+          options: function() {
+            return opts;
           }
         }
       });
     }
   }
 
-  MachineEditorController.$inject = [ '$scope', '$modalInstance', 'machine' ];
+  MachineEditorController.$inject = [ '$scope', '$modalInstance', 'machine', 'options' ];
 
-  function MachineEditorController($scope, $modalInstance, machine) {
+  function MachineEditorController($scope, $modalInstance, machine, options) {
     var vm    = this;
     vm.machine  = machine || {};
-    vm.mode     = activate;
+    vm.mode     = null;
+    vm.options  = options;
     vm.cancel   = cancel;
     vm.submit   = submit;
 
@@ -40,7 +44,7 @@
     //////////
 
     function activate() {
-      vm.mode = vm.machine ? 'edit' : 'create';
+      vm.mode = vm.machine ? 'edit' : 'create';      
     }
 
 

@@ -10,6 +10,7 @@
       restrict: 'E',
       scope: {
         machine: '=',
+        remoteType: '='
       },
       templateUrl: 'client/environments/machine/editor.html',
       controller: MachineEditorController,
@@ -21,16 +22,17 @@
   
   function MachineEditorController($scope, Role) {
     var vm = this;
-    vm.machine  = $scope.machine;
-    vm.roles    = null;
+    vm.machine    = $scope.machine;
+    vm.remoteType = $scope.remoteType;
+    vm.roles      = null;
 
     activate();
     
     //////////
-    
+
     function activate() {
-      vm.roles = Role.query();
-    }  
+      vm.roles = Role.query({ remoteType: vm.remoteType });
+    }
   }
   
 }());
