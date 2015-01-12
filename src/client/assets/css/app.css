@@ -11,6 +11,13 @@
   float: right;  
 }
 
+.color-danger {
+  color: #d9534f;
+}
+.color-danger:hover {
+  color: #c9302c;
+}
+
 .configure {
   cursor: pointer;
   color: #f0ad4e;

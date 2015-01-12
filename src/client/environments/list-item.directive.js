@@ -31,6 +31,7 @@
     vm.initialize   = initialize;
     vm.pause        = pause;
     vm.redeploy     = redeploy;
+    vm.reset        = reset;
     vm.start        = start;
     
     activate($scope.environment);
@@ -100,6 +101,10 @@
           $location.path(path);
         });     
       });
+    }
+
+    function reset() {
+      vm.environment.$reset();
     }
 
     function configure() {      

@@ -15,7 +15,8 @@
         update  : { method: 'PUT', url: 'api/envs/:envId' },
         start   : { method: 'PUT', url: 'api/envs/:envId/start' },
         pause   : { method: 'PUT', url: 'api/envs/:envId/pause' },
-        redeploy: { method: 'PUT', url: 'api/envs/:envId/redeploy' }
+        redeploy: { method: 'PUT', url: 'api/envs/:envId/redeploy' },
+        reset   : { method: 'PUT', url: 'api/envs/:envId/reset' }
       }
     );
   }
