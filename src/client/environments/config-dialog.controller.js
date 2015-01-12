@@ -9,7 +9,7 @@
 
   function EnvironmentConfigController($modalInstance, config, environment) {
     var vm          = this;
-    vm.environment  = environment;
+    vm.environment  = null;
     vm.cancel       = cancel;
     vm.save         = save;
 
@@ -18,13 +18,14 @@
     //////////
 
     function activate() {
+      vm.environment = angular.copy(environment);
       vm.environment.config = JSON.stringify(vm.environment.config, null, 2);
     }
 
     function save() {
       try 
       {
-        vm.environment.config = JSON.parse(vm.environment.config);
+        environment.config = JSON.parse(vm.environment.config);
         $modalInstance.close();
       }
       catch (ex) {        
