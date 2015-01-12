@@ -203,11 +203,3 @@ button {
   overflow: hidden;
   text-overflow: ellipsis;
 }
-
-/**
- * Overrides 
- */
-
-textarea.form-control {
-  height: 108px;
-}

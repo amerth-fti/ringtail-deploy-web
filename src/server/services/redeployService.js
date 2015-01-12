@@ -24,7 +24,7 @@ exports.redeploy = function redeploy(data, next) {
       job = new Job({
         name: 'Redeploy environment ' + env.envName,
         tasks: taskfactory.createTasks(selectedTasks),
-        rundata: { env: env }
+        rundata: { me: env }
       });
 
       // enqueue task  

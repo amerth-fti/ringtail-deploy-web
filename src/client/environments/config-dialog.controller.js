@@ -22,8 +22,13 @@
     }
 
     function save() {
-      vm.environment.config = JSON.parse(vm.environment.config);
-      $modalInstance.close();
+      try 
+      {
+        vm.environment.config = JSON.parse(vm.environment.config);
+        $modalInstance.close();
+      }
+      catch (ex) {        
+      }
     }
 
     function cancel() {
