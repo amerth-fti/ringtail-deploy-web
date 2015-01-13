@@ -18,7 +18,7 @@
 
     <div class="row" ng-show="vm.environment.deployedUntil">
       <div class="col-md-2"><strong>Requested until:</strong></div>
-      <div class="col-md-10">{{vm.environment.deployedUntil | fromDateString | date: 'MMMM dd, yyyy hh:mma (LOCAL)' }}</div>
+      <div class="col-md-10">{{vm.environment.deployedUntil | fromDateString | date: 'EEE, MMM dd, hh:mma (LOCAL)' }}</div>
     </div>
 
     <div class="row" ng-show="vm.environment.deployedNotes">
@@ -28,7 +28,7 @@
 
     <div class="row top-buffer" ng-show="vm.environment.deployedOn">
       <div class="col-md-2"><strong>Build installed:</strong></div>
-      <div class="col-md-10">{{vm.environment.deployment.date | date:'MMMM d'}}</div>        
+      <div class="col-md-10">{{vm.environment.deployedOn | fromDateString | date: 'EEE, MMM dd, hh:mma (LOCAL)'}}</div>        
     </div>
 
     <div class="row" ng-show="vm.environment.deployment.deployedBranch">

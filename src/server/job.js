@@ -1,5 +1,6 @@
-var debug = require('debug')('deployer')
-  , Q = require('q');
+var debug       = require('debug')('deployer')
+  , Q           = require('q')
+  , envService  = require('./services/envService');
 
 function Job(params) {  
   this.id = 0;
@@ -9,6 +10,7 @@ function Job(params) {
   this.name = null;
   this.tasks = [];
   this.rundata =  { };  
+  this.env = null;
 
   for(var key in params) {
     if(params.hasOwnProperty(key)) {
@@ -24,8 +26,9 @@ Job.prototype.start = function start() {
 
   /* jshint es5:false */
   /* jshint newcap:false */
-  var chain = Q(0)
-    , job = this;
+  var chain = Q(0)  
+    , job = this
+    , env = this.env;
 
   // initialize the job data
   this.status = 'Pending';  
@@ -34,6 +37,13 @@ Job.prototype.start = function start() {
   // start job on next tick
   process.nextTick(function() {
     job.status = 'Running';
+
+    // mark environment as starting
+    chain.then(function() {
+      env.status = 'deploying';
+      env.deployedJobId = job.id;      
+      return envService.update(env);      
+    });
     
     // create task chain    
     job.tasks.forEach(function(task) {    
@@ -48,6 +58,13 @@ Job.prototype.start = function start() {
     chain.then(function() {      
       job.status = 'Succeeded';
       job.stopped = new Date();
+    });
+
+    // mark environment as deployed
+    chain.then(function() {
+      env.deployedOn = new Date().toUTCString();
+      env.status = 'deployed';
+      return envService.update(env);
     })
 
     // mark as failed
