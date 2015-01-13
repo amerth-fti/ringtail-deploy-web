@@ -20,7 +20,7 @@ function TaskImplementation(options) {
     if(template_id === 'newest') {        
       return getNewestTemplate(project_id, scope, log);
     } else {
-      throw new Error('Find by id not implement');
+      return getTemplateById(template_id, scope, log);
     }    
 
   };
@@ -44,6 +44,18 @@ function getNewestTemplate(project_id, scope, log) {
 
       log('found newest template %s', result.id);
       return result;
+    });
+  });
+}
+
+function getTemplateById(template_id, scope, log) {
+  return Q.fcall(function() {
+    log('finding template %s', template_id);
+
+    return skytap.templates.get({ template_id: template_id})
+    .then(function(template) {
+      log('found template %s', template.id);
+      return template;
     });
   });
 }
