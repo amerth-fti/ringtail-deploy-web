@@ -14,7 +14,7 @@
     "hops-model": "^0.3.0",
     "hops-sqlite": "^0.1.0",
     "migrate": "^0.2.0",
-    "node-skytap": "^0.1.0",
+    "node-skytap": "^0.2.0",
     "q": "^1.0.1",
     "request": "^2.51.0",
     "serve-static": "^1.7.1",
