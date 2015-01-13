@@ -29,5 +29,14 @@ exports.update = function update(data, next) {
     .then(function() {
       return machineMapper.update(machine);      
     })
+    .then(function() {
+      return machine;
+    })
+    .nodeify(next);
+};
+
+exports.get = function get(machineId, next) {
+  return machineMapper
+    .findById(machineId)
     .nodeify(next);
 };

@@ -15,17 +15,16 @@ function TaskImpl(options) {
   this.execute = function execute(scope, log) {  
     
     var branch = this.getData(scope, 'branch')
-      , installer = this.getData(scope, 'installer')
-      , vm = this.getData(scope, 'vm');
+      , config = this.getData(scope, 'config')
+      , serviceIP = this.getData(scope, 'serviceIP');
 
     return Q.fcall(function() {
       log('start installation');
                       
-      var ip_address = vm.interfaces[0].nat_addresses.vpn_nat_addresses[0].ip_address
-        , installUrl = 'http://' + ip_address + ':8080/api/installer'
-        , statusUrl  = 'http://' + ip_address + ':8080/api/status'
-        , updateUrl  = 'http://' + ip_address + ':8080/api/UpdateInstallerService'
-        , configUrl  = 'http://' + ip_address + ':8080/api/config';
+      var installUrl = 'http://' + serviceIP + ':8080/api/installer'
+        , statusUrl  = 'http://' + serviceIP + ':8080/api/status'
+        , updateUrl  = 'http://' + serviceIP + ':8080/api/UpdateInstallerService'
+        , configUrl  = 'http://' + serviceIP + ':8080/api/config';
 
       log('will use: %s', installUrl);
       log('will use: %s', statusUrl);
@@ -92,7 +91,7 @@ function TaskImpl(options) {
       .then(function() {
         log('configure install service');
 
-        var keys = _.keys(installer);
+        var keys = _.keys(config);
 
         // update the branch config
         return Q.fcall(function() {        
@@ -116,7 +115,7 @@ function TaskImpl(options) {
           var funcs = keys.map(function(key) {
             return function() {
               var deferred = new Q.defer()
-                , value = installer[key]
+                , value = config[key]
                 , url;
               
               url = configUrl + '?key=' + key + '&value=' + value;

@@ -5,22 +5,22 @@ var util    = require('util')
   , config  = require('../../../config')
   , Skytap  = require('node-skytap')
   , skytap  = Skytap.init(config.skytap)
-  , Task    = require('./task');
+  , Task    = require('./task')
+  , machineSvc = require('../services/machineService');
 
 
 function TaskImpl(options) {  
   this.name = 'Ringtail Info';  
-  Task.call(this, options);  
+  Task.call(this, options);
 
   this.execute = function execute(scope, log) {  
-    var env = this.getData(scope, 'env');    
-    return Q.fcall(function() {
-      log('retrieving installed builds for %s', env.id);        
+    var serviceIP = this.getData(scope, 'serviceIP')
+      , machineId = this.getData(scope, 'machineId');
 
-      var vm = env.vms[0]
-        , ip_address = vm.interfaces[0].nat_addresses.vpn_nat_addresses[0].ip_address        
-        , url  = 'http://' + ip_address + ':8080/api/installedBuilds';
-  
+    return Q.fcall(function() {
+      log('retrieving installed builds for %s', serviceIP);        
+
+      var url  = 'http://' + serviceIP + ':8080/api/installedBuilds';  
       log('will use: %s', url);
 
       return Q.fcall(function() {
@@ -40,7 +40,7 @@ function TaskImpl(options) {
     })
 
     .then(function(body) {
-      log('found installed builds for %s', env.id);
+      log('found installed builds for %s', serviceIP);
       var result = body.replace(/"/g, '');
       result = result.replace(/<p\>/g, '');
       result = result.replace(/<\/p\>/g, '\n');
@@ -48,7 +48,11 @@ function TaskImpl(options) {
       result.splice(result.length - 1); // remove empty string at end
       log(result);
       return result;
-    });
+    })
+
+    .then(function(data) {
+
+    })
 
   };
 }
