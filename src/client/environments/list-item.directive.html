@@ -31,9 +31,9 @@
       <div class="col-md-10">{{vm.environment.deployedOn | fromDateString | date: 'EEE, MMM dd, hh:mma (LOCAL)'}}</div>        
     </div>
 
-    <div class="row" ng-show="vm.environment.deployment.deployedBranch">
+    <div class="row" ng-show="vm.environment.deployedBranch">
       <div class="col-md-2"><strong>Branch:</strong></div>
-      <div class="col-md-10">{{vm.environment.deployment.branch}}</div>        
+      <div class="col-md-10">{{vm.environment.deployedBranch}}</div>        
     </div>
 
     <div class="row" ng-show="vm.environment.ringtail">
