@@ -5,7 +5,9 @@ var util    = require('util')
   , config  = require('../../../config')
   , Skytap  = require('node-skytap')
   , skytap  = Skytap.init(config.skytap)
-  , Task    = require('./task');
+  , Task    = require('./task')
+  , machineSvc = require('../services/machineService')
+  ;
 
 
 function TaskImpl(options) {  
@@ -16,20 +18,26 @@ function TaskImpl(options) {
     
     var branch = this.getData(scope, 'branch')
       , config = this.getData(scope, 'config')
-      , serviceIP = this.getData(scope, 'serviceIP');
+      , machine = this.getData(scope, 'machine')
+      , serviceIP = machine.intIP
+      ;
+
 
     return Q.fcall(function() {
       log('start installation');
                       
-      var installUrl = 'http://' + serviceIP + ':8080/api/installer'
-        , statusUrl  = 'http://' + serviceIP + ':8080/api/status'
-        , updateUrl  = 'http://' + serviceIP + ':8080/api/UpdateInstallerService'
-        , configUrl  = 'http://' + serviceIP + ':8080/api/config';
+      var installUrl    = 'http://' + serviceIP + ':8080/api/installer'
+        , statusUrl     = 'http://' + serviceIP + ':8080/api/status'
+        , updateUrl     = 'http://' + serviceIP + ':8080/api/UpdateInstallerService'
+        , configUrl     = 'http://' + serviceIP + ':8080/api/config'
+        , installedUrl  = 'http://' + serviceIP + ':8080/api/installedBuilds'
+        ;  
 
       log('will use: %s', installUrl);
       log('will use: %s', statusUrl);
       log('will use: %s', updateUrl);
       log('will use: %s', configUrl);
+      log('will use: %s', installedUrl);
 
       return Q.fcall(function() {
 
@@ -173,11 +181,47 @@ function TaskImpl(options) {
         return deferred.promise;
       })
 
+      // update machine install notes
+      .then(function() {
+        
+        return Q.fcall(function() {
+          log('retrieving install info for %s', serviceIP);
+          var deferred = Q.defer();        
+          request({ url: installedUrl, timeout: 15000 }, function(err, response, body) {
+            if(err) log(err);
+
+            if(err) deferred.reject(err);
+            else deferred.resolve(body);              
+          });      
+          return deferred.promise;
+        })
+
+        .then(function(body) {
+          log('found installed builds for %s', serviceIP);
+          var result = body.replace(/"/g, '');
+          result = result.replace(/<p\>/g, '');
+          result = result.replace(/<\/p\>/g, '\n');
+          result = result.split('\n');
+          result.splice(result.length - 1); // remove empty string at end
+          log(result);
+          return result;
+        })
+
+        .then(function(data) {
+          machine.installNotes = data;
+          machineSvc.update(machine);
+          return machine;
+        });
+
+      })
+
       // signal completion for installation
       .then(function() {
         log('installations complete');
       });
+
     });
+
   };
 }
 

@@ -76,3 +76,14 @@ exports.skytap = function (configuration_id, next) {
     .nodeify(next);
 };
   
+
+exports.skytapVM = function skytapVM(envId, vm, next) {
+  var data = {
+    envId: envId,
+    machineName: vm.name,
+    remoteId: vm.id,
+    intIP: vm.interfaces[0].nat_addresses.vpn_nat_addresses[0].ip_address
+  };
+
+  return machineService.create(data);
+};

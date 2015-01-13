@@ -9,7 +9,7 @@ update machine set
 where machineId = $machineId;
 
 -- delete
-delete machine
+delete from machine
 where machineId = $machineId;
 
 -- findAll

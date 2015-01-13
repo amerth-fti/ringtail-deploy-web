@@ -43,9 +43,6 @@ app.put ('/api/envs/:envId/pause', controllers.envs.pause);
 app.put ('/api/envs/:envId/redeploy', controllers.envs.redeploy);
 app.put ('/api/envs/:envId/reset', controllers.envs.reset);
 
-// API - IMPORT ROUTES
-app.post('/api/imports/skytap', controllers.imports.skytap);
-
 
 // API - TASK ROUTES
 app.get ('/api/jobs', controllers.jobs.list);
