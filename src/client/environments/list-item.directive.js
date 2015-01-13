@@ -25,6 +25,7 @@
     vm.environment  = $scope.environment; 
     vm.showStart    = false;
     vm.showPause    = false;
+    vm.showBuildNotes = false;
     vm.status       = null;
     vm.show         = false;
     vm.configure    = configure;
@@ -45,7 +46,10 @@
       vm.showPause      = runstate === 'running';
       vm.showInitialize = environment.status === 'initialize';
       vm.showButtons    = environment.status === 'deployed';
-      vm.showDeployLink  = environment.status === 'deploying';
+      vm.showDeployLink = environment.status === 'deploying';
+      vm.showBuildNotes = environment.machines
+        .map(function(m) { return !!m.installNotes; })
+        .reduce(function(prev, cur) { return prev && cur }, true);
       
       pollWhileBusy(environment);
     }

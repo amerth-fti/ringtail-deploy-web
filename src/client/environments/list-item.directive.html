@@ -26,22 +26,24 @@
       <div class="col-md-10" ng-bind-html="vm.environment.deployedNotes | newlines | anchors | trust"></div>
     </div>
 
-    <div class="row" ng-show="vm.environment.deployedBranch">
+    <div class="row top-buffer" ng-show="vm.environment.deployedBranch">
       <div class="col-md-2"><strong>Branch:</strong></div>
       <div class="col-md-10">{{vm.environment.deployedBranch}}</div>        
     </div>
 
-    <div class="row top-buffer" ng-show="vm.environment.deployedOn">
+    <div class="row" ng-show="vm.environment.deployedOn">
       <div class="col-md-2"><strong>Build installed:</strong></div>
       <div class="col-md-10">{{vm.environment.deployedOn | fromDateString | date: 'EEE, MMM dd, hh:mma (LOCAL)'}}</div>        
     </div>
 
-    <div class="row">
+    <div class="row" ng-show="vm.showBuildNotes">
       <div class="col-md-2"><strong>Builds:</strong></div>
       <div class="col-md-10">
         <div ng-repeat="machine in vm.environment.machines">
-          <em>{{machine.machineName}}</em>
-          <div ng-repeat="note in machine.installNotes">{{note}}</div>
+          <div ng-show="machine.installNotes">
+            {{machine.machineName}}
+            <div class="install-note" ng-repeat="note in machine.installNotes">{{note}}</div>
+          </div>
         </div>
       </div>
     </div>  

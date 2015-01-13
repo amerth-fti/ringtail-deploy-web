@@ -210,3 +210,7 @@ button {
   overflow: hidden;
   text-overflow: ellipsis;
 }
+
+.install-note {
+  padding-left: 15px;
+}
