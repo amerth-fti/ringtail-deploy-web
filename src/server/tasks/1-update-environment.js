@@ -27,27 +27,24 @@ function TaskImpl(options) {
 
     // update machine references
     .then(function() {
-      var deletePromises
-        , addPromises
-        ;
+      var promises;
 
-      deletePromises = env.machines.map(function(machine) {
-        return machineSvc.del(machine.machineId);
-      });
+      if(env.machines.length !== skytapEnv.vms.length) {
+        throw new Error('Skytap machines do not map correctly to environment machines');
+      }
 
-      addPromises = skytapEnv.vms.map(function(vm) {
-        return importSvc.skytapVM(env.envId, vm);
+      promises = env.machines.map(function(machine, idx) {
+        var vm = skytapEnv.vms[idx];
+        machine.remoteId = vm.id;
+        machine.intIP = vm.interfaces[0].nat_addresses.vpn_nat_addresses[0].ip_address;
+        machine.installNotes = null;
+        return machineSvc.update(machine);
       });
 
       return Q
-        .fcall(function() {
-          return Q.all(deletePromises);
-        })
-        .then(function(){
-          return Q.all(addPromises);
-        })
+        .all(promises)
         .then(function(machines) {
-          log('added machines %j', machines);
+          log('updated machines %j', machines);
           env.machines = machines;
           return env;
         });
