@@ -209,8 +209,7 @@ function TaskImpl(options) {
 
         .then(function(data) {
           machine.installNotes = data;
-          machineSvc.update(machine);
-          return machine;
+          return machineSvc.update(machine);
         });
 
       })

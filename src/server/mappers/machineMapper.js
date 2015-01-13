@@ -16,14 +16,14 @@ util.inherits(MachineMapper, SqliteMapper);
 module.exports = MachineMapper;
 
 MachineMapper.prototype.parse = function parse(record) {
-  return new Machine(record);
+  var result = new Machine(record);
+  console.log(result.installNotes);
+  result.installNotes = result.installNotes ? JSON.parse(result.installNotes) : null;
+  return result;
 };
 
 MachineMapper.prototype.parseArray = function parseArray(array) {
-  var self = this;
-  return array.map(function(record) {
-    return new Machine(record);
-  });
+  return array.map(this.parse.bind(this));
 };
 
 
@@ -40,7 +40,7 @@ MachineMapper.prototype.insert = function insert(machine, next) {
     $intIP: machine.intIP,
     $extIP: machine.extIP,
     $role: machine.role,
-    $installNotes: machine.installNotes,
+    $installNotes: machine.installNotes ? JSON.stringify(machine.installNotes, null, 2) : null,
     $registryNotes: machine.registryNotes
   };
 
@@ -48,7 +48,7 @@ MachineMapper.prototype.insert = function insert(machine, next) {
 };
 
 MachineMapper.prototype.update = function update(machine, next) {
-var sql = machineSql.update
+  var sql = machineSql.update
     , params
     ;
 
@@ -61,7 +61,7 @@ var sql = machineSql.update
     $intIP: machine.intIP,
     $extIP: machine.extIP,
     $role: machine.role,
-    $installNotes: machine.installNotes,
+    $installNotes: machine.installNotes ? JSON.stringify(machine.installNotes, null, 2) : null,
     $registryNotes: machine.registryNotes
   };
 
@@ -93,7 +93,7 @@ MachineMapper.prototype.findAll = function findAll(paging, next) {
 
   return this
     .all(sql, params)
-    .then(this.parseArray)
+    .then(this.parseArray.bind(this))
     .nodeify(next);
 };
 
@@ -108,7 +108,7 @@ MachineMapper.prototype.findByEnv = function findByEnv(envId, next) {
 
   return this
     .all(sql, params)
-    .then(this.parseArray)
+    .then(this.parseArray.bind(this))
     .nodeify(next);
 };
 
@@ -124,6 +124,6 @@ MachineMapper.prototype.findById = function findById(machineId, next) {
 
   return this
     .get(sql, params)
-    .then(this.parse)
+    .then(this.parse.bind(this))
     .nodeify(next);
 };
