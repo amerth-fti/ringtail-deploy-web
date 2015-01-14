@@ -30,6 +30,7 @@ exports.redeploy = function redeploy(data, next) {
 
       // enqueue task  
       jobId = jobrunner.add(job);
+      env.deployedJobId = jobId;
     })      
     .then(function() {
       // start the job
