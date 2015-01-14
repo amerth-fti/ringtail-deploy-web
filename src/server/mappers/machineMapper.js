@@ -16,8 +16,7 @@ util.inherits(MachineMapper, SqliteMapper);
 module.exports = MachineMapper;
 
 MachineMapper.prototype.parse = function parse(record) {
-  var result = new Machine(record);
-  console.log(result.installNotes);
+  var result = new Machine(record);  
   result.installNotes = result.installNotes ? JSON.parse(result.installNotes) : null;
   return result;
 };
