@@ -49,7 +49,7 @@
       vm.showDeployLink = environment.status === 'deploying';
       vm.showBuildNotes = environment.machines
         .map(function(m) { return !!m.installNotes; })
-        .reduce(function(prev, cur) { return prev && cur; }, true);
+        .reduce(function(prev, cur) { return prev || cur; }, false);
       
       pollWhileBusy(environment);
     }
