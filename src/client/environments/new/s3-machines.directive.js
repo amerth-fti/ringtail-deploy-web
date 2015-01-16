@@ -16,18 +16,15 @@
       },
       templateUrl: 'client/environments/new/s3-machines.html',
       controller: NewEnvironmentMachinesController,
-      controllerAs: 'vm'
+      controllerAs: 'vm',
+      bindToController: true
     };
   }
   
-  NewEnvironmentMachinesController.$inject = [ '$scope', 'MachineEditor' ];
+  NewEnvironmentMachinesController.$inject = [ 'MachineEditor' ];
   
-  function NewEnvironmentMachinesController($scope, MachineEditor) {
+  function NewEnvironmentMachinesController(MachineEditor) {
     var vm = this;
-    vm.cancel       = $scope.cancel;
-    vm.create       = $scope.create;
-    vm.environment  = $scope.environment;
-    vm.wizard       = $scope.wizard;
     vm.roles        = null;
     vm.addMachine   = addMachine;
     vm.editMachine  = editMachine;
@@ -40,9 +37,6 @@
     
     function activate() {
       vm.machine = {};
-      $scope.$watch('environment', function(value) {
-        vm.environment = value;
-      });
     }
 
     function addMachine() {

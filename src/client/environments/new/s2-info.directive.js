@@ -15,17 +15,15 @@
       },
       templateUrl: 'client/environments/new/s2-info.html',
       controller: NewEnvironmentInfoController,
-      controllerAs: 'vm'
+      controllerAs: 'vm',
+      bindToController: true
     };
   }
   
-  NewEnvironmentInfoController.$inject = [ '$scope' ];
+  NewEnvironmentInfoController.$inject = [ ];
   
-  function NewEnvironmentInfoController($scope) {
+  function NewEnvironmentInfoController() {
     var vm = this;
-    vm.cancel       = $scope.cancel;
-    vm.environment  = null;
-    vm.wizard       = $scope.wizard;
     vm.next         = next;
     vm.prev         = prev;
     
@@ -34,9 +32,6 @@
     //////////
     
     function activate() {
-      $scope.$watch('environment', function(value) {
-        vm.environment = value;
-      });
     }
 
     function next() {

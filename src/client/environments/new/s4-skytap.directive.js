@@ -16,18 +16,15 @@
       },
       templateUrl: 'client/environments/new/s4-skytap.html',
       controller: NewEnvironmentSkytapController,
-      controllerAs: 'vm'
+      controllerAs: 'vm',
+      bindToController: true
     };
   }
   
-  NewEnvironmentSkytapController.$inject = [ '$scope', 'SkytapEnvironment', 'environmentFactory' ];
+  NewEnvironmentSkytapController.$inject = [ 'SkytapEnvironment', 'environmentFactory' ];
   
-  function NewEnvironmentSkytapController($scope, SkytapEnvironment, environmentFactory) {
+  function NewEnvironmentSkytapController(SkytapEnvironment, environmentFactory) {
     var vm = this;
-    vm.cancel       = $scope.cancel;
-    vm.create       = $scope.create;
-    vm.wizard       = $scope.wizard;
-
     vm.pageData     = null;
     vm.currentPage  = 1;
     vm.environments = null;      
@@ -58,7 +55,7 @@
       SkytapEnvironment.get({ id: vm.selected.id })
         .$promise
         .then(function(env) {
-          $scope.$parent.vm.environment = environmentFactory.fromSkytap(env);
+          vm.environment = environmentFactory.fromSkytap(env);
           vm.wizard.stage = 'info';
         });      
     }

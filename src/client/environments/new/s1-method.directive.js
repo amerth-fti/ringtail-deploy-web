@@ -15,16 +15,15 @@
       },
       templateUrl: 'client/environments/new/s1-method.html',
       controller: NewEnvironmentMethodController,
-      controllerAs: 'vm'
+      controllerAs: 'vm',
+      bindToController: true
     };
   }
   
-  NewEnvironmentMethodController.$inject = [ '$scope', 'Environment' ];
+  NewEnvironmentMethodController.$inject = [ 'Environment' ];
   
-  function NewEnvironmentMethodController($scope, Environment ) {
+  function NewEnvironmentMethodController(Environment ) {
     var vm = this;
-    vm.cancel       = $scope.cancel;
-    vm.wizard       = $scope.wizard;    
     vm.selectLocal  = selectLocal;
     vm.selectSkytap = selectSkytap;
     
@@ -36,14 +35,14 @@
     }
 
     function selectLocal() {
-      $scope.environment = new Environment();
-      $scope.environment.remoteType = null;
+      vm.environment = new Environment();
+      vm.environment.remoteType = null;
       vm.wizard.stage = 'info';      
     }
 
     function selectSkytap() {
-      $scope.environment = new Environment();
-      $scope.environment.remoteType = 'skytap';
+      vm.environment = new Environment();
+      vm.environment.remoteType = 'skytap';
       vm.wizard.stage = 'skytap';
     }
   }
