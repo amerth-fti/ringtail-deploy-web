@@ -10,7 +10,6 @@
       restrict: 'E',
       scope: {
         cancel: '=',
-        create: '=',
         environment: '=',
         wizard: '='
       },
@@ -24,12 +23,13 @@
   NewEnvironmentMachinesController.$inject = [ 'MachineEditor' ];
   
   function NewEnvironmentMachinesController(MachineEditor) {
-    var vm = this;
-    vm.roles        = null;
-    vm.addMachine   = addMachine;
-    vm.editMachine  = editMachine;
-    vm.prev         = prev;
-    vm.removeMachine = removeMachine;
+    var vm            = this;
+    vm.roles          = null;
+    vm.addMachine     = addMachine;
+    vm.editMachine    = editMachine;
+    vm.next           = next;
+    vm.prev           = prev;
+    vm.removeMachine  = removeMachine;
     
     activate();
     
@@ -58,13 +58,17 @@
       MachineEditor.open(machine, opts);
     }
 
-    function removeMachine(machine) {
-      var index = vm.environment.machines.indexOf(machine);
-      vm.environment.machines.splice(index, 1);
+    function next() {
+      vm.wizard.stage = 'config';
     }
 
     function prev() {
       vm.wizard.stage = 'info';
+    }
+
+    function removeMachine(machine) {
+      var index = vm.environment.machines.indexOf(machine);
+      vm.environment.machines.splice(index, 1);
     }
   }
   

@@ -10,11 +10,10 @@
       restrict: 'E',
       scope: {
         cancel: '=',
-        create: '=',
         environment: '=',
         wizard: '=',
       },
-      templateUrl: 'client/environments/new/s4-skytap.html',
+      templateUrl: 'client/environments/new/s5-skytap.html',
       controller: NewEnvironmentSkytapController,
       controllerAs: 'vm',
       bindToController: true

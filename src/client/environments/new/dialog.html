@@ -28,10 +28,18 @@
   environment="vm.environment"  
   wizard="vm.wizard" 
   cancel="vm.cancel"
-  create="vm.create"
   >
 </envwizard-machines>
 
+
+<envwizard-config 
+  ng-show="vm.wizard.stage === 'config'"
+  environment="vm.environment" 
+  wizard="vm.wizard"
+  cancel="vm.cancel"
+  create="vm.create"
+  >
+</envwizard-config>
 
 <envwizard-skytap 
   ng-show="vm.wizard.stage === 'skytap'"
