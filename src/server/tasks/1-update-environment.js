@@ -13,9 +13,12 @@ function TaskImpl(options) {
   this.name = 'Update environment';  
   Task.call(this, options);
 
+  this.validators.required.push('skytapEnv');
+  this.validators.required.push('env');
+
   this.execute = function execute(scope, log) {  
     var skytapEnv = this.getData(scope, 'skytapEnv')
-      , env = this.getData(scope, 'env')
+      , env       = this.getData(scope, 'env')
       , key;
     
     // update env level items    

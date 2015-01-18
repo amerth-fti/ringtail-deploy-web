@@ -11,6 +11,8 @@ function TaskImpl(options) {
   this.name = 'Wait';  
   Task.call(this, options);  
 
+  this.validators.required.push('seconds');
+
   this.execute = function execute(scope, log) {  
     var deferred = Q.defer()
       , seconds = this.getData(scope, 'seconds');

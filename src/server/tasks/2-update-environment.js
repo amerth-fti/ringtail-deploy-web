@@ -11,7 +11,9 @@ var util    = require('util')
 
 function TaskImplementation(options) {  
   this.name = 'Update environment data';
-  Task.call(this, options);    
+  Task.call(this, options);   
+
+  this.validators.required.push('configuration_id'); 
 
   this.execute = function execute(scope, log) {  
     var configuration_id = this.getData(scope, 'configuration_id')      

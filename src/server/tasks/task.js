@@ -14,6 +14,9 @@ function Task(options) {
   this.runlog = [];
   this.err = null;
   this.data = {};
+  this.validators = {
+    required: []
+  };
 
   // apply options
   if(options) {
@@ -102,6 +105,13 @@ Task.prototype.getData = function getData(scope, key, expand) {
   }
 };
 
+Task.prototype.validate = function validate() {
+  var results = [];
+  results = results.concat(validateRequired(this.validators.required, this.data));
+
+  return results.length > 0 ? results : null;
+};
+
 function getDataFromObject(scope, obj, key) {    
   
   try
@@ -127,4 +137,16 @@ function getDataFromObject(scope, obj, key) {
   catch (ex) {    
     return obj[key];
   }
+}
+
+function validateRequired(required, data) {
+  var results = [];
+
+  required.forEach(function(item) {
+    if(data[item] === undefined) {
+      results.push({ field: item, message: 'Value is required', type: 'required' });
+    }
+  }); 
+
+  return results;
 }

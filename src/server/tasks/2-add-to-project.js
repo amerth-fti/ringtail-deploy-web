@@ -10,6 +10,9 @@ var util    = require('util')
 function TaskImpl(options) {  
   this.name = 'Add to project';  
   Task.call(this, options);
+
+  this.validators.required.push('project_id');
+  this.validators.required.push('configuration_id');
   
   this.execute = function execute(scope, log) {      
     var project_id = this.getData(scope, 'project_id')

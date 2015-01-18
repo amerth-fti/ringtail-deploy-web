@@ -11,6 +11,9 @@ function TaskImpl(options) {
   this.name = 'Attach public IPs';
   Task.call(this, options);
 
+  this.validators.required.push('env');
+  this.validators.required.push('ips');
+
   this.execute = function execute(scope, log) {  
     var env = this.getData(scope, 'env')
       , ips = this.getData(scope, 'ips');

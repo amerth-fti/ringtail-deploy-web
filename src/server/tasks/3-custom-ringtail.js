@@ -14,6 +14,10 @@ function TaskImpl(options) {
   this.name = 'Install Ringtail';  
   Task.call(this, options);  
 
+  this.validators.required.push('branch');
+  this.validators.required.push('config');
+  this.validators.required.push('machine');
+
   this.execute = function execute(scope, log) {  
     
     var branch = this.getData(scope, 'branch')

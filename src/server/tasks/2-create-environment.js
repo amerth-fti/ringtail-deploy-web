@@ -11,6 +11,8 @@ function TaskImpl(options) {
   this.name = 'Create environment';  
   Task.call(this, options);
 
+  this.validators.required.push('template_id');
+
   this.execute = function execute(scope, log) {  
     var template_id = this.getData(scope, 'template_id')
       , deployment = scope.deployment;

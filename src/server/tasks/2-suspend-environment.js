@@ -13,6 +13,8 @@ function TaskImplementation(options) {
   this.name = 'Suspend environment';
   Task.call(this, options);  
 
+  this.validators.required.push('configuration_id');
+
   this.execute = function execute(scope, log) {  
     var configuration_id = this.getData(scope, 'configuration_id');
 

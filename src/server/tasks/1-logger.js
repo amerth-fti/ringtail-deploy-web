@@ -9,8 +9,10 @@ var util    = require('util')
 
 function TaskImpl(options) {  
   this.name = 'Log';  
-  Task.call(this, options);  
+  Task.call(this, options);
 
+  this.validators.required.push('message');
+  
   this.execute = function execute(scope, log) {  
     var message = this.getData(scope, 'message');
         
