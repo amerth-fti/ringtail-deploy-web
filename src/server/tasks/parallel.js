@@ -1,9 +1,5 @@
 var util        = require('util')  
-  , Q           = require('Q')
-  , _           = require('underscore')
-  , config      = require('../../../config')
-  , Skytap      = require('node-skytap')
-  , skytap      = Skytap.init(config.skytap)
+  , Q           = require('Q')  
   , taskfactory = require('../taskfactory')
   , Task        = require('./task');
 
