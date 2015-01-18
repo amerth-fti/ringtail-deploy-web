@@ -21,9 +21,9 @@
     };
   }
   
-  DirectiveController.$inject = [ 'SkytapEnvironment', 'environmentFactory' ];
+  DirectiveController.$inject = [ '$scope', 'taskdefFactory' ];
   
-  function DirectiveController() {
+  function DirectiveController($scope, taskdefFactory) {
     var vm            = this;
     vm.config         = null;
     vm.configChanged  = configChanged;   
@@ -35,7 +35,14 @@
     //////////
     
     function activate() {
-      vm.config = JSON.stringify(vm.environment.config, null, 2);
+      $scope.$watch('vm.wizard.stage', function(stage) {
+        if(stage === 'config') {
+          if(!vm.environment.config) {
+            vm.environment.config = taskdefFactory.create(vm.environment);
+          }
+          vm.config = JSON.stringify(vm.environment.config, null, 2);
+        }
+      });
     }
 
     function configChanged() {
