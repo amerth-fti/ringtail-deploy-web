@@ -12,6 +12,7 @@ schema = {
     { "name": "updated" },
     { "name": "envName", "required": true },
     { "name": "envDesc" },
+    { "name": "host" },
     { "name": "status", "required": true, "default": "deployed" }, 
     { "name": "remoteType", "required": true },
     { "name": "remoteId" },

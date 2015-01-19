@@ -12,7 +12,8 @@ CREATE TABLE env (
   deployedUntil TIMESTAMP,
   deployedNotes TEXT,
   deployedBranch NVARCHAR(255),
-  deployedJobId INTEGER
+  deployedJobId INTEGER,
+  host NVARCHAR(255)
 );
 
 
@@ -40,3 +41,8 @@ DROP TABLE machine;
 
 -- dropConfig
 DROP TABLE config;
+
+
+-- addHostToEnv
+ALTER TABLE env
+ADD COLUMN host varchar(255);
