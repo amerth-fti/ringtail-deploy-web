@@ -2,9 +2,6 @@ var util    = require('util')
   , Q       = require('Q')
   , _       = require('underscore')
   , request = require('request')
-  , config  = require('../../../config')
-  , Skytap  = require('node-skytap')
-  , skytap  = Skytap.init(config.skytap)
   , Task    = require('./task')
   , machineSvc = require('../services/machineService')
   ;
@@ -12,6 +9,8 @@ var util    = require('util')
 
 function TaskImpl(options) {  
   this.name = 'Install Ringtail';  
+  this.pollInterval = 15000;
+  this.installInterval = 60000;
   Task.call(this, options);  
 
   this.validators.required.push('branch');
@@ -24,6 +23,8 @@ function TaskImpl(options) {
       , config = this.getData(scope, 'config')
       , machine = this.getData(scope, 'machine')
       , serviceIP = machine.intIP
+      , pollInterval = this.pollInterval
+      , installInterval = this.installInterval
       ;
 
 
@@ -35,7 +36,7 @@ function TaskImpl(options) {
         , updateUrl     = 'http://' + serviceIP + ':8080/api/UpdateInstallerService'
         , configUrl     = 'http://' + serviceIP + ':8080/api/config'
         , installedUrl  = 'http://' + serviceIP + ':8080/api/installedBuilds'
-        ;  
+        ;
 
       log('will use: %s', installUrl);
       log('will use: %s', statusUrl);
@@ -48,8 +49,8 @@ function TaskImpl(options) {
         var deferred = Q.defer();
         var poll = function() {  
           log('waiting for install service');
-          setTimeout(function() {          
-            request({ url: statusUrl, timeout: 15000 }, function(err, response, body) {
+          setTimeout(function() {               
+            request.get({ url: statusUrl, timeout: 15000 }, function(err, response, body) {              
               log('%j %j', err, response);
               if(err || response.statusCode !== 200) {              
                 poll();              
@@ -57,7 +58,7 @@ function TaskImpl(options) {
                 deferred.resolve(body);
               }
             });
-          }, 15000);
+          }, pollInterval);
         };
         poll();
         return deferred.promise;
@@ -71,7 +72,7 @@ function TaskImpl(options) {
 
           // fire off update
           var deferred = Q.defer();
-          request(updateUrl, function() {
+          request.get(updateUrl, function() {
             deferred.resolve();
           });
           return deferred.promise;
@@ -83,7 +84,7 @@ function TaskImpl(options) {
           var poll = function() {
             log('waiting for install service to update');
             setTimeout(function() {
-              request({ url: statusUrl, timeout: 15000 }, function(err, response, body) {
+              request.get({ url: statusUrl, timeout: 15000 }, function(err, response, body) {
                 if(err || response.statusCode !== 200) {                
                   if(err) log(err);
                   poll();
@@ -91,7 +92,7 @@ function TaskImpl(options) {
                   deferred.resolve(body);
                 }
               });
-            }, 15000);
+            }, pollInterval);
           };
           poll();
           return deferred.promise;
@@ -112,7 +113,7 @@ function TaskImpl(options) {
           
           url = configUrl + '?key=Common|BRANCH_NAME&value=' + branch;
           log('configuring %s', url);
-          request(url, function(err) {
+          request.get(url, function(err) {
             if(err) deferred.reject(err);
             else deferred.resolve();
           });
@@ -132,7 +133,7 @@ function TaskImpl(options) {
               
               url = configUrl + '?key=' + key + '&value=' + value;
               log('configuring %s', url);
-              request(url, function(err) {
+              request.get(url, function(err) {
                 if(err) deferred.reject(err);
                 else deferred.resolve();
               });
@@ -152,7 +153,7 @@ function TaskImpl(options) {
         log('starting installation');
 
         // fire off the install    
-        request(installUrl);  
+        request.get(installUrl);  
       })
 
       // wait for installation to complete  
@@ -162,7 +163,7 @@ function TaskImpl(options) {
         var poll = function() {        
           log('waiting for install to complete');
           setTimeout(function() {          
-            request(statusUrl, function(err, response, body) {          
+            request.get(statusUrl, function(err, response, body) {          
               if(!err && response.statusCode === 200) {
 
                 // add logic for checking status
@@ -179,7 +180,7 @@ function TaskImpl(options) {
                   poll();
               }
             });
-          }, 60000);
+          }, installInterval);
         };
         poll();      
         return deferred.promise;
@@ -191,7 +192,7 @@ function TaskImpl(options) {
         return Q.fcall(function() {
           log('retrieving install info for %s', serviceIP);
           var deferred = Q.defer();        
-          request({ url: installedUrl, timeout: 15000 }, function(err, response, body) {
+          request.get({ url: installedUrl, timeout: 15000 }, function(err, response, body) {
             if(err) log(err);
 
             if(err) deferred.reject(err);
