@@ -13,7 +13,7 @@
         environment: '=',
         wizard: '='
       },
-      templateUrl: 'client/environments/new/s3-machines.html',
+      templateUrl: '/app/environments/new/s3-machines.html',
       controller: NewEnvironmentMachinesController,
       controllerAs: 'vm',
       bindToController: true

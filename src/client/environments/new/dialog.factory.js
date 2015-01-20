@@ -14,7 +14,7 @@
 
     function open(environment) {
       return $modal.open({
-        templateUrl: 'client/environments/new/dialog.html',
+        templateUrl: '/app/environments/new/dialog.html',
         controller: EnvironmentEditorController,
         controllerAs: 'vm',
         resolve: {

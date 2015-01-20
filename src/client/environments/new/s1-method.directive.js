@@ -13,7 +13,7 @@
         environment: '=',
         wizard: '='   
       },
-      templateUrl: 'client/environments/new/s1-method.html',
+      templateUrl: '/app/environments/new/s1-method.html',
       controller: NewEnvironmentMethodController,
       controllerAs: 'vm',
       bindToController: true

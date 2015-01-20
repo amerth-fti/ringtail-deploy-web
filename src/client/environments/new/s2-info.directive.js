@@ -13,7 +13,7 @@
         environment: '=',
         wizard: '='
       },
-      templateUrl: 'client/environments/new/s2-info.html',
+      templateUrl: '/app/environments/new/s2-info.html',
       controller: NewEnvironmentInfoController,
       controllerAs: 'vm',
       bindToController: true

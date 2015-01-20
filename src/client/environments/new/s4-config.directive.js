@@ -14,7 +14,7 @@
         environment: '=',
         wizard: '=',
       },
-      templateUrl: 'client/environments/new/s4-config.html',
+      templateUrl: '/app/environments/new/s4-config.html',
       controller: DirectiveController,
       controllerAs: 'vm',
       bindToController: true

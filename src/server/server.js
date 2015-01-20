@@ -14,14 +14,16 @@ app.use(bodyParser.json());
 
 
 // STATIC FILE ROUTES
-app.use('/client/assets/lib', serveStatic(__dirname + '/../client/assets/bower_components'));
-app.use('/client', serveStatic(__dirname + '/../client'));
+app.use('/app/assets/lib', serveStatic(__dirname + '/../client/assets/bower_components'));
+app.use('/app', serveStatic(__dirname + '/../client'));
 
 
 // DEFAULT ROUTE
-app.get('/', function(req, res) {
+function defaultRoute(req, res) {
   res.sendFile(path.resolve(__dirname +'/../client/index.html'));
-});
+}
+app.get('/', defaultRoute);
+app.get('/app/*', defaultRoute);
 
 
 

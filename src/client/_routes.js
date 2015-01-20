@@ -9,18 +9,18 @@
 
   function routes($routeProvider, config) {
     $routeProvider
-    .when('/environments', {
-      templateUrl: 'client/environments/list.html',
+    .when('/app/environments', {
+      templateUrl: '/app/environments/list.html',
       controller: 'EnvironmentListController',
       controllerAs: 'vm'
     })
-    .when('/jobs/:jobId', {
-      templateUrl: 'client/jobs/details.html',
+    .when('/app/jobs/:jobId', {
+      templateUrl: '/app/jobs/details.html',
       controller: 'JobDetailsController',
       controllerAs: 'vm'
     })
     .otherwise({
-      redirectTo: '/environments'
+      redirectTo: '/app/environments'
     });
   }
 

@@ -12,7 +12,7 @@
       scope: {
         task: '='
       },
-      templateUrl: 'client/jobs/task-details.directive.html',
+      templateUrl: '/app/jobs/task-details.directive.html',
       controller: 'TaskDetailsController',
       controllerAs: 'vm'
     };

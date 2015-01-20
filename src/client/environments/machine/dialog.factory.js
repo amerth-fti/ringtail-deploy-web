@@ -14,7 +14,7 @@
 
     function open(machine, opts) {
       return $modal.open({
-        templateUrl: 'client/environments/machine/dialog.html',
+        templateUrl: '/app/environments/machine/dialog.html',
         controller: MachineEditorController,
         controllerAs: 'vm',
         resolve: {

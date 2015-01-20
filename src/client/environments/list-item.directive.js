@@ -11,7 +11,7 @@
       scope: {
         environment: '='
       },
-      templateUrl: 'client/environments/list-item.directive.html',
+      templateUrl: '/app/environments/list-item.directive.html',
       controller: ListItemController,
       controllerAs: 'vm'
     };
@@ -64,7 +64,7 @@
 
     function start() {
       var modal = $modal.open({
-        templateUrl: 'client/environments/start-dialog.html',
+        templateUrl: '/app/environments/start-dialog.html',
         controller: 'EnvironmentStartController',
         controllerAs: 'vm',
         resolve: {
@@ -88,7 +88,7 @@
 
     function redeploy() {
       var modal = $modal.open({
-        templateUrl: 'client/environments/redeploy-dialog.html',
+        templateUrl: '/app/environments/redeploy-dialog.html',
         controller: 'EnvironmentRedeployController',
         controllerAs: 'vm',
         resolve: {
@@ -101,7 +101,7 @@
       modal.result.then(function() {
         vm.environment.$redeploy()
         .then(function(environment) {
-          var path = '/jobs/' + environment.deployedJobId;          
+          var path = '/app/jobs/' + environment.deployedJobId;          
           $location.path(path);
         });     
       });
@@ -114,7 +114,7 @@
     function configure() {      
       var modal = $modal.open({
         size: 'lg',
-        templateUrl: 'client/environments/config-dialog.html',
+        templateUrl: '/app/environments/config-dialog.html',
         controller: 'EnvironmentConfigController',
         controllerAs: 'vm',
         resolve: {

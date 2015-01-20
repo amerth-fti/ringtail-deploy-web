@@ -13,7 +13,7 @@
         environment: '=',
         wizard: '=',
       },
-      templateUrl: 'client/environments/new/s5-skytap.html',
+      templateUrl: 'app/environments/new/s5-skytap.html',
       controller: NewEnvironmentSkytapController,
       controllerAs: 'vm',
       bindToController: true

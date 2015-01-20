@@ -12,7 +12,7 @@
         machine: '=',
         editable: '=?'
       },
-      templateUrl: 'client/environments/machine/details.html',
+      templateUrl: '/app/environments/machine/details.html',
       controller: MachineDetailsController,
       controllerAs: 'vm'
     };

@@ -11,7 +11,7 @@
       scope: {
         environment: '='
       },
-      templateUrl: 'client/environments/deploy-info.directive.html',
+      templateUrl: '/app/environments/deploy-info.directive.html',
       controller: DeployInfoController,
       controllerAs: 'vm'
     };

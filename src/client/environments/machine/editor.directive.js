@@ -12,7 +12,7 @@
         machine: '=',
         remoteType: '='
       },
-      templateUrl: 'client/environments/machine/editor.html',
+      templateUrl: '/app/environments/machine/editor.html',
       controller: MachineEditorController,
       controllerAs: 'vm'
     };
