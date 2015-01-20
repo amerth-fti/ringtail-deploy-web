@@ -23,8 +23,11 @@
         , subtasks;
 
       taskdef = {
-        'name': 'parallel',
-        'taskdefs': null
+        'task': 'parallel',
+        'options': {
+          'name': 'Install Ringtail',
+          'taskdefs': null
+        }        
       };
 
       subtasks = environment.machines.map(function(machine, index) {
@@ -39,7 +42,7 @@
         }
       });
 
-      taskdef.taskdefs = subtasks;
+      taskdef.options.taskdefs = subtasks;
 
       return taskdef;
     }
@@ -50,19 +53,22 @@
 
       baseUrl = 'http://' + environment.host;
       taskdef = {
-        'name': '3-ringtail',
-        'data': {
-          'machine': 'scope.me.machines[' + index + ']',
-          'branch': 'scope.me.deployedBranch',
-          'config': {
-            'ROLE': machine.role,
-            'Common|RINGTAILUISTATICCONTENTURL': baseUrl + '/UIStatic',
-            'Common|RINGTAILSTSURL': baseUrl + '/RingtailSTS',
-            'Common|RINGTAILIISWEBAPPLICATIONURL': baseUrl + '/ringtail',
-            'Common|RINGTAILHELPURL': baseUrl + '/RingtailHelp',
-            'Common|RINGTAILCLASSICURL': baseUrl + '/classic',
-            'Common|RINGTAILLEGALURL': baseUrl + '/RTLC',
-            'Common|RMCIISWEBAPPLICATIONURL': baseUrl + '/RMC'
+        'task': '3-custom-ringtail',
+        'options': {
+          'name': machine.machineName || 'Machine ' + index,
+          'data': {
+            'machine': 'scope.me.machines[' + index + ']',
+            'branch': 'scope.me.deployedBranch',
+            'config': {
+              'ROLE': machine.role,
+              'Common|RINGTAILUISTATICCONTENTURL': baseUrl + '/UIStatic',
+              'Common|RINGTAILSTSURL': baseUrl + '/RingtailSTS',
+              'Common|RINGTAILIISWEBAPPLICATIONURL': baseUrl + '/ringtail',
+              'Common|RINGTAILHELPURL': baseUrl + '/RingtailHelp',
+              'Common|RINGTAILCLASSICURL': baseUrl + '/classic',
+              'Common|RINGTAILLEGALURL': baseUrl + '/RTLC',
+              'Common|RMCIISWEBAPPLICATIONURL': baseUrl + '/RMC'
+            }
           }
         }
       };
