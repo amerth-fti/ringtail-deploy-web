@@ -14,6 +14,7 @@
 
     function open(environment) {
       return $modal.open({
+        size: 'lg',
         templateUrl: '/app/environments/new/dialog.html',
         controller: EnvironmentEditorController,
         controllerAs: 'vm',
@@ -35,7 +36,24 @@
     vm.create       = create;
 
     vm.wizard       = {
-      stage: 'method'
+      stage: 'method',
+      stageInstance: null,
+      stages: [
+        { stage: 'method', name: 'Type', active: true },
+        { stage: 'skytap', name: 'Skytap', active: false },
+        { stage: 'info', name:'Information', active: false },
+        { stage: 'machines', name: 'Machines', active: false },
+        { stage: 'config', name: 'Configuration', active: false }
+      ],
+      next: function() {
+        
+      },
+      prev: function() {
+
+      },
+      goto: function(stage) {
+        
+      }
     };
     
     activate();

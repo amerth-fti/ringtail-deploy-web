@@ -3,48 +3,64 @@
   <h4 class="modal-title">New Environment Wizard</h4>
 </div>
 
-<p> 
 
-<envwizard-method 
-  ng-show="vm.wizard.stage === 'method'"
-  environment="vm.environment" 
-  wizard="vm.wizard" 
-  cancel="vm.cancel"
-  >
-</envwizard-method>
+<div class="row">
+  <div class="col-sm-3">
+    <div class="sidebar">
+      <ul class="nav nav-stacked nav-sidebar">
+        <li role="presentation" class="active"><a>Type</a></li>
+        <li role="presentation"><a>Information</a></li>
+        <li role="presentation"><a>Machines</a></li>
+        <li role="presentation"><a>Config</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="col-sm-9">
 
-
-<envwizard-info 
-  ng-show="vm.wizard.stage === 'info'"
-  environment="vm.environment" 
-  wizard="vm.wizard"  
-  cancel="vm.cancel"
-  >
-</envwizard-info>
-
-
-<envwizard-machines 
-  ng-show="vm.wizard.stage === 'machines'"
-  environment="vm.environment"  
-  wizard="vm.wizard" 
-  cancel="vm.cancel"
-  >
-</envwizard-machines>
+    <envwizard-method 
+      ng-show="vm.wizard.stage === 'method'"
+      environment="vm.environment" 
+      wizard="vm.wizard" 
+      cancel="vm.cancel"
+      >
+    </envwizard-method>
 
 
-<envwizard-config 
-  ng-show="vm.wizard.stage === 'config'"
-  environment="vm.environment" 
-  wizard="vm.wizard"
-  cancel="vm.cancel"
-  create="vm.create"
-  >
-</envwizard-config>
+    <envwizard-info 
+      ng-show="vm.wizard.stage === 'info'"
+      environment="vm.environment" 
+      wizard="vm.wizard"  
+      cancel="vm.cancel"
+      >
+    </envwizard-info>
 
-<envwizard-skytap 
-  ng-show="vm.wizard.stage === 'skytap'"
-  environment="vm.environment" 
-  wizard="vm.wizard" 
-  cancel="vm.cancel"
-  >
-</envwizard-skytap>
+
+    <envwizard-machines 
+      ng-show="vm.wizard.stage === 'machines'"
+      environment="vm.environment"  
+      wizard="vm.wizard" 
+      cancel="vm.cancel"
+      >
+    </envwizard-machines>
+
+
+    <envwizard-config 
+      ng-show="vm.wizard.stage === 'config'"
+      environment="vm.environment" 
+      wizard="vm.wizard"
+      cancel="vm.cancel"
+      create="vm.create"
+      >
+    </envwizard-config>
+
+    <envwizard-skytap 
+      ng-show="vm.wizard.stage === 'skytap'"
+      environment="vm.environment" 
+      wizard="vm.wizard" 
+      cancel="vm.cancel"
+      >
+    </envwizard-skytap>
+
+  </div>
+</div>
+
