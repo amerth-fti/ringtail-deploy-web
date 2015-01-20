@@ -37,6 +37,7 @@ build
 
 # Database files
 *.db
+/data
 
 # Migration data
 .migrate
