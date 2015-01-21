@@ -1,0 +1,129 @@
+// Karma configuration
+
+module.exports = function(config) {
+  config.set({
+
+    // base path that will be used to resolve all patterns (eg. files, exclude)
+    basePath: '',
+
+
+    // frameworks to use
+    // available frameworks: https://npmjs.org/browse/keyword/karma-adapter
+    frameworks: [ 'mocha', 'sinon-chai' ],
+
+
+    // list of files / patterns to load in the browser
+    files: [
+      'src/client/assets/bower_components/jquery/dist/jquery.min.js',
+      'src/client/assets/bower_components/bootstrap/dist/js/bootstrap.min.js',
+      'src/client/assets/bower_components/angular/angular.js',
+      'src/client/assets/bower_components/angular-mocks/angular-mocks.js',
+      'src/client/assets/bower_components/angular-route/angular-route.js',
+      'src/client/assets/bower_components/angular-resource/angular-resource.js',
+      'src/client/assets/bower_components/angular-animate/angular-animate.js',
+      'src/client/assets/bower_components/angular-bootstrap/ui-bootstrap.js',
+      'src/client/assets/bower_components/angular-bootstrap/ui-bootstrap-tpls.js',
+
+      'src/client/_module.js',
+      'src/client/_routes.js',
+      'src/client/_config.js',
+      'src/client/config.constant.js',
+      'src/client/globals.constant.js',
+
+      'src/client/layout/main.controller.js',
+
+      'src/client/environments/_module.js',
+      'src/client/environments/config-dialog.controller.js',
+      'src/client/environments/deploy-info.directive.js',
+      'src/client/environments/list-item.directive.js',
+      'src/client/environments/list.controller.js',  
+      'src/client/environments/redeploy-dialog.controller.js',
+      'src/client/environments/start-dialog.controller.js',
+
+      'src/client/environments/new/_module.js',
+      'src/client/environments/new/dialog.factory.js',
+      'src/client/environments/new/s1-method.directive.js',
+      'src/client/environments/new/s2-info.directive.js',
+      'src/client/environments/new/s3-machines.directive.js',
+      'src/client/environments/new/s4-config.directive.js',
+      'src/client/environments/new/s5-skytap.directive.js',
+
+      'src/client/environments/machine/_module.js',
+      'src/client/environments/machine/details.directive.js',
+      'src/client/environments/machine/dialog.factory.js',
+      'src/client/environments/machine/editor.directive.js',
+
+      'src/client/jobs/details.controller.js',
+      'src/client/jobs/task-details.directive.js',
+
+      'src/client/shared/_module.js',
+      'src/client/shared/date-helpers.service.js',
+      'src/client/shared/datepicker-popup.directive.js',
+      'src/client/shared/environment.factory.js',
+      'src/client/shared/loading.factory.js',
+      'src/client/shared/taskdef.factory.js',
+      
+      
+      'src/client/shared/data/_module.js',  
+      'src/client/shared/data/environment.service.js',
+      'src/client/shared/data/job.service.js',
+      'src/client/shared/data/project.service.js',
+      'src/client/shared/data/role.service.js',
+      'src/client/shared/data/skytap-environment.service.js',
+      
+      'src/client/shared/filters/_module.js',
+      'src/client/shared/filters/anchors.filter.js',
+      'src/client/shared/filters/elapsed.filter.js',
+      'src/client/shared/filters/from-date-string.filter.js',
+      'src/client/shared/filters/newlines.filter.js',
+      'src/client/shared/filters/reverse.filter.js',
+      'src/client/shared/filters/trust.filter.js', 
+
+      'test/client/**/*.js'
+    ],
+
+
+    // list of files to exclude
+    exclude: [
+    ],
+
+
+    // preprocess matching files before serving them to the browser
+    // available preprocessors: https://npmjs.org/browse/keyword/karma-preprocessor
+    preprocessors: {
+    },
+
+
+    // test results reporter to use
+    // possible values: 'dots', 'progress'
+    // available reporters: https://npmjs.org/browse/keyword/karma-reporter
+    reporters: ['progress'],
+
+
+    // web server port
+    port: 9876,
+
+
+    // enable / disable colors in the output (reporters and logs)
+    colors: true,
+
+
+    // level of logging
+    // possible values: config.LOG_DISABLE || config.LOG_ERROR || config.LOG_WARN || config.LOG_INFO || config.LOG_DEBUG
+    logLevel: config.LOG_INFO,
+
+
+    // enable / disable watching file and executing tests whenever any file changes
+    autoWatch: true,
+
+
+    // start these browsers
+    // available browser launchers: https://npmjs.org/browse/keyword/karma-launcher
+    browsers: ['Chrome'],
+
+
+    // Continuous Integration mode
+    // if true, Karma captures browsers, runs the tests and exits
+    singleRun: false
+  });
+};

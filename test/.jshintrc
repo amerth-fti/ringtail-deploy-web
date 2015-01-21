@@ -17,6 +17,10 @@
     "before": true,
     "beforeEach": true,
     "after": true,
-    "afterEach": true
+    "afterEach": true,
+    "inject": true,
+    "angular": true,
+    "sinon": true,
+    "expect": true
   }
 }
