@@ -2,7 +2,7 @@
   'use strict';
   
   angular
-    .module('app.environments.new')
+    .module('app.environments.editor')
     .directive('envwizardInfo', envwizardInfo);
   
   function envwizardInfo() {
@@ -11,9 +11,10 @@
       scope: {        
         cancel: '=',
         environment: '=',
+        update: '=',
         wizard: '='
       },
-      templateUrl: '/app/environments/new/s2-info.html',
+      templateUrl: '/app/environments/editor/s2-info.html',
       controller: NewEnvironmentInfoController,
       controllerAs: 'vm',
       bindToController: true

@@ -1,0 +1,18 @@
+
+<div class="modal-body pad-all">
+  <div class="row">
+    <div class="col-sm-12">Choose an environment type...</div>
+  </div>
+  <div class="row">
+    <div class="col-sm-6 col-centered">
+      <h1 ng-click="vm.selectLocal()" class="cursor-pointer"><strong>Local</strong></h1>
+    </div>
+    <div class="col-sm-6 col-centered">
+      <img src="/app/assets/img/skytap-logo.png" alt="skytap" class="skytap-logo cursor-pointer" ng-click="vm.selectSkytap()" />
+    </div>
+  </div>
+</div>
+
+<div class="modal-footer">
+  <button type="button" class="btn btn-warning" ng-click="vm.cancel()">Cancel</button>
+</div>

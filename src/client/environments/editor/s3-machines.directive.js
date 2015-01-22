@@ -2,7 +2,7 @@
   'use strict';
   
   angular
-    .module('app.environments.new')
+    .module('app.environments.editor')
     .directive('envwizardMachines', envwizardMachines);
   
   function envwizardMachines() {
@@ -11,9 +11,10 @@
       scope: {
         cancel: '=',
         environment: '=',
+        update: '=',
         wizard: '='
       },
-      templateUrl: '/app/environments/new/s3-machines.html',
+      templateUrl: '/app/environments/editor/s3-machines.html',
       controller: NewEnvironmentMachinesController,
       controllerAs: 'vm',
       bindToController: true

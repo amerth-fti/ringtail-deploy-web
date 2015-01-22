@@ -1,0 +1,61 @@
+<div class="modal-header bg-primary">
+  <button type="button" class="close" data-dismiss="modal" ng-click="vm.cancel()"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+  <h4 class="modal-title">New Environment Wizard</h4>
+</div>
+
+
+<div class="row" ng-show="vm.wizard.mode === 'edit'">
+  <div class="col-sm-12">
+      <ul class="nav nav-tabs">        
+        <li role="presentation" ng-click="vm.wizard.show('info')" ng-class="{ active: vm.wizard.stage === 'info' }"><a>Information</a></li>
+        <li role="presentation" ng-click="vm.wizard.show('machines')" ng-class="{ active: vm.wizard.stage === 'machines' }"><a>Machines</a></li>
+        <li role="presentation" ng-click="vm.wizard.show('config')"ng-class="{ active: vm.wizard.stage === 'config' }"><a>Redeploy Definition</a></li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<envwizard-method 
+  ng-show="vm.wizard.stage === 'method'"
+  environment="vm.environment" 
+  wizard="vm.wizard" 
+  cancel="vm.cancel"
+  >
+</envwizard-method>
+
+<envwizard-skytap 
+  ng-show="vm.wizard.stage === 'skytap'"
+  environment="vm.environment" 
+  wizard="vm.wizard" 
+  cancel="vm.cancel"
+  >
+</envwizard-skytap>
+
+<envwizard-info 
+  ng-show="vm.wizard.stage === 'info'"
+  environment="vm.environment" 
+  wizard="vm.wizard"  
+  cancel="vm.cancel"
+  update="vm.update"
+  >
+</envwizard-info>
+
+<envwizard-machines 
+  ng-show="vm.wizard.stage === 'machines'"
+  environment="vm.environment"  
+  wizard="vm.wizard" 
+  cancel="vm.cancel"
+  update="vm.update"
+  >
+</envwizard-machines>
+
+<envwizard-config 
+  ng-show="vm.wizard.stage === 'config'"
+  environment="vm.environment" 
+  wizard="vm.wizard"
+  cancel="vm.cancel"
+  create="vm.create"
+  update="vm.update"
+  >
+</envwizard-config>
+

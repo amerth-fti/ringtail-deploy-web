@@ -17,9 +17,9 @@
     };
   }
   
-  ListItemController.$inject = [ '$scope', '$modal','$location', '$timeout', 'config' ];
+  ListItemController.$inject = [ '$scope', '$modal','$location', '$timeout', 'config', 'EnvironmentEditor' ];
   
-  function ListItemController($scope, $modal, $location, $timeout, config) {
+  function ListItemController($scope, $modal, $location, $timeout, config, EnvironmentEditor) {
     var vm = this;
     vm.enableDeploy = config.enableDeployment;
     vm.environment  = $scope.environment; 
@@ -28,7 +28,7 @@
     vm.showBuildNotes = false;
     vm.status       = null;
     vm.show         = false;
-    vm.configure    = configure;
+    vm.edit         = edit;
     vm.initialize   = initialize;
     vm.pause        = pause;
     vm.redeploy     = redeploy;
@@ -111,22 +111,8 @@
       vm.environment.$reset();
     }
 
-    function configure() {      
-      var modal = $modal.open({
-        size: 'lg',
-        templateUrl: '/app/environments/config-dialog.html',
-        controller: 'EnvironmentConfigController',
-        controllerAs: 'vm',
-        resolve: {
-          environment: function() {
-            return vm.environment;
-          }
-        }
-      });
-
-      modal.result.then(function() {
-        vm.environment.$update(activate);
-      });
+    function edit() {
+      EnvironmentEditor.open(vm.environment);
     }
 
     function initialize() {

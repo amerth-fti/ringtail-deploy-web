@@ -40,13 +40,14 @@ module.exports = function(config) {
       'src/client/environments/redeploy-dialog.controller.js',
       'src/client/environments/start-dialog.controller.js',
 
-      'src/client/environments/new/_module.js',
-      'src/client/environments/new/dialog.factory.js',
-      'src/client/environments/new/s1-method.directive.js',
-      'src/client/environments/new/s2-info.directive.js',
-      'src/client/environments/new/s3-machines.directive.js',
-      'src/client/environments/new/s4-config.directive.js',
-      'src/client/environments/new/s5-skytap.directive.js',
+      'src/client/environments/editor/_module.js',
+      'src/client/environments/editor/dialog.factory.js',
+      'src/client/environments/editor/s1-method.directive.js',
+      'src/client/environments/editor/s2-info.directive.js',
+      'src/client/environments/editor/s3-machines.directive.js',
+      'src/client/environments/editor/s4-config.directive.js',
+      'src/client/environments/editor/s5-skytap.directive.js',
+      'src/client/environments/editor/wizard.factory.js',
 
       'src/client/environments/machine/_module.js',
       'src/client/environments/machine/details.directive.js',
@@ -129,6 +130,6 @@ module.exports = function(config) {
 
     // Continuous Integration mode
     // if true, Karma captures browsers, runs the tests and exits
-    singleRun: true
+    singleRun: false
   });
 };

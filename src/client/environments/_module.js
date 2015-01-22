@@ -4,7 +4,7 @@
   angular
     .module('app.environments', [ 
       'ngResource',
-      'app.environments.new',
+      'app.environments.editor',
       'app.environments.machine'
     ]);
 

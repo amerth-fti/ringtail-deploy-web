@@ -2,7 +2,7 @@
   'use strict';
   
   angular
-    .module('app.environments.new')
+    .module('app.environments.editor')
     .directive('envwizardConfig', envwizardConfig);
   
   function envwizardConfig() {
@@ -12,9 +12,10 @@
         cancel: '=',
         create: '=',
         environment: '=',
+        update: '=',
         wizard: '=',
       },
-      templateUrl: '/app/environments/new/s4-config.html',
+      templateUrl: '/app/environments/editor/s4-config.html',
       controller: DirectiveController,
       controllerAs: 'vm',
       bindToController: true

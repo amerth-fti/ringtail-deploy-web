@@ -2,7 +2,7 @@
   'use strict';
   
   angular
-    .module('app.environments.new')
+    .module('app.environments.editor')
     .directive('envwizardSkytap', envwizardSkytap);
   
   function envwizardSkytap() {
@@ -13,7 +13,7 @@
         environment: '=',
         wizard: '=',
       },
-      templateUrl: '/app/environments/new/s5-skytap.html',
+      templateUrl: '/app/environments/editor/s5-skytap.html',
       controller: NewEnvironmentSkytapController,
       controllerAs: 'vm',
       bindToController: true
