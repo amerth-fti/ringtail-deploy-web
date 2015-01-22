@@ -10,6 +10,7 @@ var debug           = require('debug')('deployer-envservice')
   , skytap          = Skytap.init(config.skytap)
   , envMapper       = new EnvMapper(dbPath)
   , machineMapper   = new MachineMapper(dbPath)  
+  , findById
   ;
 
 /** 
@@ -32,7 +33,7 @@ exports.findAll = function list(paging, next) {
 };
 
 
-exports.findById = function get(envId, next) {
+exports.findById = findById = function get(envId, next) {
   return envMapper.findById(envId)
     .then(joinEnvMachines)
     .then(joinEnvSkytap)
@@ -44,7 +45,8 @@ exports.findById = function get(envId, next) {
 exports.create = function create(data, next) {
   var env = new Env(data);
   
-  return env.validate()
+  return env
+    .validate()
     .then(function() { 
       return envMapper
         .insert(env)
@@ -54,15 +56,8 @@ exports.create = function create(data, next) {
         });
     })
     .then(function() {
-      var promises = [];
-      if(env.machines) {
-        promises = env.machines.map(function(machine) {
-          machine.envId = env.envId;
-          return machineService.create(machine);
-        });
-      }
-      return Q
-        .all(promises)
+      return machineMapper
+        .createMany(env.envId, env.machines)
         .then(function(machines) {
           env.machines = machines;
           return env;
@@ -78,7 +73,16 @@ exports.update = function update(data, next) {
   
   return env.validate()
     .then(function() { return envMapper.update(env); })
-    .then(function(result) { return env; })
+    .then(function() {
+      return findById(env.envId)
+        .then(function(found) {
+          return machineService.sync(env.envId, found.machines, env.machines);
+        })
+        .then(function(machines) {
+          env.machines = machines;
+          return env;
+        });
+    })
     .then(joinEnvMachines)
     .then(joinEnvSkytap)
     .nodeify(next);
