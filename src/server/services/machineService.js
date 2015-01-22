@@ -21,6 +21,7 @@ exports.create = create = function create(data, next) {
       return machineMapper.insert(machine);
     })
     .then(function(result) {
+      debug('machine %s created', result.lastID);
       machine.machineId = result.lastID;
       return machine;
     })
@@ -57,16 +58,15 @@ exports.del = del = function del(machineId, next) {
 };
 
 exports.createMany = function createMany(envId, data, next) {
-  var promises = []
-    , machines = [];
+  var promises = [];
   
   if(data) {
-    machines = data.map(function(datum) {
-      var machine = new Machine(datum);
-      machine.envId = envId;
-      return machine;
+    data.forEach(function(datum) {      
+      datum.envId = envId;
+    });    
+    promises = data.map(function(datum) {
+      return create(datum);
     });
-    promises = machines.map(create);
   }
 
   return Q.all(promises);

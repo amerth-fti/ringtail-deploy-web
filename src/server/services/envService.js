@@ -56,7 +56,7 @@ exports.create = function create(data, next) {
         });
     })
     .then(function() {
-      return machineMapper
+      return machineService
         .createMany(env.envId, env.machines)
         .then(function(machines) {
           env.machines = machines;
@@ -76,7 +76,8 @@ exports.update = function update(data, next) {
     .then(function() {
       return findById(env.envId)
         .then(function(found) {
-          return machineService.sync(env.envId, found.machines, env.machines);
+          return machineService
+            .sync(env.envId, found.machines, env.machines);
         })
         .then(function(machines) {
           env.machines = machines;
