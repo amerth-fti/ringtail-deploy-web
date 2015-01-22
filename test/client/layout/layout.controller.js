@@ -9,7 +9,7 @@ describe('MainController', function() {
   }));
 
   describe('initialize', function() {    
-    it('sets the globals variable to the scope', function() {
+    it('sets the globals variable to the root scope', function() {
       var scope = {}
         , globals = {}
         , controller;
