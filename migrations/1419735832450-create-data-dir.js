@@ -1,5 +1,6 @@
 var fs = require('fs')
   , path = __dirname + '/../data/'
+  , dbpath = path + 'deployer.db'
   ;
 
 exports.up = function(next){
@@ -9,7 +10,5 @@ exports.up = function(next){
 };
 
 exports.down = function(next){
-  fs.rmdir(path, function(err) {
-    next();
-  });
+  next();
 };
