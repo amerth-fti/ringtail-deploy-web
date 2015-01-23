@@ -1,4 +1,4 @@
-skytap-deployer
+ringtail-deploy
 ===============
 
-Web driven Skytap deployment utility 
+Web driven Rigntail deployment utility.
