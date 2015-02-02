@@ -177,14 +177,17 @@ button {
 .machine-details .role-SKYTAP-WEB {
   background-color: #CCFF99;
 }
-.machine-details .role-SKYTAP-WEBAGENT {
+.machine-details .role-SKYTAP-AGENT {
   background-color: #99FF99;
 }
 .machine-details .role-SKYTAP-DB {
   background-color: #99FFCC;
 }
-.machine-details .role-SKYTAP-RPF {
+.machine-details .role-SKYTAP-RPF-SUPERVISOR {
   background-color: #66FFFF;
+}
+.machine-details .role-SKYTAP-RPF-COORDINATOR {
+  background-color: #66FF66;
 }
 
 .machine-details .machine-name {
