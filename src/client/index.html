@@ -80,17 +80,35 @@
 
   <div ng-controller="MainController">
 
-    <nav class="navbar navbar-default" role="navigation">
-      <div class="container">
+    <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+      <div class="container-fluid">
         <div class="navbar-header">
           <a class="navbar-brand" href="/">
-            <span class="glyphicon glyphicon-cloud"></span>
-            Skytap Deployer
+
+            <img src="/app/assets/img/ringtail.png" alt="Ringtail Deploy" class="logo" />
           </a>
         </div>
       </div>
     </nav>
-    <div ng-view class="container"></div>
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-sm-3 col-md-2 sidebar">
+          <h3 class="title">Regions</h3>
+          <ul class="nav nav-sidebar">
+            <li class="active"><a href="#">Overview <span class="sr-only">(current)</span></a></li>
+            <li><a href="#">Reports</a></li>
+            <li><a href="#">Analytics</a></li>
+            <li><a href="#">Export</a></li>
+          </ul>          
+          <ul class="nav nav-sidebar">
+            <li><a href="">Nav item again</a></li>
+            <li><a href="">One more nav</a></li>
+            <li><a href="">Another nav item</a></li>
+          </ul>
+        </div>
+        <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main" ng-view>
+        </div>
+      </div>
 
   </div>
 </body>
