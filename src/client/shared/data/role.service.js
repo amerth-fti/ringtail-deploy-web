@@ -17,10 +17,11 @@
       'WEBSERVER',      
       'DATABASE',
       'SKYTAP-ALLINONE',      
+      'SKYTAP-AGENT',
       'SKYTAP-DB',
-      'SKYTAP-RPF',
-      'SKYTAP-WEB',
-      'SKYTAP-WEBAGENT'
+      'SKYTAP-RPF-COORDINATOR',
+      'SKYTAP-RPF-SUPERVISOR',
+      'SKYTAP-WEB'
     ];
 
     return {
