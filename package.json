@@ -1,6 +1,6 @@
 {
   "name": "skytap-deployer",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "description": "Deployment tool for skytap environments",
   "author": "Brian Mancini <bmancini@gmail.com>",
   "license": "MIT",
