@@ -1,7 +1,7 @@
 var Q               = require('q')
   , Skytap          = require('node-skytap')
-  , envService      = require('./envService')
-  , machineService  = require('./machineService')
+  , envService      = require('./env-service')
+  , machineService  = require('./machine-service')
   , config          = require('../../../config')
   , skytap          = Skytap.init(config.skytap)
   ;

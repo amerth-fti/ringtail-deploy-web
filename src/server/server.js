@@ -34,6 +34,13 @@ app.get('/config', function(req, res) {
     .send('window.appConfig = ' + JSON.stringify(config.client));
 });
 
+// API - REGION ROUTES
+app.get   ('/api/regions', controllers.regions.list);
+app.get   ('/api/regions/:regionId', controllers.regions.get);
+app.post  ('/api/regions', controllers.regions.create);
+app.put   ('/api/regions/:regionId', controllers.regions.update);
+app.delete('/api/regions/:regionId', controllers.regions.del);
+
 
 // API - ENVIRONMENT ROUTES
 app.get ('/api/envs', controllers.envs.list);

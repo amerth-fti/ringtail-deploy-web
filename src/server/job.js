@@ -1,6 +1,6 @@
 var debug       = require('debug')('deployer')
   , Q           = require('q')
-  , envService  = require('./services/envService');
+  , envService  = require('./services/env-service');
 
 function Job(params) {  
   this.id = 0;

@@ -1,6 +1,6 @@
 var debug         = require('debug')('deployer-machine-service')
   , Q             = require('q')
-  , MachineMapper = require('../mappers/machineMapper')
+  , MachineMapper = require('../mappers/machine-mapper')
   , Machine       = require('../models/machine')
   , dbPath        = __dirname + '/../../../data/deployer.db'
   , machineMapper = new MachineMapper(dbPath)

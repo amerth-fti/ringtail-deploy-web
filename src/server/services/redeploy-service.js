@@ -1,7 +1,7 @@
 var debug       = require('debug')('deployer-redeployservice')
   , Q           = require('Q')
   , _           = require('underscore')
-  , envService  = require('../services/envService')
+  , envService  = require('../services/env-service')
   , Env         = require('../models/env')
   , taskfactory = require('../taskfactory')
   , jobrunner   = require('../jobrunner')
