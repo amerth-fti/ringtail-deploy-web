@@ -111,7 +111,7 @@ function TaskImpl(options) {
           var deferred = new Q.defer()
             , url;
           
-          url = configUrl + '?key=Common|BRANCH_NAME&value=' + branch;
+          url = configUrl + '?key=Common|BRANCH_NAME&value=' + encodeURIComponent(branch);
           log('configuring %s', url);
           request.get(url, function(err) {
             if(err) deferred.reject(err);
@@ -131,7 +131,7 @@ function TaskImpl(options) {
                 , value = config[key]
                 , url;
               
-              url = configUrl + '?key=' + key + '&value=' + value;
+              url = configUrl + '?key=' + encodeURIComponent(key) + '&value=' + encodeURIComponent(value);
               log('configuring %s', url);
               request.get(url, function(err) {
                 if(err) deferred.reject(err);
