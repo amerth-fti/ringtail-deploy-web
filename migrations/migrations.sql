@@ -39,10 +39,35 @@ CREATE TABLE machine (
 DROP TABLE machine;
 
 
--- dropConfig
-DROP TABLE config;
+-- createRegion
+CREATE TABLE region (
+  regionId INTEGER PRIMARY KEY AUTOINCREMENT,
+  regionName NVARCHAR(255) NOT NULL,
+  regionDesc TEXT  
+);
 
+-- createRegionEnv
+CREATE TABLE regionenv (
+  regionId INTEGER,
+  envId INTEGER,
+  PRIMARY KEY (regionId, envId),
+  FOREIGN KEY (regionId) REFERENCES region(regionId),
+  FOREIGN KEY (envId) REFERENCES env(envId)
+);
 
--- addHostToEnv
-ALTER TABLE env
-ADD COLUMN host varchar(255);
+-- insertDefaultRegion
+INSERT INTO region (regionName, regionDesc)
+VALUES ('All', 'All environments');
+
+-- insertDefaultRegionEnvs
+INSERT INTO regionenv
+SELECT 1, envId FROM env;
+
+-- dropRegionEnv
+DROP TABLE regionenv;
+
+-- dropRegion
+DROP TABLE region;
+
+-- dropRegion
+DROP TABLE region;
