@@ -64,7 +64,7 @@
 
         // add to regions
         .then(function(environment) {
-          var defaultRegion = "1"
+          var defaultRegion = '1'
             , currentRegion = $routeParams.regionId
             ;
 

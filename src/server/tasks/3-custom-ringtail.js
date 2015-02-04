@@ -3,7 +3,7 @@ var util    = require('util')
   , _       = require('underscore')
   , request = require('request')
   , Task    = require('./task')
-  , machineSvc = require('../services/machineService')
+  , machineSvc = require('../services/machine-service')
   ;
 
 

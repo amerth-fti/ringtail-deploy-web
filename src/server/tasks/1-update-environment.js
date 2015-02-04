@@ -2,9 +2,9 @@ var util        = require('util')
   , Q           = require('Q')
   , _           = require('underscore')
   , config      = require('../../../config')
-  , envSvc      = require('../services/envService')
-  , machineSvc  = require('../services/machineService')
-  , importSvc   = require('../services/importService')
+  , envSvc      = require('../services/env-service')
+  , machineSvc  = require('../services/machine-service')
+  , importSvc   = require('../services/import-service')
   , Task        = require('./task')
   ;
 

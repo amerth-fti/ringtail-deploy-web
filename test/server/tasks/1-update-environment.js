@@ -4,8 +4,8 @@ var mocha   = require('mocha')
   , expect  = chai.expect
 
   , Task        = require('../../../src/server/tasks/1-update-environment')
-  , envSvc      = require('../../../src/server/services/envService')
-  , machineSvc  = require('../../../src/server/services/machineService')
+  , envSvc      = require('../../../src/server/services/env-service')
+  , machineSvc  = require('../../../src/server/services/machine-service')
   ;
 
 describe('Update Env Record Task', function() {

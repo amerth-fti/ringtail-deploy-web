@@ -8,7 +8,7 @@ var mocha   = require('mocha')
   , Env         = require('../../../src/server/models/env')
   , Machine     = require('../../../src/server/models/machine')
   , Task        = require('../../../src/server/tasks/3-custom-ringtail')
-  , machineSvc  = require('../../../src/server/services/machineService')
+  , machineSvc  = require('../../../src/server/services/machine-service')
   ;
 
 describe('Ringtail Install Task', function() {
