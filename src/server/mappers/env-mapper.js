@@ -105,6 +105,24 @@ EnvMapper.prototype.findAll = function findAll(paging, next) {
     .nodeify(next);
 };
 
+
+EnvMapper.prototype.findByRegion = function findByRegion(regionId, paging, next) {
+  var sql = envSql.findByRegion
+    , params
+    ;
+
+  params = {
+    $regionId: regionId,
+    $pagesize: paging.pagesize,
+    $offset: (paging.page - 1) * paging.pagesize
+  };
+
+  return this
+    .all(sql, params)
+    .then(this.parseArray.bind(this))
+    .nodeify(next);
+};
+
 EnvMapper.prototype.findById = function findById(envId, next) {
   var sql = envSql.findById
     , params

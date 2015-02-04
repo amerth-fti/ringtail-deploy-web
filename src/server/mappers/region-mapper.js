@@ -96,3 +96,35 @@ RegionMapper.prototype.findById = function findById(regionId, next) {
     .then(this.parse.bind(this))
     .nodeify(next);
 };
+
+
+RegionMapper.prototype.addEnv = function addEnv(regionId, envId, next) {
+  var sql = machineSql.addEnv
+    , params
+    ;
+
+  params = {
+    $regionId: regionId,
+    $envId: envId
+  };
+
+  return this
+    .run(sql, params)
+    .nodeify(next);
+};
+
+
+RegionMapper.prototype.removeEnv = function removeEnv(regionId, envId, next) {
+  var sql = machineSql.removeEnv
+    , params
+    ;
+    
+  params = {
+    $regionId: regionId,
+    $envId: envId
+  };
+
+  return this
+    .run(sql, params)
+    .nodeify(next);
+};

@@ -48,8 +48,8 @@ CREATE TABLE region (
 
 -- createRegionEnv
 CREATE TABLE regionenv (
-  regionId INTEGER,
-  envId INTEGER,
+  regionId INTEGER NOT NULL,
+  envId INTEGER NOT NULL,
   PRIMARY KEY (regionId, envId),
   FOREIGN KEY (regionId) REFERENCES region(regionId),
   FOREIGN KEY (envId) REFERENCES env(envId)

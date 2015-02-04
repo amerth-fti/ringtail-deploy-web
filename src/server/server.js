@@ -42,6 +42,12 @@ app.put   ('/api/regions/:regionId', controllers.regions.update);
 app.delete('/api/regions/:regionId', controllers.regions.del);
 
 
+// API - REGION ENVIRONMENT ROUTES
+app.get   ('/api/regions/:regionId/envs', controllers.regionenvs.list);
+app.post  ('/api/regions/:regionId/envs/:envId', controllers.regionenvs.add);
+app.delete('/api/regions/:regionId/envs/:envId', controllers.regionenvs.remove);
+
+
 // API - ENVIRONMENT ROUTES
 app.get ('/api/envs', controllers.envs.list);
 app.post('/api/envs', controllers.envs.create);

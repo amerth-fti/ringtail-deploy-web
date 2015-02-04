@@ -64,3 +64,16 @@ exports.findById = function findById(regionId, next) {
     .nodeify(next);
 };
 
+exports.addEnv = function addEnv(regionId, envId, next) {
+  debug('add env %s to region %s', envId, regionId);
+  return regionMapper
+    .addEnv(regionId, envId)
+    .nodeify(next);
+};
+
+exports.removeEnv = function removeEnv(regionId, envId, next) {
+  debug('remove env %s from region %s', envId, regionId);
+  return regionMapper
+    .removeEnv(regionId, envId)
+    .nodeify(next);
+};

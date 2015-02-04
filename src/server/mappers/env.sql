@@ -36,3 +36,11 @@ limit $pagesize offset $offset;
 select *
 from env
 where envId = $envId;
+
+
+-- findByRegion
+select e.*
+from env e
+join regionenv re on re.envId = e.envId
+where re.regionId = $regionId
+limit $pagesize offset $offset;

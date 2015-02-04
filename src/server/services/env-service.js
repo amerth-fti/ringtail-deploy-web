@@ -33,6 +33,17 @@ exports.findAll = function list(paging, next) {
 };
 
 
+exports.findByRegion = function findByRegion(regionId, paging, next) {
+  paging = paging || {};
+  paging.pagesize = paging.pagesize || 25;
+  paging.page = paging.page || 1;
+
+  return envMapper.findByRegion(regionId, paging)
+    .then(joinEnvsMachines)
+    .then(joinEnvsSkytap)
+    .nodeify(next);
+};
+
 exports.findById = findById = function get(envId, next) {
   return envMapper.findById(envId)
     .then(joinEnvMachines)

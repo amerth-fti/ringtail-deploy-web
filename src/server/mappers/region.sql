@@ -21,3 +21,11 @@ limit $pagesize offset $offset;
 select *
 from region
 where regionId = $regionId;
+
+-- addEnv
+insert into regionenv
+values($regionId, $envId);
+
+-- removeEnv
+delete from regionenv
+where regionId = $regionId and envId = $envId;
