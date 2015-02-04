@@ -26,9 +26,9 @@
     }
   }
     
-  EnvironmentEditorController.$inject = [ '$modalInstance', 'Environment', 'environment', 'Wizard' ];
+  EnvironmentEditorController.$inject = [ '$modalInstance', '$routeParams', 'Environment', 'environment', 'Wizard', 'Region' ];
 
-  function EnvironmentEditorController($modalInstance, Environment, environment, Wizard) {
+  function EnvironmentEditorController($modalInstance, $routeParams, Environment, environment, Wizard, Region) {
     var vm          = this;
     vm.environment  = null;
     vm.cancel       = cancel;
@@ -61,9 +61,26 @@
     function create() {      
       vm.environment
         .$save()
+
+        // add to regions
         .then(function(environment) {
+          var defaultRegion = "1"
+            , currentRegion = $routeParams.regionId
+            ;
+
+          // insert default
+          Region.addEnv({regionId:defaultRegion, envId: environment.envId});
+
+          // insert current
+          if(currentRegion && defaultRegion !== currentRegion) {
+            Region.addEnv({regionId:currentRegion, envId: environment.envId});
+          }
+
+          return environment;
+        })
+        .then(function(environment){
           $modalInstance.close(environment);
-        });      
+        });
     }
 
     function update() {

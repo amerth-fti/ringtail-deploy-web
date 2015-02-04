@@ -10,9 +10,10 @@
   function Region($resource) {
     return $resource(
       'api/regions/:regionId', 
-      { regionId: '@regionId' },
+      { regionId: '@regionId', envId: '@envId' },
       {
-        update  : { method: 'PUT', url: 'api/regions/:regionId' }
+        update: { method: 'PUT', url: 'api/regions/:regionId' },
+        addEnv: { method: 'POST', url: 'api/regions/:regionId/envs/:envId' }
       }
     );
   }
