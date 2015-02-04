@@ -6,19 +6,28 @@
     .module('app')
     .controller('MainController', MainController);
 
-    MainController.$inject = [ '$scope', 'globals', 'Region' ];
+    MainController.$inject = [ '$scope', '$routeParams', 'globals', 'Region' ];
       
-    function MainController($scope, globals, Region) {
-      $scope.globals        = globals;    
-      $scope.regions        = null;
-      $scope.selectedRegion = null;
+    function MainController($scope, $routeParams, globals, Region) {      
+      $scope.globals        = globals;
+
+      var vm = {};
+      $scope.vm         = vm;
+      vm.regions        = null;        
+      vm.selectedRegion = null;
+      vm.changeRegion   = changeRegion;
 
       activate();
 
       //////////
 
       function activate() {
-        $scope.regions = Region.query();        
+        vm.regions        = Region.query();        
+        vm.selectedRegion = $routeParams.regionId || 1;
+      }
+
+      function changeRegion(region) {
+        vm.selectedRegion = region.regionId;
       }
 
     }

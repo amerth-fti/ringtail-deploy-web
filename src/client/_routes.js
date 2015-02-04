@@ -9,7 +9,7 @@
 
   function routes($routeProvider, config) {
     $routeProvider
-    .when('/app/environments', {
+    .when('/app/regions/:regionId', {
       templateUrl: '/app/environments/list.html',
       controller: 'EnvironmentListController',
       controllerAs: 'vm'
@@ -20,7 +20,7 @@
       controllerAs: 'vm'
     })
     .otherwise({
-      redirectTo: '/app/environments'
+      redirectTo: '/app/regions/1'
     });
   }
 

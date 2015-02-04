@@ -5,9 +5,9 @@
     .module('app.environments')
     .controller('EnvironmentListController', EnvironmentListController);
 
-  EnvironmentListController.$inject = [ 'Environment', 'EnvironmentEditor' ];
+  EnvironmentListController.$inject = [ '$routeParams', 'Environment', 'EnvironmentEditor' ];
 
-  function EnvironmentListController(Environment, EnvironmentEditor) {
+  function EnvironmentListController($routeParams, Environment, EnvironmentEditor) {
     var vm            = this;
     vm.environments   = [];
     vm.newEnvironment = newEnvironment;
@@ -17,7 +17,7 @@
     //////////
     
     function activate() {
-      vm.environments = Environment.query();
+      vm.environments = Environment.region({ regionId: $routeParams.regionId });
     }
 
     function newEnvironment() {
