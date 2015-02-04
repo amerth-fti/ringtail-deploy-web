@@ -32,8 +32,7 @@ module.exports = function(config) {
 
       'src/client/layout/main.controller.js',
 
-      'src/client/environments/_module.js',
-      'src/client/environments/config-dialog.controller.js',
+      'src/client/environments/_module.js',      
       'src/client/environments/deploy-info.directive.js',
       'src/client/environments/list-item.directive.js',
       'src/client/environments/list.controller.js',  
@@ -69,6 +68,7 @@ module.exports = function(config) {
       'src/client/shared/data/environment.service.js',
       'src/client/shared/data/job.service.js',
       'src/client/shared/data/project.service.js',
+      'src/client/shared/data/region.service.js',
       'src/client/shared/data/role.service.js',
       'src/client/shared/data/skytap-environment.service.js',
       

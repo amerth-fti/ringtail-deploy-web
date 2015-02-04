@@ -2,7 +2,7 @@
 describe('Wizard', function() {
   beforeEach(module('app'));
   beforeEach(module('app.environments'));
-  beforeEach(module('app.environments.new'));
+  beforeEach(module('app.environments.editor'));
 
   var Wizard
     , wizard;

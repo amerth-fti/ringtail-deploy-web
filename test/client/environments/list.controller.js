@@ -6,6 +6,7 @@ describe('EnvironmentListContrller', function() {
   var $controller
     , $q
     , $rootScope
+    , $routeParams
     , Environment
     , EnvironmentEditor
     , controller
@@ -15,15 +16,16 @@ describe('EnvironmentListContrller', function() {
     $controller = _$controller_;
     $q = _$q_;
     $rootScope = _$rootScope_;
+    $routeParams = { regionId: 1 };
     Environment = _Environment_;
     EnvironmentEditor = _EnvironmentEditor_;
   }));
 
   beforeEach(function() {
-    sinon.stub(Environment, 'query', function() {
+    sinon.stub(Environment, 'region', function() {
       return [ { envId: 1 } ];
     });
-    controller = $controller('EnvironmentListController', { Environment: Environment, EnvironmentEditor: EnvironmentEditor });
+    controller = $controller('EnvironmentListController', { $routeParams: $routeParams, Environment: Environment, EnvironmentEditor: EnvironmentEditor });
   });
 
   describe('#activate', function() {
