@@ -28,6 +28,7 @@
     "grunt-contrib-jshint": "^0.10.0",
     "grunt-contrib-watch": "git://github.com/bmancini55/grunt-contrib-watch.git",
     "grunt-express-runner": "^0.2.0",
+    "grunt-karma": "^0.10.1",
     "grunt-mocha-test": "^0.12.4",
     "grunt-shell": "^1.1.1",
     "grunt-traceur": "^0.2.9",
@@ -36,6 +37,7 @@
     "karma-coverage": "^0.2.7",
     "karma-mocha": "^0.1.10",
     "karma-mocha-reporter": "^0.3.1",
+    "karma-phantomjs-launcher": "^0.1.4",
     "karma-sinon-chai": "^0.2.0",
     "mocha": "^2.0.1",
     "sinon": "^1.12.2"

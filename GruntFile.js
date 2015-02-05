@@ -4,6 +4,7 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-traceur');
   grunt.loadNpmTasks('grunt-contrib-jshint');
   grunt.loadNpmTasks('grunt-mocha-test');
+  grunt.loadNpmTasks('grunt-karma');
   grunt.loadNpmTasks('grunt-express-runner');
   grunt.loadNpmTasks('grunt-contrib-watch');
   grunt.loadNpmTasks('grunt-contrib-copy');
@@ -49,6 +50,11 @@ module.exports = function(grunt) {
         src: ['test/server/**/*.js']
       }      
     },
+    karma: {
+      unit: {
+        configFile: 'karma.conf.js'
+      }
+    },
     expressrunner: {
       options: {
         script: 'src/server/server.js',
@@ -85,7 +91,7 @@ module.exports = function(grunt) {
     }
   });
 
-  grunt.registerTask('validate', [ 'jshint', 'mochaTest' ]);  
+  grunt.registerTask('validate', [ 'jshint', 'mochaTest', 'karma' ]);  
   grunt.registerTask('build', [ 'traceur', 'copy' ]);
   grunt.registerTask('run', [ 'watch' ]);
   
