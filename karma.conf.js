@@ -35,7 +35,7 @@ module.exports = function(config) {
       'src/client/environments/_module.js',      
       'src/client/environments/deploy-info.directive.js',
       'src/client/environments/list-item.directive.js',
-      'src/client/environments/list.controller.js',  
+      'src/client/environments/list.directive.js',  
       'src/client/environments/redeploy-dialog.controller.js',
       'src/client/environments/start-dialog.controller.js',
 
@@ -56,13 +56,17 @@ module.exports = function(config) {
       'src/client/jobs/details.controller.js',
       'src/client/jobs/task-details.directive.js',
 
+      'src/client/regions/_module.js',
+      'src/client/regions/_routes.js',
+      'src/client/regions/details-route.controller.js',
+      'src/client/regions/details.directive.js',
+
       'src/client/shared/_module.js',
       'src/client/shared/date-helpers.service.js',
       'src/client/shared/datepicker-popup.directive.js',
       'src/client/shared/environment.factory.js',
       'src/client/shared/loading.factory.js',
-      'src/client/shared/taskdef.factory.js',
-      
+      'src/client/shared/taskdef.factory.js',      
       
       'src/client/shared/data/_module.js',  
       'src/client/shared/data/environment.service.js',
@@ -80,23 +84,33 @@ module.exports = function(config) {
       'src/client/shared/filters/reverse.filter.js',
       'src/client/shared/filters/trust.filter.js', 
 
+      'src/client/**/*.html',
+
       'test/client/**/*.js'
     ],
 
 
     // list of files to exclude
     exclude: [
+      'src/client/index.html'
     ],
 
 
     // preprocess matching files before serving them to the browser
     // available preprocessors: https://npmjs.org/browse/keyword/karma-preprocessor
     preprocessors: {
-      'src/client/!(assets)/**/*.js' : ['coverage']
+      'src/client/!(assets)/**/*.js' : ['coverage'],
+      'src/client/!(assets)/**/*.html': ['ng-html2js']
     },
 
     coverageReporter: {
       type: 'text-summary'
+    },
+
+    ngHtml2JsPreprocessor: {
+      moduleName: 'templates',
+      stripPrefix: 'src/client',
+      prependPrefix: '/app'
     },
 
 

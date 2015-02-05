@@ -1,7 +1,3 @@
-<h2>Environments 
-  <span class="small btn-add glyphicon glyphicon-plus-sign" ng-click="vm.newEnvironment()"></span>
-  <div ng-show="globals.loading" class="loading float"></div>
-</h2>
 <ul class="list-group environment-list">
   <li ng-repeat="environment in vm.environments" class="list-group-item animate-show environment"> 
     <list-item environment="environment"></list-item>

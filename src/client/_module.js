@@ -6,7 +6,8 @@
     'ngAnimate',
     'ui.bootstrap',
     'shared',
-    'app.environments'
+    'app.environments',
+    'app.regions'
   ]);
 
 }());

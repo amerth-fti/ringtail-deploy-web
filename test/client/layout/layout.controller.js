@@ -1,6 +1,6 @@
 
 describe('MainController', function() {
-  beforeEach(module('app'));
+  beforeEach(module('app'));  
   
   var $controller
     , Region

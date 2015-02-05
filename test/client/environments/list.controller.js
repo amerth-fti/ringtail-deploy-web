@@ -1,68 +1,33 @@
 
-describe('EnvironmentListContrller', function() {
+describe('environment-list Directive', function() {
+  beforeEach(module('templates'));
   beforeEach(module('app'));
-  beforeEach(module('app.environments'));
+  beforeEach(module('app.environments', function($provide) {
+    $provide.factory('listItemDirective', function() { return {}; });
+  }));
 
-  var $controller
-    , $q
-    , $rootScope
-    , $routeParams
-    , Environment
-    , EnvironmentEditor
+  var element
+    , environments = [ {} ]    
     , controller
     ;
 
-  beforeEach(inject(function(_$controller_, _$q_, _$rootScope_, _Environment_, _EnvironmentEditor_) {
-    $controller = _$controller_;
-    $q = _$q_;
-    $rootScope = _$rootScope_;
-    $routeParams = { regionId: 1 };
-    Environment = _Environment_;
-    EnvironmentEditor = _EnvironmentEditor_;
-  }));
+  beforeEach(inject(function($rootScope, $compile) {    
+    element = angular.element('<environments-list environments="vm.environments"></environments-list>');
+    var scope = $rootScope;
+    scope.vm = { 
+      environments: environments
+    };
+    $compile(element)(scope);
+    scope.$digest();
 
-  beforeEach(function() {
-    sinon.stub(Environment, 'region', function() {
-      return [ { envId: 1 } ];
-    });
-    controller = $controller('EnvironmentListController', { $routeParams: $routeParams, Environment: Environment, EnvironmentEditor: EnvironmentEditor });
-  });
+    controller = element.controller('environmentsList');    
+  }));    
 
   describe('#activate', function() {
-    it('loads the environments from the resource', function() {
+    it('renders the environments', function() {
       expect(controller.environments).to.be.an('array');
-      expect(controller.environments.length).to.equal(1);
+      expect(controller.environments).to.equal(environments);
     });
   });
-
-  describe('#newEnvironment', function() {
-    var open;
-
-    beforeEach(function() {
-      open = sinon.stub(EnvironmentEditor, 'open', function() {
-        var deferred = $q.defer();
-        deferred.resolve({ envId: 2 });
-        return { result: deferred.promise };    
-      });
-    });
-    
-    it('opens the editor', function(done) {
-      controller.newEnvironment()
-      .then(function() {
-        expect(open.calledOnce).to.be.true;
-        done();
-      });
-      $rootScope.$apply();
-    });
-
-    it('when resolved adds to environments', function(done) {
-      controller.newEnvironment()
-      .then(function() {
-        expect(controller.environments.length).to.equal(2);
-        done();
-      });
-      $rootScope.$apply();
-    });
-
-  });
+  
 });

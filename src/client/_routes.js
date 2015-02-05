@@ -9,11 +9,6 @@
 
   function routes($routeProvider, config) {
     $routeProvider
-    .when('/app/regions/:regionId', {
-      templateUrl: '/app/environments/list.html',
-      controller: 'EnvironmentListController',
-      controllerAs: 'vm'
-    })
     .when('/app/jobs/:jobId', {
       templateUrl: '/app/jobs/details.html',
       controller: 'JobDetailsController',
