@@ -36,9 +36,14 @@
       <div class="col-md-10">{{vm.environment.deployedOn | fromDateString | date: 'EEE, MMM dd, hh:mma (LOCAL)'}}</div>        
     </div>
 
-    <div class="row" ng-show="vm.showBuildNotes">
-      <div class="col-md-2"><strong>Builds:</strong></div>
-      <div class="col-md-10">
+    <div class="row" >
+      <div class="col-md-2"><strong>Build notes:</strong>        
+        <span 
+          class="small toggle-icon glyphicon" 
+          ng-click="vm.showBuildNotes = !vm.showBuildNotes;"
+          ng-class="{ 'glyphicon-collapse-down': !vm.showBuildNotes, 'glyphicon-collapse-up': vm.showBuildNotes }"></span>        
+      </div>
+      <div class="col-md-10" ng-show="vm.showBuildNotes">              
         <div ng-repeat="machine in vm.environment.machines">
           <div ng-show="machine.installNotes">
             {{machine.machineName}}
