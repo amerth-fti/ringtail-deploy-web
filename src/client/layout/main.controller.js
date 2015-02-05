@@ -15,21 +15,22 @@
       $scope.vm         = vm;
       vm.regions        = null;        
       vm.selectedRegion = null;
-      vm.changeRegion   = changeRegion;
+      vm.routeParams    = $routeParams;
 
       activate();
 
       //////////
 
       function activate() {
-        vm.regions        = Region.query();        
-        vm.selectedRegion = $routeParams.regionId || 1;
+        vm.regions = Region.query(); 
+        watchRegionId();             
       }
 
-      function changeRegion(region) {
-        vm.selectedRegion = region.regionId;
+      function watchRegionId() {
+        $scope.$watch('vm.routeParams.regionId', function(regionId) {
+          vm.selectedRegion = parseInt(regionId);
+        });        
       }
-
     }
 
 }());
