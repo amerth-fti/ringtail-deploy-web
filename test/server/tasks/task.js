@@ -103,15 +103,75 @@ describe('Task', function() {
         expect(result).to.equal('Hello World');
       });
 
+      it('resolves an expression ', function() {
+        task.data.resolveMe = 'scope.newValue = scope.someValue + "!"';
+        scope.someValue = 'Hello World' ;
+
+        var result = task.getData(scope, 'resolveMe');
+        expect(scope.newValue).to.equal('Hello World!');
+      });
+
     });
 
+
     describe('when value is not on scope object', function() {
+
       it('resolves simple types from data', function() {
         task.data.resolveMe = 'Hello World';
 
         var result = task.getData(scope, 'resolveMe');
         expect(result).to.equal('Hello World');
       });
+
+    });
+
+
+    describe('when expanding an object', function(){
+
+      it('resolves each value in an object', function() {
+        scope.value1 = 'Value1';
+        scope.value2 = 'Value2';
+        task.data.expand = {
+          'value1': 'scope.value1',
+          'value2': 'scope.value2'
+        };
+
+        var result = task.getData(scope, 'expand', true);
+        expect(result.value1).to.equal('Value1');
+        expect(result.value2).to.equal('Value2');
+      });
+
+    });
+
+
+    describe('when expanding an array', function () {
+
+      it('resolves each value in the array', function() {
+        scope.value1 = 'Value1';
+        scope.value2 = 'Value2';
+        task.data.expand = [
+          'scope.value1',
+          'scope.value2'
+        ];
+
+        var result = task.getData(scope, 'expand', true);
+        expect(result[0]).to.equal('Value1');
+        expect(result[1]).to.equal('Value2');
+      });
+
+      it('resolves each object in the array', function() {
+        scope.value1 = 'Value1';
+        scope.value2 = 'Value2';
+        task.data.expand = [
+          { 'value1': 'scope.value1' },
+          { 'value2': 'scope.value2' }
+        ];
+
+        var result = task.getData(scope, 'expand', true);
+        expect(result[0].value1).to.equal('Value1');
+        expect(result[1].value2).to.equal('Value2');
+      });
+
     });
         
   });

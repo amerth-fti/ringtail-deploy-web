@@ -118,7 +118,7 @@ function getDataFromObject(scope, obj, key) {
   {     
     /*jshint es5:false */
     /*jshint evil:true */      
-    var val = eval(obj[key])
+    var val = key ? eval(obj[key]) : eval(obj)
       , temp;
     
     if(Object.prototype.toString.call(val) === '[object Object]') {
@@ -130,7 +130,13 @@ function getDataFromObject(scope, obj, key) {
         temp[valkey] = getDataFromObject(scope, val, valkey);
       }
       val = temp;
-    }    
+    }  
+
+    else if (Object.prototype.toString.call(val) === '[object Array]') {
+      val = val.map(function(element) {
+        return getDataFromObject(scope, element);
+      });
+    } 
     
     return val;
   }
