@@ -1,7 +1,7 @@
 {
-  "name": "skytap-deployer",
+  "name": "ringtail-deploy-web",
   "version": "0.5.0",
-  "description": "Deployment tool for skytap environments",
+  "description": "Website for interacting with the Ringtail deployment service",
   "author": "Brian Mancini <bmancini@gmail.com>",
   "license": "MIT",
   "scripts": {
