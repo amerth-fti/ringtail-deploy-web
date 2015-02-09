@@ -89,9 +89,11 @@
       <div class="container-fluid">
         <div class="navbar-header">
           <a class="navbar-brand" href="/">
-
             <img src="/app/assets/img/ringtail.png" alt="Ringtail Deploy" class="logo" />
           </a>
+        </div>
+        <div class="navbar-right">
+          <div ng-show="vm.globals.loading" class="loading"></div>
         </div>
       </div>
     </nav>

@@ -13,6 +13,7 @@
 
       var vm = {};
       $scope.vm         = vm;
+      vm.globals        = globals;
       vm.regions        = null;        
       vm.selectedRegion = null;
       vm.routeParams    = $routeParams;
