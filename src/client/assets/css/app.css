@@ -163,7 +163,7 @@ button {
 .machine-details .role-DEV-FULL {
   background-color: #66CCFF;
 }
-.machine-details .role-WEBSERVER {
+.machine-details .role-WEB {
   background-color: #99CCFF;
 }
 .machine-details .role-AGENT {
@@ -175,8 +175,11 @@ button {
 .machine-details .role-WEBAGENT {
   background-color: #FF99CC;
 }
-.machine-details .role-RPF {
+.machine-details .role-RPF-COORDINATOR {
   background-color: #FF9999;
+}
+.machine-details .role-RPF-SUPERVISOR {
+  background-color: #FF6666; 
 }
 .machine-details .role-DATABASE {
   background-color: #FFCC99;

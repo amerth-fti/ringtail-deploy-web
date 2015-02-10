@@ -11,10 +11,11 @@
 
     var roles = [
       'DEV-FULL',
-      'AGENT',
-      'RPF',
+      'AGENT',            
       'WEBAGENT',
-      'WEBSERVER',      
+      'WEB',  
+      'RPF-COORDINATOR',
+      'RPF-SUPERVISOR',    
       'DATABASE',
       'SKYTAP-ALLINONE',      
       'SKYTAP-AGENT',
