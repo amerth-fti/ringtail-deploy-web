@@ -18,9 +18,9 @@
     };
   }
   
-  ListItemController.$inject = [ '$modal','$location', '$timeout', 'config', 'EnvironmentEditor', 'EnvironmentStarter' ];
+  ListItemController.$inject = [ '$timeout', 'config', 'EnvironmentEditor', 'EnvironmentStarter', 'EnvironmentRedeploy' ];
   
-  function ListItemController($modal, $location, $timeout, config, EnvironmentEditor, EnvironmentStarter) {
+  function ListItemController($timeout, config, EnvironmentEditor, EnvironmentStarter, EnvironmentRedeploy) {
     var vm = this;
     vm.enableDeploy = config.enableDeployment;
     vm.environment  = this.environment; 
@@ -71,24 +71,7 @@
     }
 
     function redeploy() {
-      var modal = $modal.open({
-        templateUrl: '/app/environments/redeploy-dialog.html',
-        controller: 'EnvironmentRedeployController',
-        controllerAs: 'vm',
-        resolve: {
-          environment: function() {
-            return vm.environment;
-          }
-        }
-      });
-
-      modal.result.then(function() {
-        vm.environment.$redeploy()
-        .then(function(environment) {
-          var path = '/app/jobs/' + environment.deployedJobId;          
-          $location.path(path);
-        });     
-      });
+      EnvironmentRedeploy.open(vm.environment);
     }
 
     function reset() {

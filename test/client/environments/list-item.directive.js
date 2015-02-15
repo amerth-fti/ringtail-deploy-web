@@ -11,7 +11,6 @@ describe('listItem Directive', function() {
     });
 
   }));
-  beforeEach(module('app.environments.starter'));
 
   var element
     , environment

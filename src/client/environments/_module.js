@@ -6,7 +6,8 @@
       'ngResource',
       'app.environments.editor',
       'app.environments.machine',
-      'app.environments.starter'
+      'app.environments.starter',
+      'app.environments.redeploy'
     ]);
 
 }());

@@ -1,13 +1,34 @@
-(function () {
+(function() {
   'use strict';
 
   angular
-    .module('app.environments')
-    .controller('EnvironmentRedeployController', EnvironmentRedeployController);
+    .module('app.environments.starter')
+    .factory('EnvironmentRedeploy', EnvironmentRedeploy);
 
-  EnvironmentRedeployController.$inject = [ '$modalInstance', 'config', 'environment' ];
+  EnvironmentRedeploy.$inject = [ '$modal' ];
+  
+  function EnvironmentRedeploy($modal) {    
+    return {
+      open: open
+    };
 
-  function EnvironmentRedeployController($modalInstance, config, environment) {
+    function open(environment) {
+      return $modal.open({
+        templateUrl: '/app/environments/redeploy-dialog.html',
+        controller: EnvironmentRedeployController,
+        controllerAs: 'vm',
+        resolve: {
+          environment: function() {
+            return environment;
+          }
+        }
+      });
+    }
+  }
+
+  EnvironmentRedeployController.$inject = [ '$modalInstance', '$location', 'config', 'environment' ];
+
+  function EnvironmentRedeployController($modalInstance, $location, config, environment) {
     var vm = this;
     vm.branches           = config.branches;
     vm.duration           = 120;
@@ -38,7 +59,20 @@
     function rebuild() {
       angular.copy(vm.environment, environment);
       environment.selectedTasks = vm.selectedTasks;
-      $modalInstance.close();
+      
+      // trigger the redeployment
+      environment.$redeploy()
+
+      // shut the dialog since we had success
+      .then(function() {
+        $modalInstance.close(environment);
+      })
+
+      // transition to the job details
+      .then(function(environment) {
+        var path = '/app/jobs/' + environment.deployedJobId;          
+        $location.path(path);
+      });
     }
 
     function toggleAdvanced() {
