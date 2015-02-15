@@ -37,7 +37,6 @@ module.exports = function(config) {
       'src/client/environments/list-item.directive.js',
       'src/client/environments/list.directive.js',  
       'src/client/environments/redeploy-dialog.controller.js',
-      'src/client/environments/start-dialog.controller.js',
 
       'src/client/environments/editor/_module.js',
       'src/client/environments/editor/dialog.factory.js',
@@ -52,6 +51,9 @@ module.exports = function(config) {
       'src/client/environments/machine/details.directive.js',
       'src/client/environments/machine/dialog.factory.js',
       'src/client/environments/machine/editor.directive.js',
+
+      'src/client/environments/starter/_module.js',
+      'src/client/environments/starter/dialog.factory.js', 
 
       'src/client/jobs/details.controller.js',
       'src/client/jobs/task-details.directive.js',

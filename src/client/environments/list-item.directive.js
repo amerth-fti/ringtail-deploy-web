@@ -13,16 +13,17 @@
       },
       templateUrl: '/app/environments/list-item.directive.html',
       controller: ListItemController,
-      controllerAs: 'vm'
+      controllerAs: 'vm',
+      bindToController: true
     };
   }
   
-  ListItemController.$inject = [ '$scope', '$modal','$location', '$timeout', 'config', 'EnvironmentEditor' ];
+  ListItemController.$inject = [ '$modal','$location', '$timeout', 'config', 'EnvironmentEditor', 'EnvironmentStarter' ];
   
-  function ListItemController($scope, $modal, $location, $timeout, config, EnvironmentEditor) {
+  function ListItemController($modal, $location, $timeout, config, EnvironmentEditor, EnvironmentStarter) {
     var vm = this;
     vm.enableDeploy = config.enableDeployment;
-    vm.environment  = $scope.environment; 
+    vm.environment  = this.environment; 
     vm.showStart    = false;
     vm.showPause    = false;
     vm.showBuildNotes = null;
@@ -35,7 +36,7 @@
     vm.reset        = reset;
     vm.start        = start;
     
-    activate($scope.environment);
+    activate(vm.environment);
     
     //////////
     
@@ -64,23 +65,7 @@
     }
 
     function start() {
-      var modal = $modal.open({
-        templateUrl: '/app/environments/start-dialog.html',
-        controller: 'EnvironmentStartController',
-        controllerAs: 'vm',
-        resolve: {
-          environment: function() { 
-            return vm.environment;
-          }
-        }
-      });
-
-      modal.result.then(function(startinfo) {
-        var qs = {
-          suspend_on_idle: startinfo.duration * 60,
-        };
-        vm.environment.$start(qs, activate);
-      });
+      EnvironmentStarter.open(vm.envirnoment);
     }
 
     function pause() {
