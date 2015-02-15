@@ -30,7 +30,6 @@
     vm.status       = null;
     vm.show         = false;
     vm.edit         = edit;
-    vm.initialize   = initialize;
     vm.pause        = pause;
     vm.redeploy     = redeploy;
     vm.reset        = reset;
@@ -45,7 +44,6 @@
       vm.environment    = environment;
       vm.showStart      = runstate === 'suspended' || runstate === 'stopped';
       vm.showPause      = runstate === 'running';
-      vm.showInitialize = environment.status === 'initialize';
       vm.showButtons    = environment.status === 'deployed';
       vm.showDeployLink = environment.status === 'deploying';
 
@@ -99,11 +97,6 @@
 
     function edit() {
       EnvironmentEditor.open(vm.environment);
-    }
-
-    function initialize() {
-      vm.environment.user_data.contents = JSON.stringify(config.intialize, null, 2);
-      vm.environment.$update(activate);
     }
   }
   

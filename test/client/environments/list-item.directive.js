@@ -70,12 +70,6 @@ describe('listItem Directive', function() {
       expect(controller.showStart).to.be.true;
     });
 
-    it('sets showInitialize when status is "initialize"', function() {
-      environment.status = 'initialize';
-      run();
-      expect(controller.showInitialize).to.be.true;
-    });
-
     it('sets showButtons when status is "deployed"', function() {
       environment.status = 'deployed';
       run();
@@ -94,7 +88,7 @@ describe('listItem Directive', function() {
 
   });
 
-  describe('.start', function() {
+  describe('.start()', function() {
     var EnvironmentStarter;
 
     beforeEach(inject(function(_EnvironmentStarter_) {
@@ -102,42 +96,52 @@ describe('listItem Directive', function() {
     }));
 
     it('should open the starter dialog', function() {
-      var mock = sinon.stub(EnvironmentStarter, 'open');
+      var stub = sinon.stub(EnvironmentStarter, 'open');
       run();
       controller.start();
-      expect(mock.calledOnce).to.equal(true);
+      expect(stub.calledOnce).to.equal(true);
     });
 
   });
 
-  // describe('#newEnvironment', function() {
-  //   var open;
+  describe('.pause()', function() {
+    it('should pause the environment', function() {
+      var stub = sinon.stub(environment, '$pause');
+      run();
+      controller.pause();
+      expect(stub.calledOnce).to.be.true;
+    });
+  });
 
-  //   beforeEach(function() {
-  //     open = sinon.stub(EnvironmentEditor, 'open', function() {
-  //       var deferred = $q.defer();
-  //       deferred.resolve({ envId: 2 });
-  //       return { result: deferred.promise };    
-  //     });
-  //   });
-    
-  //   it('opens the editor', function(done) {
-  //     controller.newEnvironment()
-  //     .then(function() {
-  //       expect(open.calledOnce).to.be.true;
-  //       done();
-  //     });
-  //     $rootScope.$apply();
-  //   });
+  describe('.redeploy()', function() {
 
-  //   it('when resolved adds to environments', function(done) {
-  //     controller.newEnvironment()
-  //     .then(function() {
-  //       expect(controller.environments.length).to.equal(2);
-  //       done();
-  //     });
-  //     $rootScope.$apply();
-  //   });
+    it('should open the redeploy dialog');
 
-  //});
+  });
+
+  describe('.reset()', function() {
+    it('should reset the environment', function() {
+      var stub = sinon.stub(environment, '$reset');
+      run();
+      controller.reset();
+      expect(stub.calledOnce).to.be.true;
+    });
+  });
+
+  describe('.edit()', function() {
+    var EnvironmentEditor;
+
+    beforeEach(inject(function(_EnvironmentEditor_) {
+      EnvironmentEditor = _EnvironmentEditor_;
+    }));
+
+    it('should open the environment editor for the current environment', function() { 
+      var stub = sinon.stub(EnvironmentEditor, 'open');
+      run();
+      controller.edit();
+      expect(stub.calledOnce).to.be.true;
+      expect(stub.getCall(0).args[0]).to.equal(environment);
+    });
+  });
+
 });

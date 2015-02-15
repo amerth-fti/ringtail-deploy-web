@@ -80,18 +80,10 @@
         ng-show="vm.enableDeploy"></button>
     </div>
     
-    <h4 ng-show="vm.showInitialize || vm.showDeployLink">
+    <h4 ng-show="vm.showDeployLink">
       <span>{{ vm.environment.status | uppercase }}</span>
       <span ng-show="vm.showDeployLink" title="Reset Environment" class="small glyphicon glyphicon-exclamation-sign color-danger" ng-click="vm.reset()"></span>
     </h4>
-    
-    <div ng-show="vm.showInitialize">
-      <button
-        type="button"
-        class="btn btn-success glyphicon glyphicon-off"
-        ng-click="vm.initialize()"
-        ng-show="vm.showInitialize"></button>
-    </div>
     
     <div ng-show="vm.showDeployLink">    
         <!-- Show deployment job details when deploying -->
