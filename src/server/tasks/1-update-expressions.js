@@ -21,7 +21,7 @@ function TaskImpl(options) {
       
       var update = self.getData(scope, 'update', true)
         , env = self.getData(scope, 'env');
-      console.log(env);
+      
       log('saving environment changes');
       return envSvc.update(env);
     });

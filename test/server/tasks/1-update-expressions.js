@@ -7,7 +7,7 @@ var mocha   = require('mocha')
   , envSvc      = require('../../../src/server/services/env-service')
   ;
 
-describe('Update Env Record Task', function() {
+describe('Update Expressions Task', function() {
 
   describe('execute', function() {
 
@@ -23,9 +23,9 @@ describe('Update Env Record Task', function() {
       task.data = { 
         'env': 'scope.me',
         'update': [
-          'scope.env.envName = "new name"',
-          'scope.env.envDesc = "new description"',
-          'scope.env.machines[0].machineName = "new machine name"'          
+          'scope.me.envName = "new name"',
+          'scope.me.envDesc = "new description"',
+          'scope.me.machines[0].machineName = "new machine name"'          
         ]
       };
     });
@@ -56,9 +56,9 @@ describe('Update Env Record Task', function() {
       task
         .execute(scope, log)
         .then(function() {
-          expect(scope.env.envName).to.equal('new name');
-          expect(scope.env.envDesc).to.equal('new description');
-          expect(scope.env.machines[0].machineName).to.equal('new machine name');
+          expect(scope.me.envName).to.equal('new name');
+          expect(scope.me.envDesc).to.equal('new description');
+          expect(scope.me.machines[0].machineName).to.equal('new machine name');
         })
         .done(done);
     });    
@@ -67,7 +67,7 @@ describe('Update Env Record Task', function() {
       task
         .execute(scope, log)
         .then(function() {
-          expect(envSvc.update.withArgs(scope.env).calledOnce).to.be.true;          
+          expect(envSvc.update.withArgs(scope.me).calledOnce).to.be.true;          
         })
         .done(done);
     });
