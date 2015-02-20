@@ -113,9 +113,18 @@ describe('listItem Directive', function() {
   });
 
   describe('.redeploy()', function() {
+    var EnvironmentRedeploy;
 
-    it('should open the redeploy dialog');
+    beforeEach(inject(function(_EnvironmentRedeploy_) {
+      EnvironmentRedeploy = _EnvironmentRedeploy_;
+    }));
 
+    it('should open the redeploy dialog', function() {
+      var stub = sinon.stub(EnvironmentRedeploy, 'open');
+      run();
+      controller.redeploy();
+      expect(stub.calledOnce).to.equal(true);
+    });
   });
 
   describe('.reset()', function() {
