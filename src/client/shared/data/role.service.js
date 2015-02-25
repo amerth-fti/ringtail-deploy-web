@@ -67,11 +67,15 @@
 
     function environment(env) {
       var machines = env.machines
-        , roles;
-      roles = machines.map(function(machine) {
-        return machine.role;
-      });
-      return distinct(roles);
+        , roles = [];
+
+      if(machines) {
+        roles = machines.map(function(machine) {
+          return machine.role;
+        });
+        roles = distinct(roles);
+      }
+      return roles;
     }
 
     function query(opts) {

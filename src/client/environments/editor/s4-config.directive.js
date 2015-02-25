@@ -30,20 +30,21 @@
     vm.configChanged  = configChanged;   
     vm.prev           = prev;
     vm.invalid        = false;
+    vm.simple         = true;    
     
     activate();
     
     //////////
     
-    function activate() {
+    function activate() {      
       $scope.$watch('vm.wizard.stage', function(stage) {
         if(stage === 'config') {
           if(!vm.environment.config) {
             vm.environment.config = taskdefFactory.create(vm.environment);
           }
-          vm.config = JSON.stringify(vm.environment.config, null, 2);
+          vm.config = JSON.stringify(vm.environment.config, null, 2);          
         }
-      });
+      });    
     }
 
     function configChanged() {
@@ -60,6 +61,8 @@
     function prev() {
       vm.wizard.stage = 'machines';
     }
+
+
 
   }
   

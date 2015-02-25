@@ -1,6 +1,11 @@
 <div class="modal-body">
-  <h4>Redeploy Definition</h4>
-  <textarea class="form-control" rows="20" ng-model="vm.config" ng-change="vm.configChanged()"></textarea>
+  <h4>Deployment Configuration <label><input type="checkbox" ng-model="vm.simple" />Guided Editor</label> </h4>
+  <div ng-show="vm.simple">
+    // taskdef editor goes here
+  </div>
+  <div ng-show="!vm.simple">
+    <textarea class="form-control" rows="20" ng-model="vm.config" ng-change="vm.configChanged()"></textarea>
+  </div>
 </div>
 
 <div class="modal-footer">
