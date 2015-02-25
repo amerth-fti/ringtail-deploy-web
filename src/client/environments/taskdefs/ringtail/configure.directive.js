@@ -9,7 +9,8 @@
     return { 
       restrict: 'E',
       scope: {
-        taskdef: '='     
+        environment: '=',
+        taskdef: '='   
       },
       templateUrl: '/app/environments/taskdefs/ringtail/configure.html',
       controller: TaskdefRingtailController,
@@ -21,14 +22,26 @@
   TaskdefRingtailController.$inject = [ 'RingtailConfig', 'Role' ];
 
   function TaskdefRingtailController(RingtailConfig, Role) {
-    var vm = this;        
-    
+    var vm          = this; 
+    vm.environment  = this.environment;
+    vm.taskdef      = this.taskdef;    
+    vm.roles        = null;
+    vm.roleconfigs  = null;
+    vm.selectedRole = 0;
+    vm.selectRole   = selectRole;
+
     activate();
 
     //////////
 
     function activate() {
-    }  
+      vm.roles = Role.environment(vm.environment);
+      vm.roleconfigs = RingtailConfig.get(vm.roles[vm.selectedRole]);
+    }
+
+    function selectRole(index, role) {
+      vm.selectedRole = index;      
+    }
   }
 
 }());

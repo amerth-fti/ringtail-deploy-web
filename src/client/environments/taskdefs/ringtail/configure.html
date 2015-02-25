@@ -1,0 +1,9 @@
+<ul class="nav nav-tabs">
+  <li 
+    ng-repeat="(index, role) in vm.roles"
+    ng-class="{ active: index === vm.selectedRole }"
+    ng-click="vm.selectRole(index, role)"
+    >
+    <a>{{ role }}</a>
+  </li>
+</ul>

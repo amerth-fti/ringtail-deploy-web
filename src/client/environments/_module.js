@@ -7,7 +7,8 @@
       'app.environments.editor',
       'app.environments.machine',
       'app.environments.starter',
-      'app.environments.redeploy'
+      'app.environments.redeploy',
+      'app.environments.taskdefs'
     ]);
 
 }());
