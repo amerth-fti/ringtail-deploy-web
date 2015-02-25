@@ -57,6 +57,11 @@ module.exports = function(config) {
       'src/client/environments/redeploy/_module.js',
       'src/client/environments/redeploy/dialog.factory.js', 
 
+      'src/client/environments/taskdefs/_module.js', 
+      'src/client/environments/taskdefs/list.directive.js', 
+      'src/client/environments/taskdefs/ringtail/_module.js', 
+      'src/client/environments/taskdefs/ringtail/configure.directive.js', 
+
       'src/client/jobs/details.controller.js',
       'src/client/jobs/task-details.directive.js',
 
@@ -77,6 +82,7 @@ module.exports = function(config) {
       'src/client/shared/data/job.service.js',
       'src/client/shared/data/project.service.js',
       'src/client/shared/data/region.service.js',
+      'src/client/shared/data/ringtail-config.service.js',
       'src/client/shared/data/role.service.js',
       'src/client/shared/data/skytap-environment.service.js',
       
