@@ -8,9 +8,22 @@
   </li>
 </ul>
 
-<div>
-  configs
-  <div ng-repeat="config in vm.roleconfigs">
-    
+<form>  
+  <div ng-repeat="field in vm.fields" class="form-group">    
+      <label>{{field.title}}</label>       
+      <input 
+        type="text" 
+        class="form-control"
+        ng-model="field.value"
+        ng-if="!field.options"
+      ></input>      
+      <select
+        class="form-control"
+        ng-model="field.value"
+        ng-options="option as option for option in field.options"
+        ng-if="field.options"
+      ></select>
+      <p class="help-block">{{field.description}}</p>
+    </p>
   </div>
 </div>

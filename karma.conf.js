@@ -23,6 +23,7 @@ module.exports = function(config) {
       'src/client/assets/bower_components/angular-animate/angular-animate.js',
       'src/client/assets/bower_components/angular-bootstrap/ui-bootstrap.js',
       'src/client/assets/bower_components/angular-bootstrap/ui-bootstrap-tpls.js',
+      'src/client/assets/bower_components/underscore/underscore.js',
 
       'src/client/_module.js',
       'src/client/_routes.js',
@@ -61,6 +62,7 @@ module.exports = function(config) {
       'src/client/environments/taskdefs/list.directive.js', 
       'src/client/environments/taskdefs/ringtail/_module.js', 
       'src/client/environments/taskdefs/ringtail/configure.directive.js', 
+      'src/client/environments/taskdefs/ringtail/field.service.js', 
 
       'src/client/jobs/details.controller.js',
       'src/client/jobs/task-details.directive.js',
@@ -76,6 +78,7 @@ module.exports = function(config) {
       'src/client/shared/environment.factory.js',
       'src/client/shared/loading.factory.js',
       'src/client/shared/taskdef.factory.js',      
+      'src/client/shared/underscore.js', 
       
       'src/client/shared/data/_module.js',  
       'src/client/shared/data/environment.service.js',

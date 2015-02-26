@@ -25,19 +25,7 @@ describe('Ringtail Config Service', function() {
       sut.get('MYROLE');
       $httpBackend.flush();
     });
-  });
-
-
-  describe('.details', function() {
-    it('should return the description for a existing key', function() {
-      var config = 'Common|IS_SQLSERVER_SERVER'
-        , result
-        ;
-      result = sut.details(config);
-      expect(result).to.be.a('string');
-      expect(result.length).to.be.above(0);
-    });    
-  });
+  });  
 
 
   describe('.split', function() {

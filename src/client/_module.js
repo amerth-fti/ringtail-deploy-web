@@ -5,9 +5,10 @@
     'ngRoute',  
     'ngAnimate',
     'ui.bootstrap',
+    'underscore',
     'shared',
     'app.environments',
-    'app.regions'
+    'app.regions',
   ]);
 
 }());

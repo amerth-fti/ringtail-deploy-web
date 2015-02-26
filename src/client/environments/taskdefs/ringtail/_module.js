@@ -3,6 +3,7 @@
 
   angular
     .module('app.environments.taskdefs.ringtail', [      
+      'underscore'
     ]);
 
 }());

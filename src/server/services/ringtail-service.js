@@ -14,52 +14,52 @@ exports.roleConfigs = function roleConfigs(role, next) {
     /* jshint es5:false */
     /* jshint ignore:start */
     result = [
-      { "Ringtail8|IS_SQLSERVER_SERVER": "" },
-      { "Ringtail8|IS_SQLSERVER_USERNAME": "sa" },
-      { "Ringtail8|IS_SQLSERVER_PASSWORD": "" },
-      { "Ringtail8|IS_SQLSERVER_DATABASE": "" },
-      { "Ringtail8|RINGTAILIISWEBAPPLICATIONNAME": "\"Default Web Site/Ringtail\"" },
-      { "Ringtail8|RINGTAILWEBAPPNAME": "Ringtail" },
-      { "Ringtail8|RINGTAILIISVIRTUALDIRECTORYPHYSICALPATH": "C:\\inetpub\\wwwroot\\Ringtail" },
-      { "Ringtail8|RINGTAILIISWEBAPPLICATIONURL": "https://site.ftitools.com/Ringtail" },
-      { "Ringtail8|RINGTAILUISTATICCONTENTURL": "https://site.ftitools.com/UIStatic " },
-      { "Ringtail8|RINGTAILHELPURL": "https://site.ftitools.com/RingtailHelp " },
-      { "Ringtail8|RINGTAILSTSURL": "https://site.ftitools.com/RingtailSTS " },
-      { "Ringtail8|RINGTAILSTSCERTIFICATETHUMBPRINT": "\"2c 3f 36 e4 cc b3 24 82 d9 66 11 69 1e e7 2a 5a 2c 0e c4 30\"" },
-      { "Ringtail8|SSLUSAGEPROPERTY": "true " },
-      { "Ringtail8|RINGTAILSTSCERTIFICATENAME": "RingtailSTS" },
-      { "Ringtail8|RINGTAILSTSCERTIFICATEISSUERNAME": "RingtailSTS" },
-      { "Ringtail8|RINGTAILSTSIISVIRTUALDIRECTORYPHYSICALPATH": "C:\\inetpub\\wwwroot\\RingtailSTS" },
-      { "Ringtail8|RINGTAILUIIISVIRTUALDIRECTORYPHYSICALPATH": "C:\\inetpub\\wwwroot\\RingtailUIStatic" },
-      { "Ringtail8|IISAUTHENTICATIONMETHOD": "Forms" },
-      { "Ringtail8|SELFSERVICEAUTHENTICATIONMODE": "Ringtail" },
-      { "Ringtail8|RINGTAILSTSIISAPPLICATIONNAME": "\"Default Web Site/RingtailSTS\"" },
-      { "Ringtail8|RINGTAILUIIISAPPLICATONNAME": "\"Default Web Site/RingtailUIStatic\"" },
-      { "Ringtail8|WEBBROWSERPROTOCOL": "https" },
-      { "Ringtail8|WEBSERVERSSLUSAGE": "false" },
-      { "Ringtail8|RMCIISWEBAPPLICATIONNAME": "\"Default Web Site/RMC\"" },
-      { "Ringtail8|RMCAPPNAME": "RMC" },
-      { "Ringtail8|RMCIISVIRTUALDIRECTORYPHYSICALPATH": "C:\\inetpub\\wwwroot\\RMC" },
-      { "Ringtail8|RMCIISWEBAPPLICATIONURL": "https://site.ftitools.com/RMC" },
-      { "Ringtail8|RINGTAILCLASSICURL": "https://site.ftitools.com/classic" },
-      { "Ringtail8|RLMIISWEBAPPLICATIONNAME": "\"Default Web Site/RingtailLicenseManagement\"" },
-      { "Ringtail8|RLMIISVIRTUALDIRECTORYPHYSICALPATH": "C:\inetpub\wwwroot\RingtailLicenseManagement" },
-      { "Ringtail8|RINGTAILCLASSICWEBSITENAME": "\"Default Web Site\"" },
-      { "Ringtail8|RINGTAILCLASSICWEBSITEMAPPING": "Legal" }
+      { "key": "Ringtail8|IS_SQLSERVER_SERVER", "value": "" },
+      { "key": "Ringtail8|IS_SQLSERVER_USERNAME", "value": "sa" },
+      { "key": "Ringtail8|IS_SQLSERVER_PASSWORD", "value": "" },
+      { "key": "Ringtail8|IS_SQLSERVER_DATABASE", "value": "" },
+      { "key": "Ringtail8|RINGTAILIISWEBAPPLICATIONNAME", "value": "\"Default Web Site/Ringtail\"" },
+      { "key": "Ringtail8|RINGTAILWEBAPPNAME", "value": "Ringtail" },
+      { "key": "Ringtail8|RINGTAILIISVIRTUALDIRECTORYPHYSICALPATH", "value": "C:\\inetpub\\wwwroot\\Ringtail" },
+      { "key": "Ringtail8|RINGTAILIISWEBAPPLICATIONURL", "value": "https://site.ftitools.com/Ringtail" },
+      { "key": "Ringtail8|RINGTAILUISTATICCONTENTURL", "value": "https://site.ftitools.com/UIStatic " },
+      { "key": "Ringtail8|RINGTAILHELPURL", "value": "https://site.ftitools.com/RingtailHelp " },
+      { "key": "Ringtail8|RINGTAILSTSURL", "value": "https://site.ftitools.com/RingtailSTS " },
+      { "key": "Ringtail8|RINGTAILSTSCERTIFICATETHUMBPRINT", "value": "\"2c 3f 36 e4 cc b3 24 82 d9 66 11 69 1e e7 2a 5a 2c 0e c4 30\"" },
+      { "key": "Ringtail8|SSLUSAGEPROPERTY", "value": "true " },
+      { "key": "Ringtail8|RINGTAILSTSCERTIFICATENAME", "value": "RingtailSTS" },
+      { "key": "Ringtail8|RINGTAILSTSCERTIFICATEISSUERNAME", "value": "RingtailSTS" },
+      { "key": "Ringtail8|RINGTAILSTSIISVIRTUALDIRECTORYPHYSICALPATH", "value": "C:\\inetpub\\wwwroot\\RingtailSTS" },
+      { "key": "Ringtail8|RINGTAILUIIISVIRTUALDIRECTORYPHYSICALPATH", "value": "C:\\inetpub\\wwwroot\\RingtailUIStatic" },
+      { "key": "Ringtail8|IISAUTHENTICATIONMETHOD", "value": "Forms" },
+      { "key": "Ringtail8|SELFSERVICEAUTHENTICATIONMODE", "value": "Ringtail" },
+      { "key": "Ringtail8|RINGTAILSTSIISAPPLICATIONNAME", "value": "\"Default Web Site/RingtailSTS\"" },
+      { "key": "Ringtail8|RINGTAILUIIISAPPLICATONNAME", "value": "\"Default Web Site/RingtailUIStatic\"" },
+      { "key": "Ringtail8|WEBBROWSERPROTOCOL", "value": "https" },
+      { "key": "Ringtail8|WEBSERVERSSLUSAGE", "value": "false" },
+      { "key": "Ringtail8|RMCIISWEBAPPLICATIONNAME", "value": "\"Default Web Site/RMC\"" },
+      { "key": "Ringtail8|RMCAPPNAME", "value": "RMC" },
+      { "key": "Ringtail8|RMCIISVIRTUALDIRECTORYPHYSICALPATH", "value": "C:\\inetpub\\wwwroot\\RMC" },
+      { "key": "Ringtail8|RMCIISWEBAPPLICATIONURL", "value": "https://site.ftitools.com/RMC" },
+      { "key": "Ringtail8|RINGTAILCLASSICURL", "value": "https://site.ftitools.com/classic" },
+      { "key": "Ringtail8|RLMIISWEBAPPLICATIONNAME", "value": "\"Default Web Site/RingtailLicenseManagement\"" },
+      { "key": "Ringtail8|RLMIISVIRTUALDIRECTORYPHYSICALPATH", "value": "C:\inetpub\wwwroot\RingtailLicenseManagement" },
+      { "key": "Ringtail8|RINGTAILCLASSICWEBSITENAME", "value": "\"Default Web Site\"" },
+      { "key": "Ringtail8|RINGTAILCLASSICWEBSITEMAPPING", "value": "Legal" }
     ];
     /* jshint ignore:end */    
   } 
 
-  else if (role.contains('db')) {
+  else if (role.indexOf('db') >= 0) {
     /* jshint es5:false */
     /* jshint ignore:start */
     result = [ 
-      { "RingtailDatabaseUtility|IS_SQLSERVER_USERNAME": "user" },
-      { "RingtailDatabaseUtility|IS_SQLSERVER_PASSWORD": "pwd" },
-      { "DatabaseUpgrader|IS_SQLSERVER_USERNAME": "sa" },
-      { "DatabaseUpgrader|IS_SQLSERVER_PASSWORD": "pwd" },
-      { "DatabaseUpgrader|DATACAMEL_ACTION": "upgrade" },
-      { "DatabaseUpgrader|DATACAMEL_DATABASES": "Portal,Rpf,Case01,Case01,rs_tempdb" }
+      { "key": "RingtailDatabaseUtility|IS_SQLSERVER_USERNAME", "value": "user" },
+      { "key": "RingtailDatabaseUtility|IS_SQLSERVER_PASSWORD", "value": "pwd" },
+      { "key": "DatabaseUpgrader|IS_SQLSERVER_USERNAME", "value": "sa" },
+      { "key": "DatabaseUpgrader|IS_SQLSERVER_PASSWORD", "value": "pwd" },
+      { "key": "DatabaseUpgrader|DATACAMEL_ACTION", "value": "upgrade" },
+      { "key": "DatabaseUpgrader|DATACAMEL_DATABASES", "value": "Portal,Rpf,Case01,Case01,rs_tempdb" }
     ]
     /* jshint ignore:end */    
   }
