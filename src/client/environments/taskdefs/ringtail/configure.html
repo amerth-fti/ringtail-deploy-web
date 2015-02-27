@@ -1,29 +1,15 @@
 <ul class="nav nav-tabs">
   <li 
-    ng-repeat="(index, role) in vm.roles"
-    ng-class="{ active: index === vm.selectedRole }"
-    ng-click="vm.selectRole(index, role)"
+    ng-repeat="role in vm.roles"
+    ng-class="{ active: role === vm.selectedRole }"
+    ng-click="vm.selectRole(role)"
     >
     <a>{{ role }}</a>
   </li>
 </ul>
 
-<form>  
-  <div ng-repeat="field in vm.fields" class="form-group">    
-      <label>{{field.title}}</label>       
-      <input 
-        type="text" 
-        class="form-control"
-        ng-model="field.value"
-        ng-if="!field.options"
-      ></input>      
-      <select
-        class="form-control"
-        ng-model="field.value"
-        ng-options="option as option for option in field.options"
-        ng-if="field.options"
-      ></select>
-      <p class="help-block">{{field.description}}</p>
-    </p>
-  </div>
-</div>
+<ringtail-field-editor
+  role="vm.selectedRole"
+  current-values="vm.currentValues"
+  >
+</ringtail-field-editor>

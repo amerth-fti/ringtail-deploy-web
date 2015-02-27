@@ -39,13 +39,12 @@
         , el
         ;
 
-      vm.selectedTaskdef  = index;      
-      scope.taskdef       = taskdef;
+      vm.selectedTaskdef  = index;
       scope.environment   = vm.environment;
 
       // TODO - break into factory
       if(taskdef.task === 'parallel') {
-        el = $compile('<taskdef-ringtail taskdef="vm.taskdef" environment="vm.environment"></tasdef-ringtail>')(scope);
+        el = $compile('<taskdef-ringtail environment="vm.environment"></tasdef-ringtail>')(scope);
         angular.element($element[0].querySelector('.taskdef-editor-container')).html(el);
       } else {
         // TODO - create raw editor that gets toggled

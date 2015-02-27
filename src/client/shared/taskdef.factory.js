@@ -5,9 +5,9 @@
     .module('shared')
     .factory('taskdefFactory', taskdefFactory);
 
-  taskdefFactory.$inject = [ ];
+  taskdefFactory.$inject = [ '_' ];
  
-  function taskdefFactory() {
+  function taskdefFactory(_) {
     return {
       create: create
     };
@@ -51,7 +51,6 @@
       var baseUrl
         , taskdef;
 
-      baseUrl = 'http://' + environment.host;
       taskdef = {
         'task': '3-custom-ringtail',
         'options': {
@@ -74,6 +73,26 @@
       };
 
       return taskdef;
+    }  
+
+    
+
+    function getEnvironmentTaskDefs(environment) {
+      var config = environment.config || { 'taskdefs': [] };
+      return config.taskdefs || [];
+    } 
+
+    function findInstallTaskDefs(taskdefs) {
+      var install = _.where(taskdefs, { 'task': '3-custom-ringtail' });
+      if(install.length === 0) {
+        install = _.where(taskdefs, { 'task': 'parallel' });
+      }
+    }
+
+    function findRoleTaskDefs(taskdefs, role) {
+      return _.filter(taskdefs, function(taskdef) {
+        return taskdef.data.config.ROLE === role;
+      });
     }
 
   }
