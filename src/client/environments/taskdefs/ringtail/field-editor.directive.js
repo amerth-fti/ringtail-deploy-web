@@ -11,7 +11,7 @@
       scope: {
         role: '=',
         //host: '=',
-        currentValues: '='
+        values: '='
       },
       templateUrl: '/app/environments/taskdefs/ringtail/field-editor.html',
       controller: Controller,
@@ -20,12 +20,14 @@
     };
   }
 
-  Controller.$inject = [ '_', 'RingtailConfig', 'Role', 'RingtailField' ];
+  Controller.$inject = [ '$scope', '_', 'RingtailConfig', 'Role', 'RingtailField' ];
 
-  function Controller(_, RingtailConfig, Role, RingtailField) {
-    var vm        = this;
-    vm.role       = this.role;
-    vm.currentValues  = this.currentValues;
+  function Controller($scope, _, RingtailConfig, Role, RingtailField) {
+    var vm          = this;
+    vm.role         = this.role;
+    vm.values       = this.values;
+    vm.fields       = null;
+    vm.updateField  = updateField;
 
     activate();
 
@@ -34,21 +36,31 @@
     function activate() {
       RingtailConfig
         .get(vm.role)
-        .success(processConfigs);
+        .success(processConfigs);    
     }
 
 
-    function processConfigs(kvps) {    
-      var keys = _.pluck(kvps, 'key');
-      vm.fields = keys.map(function(key) {
-        
-        var field = RingtailField.getField(key)
-          , currentValue = vm.currentValues[key]
-          ;
+    function processConfigs(configs) {    
+      var configKeys = _.pluck(configs, 'key');
 
-        field.value = currentValue || field.default;
+      // TODO - dedup fields
+      vm.fields = configKeys.map(function(configKey) {
+        
+        var field = RingtailField.getField(configKey)
+          , currentValue = vm.values[configKey]
+          ;
+        field.configKey = configKey;
+        field.value = currentValue || field.default;        
         return field;
       });
+
+      // push updates to all configs
+      vm.fields.forEach(updateField);
+    }
+
+    function updateField(field) { 
+      // TODO write values for all field members
+      vm.values[field.configKey] = field.value;
     }
 
   }

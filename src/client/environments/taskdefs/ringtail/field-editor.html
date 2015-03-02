@@ -5,12 +5,14 @@
         type="text" 
         class="form-control"
         ng-model="field.value"
+        ng-change="vm.updateField(field)"
         ng-if="!field.options"
       ></input>      
       <select
         class="form-control"
         ng-model="field.value"
         ng-options="option as option for option in field.options"
+        ng-change="vm.updateField(field)"
         ng-if="field.options"
       ></select>
       <p class="help-block">{{field.description}}</p>
