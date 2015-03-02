@@ -1,15 +1,11 @@
 <ul class="nav nav-tabs">
   <li 
-    ng-repeat="role in vm.roles"
+    ng-repeat="(index, role) in vm.roles"
     ng-class="{ active: role === vm.selectedRole }"
-    ng-click="vm.selectRole(role)"
+    ng-click="vm.selectRole(index, role)"
     >
     <a>{{ role }}</a>
   </li>
 </ul>
 
-<ringtail-field-editor
-  role="vm.selectedRole"
-  current-values="vm.currentValues"
-  >
-</ringtail-field-editor>
+<div class="field-editor-container"></div>

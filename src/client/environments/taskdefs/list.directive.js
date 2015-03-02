@@ -37,10 +37,8 @@
     function editTaskdef(taskdef, index) {
       var scope = $scope.$new()
         , el
-        ;
-
-      vm.selectedTaskdef  = index;
-      scope.environment   = vm.environment;
+        ;        
+      vm.selectedTaskdef  = index;      
 
       // TODO - break into factory
       if(taskdef.task === 'parallel') {

@@ -3,14 +3,14 @@
 
   angular
     .module('app.environments.taskdefs.ringtail')
-    .directive('ringtailFieldEditor', ringtailFieldEditor);
+    .directive('tasksRingtailFieldEditor', tasksRingtailFieldEditor);
 
-  function ringtailFieldEditor() {
+  function tasksRingtailFieldEditor() {
     return { 
       restrict: 'E',
       scope: {
         role: '=',
-        host: '=',
+        //host: '=',
         currentValues: '='
       },
       templateUrl: '/app/environments/taskdefs/ringtail/field-editor.html',
@@ -27,6 +27,9 @@
     vm.role       = this.role;
     vm.currentValues  = this.currentValues;
 
+    activate();
+
+    //////////
 
     function activate() {
       RingtailConfig

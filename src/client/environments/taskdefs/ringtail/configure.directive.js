@@ -18,9 +18,9 @@
     };
   }
 
-  TaskdefRingtailController.$inject = [ '_', 'RingtailConfig', 'Role', 'RingtailField' ];
+  TaskdefRingtailController.$inject = [ '$compile', '$scope', '$element', 'Role', 'TaskDef' ];
 
-  function TaskdefRingtailController(_, RingtailConfig, Role, RingtailField) {
+  function TaskdefRingtailController($compile, $scope, $element, Role, TaskDef) {
     var vm            = this;
     vm.environment    = this.environment;    
     vm.fields         = null;
@@ -40,8 +40,17 @@
     }
 
     function selectRole(index, role) {
-      vm.selectedRole = index;       
-      vm.currentValues = // LOAD FROM taskdef.factory
+      var taskdef = TaskDef.getEnvTaskDefForRole(vm.environment, role)
+        , currentValues = TaskDef.getKeyValuePairs(taskdef)
+        , scope = $scope.$new()
+        , element
+        ;
+
+      vm.selectedRole = role;
+      vm.currentValues = currentValues;
+
+      element = $compile('<tasks-ringtail-field-editor role="vm.selectedRole" current-values="vm.currentValues"></tasks-ringtail-field-editor>')(scope);
+      angular.element($element[0].querySelector('.field-editor-container')).html(element);
     }  
   }
 

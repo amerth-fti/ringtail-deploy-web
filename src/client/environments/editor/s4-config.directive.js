@@ -22,9 +22,9 @@
     };
   }
   
-  DirectiveController.$inject = [ '$scope', 'taskdefFactory' ];
+  DirectiveController.$inject = [ '$scope', 'TaskDef' ];
   
-  function DirectiveController($scope, taskdefFactory) {
+  function DirectiveController($scope, TaskDef) {
     var vm            = this;
     vm.config         = null;
     vm.configChanged  = configChanged;   
@@ -40,7 +40,7 @@
       $scope.$watch('vm.wizard.stage', function(stage) {
         if(stage === 'config') {
           if(!vm.environment.config) {
-            vm.environment.config = taskdefFactory.create(vm.environment);
+            vm.environment.config = TaskDef.create(vm.environment);
           }
           vm.config = JSON.stringify(vm.environment.config, null, 2);          
         }

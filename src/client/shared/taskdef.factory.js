@@ -3,13 +3,20 @@
 
   angular
     .module('shared')
-    .factory('taskdefFactory', taskdefFactory);
+    .factory('TaskDef', TaskDef);
 
-  taskdefFactory.$inject = [ '_' ];
+  TaskDef.$inject = [ '_' ];
  
-  function taskdefFactory(_) {
+  function TaskDef(_) {
     return {
-      create: create
+      create: create,      
+      getEnvTaskDefs: getEnvTaskDefs,
+      getEnvTaskDefForRole: getEnvTaskDefForRole,
+      getKeyValuePairs: getKeyValuePairs,
+
+      /* Private - open for testing */
+      findInstallTaskDefs: findInstallTaskDefs,
+      findTaskDefForRole: findTaskDefForRole,      
     };
 
     function create(environment) {
@@ -20,7 +27,8 @@
 
     function createEnvironment(environment) {
       var taskdef
-        , subtasks;
+        , subtasks
+        ;
 
       taskdef = {
         'task': 'parallel',
@@ -36,10 +44,8 @@
         }
       });
 
-      subtasks.forEach(function(subtask, index) {
-        if(!subtask) {
-          subtasks.splice(index, 1);
-        }
+      subtasks = _.filter(subtasks, function(subtask) {
+        return !!subtask;
       });
 
       taskdef.options.taskdefs = subtasks;
@@ -54,19 +60,12 @@
       taskdef = {
         'task': '3-custom-ringtail',
         'options': {
-          'name': machine.machineName || 'Machine ' + index,
+          'name': 'Install ' + (machine.machineName || 'Machine ') + index,
           'data': {
             'machine': 'scope.me.machines[' + index + ']',
             'branch': 'scope.me.deployedBranch',
             'config': {
-              'ROLE': machine.role,
-              'Common|RINGTAILUISTATICCONTENTURL': baseUrl + '/UIStatic',
-              'Common|RINGTAILSTSURL': baseUrl + '/RingtailSTS',
-              'Common|RINGTAILIISWEBAPPLICATIONURL': baseUrl + '/ringtail',
-              'Common|RINGTAILHELPURL': baseUrl + '/RingtailHelp',
-              'Common|RINGTAILCLASSICURL': baseUrl + '/classic',
-              'Common|RINGTAILLEGALURL': baseUrl + '/RTLC',
-              'Common|RMCIISWEBAPPLICATIONURL': baseUrl + '/RMC'
+              'ROLE': machine.role              
             }
           }
         }
@@ -75,26 +74,54 @@
       return taskdef;
     }  
 
-    
+    function getEnvTaskDefForRole(environment, role) {
+      var taskdefs = getEnvTaskDefs(environment);
+      taskdefs = findInstallTaskDefs(taskdefs);
+      return findTaskDefForRole(taskdefs, role);
+    }
 
-    function getEnvironmentTaskDefs(environment) {
-      var config = environment.config || { 'taskdefs': [] };
-      return config.taskdefs || [];
-    } 
+    function getEnvTaskDefs(environment) {
+      var config = environment.config || create(environment);
+      return config.taskdefs;
+    }  
 
     function findInstallTaskDefs(taskdefs) {
-      var install = _.where(taskdefs, { 'task': '3-custom-ringtail' });
-      if(install.length === 0) {
-        install = _.where(taskdefs, { 'task': 'parallel' });
+      var result = [];
+
+      function processTaskDef(taskdef) {
+        if(taskdef.task === '3-custom-ringtail') {
+          processInstall(taskdef);
+        }
+        else if (taskdef.task === 'parallel') {
+          processParallel(taskdef);
+        }
       }
+
+      function processInstall(taskdef) {
+        result.push(taskdef);
+      }
+
+      function processParallel(taskdef) {
+        if(taskdef.options && taskdef.options.taskdefs && Array.isArray(taskdef.options.taskdefs)) {
+          var taskdefs = taskdef.options.taskdefs;
+          taskdefs.forEach(processTaskDef);          
+        }
+      }
+      
+      taskdefs.forEach(processTaskDef);    
+      return result;
     }
 
-    function findRoleTaskDefs(taskdefs, role) {
-      return _.filter(taskdefs, function(taskdef) {
-        return taskdef.data.config.ROLE === role;
+    function findTaskDefForRole(taskdefs, role) {
+      var matches = _.filter(taskdefs, function(taskdef) {
+        return taskdef.options.data.config.ROLE === role;
       });
+      return matches[0] || null;
     }
 
+    function getKeyValuePairs(taskdef) {
+      return taskdef.options.data.config;      
+    }
   }
 
 }());
