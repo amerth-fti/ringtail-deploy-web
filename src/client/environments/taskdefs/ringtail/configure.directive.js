@@ -18,9 +18,9 @@
     };
   }
 
-  TaskdefRingtailController.$inject = [ '$compile', '$scope', '$element', 'Role', 'TaskDef' ];
+  TaskdefRingtailController.$inject = [ '_', '$compile', '$scope', '$element', 'Role', 'TaskDef' ];
 
-  function TaskdefRingtailController($compile, $scope, $element, Role, TaskDef) {
+  function TaskdefRingtailController(_, $compile, $scope, $element, Role, TaskDef) {
     var vm            = this;
     vm.environment    = this.environment;    
     vm.fields         = null;
@@ -57,15 +57,22 @@
 
     function updateEnvironmentConfig(values) {
       vm.environment.config.taskdefs.forEach(function(taskdef) {
+        // check for install task
         if(taskdef.task === '3-custom-ringtail') {
-          if(taskdef.options.data.role === vm.selectedRole) {
-            taskdef.options.data = values;
+          if( taskdef.options.data && 
+              taskdef.options.data.config && 
+              taskdef.options.data.config.ROLE === vm.selectedRole) {
+            taskdef.options.data.config = _.clone(values);
           }
-        } else if (taskdef.task === 'parallel') {
+        } 
+        // check parallel task
+        else if (taskdef.task === 'parallel') {
           taskdef.options.taskdefs.forEach(function(taskdef) {
             if(taskdef.task === '3-custom-ringtail') {
-              if(taskdef.options.data.role === vm.selectedRole) {
-                taskdef.options.data = values;
+              if( taskdef.options.data && 
+                  taskdef.options.data.config && 
+                  taskdef.options.data.config.ROLE === vm.selectedRole) {
+                taskdef.options.data.config = _.clone(values);
               }
             }
           });
