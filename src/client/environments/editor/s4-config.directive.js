@@ -36,15 +36,18 @@
     
     //////////
     
-    function activate() {      
+    function activate() {
       $scope.$watch('vm.wizard.stage', function(stage) {
-        if(stage === 'config') {
-          if(!vm.environment.config) {
-            vm.environment.config = TaskDef.create(vm.environment);
-          }
-          vm.config = JSON.stringify(vm.environment.config, null, 2);          
+        if(stage === 'config' && !vm.environment.config) {        
+          vm.environment.config = TaskDef.create(vm.environment);
         }
-      });    
+      });
+
+      $scope.$watch('vm.environment.config', function(config) {
+        if(config) {
+          vm.config = JSON.stringify(config, null, 2);
+        }
+      }, true);    
     }
 
     function configChanged() {
