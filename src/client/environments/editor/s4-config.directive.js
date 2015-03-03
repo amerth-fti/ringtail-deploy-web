@@ -37,18 +37,22 @@
     //////////
     
     function activate() {
+      // initialize configuration on first load
       $scope.$watch('vm.wizard.stage', function(stage) {
         if(stage === 'config' && !vm.environment.config) {        
           vm.environment.config = TaskDef.create(vm.environment);
         }
       });
 
+      // handle updates from editor
       $scope.$watch('vm.environment.config', function(config) {
         if(config) {
           vm.config = JSON.stringify(config, null, 2);
         }
       }, true);    
     }
+
+
 
     function configChanged() {
       try 

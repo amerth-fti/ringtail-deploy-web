@@ -31,7 +31,12 @@
 
     //////////
 
-    function activate() {      
+    function activate() {
+      $scope.$watch('vm.taskdefs', function(taskdefs) {
+        if(taskdefs) {
+          editTaskdef(taskdefs[0], 0);
+        }
+      });
     }
 
     function editTaskdef(taskdef, index) {
@@ -40,7 +45,6 @@
         ;        
       vm.selectedTaskdef  = index;      
 
-      // TODO - break into factory
       if(taskdef.task === 'parallel') {
         el = $compile('<taskdef-ringtail environment="vm.environment"></tasdef-ringtail>')(scope);
         angular.element($element[0].querySelector('.taskdef-editor-container')).html(el);
