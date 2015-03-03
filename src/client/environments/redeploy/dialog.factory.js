@@ -14,7 +14,7 @@
 
     function open(environment) {
       return $modal.open({
-        templateUrl: '/app/environments/redeploy-dialog.html',
+        templateUrl: '/app/environments/redeploy/dialog.html',
         controller: EnvironmentRedeployController,
         controllerAs: 'vm',
         resolve: {
@@ -64,8 +64,9 @@
       environment.$redeploy()
 
       // shut the dialog since we had success
-      .then(function() {
+      .then(function(environment) {
         $modalInstance.close(environment);
+        return environment;
       })
 
       // transition to the job details

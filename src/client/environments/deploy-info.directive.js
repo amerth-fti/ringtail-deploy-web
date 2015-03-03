@@ -13,7 +13,8 @@
       },
       templateUrl: '/app/environments/deploy-info.directive.html',
       controller: DeployInfoController,
-      controllerAs: 'vm'
+      controllerAs: 'vm',
+      bindToController: true
     };
   }
 
@@ -26,7 +27,7 @@
     vm.opened           = false;
     vm.openCalendar     = openCalendar;
     vm.dateTimeChanged  = dateTimeChanged;
-    vm.environment      = $scope.environment;
+    vm.environment      = this.environment;
     
     activate();
 

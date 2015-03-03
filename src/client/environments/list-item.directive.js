@@ -63,15 +63,27 @@
     }
 
     function start() {
-      EnvironmentStarter.open(vm.envirnoment);
+      EnvironmentStarter
+        .open(vm.environment)
+        .result
+        .then(function() {
+          pollWhileBusy(vm.environment);
+        });
     }
 
     function pause() {
       vm.environment.$pause(activate);
+      pollWhileBusy(vm.environment);
     }
 
     function redeploy() {
-      EnvironmentRedeploy.open(vm.environment);
+      EnvironmentRedeploy
+        .open(vm.environment)
+        .result
+        .then(function() {
+          pollWhileBusy(vm.environment);
+        });
+
     }
 
     function reset() {
