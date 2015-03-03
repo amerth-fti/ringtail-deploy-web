@@ -51,7 +51,7 @@
       vm.selectedRole = role;
       vm.currentValues = currentValues;
 
-      element = $compile('<tasks-ringtail-field-editor role="vm.selectedRole" values="vm.currentValues"></tasks-ringtail-field-editor>')(scope);
+      element = $compile('<tasks-ringtail-field-editor role="vm.selectedRole" host="vm.environment.host" values="vm.currentValues"></tasks-ringtail-field-editor>')(scope);
       angular.element($element[0].querySelector('.field-editor-container')).html(element);
     }
 
