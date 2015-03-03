@@ -34,18 +34,12 @@
 
     //////////
 
-    function activate() {
-      vm.protocol = 'http';
-
-      RingtailConfig
-        .get(vm.role)
-        .success(processConfigs);    
+    function activate() {      
+      var configs = RingtailConfig.configsForRole(vm.role);
+      processConfigs(configs);      
     }
 
-
-    function processConfigs(configs) {    
-      var configKeys = _.pluck(configs, 'key');
-      
+    function processConfigs(configKeys) {      
       vm.fields = configKeys.map(function(configKey) {
         
         var field = RingtailField.getFieldForConfigKey(configKey)

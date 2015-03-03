@@ -1,6 +1,6 @@
 describe('TaskDef Service', function() {
   beforeEach(module('underscore'));
-  beforeEach(module('shared'));
+  beforeEach(module('app.environments.taskdefs'));
   var sut;
 
 
@@ -21,12 +21,7 @@ describe('TaskDef Service', function() {
       var result = sut.getEnvTaskDefs(env);
       expect(result.length).to.equal(2);
       /* jshint ignore:end */
-    });
-    it('should return an empty array when there is no configuration', function() {
-      var env = { };
-      var result = sut.getEnvTaskDefs(env);
-      expect(result.length).to.equal(0);
-    });
+    });    
   });
 
   

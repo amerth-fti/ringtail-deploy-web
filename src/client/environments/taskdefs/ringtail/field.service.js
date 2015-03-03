@@ -44,17 +44,22 @@
   /* jshint ignore:start */
   fieldMappings = {
     "RingtailDatabaseUtility|IS_SQLSERVER_SERVER": "IS_SQLSERVER_SERVER_PORTAL",
-    "RingtailDatabaseUtility|IS_SQLSERVER_USERNAME": "IS_SQLSERVER_USERNAME",
-    "RingtailDatabaseUtility|IS_SQLSERVER_PASSWORD": "IS_SQLSERVER_PASSWORD",
+    "RingtailDatabaseUtility|IS_SQLSERVER_USERNAME": "IS_SQLSERVER_USERNAME_PORTAL",
+    "RingtailDatabaseUtility|IS_SQLSERVER_PASSWORD": "IS_SQLSERVER_PASSWORD_PORTAL",
     "RingtailDatabaseUtility|WEBUSER": "WEBUSER",
+    "DatabaseUpgrader|IS_SQLSERVER_USERNAME": "IS_SQLSERVER_USERNAME_PORTAL",
+    "DatabaseUpgrader|IS_SQLSERVER_PASSWORD": "IS_SQLSERVER_PASSWORD_PORTAL",
+    "DatabaseUpgrader|DATACAMEL_ACTION": "DATACAMEL_ACTION",
+    "DatabaseUpgrader|DATACAMEL_DATABASES": "DATACAMEL_DATABASES",   
 
     "RingtailLegalApplicationServer|IS_SQLSERVER_SERVER": "IS_SQLSERVER_SERVER_PORTAL",
-    "RingtailLegalApplicationServer|IS_SQLSERVER_USERNAME": "IS_SQLSERVER_USERNAME",
-    "RingtailLegalApplicationServer|IS_SQLSERVER_PASSWORD": "IS_SQLSERVER_PASSWORD",
+    "RingtailLegalApplicationServer|IS_SQLSERVER_USERNAME": "IS_SQLSERVER_USERNAME_PORTAL",
+    "RingtailLegalApplicationServer|IS_SQLSERVER_PASSWORD": "IS_SQLSERVER_PASSWORD_PORTAL",
     "RingtailLegalApplicationServer|IS_SQLSERVER_DATABASE": "IS_SQLSERVER_DATABASE_PORTAL",
     "RingtailLegalApplicationServer|RINGTAILSTSURL": "RINGTAILSTSURL",
     "RingtailLegalApplicationServer|RMCIISWEBAPPLICATIONURL": "RMCIISWEBAPPLICATIONURL",
-    "RingtailLegalApplicationServer|RINGTAILLEGALURL": "RINGTAILLEGALURL",
+    "RingtailLegalApplicationServer|RINGTAILLEGALURL": "RINGTAILCLASSICURL",
+    "RingtailLegalApplicationServer|RINGTAILURL": "RINGTAILIISWEBAPPLICATIONURL",
     "RingtailLegalApplicationServer|LEGALPATH": "LEGALPATH",
     "RingtailLegalApplicationServer|RINGTAILSTSCERTIFICATETHUMBPRINT": "RINGTAILSTSCERTIFICATETHUMBPRINT",
     "RingtailLegalApplicationServer|RINGTAILSTSCERTIFICATENAME": "RINGTAILSTSCERTIFICATENAME",
@@ -62,8 +67,8 @@
     "RingtailLegalApplicationServer|WEBBROWSERPROTOCOL": "WEBBROWSERPROTOCOL",
 
     "Ringtail8|IS_SQLSERVER_SERVER": "IS_SQLSERVER_SERVER_PORTAL",
-    "Ringtail8|IS_SQLSERVER_USERNAME": "IS_SQLSERVER_USERNAME",
-    "Ringtail8|IS_SQLSERVER_PASSWORD": "IS_SQLSERVER_PASSWORD",
+    "Ringtail8|IS_SQLSERVER_USERNAME": "IS_SQLSERVER_USERNAME_PORTAL",
+    "Ringtail8|IS_SQLSERVER_PASSWORD": "IS_SQLSERVER_PASSWORD_PORTAL",
     "Ringtail8|IS_SQLSERVER_DATABASE": "IS_SQLSERVER_DATABASE_PORTAL",
     "Ringtail8|RINGTAILWEBAPPNAME": "RINGTAILWEBAPPNAME",    
     "Ringtail8|RINGTAILIISWEBAPPLICATIONNAME": "RINGTAILIISWEBAPPLICATIONNAME",  
@@ -92,7 +97,29 @@
     "Ringtail8|RINGTAILCLASSICWEBSITENAME": "RINGTAILCLASSICWEBSITENAME",
     "Ringtail8|RINGTAILCLASSICWEBSITEMAPPING": "RINGTAILCLASSICWEBSITEMAPPING",
     "Ringtail8|RINGTAILSTSCERTIFICATENAME": "RINGTAILSTSCERTIFICATENAME",    
-    "Ringtail8|SELFSERVICEAUTHENTICATIONMODE": "SELFSERVICEAUTHENTICATIONMODE"    
+    "Ringtail8|SELFSERVICEAUTHENTICATIONMODE": "SELFSERVICEAUTHENTICATIONMODE",
+
+    "RingtailConfigurator|CONFIGURATORPORT": "CONFIGURATORPORT",
+    "RingtailConfigurator|HOST": "CONFIGURATORHOST",
+    "RingtailConfigurator|NT_DOMAIN": "CONFIGURATOR_NT_DOMAIN",
+    "RingtailConfigurator|NT_USER": "CONFIGURATOR_NT_USER",
+    "RingtailConfigurator|NT_PASSWORD": "CONFIGURATOR_NT_PASS",
+    "RingtailConfigurator|CONFIG_USERNAME": "CONFIGURATOR_CONFIG_USERNAME",
+    "RingtailConfigurator|CONFIG_PASSWORD": "CONFIGURATOR_CONFIG_PASSWORD",
+
+    "RingtailProcessingFrameworkWorkers|RPFWORKERPATH": "RPFWORKERPATH",
+
+    "RingtailProcessingFramework|ADDLOCAL": "RPFINSTALL",
+    "RingtailProcessingFramework|IS_SQLSERVER_SERVER": "IS_SQLSERVER_SERVER_RPF",
+    "RingtailProcessingFramework|IS_SQLSERVER_USERNAME": "IS_SQLSERVER_USERNAME_RPF",
+    "RingtailProcessingFramework|IS_SQLSERVER_PASSWORD": "IS_SQLSERVER_SERVER_RPF",
+    "RingtailProcessingFramework|IS_SQLSERVER_DATABASE": "IS_SQLSERVER_DATABASE_RPF",
+    "RingtailProcessingFramework|RINGTAILIISWEBAPPLICATIONNAME": "RPF_RINGTAILIISWEBAPPLICATIONNAME",
+    "RingtailProcessingFramework|RINGTAILIISVIRTUALDIRECTORYPHYSICALPATH": "RPF_RINGTAILIISVIRTUALDIRECTORYPHYSICALPATH",
+    "RingtailProcessingFramework|RT_COORDINATOR_URL": "RT_COORDINATOR_URL",
+    "RingtailProcessingFramework|SERVICEUSERNAME": "SERVICEUSERNAME",
+    "RingtailProcessingFramework|SERVICEPASSWORD": "SERVICEPASSWORD",
+    "RingtailProcessingFramework|RPFWORKERPATH": "RPFWORKERPATH"
   }
 
 
@@ -100,7 +127,6 @@
     {
       "key": "UNKNOWN",
       "title": "Unknown field",
-      "description": "Unknown field"
     },
     { 
       "key": "IS_SQLSERVER_SERVER_PORTAL",      
@@ -108,18 +134,13 @@
       "description": "The instance name of the SQL server that contains the Ringtail Portal database.",      
     },
     {
-      "key": "IS_SQLSERVER_SERVER_RPF",
-      "title": "Server name",
-      "description": "The instance name of the SQL server that contains the Ringtail Processing Framework database."
-    },
-    {
-      "key": "IS_SQLSERVER_USERNAME",
+      "key": "IS_SQLSERVER_USERNAME_PORTAL",
       "title": "Login",
       "description": "The SQL Server username used to connect to the SQL server.",
       "default": "sa"
     },
     {
-      "key": "IS_SQLSERVER_PASSWORD",
+      "key": "IS_SQLSERVER_PASSWORD_PORTAL",
       "title": "Password",
       "description": "The SQL Server password used to connect to the SQL server."  
     },
@@ -128,6 +149,22 @@
       "title": "Portal Database",
       "description": "The Portal database name"
     },
+    {
+      "key": "IS_SQLSERVER_SERVER_RPF",
+      "title": "Server name",
+      "description": "The instance name of the SQL server that contains the Ringtail Processing Framework database."
+    },      
+    {
+      "key": "IS_SQLSERVER_USERNAME_RPF",
+      "title": "Login",
+      "description": "The SQL Server username used to connect to the SQL server.",
+      "default": "sa"
+    },
+    {
+      "key": "IS_SQLSERVER_PASSWORD_RPF",
+      "title": "Password",
+      "description": "The SQL Server password used to connect to the SQL server."  
+    },    
     {
       "key": "IS_SQLSERVER_DATABASE_RPF",
       "title": "RPF Database",
@@ -152,14 +189,7 @@
       "description": "The URL of the Ringtail Management Console Application. (e.g. http://host/RMC)",
       "type": "url",
       "defaultPath": "RMC"
-    },
-    {
-      "key": "RINGTAILLEGALURL",
-      "title": "Ringtail Legal (Classic) Application URL",
-      "description": "The URL of the Ringtail Legal (Classic) Application. (e.g. http://host/Classic)",
-      "type": "url",
-      "defaultPath": "Classic"
-    },
+    },    
     {
       "key": "LEGALPATH",
       "title": "Ringtail Legal Application Name",
@@ -323,6 +353,94 @@
       "description": "Self-service Authentication Mode that will be used",
       "default": "Ringtail",
       "options": ["Ringtail", "ADSelfService"]
+    },
+    {
+      "key": "DATACAMEL_ACTION",
+      "title": "Database Upgrade Action",
+      "description": "Update individual database or the portal an all attached cases",
+      "default": "portal",
+      "options": ["portal", "upgrade"]
+    },
+    {
+      "key": "DATACAMEL_DATABASES",
+      "title": "Databases to Upgrade",
+      "description": "The portal name or a list of comma separated cases"      
+    },
+    {
+      "key": "CONFIGURATORPORT",
+      "title": "Configurator Port",
+      "description": "The port that the Ringtail Configurator will listen on",
+      "default": "10000"
+    },
+    { 
+      "key": "CONFIGURATORHOST",
+      "title": "Configurator Host",
+      "description": "The host that the Ringtail Configurator is installed on",
+      "default": "localhost"
+    },
+    {
+      "key": "CONFIGURATOR_NT_DOMAIN",
+      "title": "Configurator NT Domain",
+      "description": "The domain for the user that has access to the Ringtail Configurator"
+    }, 
+    {
+      "key": "CONFIGURATOR_NT_USER",
+      "title": "Configuator NT User",
+      "description": "The user that has access to the Ringtail Configurator"
+    },
+    {
+      "key": "CONFIGURATOR_NT_PASS",
+      "title": "Configurator NT Password",
+      "description": "The user's password that has access to the Ringtail Configurator"
+    },
+    {
+      "key": "CONFIGURATOR_CONFIG_USERNAME",
+      "title": "Ringtail Database User",
+      "description": "The Ringtail Database User name"
+    },
+    {
+      "key": "CONFIGURATOR_CONFIG_PASSWORD",
+      "title": "Ringtail Database User Password",
+      "description": "The password for the Ringtail Database User"
+    },
+    {
+      "key": "RPFWORKERPATH",
+      "title": "Ringtail Processing Framework Worker UNC Share Path",
+      "description": "Enter the UNC share path to the RPF Workers folder (e.g. \\\\127.0.0.1\\RPF_Workers)"
+    },
+    {
+      "key": "RPFINSTALL",
+      "title": "Ringtail Processing Framework Features",
+      "description": "The Ringtail Processing Framework features to install",
+      "default": "All",
+      "options": ["All", "COORD", "SUPERVISOR"]
+    },
+    {
+      "key": "RPF_RINGTAILIISWEBAPPLICATIONNAME",
+      "title": "Ringtail Processing Framework Coordinator Application Name",
+      "description": "The full site path where you want to install the Ringtail Coordinator Application. (e.g. Default Web Site/Coodinator)",
+      "default": "Default Web Site/Coordinator"
+    },
+    {
+      "key": "RPF_RINGTAILIISVIRTUALDIRECTORYPHYSICALPATH",
+      "title": "Ringtail Processing Framework Coodinator Physical Path",
+      "description": "The physical path where the files for the Web application will be deployed.",
+      "default": "C:\\inetpub\\wwwroot\\Coodinator\\"
+    },
+    {
+      "key": "RT_COORDINATOR_URL",
+      "title": "Ringtail Coodinator URL",
+      "description": ""
+    },
+    {
+      "key": "SERVICEUSERNAME",
+      "title": "Ringtail Process Framework Service 'Log on as' User",
+      "description": "The user account that the RPF Service will Log on as (e.g. DomainName\UserName)"      
+    },
+    {
+      "key": "SERVICEPASSWORD",
+      "title": "Ringtail Process Framework Service 'Log on as' Password",
+      "description": "The password for the user account that the RPF Service will Log on as"
     }
   ]
   /* jshint ignore:end */  

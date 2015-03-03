@@ -69,9 +69,6 @@ app.get ('/api/skytap/environments', controllers.skytap.environments);
 app.get ('/api/skytap/environments/:configuration_id', controllers.skytap.environment);
 
 
-app.get ('/api/ringtail/configs', controllers.ringtail.configs);
-
-
 // CONVERT TO UNIVERSAL HANDLER
 app.all ('/api/*', function(req, res) {
 

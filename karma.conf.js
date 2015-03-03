@@ -60,7 +60,9 @@ module.exports = function(config) {
 
       'src/client/environments/taskdefs/_module.js', 
       'src/client/environments/taskdefs/list.directive.js', 
+      'src/client/environments/taskdefs/taskdef.service.js',      
       'src/client/environments/taskdefs/ringtail/_module.js', 
+      'src/client/environments/taskdefs/ringtail/config.service.js', 
       'src/client/environments/taskdefs/ringtail/configure.directive.js', 
       'src/client/environments/taskdefs/ringtail/field.service.js', 
 
@@ -77,7 +79,6 @@ module.exports = function(config) {
       'src/client/shared/datepicker-popup.directive.js',
       'src/client/shared/environment.factory.js',
       'src/client/shared/loading.factory.js',
-      'src/client/shared/taskdef.factory.js',      
       'src/client/shared/underscore.js', 
       
       'src/client/shared/data/_module.js',  
@@ -85,7 +86,6 @@ module.exports = function(config) {
       'src/client/shared/data/job.service.js',
       'src/client/shared/data/project.service.js',
       'src/client/shared/data/region.service.js',
-      'src/client/shared/data/ringtail-config.service.js',
       'src/client/shared/data/role.service.js',
       'src/client/shared/data/skytap-environment.service.js',
       

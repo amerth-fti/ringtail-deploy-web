@@ -2,8 +2,8 @@
   'use strict';
 
   angular
-    .module('shared')
-    .factory('TaskDef', TaskDef);
+    .module('app.environments.taskdefs')
+    .service('TaskDef', TaskDef);
 
   TaskDef.$inject = [ '_' ];
  
