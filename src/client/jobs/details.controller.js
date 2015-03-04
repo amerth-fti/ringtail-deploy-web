@@ -5,21 +5,27 @@
     .module('app')
     .controller('JobDetailsController', JobDetailsController);
 
-  JobDetailsController.$inject = [ '$routeParams', '$timeout', 'Job' ];
+  JobDetailsController.$inject = [ '$routeParams', '$timeout', '$scope', 'Job' ];
 
-  function JobDetailsController($routeParams, $timeout, Job) {    
+  function JobDetailsController($routeParams, $timeout, $scope, Job) {    
     var vm          = this;
     vm.job          = null;
     vm.selectedTask = null;
     vm.currentTask  = null;
     vm.selectTask   = selectTask;
+    vm.poll         = null;
     
     activate();
     
     //////////
     
     function activate() {
-      return Job.get({ jobId: $routeParams.jobId }, loadJobComplete);
+      Job.get({ jobId: $routeParams.jobId }, loadJobComplete);
+
+      // cancel polling on scope destroy
+      $scope.$on('$destroy', function() {
+        $timeout.cancel(vm.poll);
+      });      
     }
 
     function loadJobComplete(result) {
@@ -43,7 +49,7 @@
 
     function pollWhileRunning(job) {
       if(job.status === 'Running') {
-        $timeout(function() {
+        vm.poll = $timeout(function() {
           job.$get(loadJobComplete);
         }, 5000);
       }

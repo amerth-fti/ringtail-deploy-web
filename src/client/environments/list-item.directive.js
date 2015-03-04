@@ -18,9 +18,9 @@
     };
   }
   
-  ListItemController.$inject = [ '$timeout', 'config', 'EnvironmentEditor', 'EnvironmentStarter', 'EnvironmentRedeploy' ];
+  ListItemController.$inject = [ '$timeout', '$scope', 'config', 'EnvironmentEditor', 'EnvironmentStarter', 'EnvironmentRedeploy' ];
   
-  function ListItemController($timeout, config, EnvironmentEditor, EnvironmentStarter, EnvironmentRedeploy) {
+  function ListItemController($timeout, $scope, config, EnvironmentEditor, EnvironmentStarter, EnvironmentRedeploy) {
     var vm = this;
     vm.enableDeploy = config.enableDeployment;
     vm.environment  = this.environment; 
@@ -34,6 +34,7 @@
     vm.redeploy     = redeploy;
     vm.reset        = reset;
     vm.start        = start;
+    vm.poll         = null;
     
     activate(vm.environment);
     
@@ -52,11 +53,16 @@
       }
       
       pollWhileBusy(environment);
+
+      // cancel polling on scope destroy
+      $scope.$on('$destroy', function() {
+        $timeout.cancel(vm.poll);
+      });
     }
 
     function pollWhileBusy(environment) {
       if(environment.runstate === 'busy' || environment.status === 'deploying') {
-        $timeout(function() {
+        vm.poll = $timeout(function() {
           environment.$get(activate);
         }, 15000);
       }
