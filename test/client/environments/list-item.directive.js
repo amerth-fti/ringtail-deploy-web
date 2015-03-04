@@ -88,19 +88,23 @@ describe('listItem Directive', function() {
   });
 
   describe('.start()', function() {
-    var EnvironmentStarter;
+    var EnvironmentStarter
+      , $q;
 
-    beforeEach(inject(function(_EnvironmentStarter_) {
+    beforeEach(inject(function(_EnvironmentStarter_, _$q_) {
       EnvironmentStarter = _EnvironmentStarter_;
+      $q = _$q_;
     }));
 
     it('should open the starter dialog', function() {
-      var stub = sinon.stub(EnvironmentStarter, 'open');
+      var stub = sinon
+        .stub(EnvironmentStarter, 'open')
+        .returns({ result: $q.when(true) });        
       run();
       controller.start();
       expect(stub.calledOnce).to.equal(true);
     });
-
+    it('should start polling');
   });
 
   describe('.pause()', function() {
@@ -110,21 +114,27 @@ describe('listItem Directive', function() {
       controller.pause();
       expect(stub.calledOnce).to.be.true;
     });
+    it('should start polling');
   });
 
   describe('.redeploy()', function() {
-    var EnvironmentRedeploy;
+    var EnvironmentRedeploy
+      , $q;
 
-    beforeEach(inject(function(_EnvironmentRedeploy_) {
+    beforeEach(inject(function(_EnvironmentRedeploy_, _$q_) {
       EnvironmentRedeploy = _EnvironmentRedeploy_;
+      $q = _$q_;
     }));
 
     it('should open the redeploy dialog', function() {
-      var stub = sinon.stub(EnvironmentRedeploy, 'open');
+      var stub = sinon
+        .stub(EnvironmentRedeploy, 'open')
+        .returns({ result: $q.when(true) });        
       run();
       controller.redeploy();
       expect(stub.calledOnce).to.equal(true);
     });
+    it('should start polling');
   });
 
   describe('.reset()', function() {
