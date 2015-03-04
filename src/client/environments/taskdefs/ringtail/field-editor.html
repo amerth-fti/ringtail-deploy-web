@@ -1,5 +1,9 @@
 <form>  
-  <div ng-repeat="field in vm.fields" class="form-group">    
+  <div 
+    ng-repeat="field in vm.fields" 
+    class="form-group"
+    ng-class="{ 'has-success': field.valid, 'has-error': !field.valid }"
+    >    
       <label>{{field.title}}</label>       
       <input 
         type="text" 

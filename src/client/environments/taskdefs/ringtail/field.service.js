@@ -32,7 +32,13 @@
         field = _.clone(fieldLookup[fieldKey]);
         field.title = configKey;
       }
-              
+
+      // set whether field is valid      
+      field.validate = function() {
+        field.valid = !!field.value;
+      };
+      field.validate();
+
       return field;
     }
 

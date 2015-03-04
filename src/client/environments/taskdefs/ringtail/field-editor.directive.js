@@ -58,8 +58,11 @@
     }
 
     function updateField(field) { 
+      // validate the change;
+      field.validate();
+
       // TODO - after depud, write values for all field mappings
-      vm.values[field.configKey] = field.value;
+      vm.values[field.configKey] = field.value;      
 
       // propagate protocol changes
       if(field.type === 'protocol') {
