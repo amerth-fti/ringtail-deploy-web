@@ -11,7 +11,7 @@
       scope: {
         environment: '='        
       },
-      templateUrl: '/app/environments/taskdefs/ringtail/configure.html',
+      templateUrl: '/app/environments/taskdefs/ringtail/editor.html',
       controller: TaskdefRingtailController,
       controllerAs: 'vm',
       bindToController: true

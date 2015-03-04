@@ -23,8 +23,9 @@
   function Controller($scope, $compile, $element) {
     var vm              = this;
     vm.environment      = this.environment;
-    vm.taskdefs         = this.taskdefs;
-    vm.selectedTaskdef  = 0;    
+    vm.taskdefs         = this.taskdefs;    
+    vm.selectedTaskdef  = null;
+    vm.selectedIndex    = 0;
     vm.editTaskdef      = editTaskdef;
 
     activate();
@@ -43,14 +44,15 @@
       var scope = $scope.$new()
         , el
         ;        
-      vm.selectedTaskdef  = index;      
+      vm.selectedTaskdef  = taskdef;      
+      vm.selectedIndex    = index;
 
-      if(taskdef.task === 'parallel') {
-        el = $compile('<taskdef-ringtail environment="vm.environment"></tasdef-ringtail>')(scope);
-        angular.element($element[0].querySelector('.taskdef-editor-container')).html(el);
+      if(taskdef.task === 'parallel' || taskdef.task === '3-custom-ringtail') {
+        el = $compile('<taskdef-ringtail environment="vm.environment"></tasdef-ringtail>')(scope);        
       } else {
-        // TODO - create raw editor that gets toggled
+        el = $compile('<taskdef-raw environment="vm.environment" taskdef="vm.selectedTaskdef"></taskdef-raw>')(scope);
       }
+      angular.element($element[0].querySelector('.taskdef-editor-container')).html(el);
 
     }
   }

@@ -1,6 +1,6 @@
 {
   "name": "ringtail-deploy-web",
-  "version": "0.5.1",
+  "version": "0.6.0",
   "description": "Website for interacting with the Ringtail deployment service",
   "author": "Brian Mancini <bmancini@gmail.com>",
   "license": "MIT",
