@@ -292,3 +292,12 @@ button {
     padding-left: 40px;
   }
 }
+
+
+.config-editor-container {  
+  padding-right: 10px;
+}
+.taskdef-editor-container {
+  max-height: 500px;
+  overflow-y: auto;
+}

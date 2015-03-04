@@ -1,10 +1,12 @@
 <div class="modal-body">
   <h4>Deployment Configuration</h4>
-  <div ng-show="vm.simple">
-    <taskdefs-list taskdefs="vm.environment.config.taskdefs" environment="vm.environment"></taskdefs-list>
-  </div>
-  <div ng-show="!vm.simple">
-    <textarea class="form-control" rows="20" ng-model="vm.config" ng-change="vm.configChanged()"></textarea>
+  <div class="config-editor-container">
+    <div ng-show="vm.simple">
+      <taskdefs-list taskdefs="vm.environment.config.taskdefs" environment="vm.environment"></taskdefs-list>
+    </div>
+    <div ng-show="!vm.simple">
+      <textarea class="form-control" rows="20" ng-model="vm.config" ng-change="vm.configChanged()"></textarea>
+    </div>
   </div>
 </div>
 
