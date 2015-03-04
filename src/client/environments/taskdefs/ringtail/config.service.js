@@ -35,7 +35,7 @@
   /* jshint ignore:start */
   rolesData = [
     { 
-      "roles": ["SKYTAP-WEB", "WEB", "WEBAGENT"], 
+      "roles": ["SKYTAP-WEB", "WEB", "WEBAGENT", "SKYTAP-ALLINONE"], 
       "configs": [
         "Ringtail8|IS_SQLSERVER_SERVER",
         "Ringtail8|IS_SQLSERVER_USERNAME",
@@ -72,7 +72,7 @@
       ]
     },
     {
-      "roles": ["SKYTAP-WEB", "WEB", "WEBAGENT"], 
+      "roles": ["SKYTAP-WEB", "WEB", "WEBAGENT", "SKYTAP-ALLINONE", "DEV-FULL"], 
       "configs": [
         "RingtailLegalApplicationServer|IS_SQLSERVER_SERVER",
         "RingtailLegalApplicationServer|IS_SQLSERVER_USERNAME",
@@ -90,7 +90,7 @@
       ],
     },
     {
-      "roles": ["SKYTAP-AGENT", "SKYTAP-WEBAGENT", "SKYTAP-WEB", "AGENT", "WEBAGENT", "WEB"],
+      "roles": ["SKYTAP-AGENT", "SKYTAP-WEBAGENT", "SKYTAP-WEB", "AGENT", "WEBAGENT", "WEB", "SKYTAP-ALLINONE", "DEV-FULL"],
       "configs": [
         "RingtailConfigurator|CONFIGURATORPORT",
         "RingtailConfigurator|HOST",
@@ -102,13 +102,13 @@
       ]
     },
     {
-      "roles": ["SKYTAP-RPF-COORDINATOR", "SKYTAP-RPF-SUPERVISOR"],
+      "roles": ["SKYTAP-RPF-COORDINATOR", "SKYTAP-ALLINONE", "DEV-FULL"],
       "configs": [
         "RingtailProcessingFrameworkWorkers|RPFWORKERPATH"
       ]
     },
     {
-      "roles": ["SKYTAP-RPF-SUPERVISOR", "RPF-SUPERVISOR"],
+      "roles": ["SKYTAP-RPF-COODINATOR", "SKYTAP-RPF-SUPERVISOR", "RPR-COODINATOR", "RPF-SUPERVISOR", "SKYTAP-ALLINONE", "DEV-FULL"],
       "configs": [
         "RingtailProcessingFramework|ADDLOCAL",
         "RingtailProcessingFramework|IS_SQLSERVER_SERVER",
@@ -124,10 +124,15 @@
       ]
     },
     {
-      "roles": ["SKYTAP-DB", "DATABASE"],
+      "roles": ["SKYTAP-DB", "DATABASE", "DEV-FULL"],
       "configs": [
         "RingtailDatabaseUtility|IS_SQLSERVER_USERNAME",
-        "RingtailDatabaseUtility|IS_SQLSERVER_PASSWORD",
+        "RingtailDatabaseUtility|IS_SQLSERVER_PASSWORD",        
+      ]
+    },
+    {
+      "roles": ["SKYTAP-DB", "DATABASE", "DEV-FULL"],
+      "configs": [
         "DatabaseUpgrader|IS_SQLSERVER_USERNAME",
         "DatabaseUpgrader|IS_SQLSERVER_PASSWORD",
         "DatabaseUpgrader|DATACAMEL_ACTION",
