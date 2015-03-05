@@ -126,13 +126,16 @@
     {
       "roles": ["SKYTAP-DB", "DATABASE", "DEV-FULL", "SKYTAP-ALLINONE"],
       "configs": [
+        "RingtailDatabaseUtility|IS_SQLSERVER_SERVER",        
         "RingtailDatabaseUtility|IS_SQLSERVER_USERNAME",
         "RingtailDatabaseUtility|IS_SQLSERVER_PASSWORD",        
+        "RingtailDatabaseUtility|IS_SQLSERVER_DATABASE"
       ]
     },
     {
       "roles": ["SKYTAP-DB", "DATABASE", "DEV-FULL", "SKYTAP-ALLINONE"],
       "configs": [
+        "DatabaseUpgrader|IS_SQLSERVER_SERVER",        
         "DatabaseUpgrader|IS_SQLSERVER_USERNAME",
         "DatabaseUpgrader|IS_SQLSERVER_PASSWORD",
         "DatabaseUpgrader|DATACAMEL_ACTION",
