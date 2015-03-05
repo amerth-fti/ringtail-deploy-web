@@ -118,7 +118,7 @@
     "RingtailProcessingFramework|ADDLOCAL": "RPFINSTALL",
     "RingtailProcessingFramework|IS_SQLSERVER_SERVER": "IS_SQLSERVER_SERVER_RPF",
     "RingtailProcessingFramework|IS_SQLSERVER_USERNAME": "IS_SQLSERVER_USERNAME_RPF",
-    "RingtailProcessingFramework|IS_SQLSERVER_PASSWORD": "IS_SQLSERVER_SERVER_RPF",
+    "RingtailProcessingFramework|IS_SQLSERVER_PASSWORD": "IS_SQLSERVER_PASSWORD_RPF",
     "RingtailProcessingFramework|IS_SQLSERVER_DATABASE": "IS_SQLSERVER_DATABASE_RPF",
     "RingtailProcessingFramework|RINGTAILIISWEBAPPLICATIONNAME": "RPF_RINGTAILIISWEBAPPLICATIONNAME",
     "RingtailProcessingFramework|RINGTAILIISVIRTUALDIRECTORYPHYSICALPATH": "RPF_RINGTAILIISVIRTUALDIRECTORYPHYSICALPATH",
@@ -136,18 +136,18 @@
     },
     { 
       "key": "IS_SQLSERVER_SERVER_PORTAL",      
-      "title": "Server name",
+      "title": "Portal Database Server Name",
       "description": "The instance name of the SQL server that contains the Ringtail Portal database.",      
     },
     {
       "key": "IS_SQLSERVER_USERNAME_PORTAL",
-      "title": "Login",
+      "title": "Portal Database Server Login",
       "description": "The SQL Server username used to connect to the SQL server.",
       "default": "sa"
     },
     {
       "key": "IS_SQLSERVER_PASSWORD_PORTAL",
-      "title": "Password",
+      "title": "Portal Database Server Password",
       "description": "The SQL Server password used to connect to the SQL server."  
     },
     {
@@ -157,23 +157,23 @@
     },
     {
       "key": "IS_SQLSERVER_SERVER_RPF",
-      "title": "Server name",
+      "title": "Ringtail Processing Framework Database Server Name",
       "description": "The instance name of the SQL server that contains the Ringtail Processing Framework database."
     },      
     {
       "key": "IS_SQLSERVER_USERNAME_RPF",
-      "title": "Login",
+      "title": "Ringtail Processing Framework Database Login",
       "description": "The SQL Server username used to connect to the SQL server.",
       "default": "sa"
     },
     {
       "key": "IS_SQLSERVER_PASSWORD_RPF",
-      "title": "Password",
+      "title": "Ringtail Processing Framework Database Password",
       "description": "The SQL Server password used to connect to the SQL server."  
     },    
     {
       "key": "IS_SQLSERVER_DATABASE_RPF",
-      "title": "RPF Database",
+      "title": "Ringtail Processing Framework Database",
       "description": "The RPF database name"
     },
     {    
@@ -199,7 +199,8 @@
     {
       "key": "LEGALPATH",
       "title": "Ringtail Legal Application Name",
-      "description": "The Ringtail Legal Application name e.g. RTLC",
+      "description": "The Ringtail Legal Application name (e.g. Classic)",
+      "default": "Classic"
     },
     {
       "key": "RINGTAILSTSCERTIFICATETHUMBPRINT",
@@ -350,8 +351,8 @@
     {
       "key": "RINGTAILCLASSICWEBSITEMAPPING",
       "title": "Ringtail Legal Web Site Mapping",
-      "description": "The web site mapping that is used for Ringtail Legal (Classic) (e.g. Legal)",
-      "default": "Legal"
+      "description": "The web site mapping that is used for Ringtail Legal (Classic) (e.g. Classic)",
+      "default": "Classic"
     },
     {
       "key": "SELFSERVICEAUTHENTICATIONMODE",
@@ -436,12 +437,12 @@
     {
       "key": "RT_COORDINATOR_URL",
       "title": "Ringtail Coodinator URL",
-      "description": ""
+      "description": "The URL where the coordinator is acccessed (e.g. http://CoordinatorMachineIP/Coodinator)"
     },
     {
       "key": "SERVICEUSERNAME",
       "title": "Ringtail Process Framework Service 'Log on as' User",
-      "description": "The user account that the RPF Service will Log on as (e.g. DomainName\UserName)"      
+      "description": "The user account that the RPF Service will Log on as (e.g. DomainName\\UserName)"      
     },
     {
       "key": "SERVICEPASSWORD",
