@@ -208,7 +208,7 @@
       "key": "RINGTAILSTSCERTIFICATETHUMBPRINT",
       "title": "",
       "description": "The thumbprint of the installed Ringtail Secure Token Service (STS) certificate.",
-      "default": "2c 3f 36 e4 cc b3 24 82 d9 66 11 69 1e e7 2a 5a 2c 0e c4 30"
+      "default": "2c 3f 36 e4 cc b3 24 82 d9 66 11 69 1e e7 2a 5a 2c 0e c4 30",      
     },
     {
       "key": "RINGTAILSTSCERTIFICATENAME",
@@ -235,73 +235,85 @@
       "key": "RINGTAILIISWEBAPPLICATIONNAME",
       "title": "Ringtail Web Application Name",
       "description": "The full site path where you want to install the Ringtail Web Application. (e.g. Default Web Site/Ringtail)",
-      "default": "Default Web Site/Ringtail"
+      "default": "Default Web Site/Ringtail",
+      "ignoreWhen": "Default Web Site/Ringtail"
     },
     {
       "key": "RINGTAILWEBAPPNAME",
       "title": "Ringtail Web Application Name",
       "description": "The Ringtail Web Application name (e.g. Ringtail)",
-      "default": "Ringtail"
+      "default": "Ringtail",
+      "ignoreWhen": "Ringtail"
     },
     {
       "key": "RINGTAILIISVIRTUALDIRECTORYPHYSICALPATH",
       "title": "Ringtail Web Application Physical Path",
       "description": "The physical path where the files for the Web application will be deployed.",
-      "default": "C:\\inetpub\\wwwroot\\Ringtail\\"
+      "default": "C:\\inetpub\\wwwroot\\Ringtail\\",
+      "ignoreWhen": "C:\\inetpub\\wwwroot\\Ringtail\\"
     },  
     {
       "key": "RINGTAILSTSIISAPPLICATIONNAME",
       "title": "Ringtail STS Application Name",
       "description": "The full site path where you want to install the Ringtail STS Application (e.g. Default Web Site/RingtailSTS",
-      "default": "Default Web Site/RingtailSTS"
+      "default": "Default Web Site/RingtailSTS",
+      "ignoreWhen": "Default Web Site/RingtailSTS"
     },
     {
       "key": "RINGTAILSTSIISVIRTUALDIRECTORYPHYSICALPATH",
       "title": "Ringtail STS Physical Path",
       "description": "The physical path where the files for the Ringtail STS application will be deployed.",
-      "default": "C:\\inetpub\\wwwroot\\RingtailSTS\\"
+      "default": "C:\\inetpub\\wwwroot\\RingtailSTS\\",
+      "ignoreWhen": "C:\\inetpub\\wwwroot\\RingtailSTS\\"
     },
     {
       "key": "RINGTAILUIIISAPPLICATONNAME",
       "title": "Ringtail UI Static Application Name",
       "description": "The full site path where you want to install the Ringtail UI Static Application (e.g. Default Web Site/UIStatic).",
-      "default": "Default Web Site/UIStatic"
+      "default": "Default Web Site/UIStatic",
+      "ignoreWhen": "Default Web Site/UIStatic"
     },
     {
       "key": "RINGTAILUIIISVIRTUALDIRECTORYPHYSICALPATH",
       "title": "Ringtail UI Static Content Physical Path",
       "description": "The physical path where the files for the Ringtail UI Static Application will be deployed.",
-      "default": "C:\\inetpub\\wwwroot\\UIStatic\\"    
+      "default": "C:\\inetpub\\wwwroot\\UIStatic\\",
+      "ignoreWhen": "C:\\inetpub\\wwwroot\\UIStatic\\"    
     },
     {
       "key": "RLMIISWEBAPPLICATIONNAME",
       "title": "Ringtail License Management Application Name",
       "description": "The full site path where you want to install Ringtail License Management (e.g. Default Web Site/RingtailLicenseManagment).",
-      "default": "Default Web Site/RingtailLicenseManagement"
+      "default": "Default Web Site/RingtailLicenseManagement",
+      "ignoreWhen": "Default Web Site/RingtailLicenseManagement"
     },
     {
       "key": "RLMIISVIRTUALDIRECTORYPHYSICALPATH",
       "title": "Ringtail License Management Physical Path",
       "description": "The physical path where files for Ringtail License Management will be deployed.",
-      "default": "C:\\inetpub\\wwwroot\\RingtailLicenseManagement\\"
+      "default": "C:\\inetpub\\wwwroot\\RingtailLicenseManagement\\",
+      "ignoreWhen": "C:\\inetpub\\wwwroot\\RingtailLicenseManagement\\"
     },
     {
       "key": "RMCIISWEBAPPLICATIONNAME",
       "title": "Ringtail Management Console Application Name",
       "description": "The full site path where you want to install Ringtail Management Console (e.g. Default Web Site/RMC).",
-      "default": "Default Web Site/RMC"
+      "default": "Default Web Site/RMC",
+      "ignoreWhen": "Default Web Site/RMC",
     },
     {
       "key": "RMCAPPNAME",
       "title": "Ringtail Management Console Application Name",
       "description": "The Ringtail Management Console Application name (e.g. RMC)",
-      "default": "RMC"
+      "default": "RMC",
+      "ignoreWhen": "RMC"
     },
     {
       "key": "RMCIISVIRTUALDIRECTORYPHYSICALPATH",
       "title": "Ringtail Management Console Physical Path",
       "description": "The physical path where files for Ringtail Management Console will be deployed.",
-      "default": "C:\\inetpub\\wwwroot\\RMC\\"
+      "default": "C:\\inetpub\\wwwroot\\RMC\\",
+      "ignoreWhen": "C:\\inetpub\\wwwroot\\RMC\\"      
     },
     {
       "key": "RINGTAILIISWEBAPPLICATIONURL",
@@ -348,13 +360,15 @@
       "key": "RINGTAILCLASSICWEBSITENAME",
       "title": "Ringtail Legal (Classic) Web Site Name",
       "description": "The web site name where the Ringtail Legal (Classic) mapping is located. (e.g. Default Web Site)",
-      "default": "Default Web Site"
+      "default": "Default Web Site",
+      "ignoreWhen": "Default Web Site",
     },
     {
       "key": "RINGTAILCLASSICWEBSITEMAPPING",
       "title": "Ringtail Legal Web Site Mapping",
       "description": "The web site mapping that is used for Ringtail Legal (Classic) (e.g. Classic)",
-      "default": "Classic"
+      "default": "Classic",
+      "ignoreWhen": "Legal",
     },
     {
       "key": "SELFSERVICEAUTHENTICATIONMODE",
@@ -429,13 +443,15 @@
       "key": "RPF_RINGTAILIISWEBAPPLICATIONNAME",
       "title": "Ringtail Processing Framework Coordinator Application Name",
       "description": "The full site path where you want to install the Ringtail Coordinator Application. (e.g. Default Web Site/Coodinator)",
-      "default": "Default Web Site/Coordinator"
+      "default": "Default Web Site/Coordinator",
+      "ignoreWhen": "Default Web Site/Coordinator"
     },
     {
       "key": "RPF_RINGTAILIISVIRTUALDIRECTORYPHYSICALPATH",
       "title": "Ringtail Processing Framework Coodinator Physical Path",
       "description": "The physical path where the files for the Web application will be deployed.",
-      "default": "C:\\inetpub\\wwwroot\\Coodinator\\"
+      "default": "C:\\inetpub\\wwwroot\\Coodinator\\",
+      "ignoreWhen": "C:\\inetpub\\wwwroot\\Coodinator\\"
     },
     {
       "key": "RT_COORDINATOR_URL",

@@ -88,16 +88,28 @@
     }
 
     function updateField(field) { 
+      var value
+        , ignore
+        ;
+
       // validate the change;
       field.validate();
 
+      // should ignore
+      ignore = field.value === field.ignoreWhen;
+
       // escape value
-      var value = field.value;
-      value = escapeValue(value);
+      value = field.value;
+      value = escapeValue(value);    
 
       //write values for all field mappings
       field.configKey.forEach(function(configKey) {
-        vm.values[configKey] = value;
+        if(!ignore) {
+          vm.values[configKey] = value;
+        }
+        else {
+          delete vm.values[configKey];
+        }
       });      
 
       // propagate protocol changes
