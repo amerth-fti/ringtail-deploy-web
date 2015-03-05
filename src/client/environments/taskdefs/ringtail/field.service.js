@@ -393,7 +393,7 @@
     {
       "key": "CONFIGURATOR_NT_USER",
       "title": "Configuator NT User",
-      "description": "The user that has access to the Ringtail Configurator"
+      "description": "The user that has access to the Ringtail Configurator",      
     },
     {
       "key": "CONFIGURATOR_NT_PASS",
@@ -403,7 +403,8 @@
     {
       "key": "CONFIGURATOR_CONFIG_USERNAME",
       "title": "Ringtail Database User",
-      "description": "The Ringtail Database User name"
+      "description": "The Ringtail Database User name (e.g. webuser)",
+      "default": "webuser"
     },
     {
       "key": "CONFIGURATOR_CONFIG_PASSWORD",
