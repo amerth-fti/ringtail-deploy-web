@@ -51,7 +51,7 @@
           ;
 
         field.configKey = [ configKey ];
-        field.value = currentValue || field.default;        
+        field.value = unescapeValue(currentValue) || field.default;
         return field;
       });
 
@@ -74,13 +74,30 @@
       vm.fields.forEach(updateField);
     }
 
+    function escapeValue(value) {
+      var result = value; 
+      if(value && value.indexOf(' ') > 0) {
+        result = '"""' + value + '"""';
+      }
+      return result;
+    }
+
+    function unescapeValue(value) {
+      var result = value ? value.replace(/"""/g, '') : value;
+      return result;
+    }
+
     function updateField(field) { 
       // validate the change;
       field.validate();
 
+      // escape value
+      var value = field.value;
+      value = escapeValue(value);
+
       //write values for all field mappings
       field.configKey.forEach(function(configKey) {
-        vm.values[configKey] = field.value;
+        vm.values[configKey] = value;
       });      
 
       // propagate protocol changes
