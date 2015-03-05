@@ -40,18 +40,35 @@
     }
 
     function processConfigs(configKeys) {      
-      vm.fields = configKeys.map(function(configKey) {
+      var fields
+        , fieldLookup = {}
+        ;
+
+      fields = configKeys.map(function(configKey) {
         
         var field = RingtailField.getFieldForConfigKey(configKey)
           , currentValue = vm.values[configKey]
           ;
 
-        field.configKey = configKey;
+        field.configKey = [ configKey ];
         field.value = currentValue || field.default;        
         return field;
       });
 
-      // TODO - dedup fields
+      // dedup fields
+      fields.forEach(function(field) {
+        var key = field.key;
+        if(!fieldLookup[key]) {
+          fieldLookup[key] = field;
+        } else {
+          field.configKey.forEach(function(configKey) {
+            fieldLookup[key].configKey.push(configKey);
+          });
+        }
+      });
+
+      // get list of dedeuped fields
+      vm.fields = _.values(fieldLookup);
 
       // push updates to all configs
       vm.fields.forEach(updateField);
@@ -61,8 +78,10 @@
       // validate the change;
       field.validate();
 
-      // TODO - after depud, write values for all field mappings
-      vm.values[field.configKey] = field.value;      
+      //write values for all field mappings
+      field.configKey.forEach(function(configKey) {
+        vm.values[configKey] = field.value;
+      });      
 
       // propagate protocol changes
       if(field.type === 'protocol') {
