@@ -65,7 +65,7 @@
             'machine': 'scope.me.machines[' + index + ']',
             'branch': 'scope.me.deployedBranch',
             'config': {
-              'ROLE': machine.role              
+              'RoleResolver|ROLE': machine.role
             }
           }
         }
@@ -114,7 +114,8 @@
 
     function findTaskDefForRole(taskdefs, role) {
       var matches = _.filter(taskdefs, function(taskdef) {
-        return taskdef.options.data.config.ROLE === role;
+        return taskdef.options.data.config.ROLE === role ||
+               taskdef.options.data.config['RoleResolver|ROLE'] === role;
       });
       return matches[0] || null;
     }

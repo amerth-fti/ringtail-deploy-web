@@ -61,7 +61,8 @@
         if(taskdef.task === '3-custom-ringtail') {
           if( taskdef.options.data && 
               taskdef.options.data.config && 
-              taskdef.options.data.config.ROLE === vm.selectedRole) {
+              ( taskdef.options.data.config.ROLE === vm.selectedRole ||
+                taskdef.options.data.config['RoleResolver|ROLE'] === vm.selectedRole)) {
             taskdef.options.data.config = _.clone(values);
           }
         } 
@@ -71,7 +72,8 @@
             if(taskdef.task === '3-custom-ringtail') {
               if( taskdef.options.data && 
                   taskdef.options.data.config && 
-                  taskdef.options.data.config.ROLE === vm.selectedRole) {
+                  ( taskdef.options.data.config.ROLE === vm.selectedRole ||
+                    taskdef.options.data.config['RoleResolver|ROLE'] === vm.selectedRole)) {
                 taskdef.options.data.config = _.clone(values);
               }
             }
