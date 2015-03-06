@@ -85,11 +85,14 @@ function TaskImpl(options) {
             log('waiting for install service to update');
             setTimeout(function() {
               request.get({ url: statusUrl, timeout: 15000 }, function(err, response, body) {
-                if(err || response.statusCode !== 200) {                
+                if(response.statusCode === 200) {
+                  setTimeout(function() {
+                    deferred.resolve(body);
+                  }, 5000);
+                }
+                else {
                   if(err) log(err);
                   poll();
-                } else {
-                  deferred.resolve(body);
                 }
               });
             }, pollInterval);
@@ -167,9 +170,14 @@ function TaskImpl(options) {
               if(!err && response.statusCode === 200) {
 
                 // add logic for checking status
-                if(body.indexOf('UPGRADE COMPLETE') >= 0) {
+                if(body.indexOf('UPGRADE COMPLETE') >= 0 || body.indexOf('UPGRADE SUCCESSFUL') >= 0) {
                   deferred.resolve();
                 } 
+
+                // check for failure / abort
+                else if (body.indexOf('UPGRADE FAILED') >= 0 || body.indexOf('UPGRADE ABORTED') >= 0) {
+                  deferred.reject(body);
+                }
 
                 // if not in completed status continue polling
                 else {              

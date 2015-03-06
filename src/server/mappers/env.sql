@@ -43,4 +43,5 @@ select e.*
 from env e
 join regionenv re on re.envId = e.envId
 where re.regionId = $regionId
+order by envName collate nocase
 limit $pagesize offset $offset;
