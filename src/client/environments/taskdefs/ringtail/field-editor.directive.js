@@ -47,11 +47,13 @@
       fields = configKeys.map(function(configKey) {
         
         var field = RingtailField.getFieldForConfigKey(configKey)
-          , currentValue = vm.values[configKey]
+          , configKeyParts = configKey.split('|')
+          , currentValue = unescapeValue(vm.values[configKey])
+          , commonValue = unescapeValue(vm.values['Common|' + configKeyParts[1]])
           ;
 
         field.configKey = [ configKey ];
-        field.value = unescapeValue(currentValue) || field.default;
+        field.value = currentValue || commonValue || field.default;        
         return field;
       });
 
