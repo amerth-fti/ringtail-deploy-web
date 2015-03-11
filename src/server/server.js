@@ -14,8 +14,9 @@ app.use(bodyParser.json());
 
 
 // STATIC FILE ROUTES
-app.use('/app/assets/lib', serveStatic(__dirname + '/../client/assets/bower_components'));
-app.use('/app', serveStatic(__dirname + '/../client'));
+app.use('/assets', serveStatic(__dirname + '/../client/assets'));
+app.use('/assets/lib', serveStatic(__dirname + '/../client/assets/bower_components'));
+app.use('/app', serveStatic(__dirname + '/../client/app'));
 
 
 // DEFAULT ROUTE

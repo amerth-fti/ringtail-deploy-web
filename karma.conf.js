@@ -25,79 +25,9 @@ module.exports = function(config) {
       'src/client/assets/bower_components/angular-bootstrap/ui-bootstrap-tpls.js',
       'src/client/assets/bower_components/underscore/underscore.js',
 
-      'src/client/_module.js',
-      'src/client/_routes.js',
-      'src/client/_config.js',
-      'src/client/config.constant.js',
-      'src/client/globals.constant.js',
-
-      'src/client/layout/main.controller.js',
-
-      'src/client/environments/_module.js',      
-      'src/client/environments/deploy-info.directive.js',
-      'src/client/environments/list-item.directive.js',
-      'src/client/environments/list.directive.js',  
-
-      'src/client/environments/editor/_module.js',
-      'src/client/environments/editor/dialog.factory.js',
-      'src/client/environments/editor/s1-method.directive.js',
-      'src/client/environments/editor/s2-info.directive.js',
-      'src/client/environments/editor/s3-machines.directive.js',
-      'src/client/environments/editor/s4-config.directive.js',
-      'src/client/environments/editor/s5-skytap.directive.js',
-      'src/client/environments/editor/wizard.factory.js',
-
-      'src/client/environments/machine/_module.js',
-      'src/client/environments/machine/details.directive.js',
-      'src/client/environments/machine/dialog.factory.js',
-      'src/client/environments/machine/editor.directive.js',
-
-      'src/client/environments/starter/_module.js',
-      'src/client/environments/starter/dialog.factory.js', 
-
-      'src/client/environments/redeploy/_module.js',
-      'src/client/environments/redeploy/dialog.factory.js', 
-
-      'src/client/environments/taskdefs/_module.js', 
-      'src/client/environments/taskdefs/list.directive.js', 
-      'src/client/environments/taskdefs/taskdef.service.js',      
-      'src/client/environments/taskdefs/ringtail/_module.js', 
-      'src/client/environments/taskdefs/ringtail/config.service.js', 
-      'src/client/environments/taskdefs/ringtail/configure.directive.js', 
-      'src/client/environments/taskdefs/ringtail/field.service.js', 
-
-      'src/client/jobs/details.controller.js',
-      'src/client/jobs/task-details.directive.js',
-
-      'src/client/regions/_module.js',
-      'src/client/regions/_routes.js',
-      'src/client/regions/details-route.controller.js',
-      'src/client/regions/details.directive.js',
-
-      'src/client/shared/_module.js',
-      'src/client/shared/date-helpers.service.js',
-      'src/client/shared/datepicker-popup.directive.js',
-      'src/client/shared/environment.factory.js',
-      'src/client/shared/loading.factory.js',
-      'src/client/shared/underscore.js', 
-      
-      'src/client/shared/data/_module.js',  
-      'src/client/shared/data/environment.service.js',
-      'src/client/shared/data/job.service.js',
-      'src/client/shared/data/project.service.js',
-      'src/client/shared/data/region.service.js',
-      'src/client/shared/data/role.service.js',
-      'src/client/shared/data/skytap-environment.service.js',
-      
-      'src/client/shared/filters/_module.js',
-      'src/client/shared/filters/anchors.filter.js',
-      'src/client/shared/filters/elapsed.filter.js',
-      'src/client/shared/filters/from-date-string.filter.js',
-      'src/client/shared/filters/newlines.filter.js',
-      'src/client/shared/filters/reverse.filter.js',
-      'src/client/shared/filters/trust.filter.js', 
-
-      'src/client/**/*.html',
+      'src/client/app/**/_module.js',
+      'src/client/app/**/*.js',
+      'src/client/app/**/*.html',
 
       'test/client/**/*.js'
     ],
@@ -122,7 +52,7 @@ module.exports = function(config) {
 
     ngHtml2JsPreprocessor: {
       moduleName: 'templates',
-      stripPrefix: 'src/client',
+      stripPrefix: 'src/client/app',
       prependPrefix: '/app'
     },
 
