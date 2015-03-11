@@ -44,16 +44,18 @@
       var scope = $scope.$new()
         , el
         ;        
-      vm.selectedTaskdef  = taskdef;      
-      vm.selectedIndex    = index;
 
-      if(taskdef.task === 'parallel' || taskdef.task === '3-custom-ringtail') {
-        el = $compile('<taskdef-ringtail environment="vm.environment"></tasdef-ringtail>')(scope);        
-      } else {
-        el = $compile('<taskdef-raw environment="vm.environment" taskdef="vm.selectedTaskdef"></taskdef-raw>')(scope);
+      if(taskdef) {
+        vm.selectedTaskdef  = taskdef;      
+        vm.selectedIndex    = index;
+
+        if(taskdef.task === 'parallel' || taskdef.task === '3-custom-ringtail') {
+          el = $compile('<taskdef-ringtail environment="vm.environment"></tasdef-ringtail>')(scope);        
+        } else {
+          el = $compile('<taskdef-raw environment="vm.environment" taskdef="vm.selectedTaskdef"></taskdef-raw>')(scope);
+        }
+        angular.element($element[0].querySelector('.taskdef-editor-container')).html(el);
       }
-      angular.element($element[0].querySelector('.taskdef-editor-container')).html(el);
-
     }
   }
 

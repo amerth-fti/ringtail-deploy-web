@@ -20,8 +20,16 @@
     };
 
     function create(environment) {
+      var taskdefs = []
+        , envTaskdef = createEnvironment(environment)
+        ;
+
+      if(envTaskdef) {
+        taskdefs.push(envTaskdef);
+      }
+
       return { 
-        'taskdefs': [ createEnvironment(environment) ]
+        'taskdefs': taskdefs
       };
     }
 
@@ -30,26 +38,29 @@
         , subtasks
         ;
 
-      taskdef = {
-        'task': 'parallel',
-        'options': {
-          'name': 'Install Ringtail',
-          'taskdefs': null
-        }        
-      };
+      if(environment.machines) {
 
-      subtasks = environment.machines.map(function(machine, index) {
-        if(machine.role) {
-          return createMachine(environment, machine, index);
-        }
-      });
+        taskdef = {
+          'task': 'parallel',
+          'options': {
+            'name': 'Install Ringtail',
+            'taskdefs': null
+          }       
+        };
 
-      subtasks = _.filter(subtasks, function(subtask) {
-        return !!subtask;
-      });
+        subtasks = environment.machines.map(function(machine, index) {
+          if(machine.role) {
+            return createMachine(environment, machine, index);
+          }
+        });
 
-      taskdef.options.taskdefs = subtasks;
+        subtasks = _.filter(subtasks, function(subtask) {
+          return !!subtask;
+        });
 
+        taskdef.options.taskdefs = subtasks;
+
+      }
       return taskdef;
     }
 
