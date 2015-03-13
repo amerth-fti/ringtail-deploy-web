@@ -108,7 +108,7 @@
       ]
     },
     {
-      "roles": ["SKYTAP-RPF-COODINATOR", "SKYTAP-RPF-SUPERVISOR", "RPR-COODINATOR", "RPF-SUPERVISOR", "SKYTAP-ALLINONE", "DEV-FULL"],
+      "roles": ["SKYTAP-RPF-COORDINATOR", "SKYTAP-RPF-SUPERVISOR", "RPR-COORDINATOR", "RPF-SUPERVISOR", "SKYTAP-ALLINONE", "DEV-FULL"],
       "configs": [
         "RingtailProcessingFramework|ADDLOCAL",
         "RingtailProcessingFramework|IS_SQLSERVER_SERVER",
