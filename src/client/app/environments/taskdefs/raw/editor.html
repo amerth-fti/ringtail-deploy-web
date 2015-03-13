@@ -1,1 +1,31 @@
-<textarea class="form-control" rows="20" ng-model="vm.taskdefJson" ng-change="vm.jsonChanged()"></textarea>
+<form class="task-editor">
+  <div class="form-group">
+    <label for="taskType">Type</label>
+    <select 
+      id="taskType"
+      class="form-control"
+      ng-model="vm.selectedTasktype"
+      ng-options="tasktype.name for tasktype in vm.tasktypes track by tasktype.name"
+      ng-change="vm.tasktypeChanged()"
+      >
+    </select>
+  </div>
+  <div class="form-group">
+    <label for="taskName">Task Name</label>
+    <input type="text" class="form-control" id="taskName" placeholder="Task name" ng-model="vm.taskdef.options.name" />
+  </div>
+  <div class="form-group">
+    <label for="data">Output Variable</label>
+    <p class="help-block">Named variable on the 'scope' object (e.g. scope.newEnvironment)</p>
+    <input type="text" class="form-control" id="data" placeholder="Output variable" ng-model="vm.taskdef.options.storeIn" />
+  </div>
+  <div 
+    class="form-group"
+    ng-class="{ 'has-error': vm.invalid }"
+  >
+    <label for="taskData">Task Data</label>
+    <p class="help-block">Data that will be used by the task.
+      Data can be discrete values, functions, or 'scope' object. 
+      These values should be stored in a JSON object as name:value pairs.</p>
+    <textarea class="form-control" rows="20" ng-model="vm.dataJson" ng-change="vm.jsonChanged()"></textarea>
+</form>

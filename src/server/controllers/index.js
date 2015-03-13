@@ -4,5 +4,6 @@ module.exports = {
   jobs:       require('./jobs'),
   regionenvs: require('./regionenvs'),
   regions:    require('./regions'),
+  tasks:      require('./tasks'),
   skytap:     require('./skytap')
 };

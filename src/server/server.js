@@ -69,6 +69,9 @@ app.get ('/api/jobs/:jobId', controllers.jobs.get);
 app.get ('/api/skytap/environments', controllers.skytap.environments);
 app.get ('/api/skytap/environments/:configuration_id', controllers.skytap.environment);
 
+// API - TASKS
+app.get ('/api/tasks', controllers.tasks.list);
+
 
 // CONVERT TO UNIVERSAL HANDLER
 app.all ('/api/*', function(req, res) {
