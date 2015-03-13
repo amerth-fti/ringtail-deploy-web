@@ -301,3 +301,7 @@ button {
   max-height: 500px;
   overflow-y: auto;
 }
+
+.ringtail-field {
+  margin-top: 25px;
+}

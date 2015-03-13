@@ -1,10 +1,11 @@
 <form>  
   <div 
+    class="form-group ringtail-field"
     ng-repeat="field in vm.fields" 
-    class="form-group"
     ng-class="{ 'has-success': field.valid, 'has-error': !field.valid }"
     >    
       <label>{{field.title}}</label>       
+      <p class="help-block">{{field.description}}</p>
       <input 
         type="text" 
         class="form-control"
@@ -19,7 +20,6 @@
         ng-change="vm.updateField(field)"
         ng-if="field.options"
       ></select>
-      <p class="help-block">{{field.description}}</p>
     </p>
   </div>
 </form>

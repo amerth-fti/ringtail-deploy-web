@@ -206,7 +206,7 @@
     },
     {
       "key": "RINGTAILSTSCERTIFICATETHUMBPRINT",
-      "title": "",
+      "title": "Certificate Thumbprint",
       "description": "The thumbprint of the installed Ringtail Secure Token Service (STS) certificate.",
       "default": "2c 3f 36 e4 cc b3 24 82 d9 66 11 69 1e e7 2a 5a 2c 0e c4 30",      
     },
