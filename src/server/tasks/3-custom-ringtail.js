@@ -85,10 +85,10 @@ function TaskImpl(options) {
             log('waiting for install service to update');
             setTimeout(function() {
               request.get({ url: statusUrl, timeout: 15000 }, function(err, response, body) {
-                if(response.statusCode === 200) {
+                if(response && response.statusCode === 200) {
                   setTimeout(function() {
                     deferred.resolve(body);
-                  }, 5000);
+                  }, pollInterval);
                 }
                 else {
                   if(err) log(err);
