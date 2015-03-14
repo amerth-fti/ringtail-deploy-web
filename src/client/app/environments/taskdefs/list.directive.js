@@ -27,17 +27,33 @@
     vm.selectedTaskdef  = null;
     vm.selectedIndex    = 0;
     vm.editTaskdef      = editTaskdef;
+    vm.removeTaskdef    = removeTaskdef;
 
     activate();
 
     //////////
 
     function activate() {
+      var oldLength = 0;
+
       $scope.$watch('vm.taskdefs', function(taskdefs) {
         if(taskdefs) {
-          editTaskdef(taskdefs[0], 0);
+          var length = taskdefs.length
+            , index = 0;
+
+          // select first task when starting
+          if(oldLength === 0) {
+            index = 0;
+            editTaskdef(taskdefs[index], index);  
+          } 
+          // select last tab when new tab added
+          else if (oldLength < length) {
+            index = taskdefs.length - 1;
+            editTaskdef(taskdefs[index], index);  
+          }
+          oldLength = taskdefs.length;
         }
-      });
+      }, true);
     }
 
     function editTaskdef(taskdef, index) {
@@ -56,6 +72,10 @@
         }
         angular.element($element[0].querySelector('.taskdef-editor-container')).html(el);
       }
+    }
+
+    function removeTaskdef(taskdef, index) {
+      vm.taskdefs.splice(index, 1);
     }
   }
 

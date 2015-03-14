@@ -305,3 +305,15 @@ button {
 .ringtail-field {
   margin-top: 25px;
 }
+
+.task-name {
+  display: inline-block;
+  width: 144px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow-x: hidden;
+  margin-right: 4px;
+}
+.task-remove {
+  margin-top: 2px;
+}
