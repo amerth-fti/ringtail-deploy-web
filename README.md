@@ -5,7 +5,7 @@ This project is a web-driven Ringtail environment management tool. At present it
 
 ##Getting Started
 
-* Download the latest version of Node.JS.
+* Download the latest stable release of Node.JS [v0.10](http://nodejs.org/dist/)
 
 * Install all NPM dependencies.
 ```
@@ -24,11 +24,14 @@ $(npm bin)/migrate up
 
 * Copy the config.json.example file to config.json and modify it with the correct credentials
 
-* Start the server with `debug=deployer* src/server/server` or `grunt watch`
+* Start the server with `grunt watch` or directly with  `debug=deployer* node src/server/server`
+
+##Deployment Tasks
+Refer to the [Deploy Task Definitions Guide](TASKDEFS.md) for information on creating and working with deployment tasks.
 
 ##Contributing
 
-In lieu of a formal style guide, please maintain consistency with style and patterns in place in the application. Add appropriate unit tests where applicable.
+In lieu of a formal style guide, please maintain consistency with style and patterns in place in the application. Add appropriate unit tests to client and server code.
 
 Validate changes with `grunt validate`.
 
