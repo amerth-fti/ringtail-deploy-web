@@ -98,7 +98,11 @@
         "RingtailConfigurator|NT_USER",
         "RingtailConfigurator|NT_PASSWORD",
         "RingtailConfigurator|CONFIG_USERNAME",
-        "RingtailConfigurator|CONFIG_PASSWORD"
+        "RingtailConfigurator|CONFIG_PASSWORD",
+        "RingtailConfigurator|IS_SQLSERVER_SERVER",
+        "RingtailConfigurator|IS_SQLSERVER_USERNAME",
+        "RingtailConfigurator|IS_SQLSERVER_PASSWORD",
+        "RingtailConfigurator|IS_SQLSERVER_DATABASE"
       ]
     },
     {
@@ -108,7 +112,7 @@
       ]
     },
     {
-      "roles": ["SKYTAP-RPF-COORDINATOR", "SKYTAP-RPF-SUPERVISOR", "RPR-COORDINATOR", "RPF-SUPERVISOR", "SKYTAP-ALLINONE", "DEV-FULL"],
+      "roles": ["SKYTAP-RPF-COORDINATOR", "SKYTAP-RPF-SUPERVISOR", "RPF-COORDINATOR", "RPF-SUPERVISOR", "SKYTAP-ALLINONE", "DEV-FULL"],
       "configs": [
         "RingtailProcessingFramework|ADDLOCAL",
         "RingtailProcessingFramework|IS_SQLSERVER_SERVER",
