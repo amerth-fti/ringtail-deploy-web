@@ -31,6 +31,7 @@
     vm.prev           = prev;
     vm.invalid        = false;
     vm.simple         = true;    
+    vm.addTask        = addTask;
     
     activate();
     
@@ -69,6 +70,9 @@
       vm.wizard.stage = 'machines';
     }
 
+    function addTask() {
+      TaskDef.addTask(vm.environment);
+    }
 
 
   }

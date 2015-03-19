@@ -8,7 +8,10 @@
         ng-class="{ active: index === vm.selectedIndex }"
         ng-click="vm.editTaskdef(taskdef, index)"
         >          
-        <a href="#">{{ taskdef.options.name || taskdef.task }}</a>
+        <a href="#">
+          <span class="task-name">{{ taskdef.options.name || taskdef.task }}</span>
+          <span class="pull-right glyphicon glyphicon-remove" ng-click="vm.removeTaskdef(taskdef, index)"></span> 
+        </a>
       </li>
     </ul>
   </div>

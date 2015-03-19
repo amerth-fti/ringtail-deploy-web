@@ -13,6 +13,7 @@
       getEnvTaskDefs: getEnvTaskDefs,
       getEnvTaskDefForRole: getEnvTaskDefForRole,
       getKeyValuePairs: getKeyValuePairs,
+      addTask: addTask,
 
       /* Private - open for testing */
       findInstallTaskDefs: findInstallTaskDefs,
@@ -83,7 +84,18 @@
       };
 
       return taskdef;
-    }  
+    }
+
+    function addTask(environment) {
+      var taskdef = {
+        'task': '1-wait',
+        'options': {
+          'name': 'New task',
+          'data': { }
+        }
+      };
+      environment.config.taskdefs.push(taskdef);
+    }
 
     function getEnvTaskDefForRole(environment, role) {
       var taskdefs = getEnvTaskDefs(environment);
