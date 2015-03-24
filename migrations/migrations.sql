@@ -71,3 +71,11 @@ DROP TABLE region;
 
 -- dropRegion
 DROP TABLE region;
+
+-- deleteDefaultRegion
+DELETE FROM region 
+WHERE regionId = 1;
+
+-- deleteDefaultRegionEnvs
+DELETE FROM regionenv
+WHERE regionId = 1;

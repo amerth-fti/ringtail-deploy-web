@@ -13,10 +13,7 @@
       templateUrl: '/app/jobs/details.html',
       controller: 'JobDetailsController',
       controllerAs: 'vm'
-    })
-    .otherwise({
-      redirectTo: '/app/regions/1'
-    });
+    });    
   }
 
 }());

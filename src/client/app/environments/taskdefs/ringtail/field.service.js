@@ -386,7 +386,7 @@
       "title": "Database Upgrade Action",
       "description": "Update individual database or the portal an all attached cases",
       "default": "portal",
-      "options": ["portal", "upgradeportal"]
+      "options": ["upgrade", "upgradeportal"]
     },
     {
       "key": "DATACAMEL_DATABASES",
