@@ -8,11 +8,19 @@
         ng-class="{ 'glyphicon-time': tab.task.status === 'Pending', 'glyphicon-ok': tab.task.status === 'Succeeded', 'glyphicon-fire': tab.task.status === 'Failed', 'glyphicon-road': tab.task.status === 'Running' }"></span>
     </span>
     </tab-heading>
-    <p></p>
-    <ul class="list-group">
-      <li class="list-group-item" ng-repeat="entry in tab.task.runlog">
-        <strong>{{entry.date | date:'mediumTime' }}:</strong> {{entry.data}}
-      </li>
-    </ul>
+    <p></p>    
+    <div class="panel panel-default" ng-show="tab.task.rundetails">
+      <div class="panel-heading">Run Details</div>      
+      <div class="panel-body" ng-bind-html="tab.task.rundetails | trust">
+      </div>
+    </div>
+    <div class="panel panel-default">
+      <div class="panel-heading">Run Log</div>
+      <ul class="list-group">
+        <li class="list-group-item" ng-repeat="entry in tab.task.runlog">
+          <strong>{{entry.date | date:'mediumTime' }}:</strong> {{entry.data}}
+        </li>
+      </ul>    
+    </div>
   </tab>      
 </tabset>

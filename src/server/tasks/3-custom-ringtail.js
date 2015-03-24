@@ -25,6 +25,7 @@ function TaskImpl(options) {
       , serviceIP = machine.intIP
       , pollInterval = this.pollInterval
       , installInterval = this.installInterval
+      , me = this
       ;
 
 
@@ -168,6 +169,9 @@ function TaskImpl(options) {
           setTimeout(function() {          
             request.get(statusUrl, function(err, response, body) {          
               if(!err && response.statusCode === 200) {
+
+                // add install status
+                me.rundetails = body;
 
                 // add logic for checking status
                 if(body.indexOf('UPGRADE COMPLETE') >= 0 || body.indexOf('UPGRADE SUCCESSFUL') >= 0) {

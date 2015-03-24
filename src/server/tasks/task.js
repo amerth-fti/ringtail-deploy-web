@@ -12,6 +12,7 @@ function Task(options) {
   this.started = null;
   this.stopped = null;
   this.runlog = [];
+  this.rundetails = null;
   this.err = null;
   this.data = {};
   this.validators = {
