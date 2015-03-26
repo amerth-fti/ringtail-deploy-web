@@ -4,6 +4,7 @@ var util    = require('util')
   , request = require('request')
   , Task    = require('./task')
   , machineSvc = require('../services/machine-service')
+  , RingtailClient = require('ringtail-deploy-client')
   ;
 
 
@@ -15,7 +16,8 @@ function TaskImpl(options) {
 
   this.validators.required.push('branch');
   this.validators.required.push('config');
-  this.validators.required.push('machine');
+  this.validators.required.push('machine');  
+  this.serviceClient = null;
 
   this.execute = function execute(scope, log) {  
     
@@ -25,215 +27,74 @@ function TaskImpl(options) {
       , serviceIP = machine.intIP
       , pollInterval = this.pollInterval
       , installInterval = this.installInterval
+      , client
       , me = this
       ;
 
+    client = this.serviceClient = new RingtailClient({ serviceHost: serviceIP });
 
     return Q.fcall(function() {
-      log('start installation');
-                      
-      var installUrl    = 'http://' + serviceIP + ':8080/api/installer'
-        , statusUrl     = 'http://' + serviceIP + ':8080/api/status'
-        , updateUrl     = 'http://' + serviceIP + ':8080/api/UpdateInstallerService'
-        , configUrl     = 'http://' + serviceIP + ':8080/api/config'
-        , installedUrl  = 'http://' + serviceIP + ':8080/api/installedBuilds'
-        ;
+      log('start installation');      
+      log('will use: %s', client.installUrl);
+      log('will use: %s', client.statusUrl);
+      log('will use: %s', client.updateUrl);
+      log('will use: %s', client.configUrl);
+      log('will use: %s', client.installedUrl);
 
-      log('will use: %s', installUrl);
-      log('will use: %s', statusUrl);
-      log('will use: %s', updateUrl);
-      log('will use: %s', configUrl);
-      log('will use: %s', installedUrl);
-
+      // wait for the service to be available
       return Q.fcall(function() {
-
-        var deferred = Q.defer();
-        var poll = function() {  
-          log('waiting for install service');
-          setTimeout(function() {               
-            request.get({ url: statusUrl, timeout: 15000 }, function(err, response, body) {              
-              log('%j %j', err, response);
-              if(err || response.statusCode !== 200) {              
-                poll();              
-              } else {
-                deferred.resolve(body);
-              }
-            });
-          }, pollInterval);
-        };
-        poll();
-        return deferred.promise;
+        log('waiting for service to start');   
+        return client.waitForService();
       })
 
       // upgrade install service
       .then(function() {
-        log('update install service');
-        
-        return Q.fcall(function() {
+        log('updating install service to latest version');        
+        return client.update();          
+      })
 
-          // fire off update
-          var deferred = Q.defer();
-          request.get(updateUrl, function() {
-            deferred.resolve();
-          });
-          return deferred.promise;
-
-        })
-        .then(function() {        
-
-          var deferred = Q.defer();
-          var poll = function() {
-            log('waiting for install service to update');
-            setTimeout(function() {
-              request.get({ url: statusUrl, timeout: 15000 }, function(err, response, body) {
-                if(response && response.statusCode === 200) {
-                  setTimeout(function() {
-                    deferred.resolve(body);
-                  }, pollInterval);
-                }
-                else {
-                  if(err) log(err);
-                  poll();
-                }
-              });
-            }, pollInterval);
-          };
-          poll();
-          return deferred.promise;
-
-        });
+      // wait for service to return
+      .then(function() {
+        log('waiting for service to return');        
+        return client.waitForService();          
       })
 
       // configure install service
       .then(function() {
-        log('configure install service');
-
-        var keys = _.keys(config);
-
-        // update the branch config
-        return Q.fcall(function() {        
-          var deferred = new Q.defer()
-            , url;
-          
-          url = configUrl + '?key=Common|BRANCH_NAME&value=' + encodeURIComponent(branch);
-          log('configuring %s', url);
-          request.get(url, function(err) {
-            if(err) deferred.reject(err);
-            else deferred.resolve();
-          });
-
-          return deferred.promise;  
-        })
-
-        // update all configures
-        .then(function() {
-          
-          // create functions to execute config
-          var funcs = keys.map(function(key) {
-            return function() {
-              var deferred = new Q.defer()
-                , value = config[key]
-                , url;
-              
-              url = configUrl + '?key=' + encodeURIComponent(key) + '&value=' + encodeURIComponent(value);
-              log('configuring %s', url);
-              request.get(url, function(err) {
-                if(err) deferred.reject(err);
-                else deferred.resolve();
-              });
-
-              return deferred.promise;  
-            };
-          });
-
-          /* jshint es5:false */
-          /* jshint newcap:false */
-          return funcs.reduce(Q.when, Q(0));        
-        });
+        log('configuring install service');
+        var opts = { 'Common|BRANCH_NAME' : branch };
+        _.extend(opts, config);                    
+        return client.setConfigs(opts);
       })
           
       // start installation
       .then(function() {
-        log('starting installation');
-
-        // fire off the install    
-        request.get(installUrl);  
-      })
+        log('starting installation');        
+        return client.install();
+      })      
 
       // wait for installation to complete  
-      .then(function() {
-        
-        var deferred = Q.defer();
-        var poll = function() {        
-          log('waiting for install to complete');
-          setTimeout(function() {          
-            request.get(statusUrl, function(err, response, body) {          
-              if(!err && response.statusCode === 200) {
-
-                // add install status
-                me.rundetails = body;
-
-                // add logic for checking status
-                if(body.indexOf('UPGRADE COMPLETE') >= 0 || body.indexOf('UPGRADE SUCCESSFUL') >= 0) {
-                  deferred.resolve();
-                } 
-
-                // check for failure / abort
-                else if (body.indexOf('UPGRADE FAILED') >= 0 || body.indexOf('UPGRADE ABORTED') >= 0) {
-                  deferred.reject(body);
-                }
-
-                // if not in completed status continue polling
-                else {              
-                  poll();
-                }
-
-              } else {
-                  poll();
-              }
-            });
-          }, installInterval);
-        };
-        poll();      
-        return deferred.promise;
+      .then(function() {   
+        log('waiting for install to complete, refer to Run Details');
+        return client.waitForInstall(function(status) {
+          me.rundetails = status;
+        });
       })
 
       // update machine install notes
       .then(function() {
-        
-        return Q.fcall(function() {
-          log('retrieving install info for %s', serviceIP);
-          var deferred = Q.defer();        
-          request.get({ url: installedUrl, timeout: 15000 }, function(err, response, body) {
-            if(err) log(err);
-
-            if(err) deferred.reject(err);
-            else deferred.resolve(body);              
-          });      
-          return deferred.promise;
-        })
-
-        .then(function(body) {
-          log('found installed builds for %s', serviceIP);
-          var result = body.replace(/"/g, '');
-          result = result.replace(/<p\>/g, '');
-          result = result.replace(/<\/p\>/g, '\n');
-          result = result.split('\n');
-          result.splice(result.length - 1); // remove empty string at end
-          log(result);
-          return result;
-        })
-
-        .then(function(data) {
-          machine.installNotes = data;
-          return machineSvc.update(machine);
-        });
-
+        log('retrieving install info for %s', serviceIP);
+        return client
+          .installed()          
+          .then(function(builds) {
+            machine.installNotes = builds;
+            return machineSvc.update(machine);
+          });
       })
 
       // signal completion for installation
       .then(function() {
-        log('installations complete');
+        log('installation complete');
       });
 
     });

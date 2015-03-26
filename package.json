@@ -17,6 +17,7 @@
     "node-skytap": "^0.2.0",
     "q": "^1.0.1",
     "request": "^2.51.0",
+    "ringtail-deploy-client": "git://github.com/fti-technology/ringtail-deploy-client",
     "serve-static": "^1.7.1",
     "statements": "^0.1.0",
     "underscore": "^1.7.0"

@@ -3,7 +3,8 @@ var mocha   = require('mocha')
   , chai    = require('chai')
   , expect  = chai.expect
 
-  , request = require('request')
+  , Q               = require('q')
+  , RingtailClient  = require('ringtail-deploy-client')
 
   , Env         = require('../../../src/server/models/env')
   , Machine     = require('../../../src/server/models/machine')
@@ -13,110 +14,85 @@ var mocha   = require('mocha')
 
 describe('Ringtail Install Task', function() {
 
-  describe('execute', function() {
+  describe('#execute', function() {
     var task
       , log
       , scope
       , env
-      , requestGet     
+      , stubWaitForService
+      , stubUpdate
+      , stubSetConfigs
+      , stubInstall
+      , stubWaitForInstall
+      , stubInstalled
       ;
 
-    beforeEach(function() {
-      env = new Env({ deployedBranch: 'NEW_BRANCH' });
-      env.machines = [ 
-        new Machine({ role: 'SKYTAP-WEB', intIP: '192.168.0.2' }),
-        new Machine({ role: 'SKYTAP-DB', intIP: '192.168.0.3' }),
-        new Machine({ role: 'SKYTAP-RPF', intIP: '192.168.0.4' })
-      ];
+    env = new Env({ deployedBranch: 'NEW_BRANCH' });
+    env.machines = [ 
+      new Machine({ role: 'SKYTAP-WEB', intIP: '192.168.0.2' }),
+      new Machine({ role: 'SKYTAP-DB', intIP: '192.168.0.3' }),
+      new Machine({ role: 'SKYTAP-RPF', intIP: '192.168.0.4' })
+    ];
 
-      task   = new Task();
-      task.pollInterval = 0;
-      task.installInterval = 0;
-      task.data = {
-        'branch': 'scope.env.deployedBranch',
-        'machine': 'scope.env.machines[0]',
-        'config': {
-          'CONFIG1': 'VALUE_OF_CONFIG1',
-          'CONFIG2': 'VALUE_OF_CONFIG2'
-        }
-      };
-      scope  = {
-        'env': env
-      };
+    task   = new Task();
+    task.pollInterval = 0;
+    task.installInterval = 0;
+    task.data = {
+      'branch': 'scope.env.deployedBranch',
+      'machine': 'scope.env.machines[0]',
+      'config': {
+        'CONFIG1': 'VALUE_OF_CONFIG1',
+        'CONFIG2': 'VALUE_OF_CONFIG2'
+      }
+    };
+    scope  = {
+      'env': env
+    };
 
+    function returnInstalled() {
+      /* jshint es5:false */
+      /* jshint ignore:start */
+      return Q([ 'one', 'two' ]);
+      /* jshint ignore:end */
+    }
+
+    beforeEach(function() {      
       log = sinon.spy();
           
-      requestGet = sinon.stub(request, 'get')
-        // stub status failure
-        .onCall(0)
-        .callsArgWith(1, 'Timeout', null, null)
+      stubWaitForService  = sinon.stub(RingtailClient.prototype, 'waitForService');
+      stubUpdate          = sinon.stub(RingtailClient.prototype, 'update');
+      stubSetConfigs      = sinon.stub(RingtailClient.prototype, 'setConfigs');
+      stubInstall         = sinon.stub(RingtailClient.prototype, 'install');
+      stubWaitForInstall  = sinon.stub(RingtailClient.prototype, 'waitForInstall');
+      stubInstalled       = sinon.stub(RingtailClient.prototype, 'installed', returnInstalled);
 
-        // stub status success
-        .onCall(1)
-        .callsArgWith(1, null, { statusCode: 200 }, 'body')
-
-        // stub update service
-        .onCall(2)
-        .callsArgWith(1, null, { statusCode: 200 }, 'body')
-
-        // stub status failure
-        .onCall(3)
-        .callsArgWith(1, 'Timeout', null, null)
-
-        // stub status success
-        .onCall(4)
-        .callsArgWith(1, null, { statusCode: 200 }, 'body')
-
-        // stub configure branch
-        .onCall(5)
-        .callsArgWith(1, null, { statusCode: 200 }, 'body')
-
-        // stub configure CONFIG1
-        .onCall(6)
-        .callsArgWith(1, null)
-
-        // stub configure CONFIG2
-        .onCall(7)
-        .callsArgWith(1, null)
-
-        // stub install call
-        .onCall(8)
-
-        // stub install status failure
-        .onCall(9)
-        .callsArgWith(1, 'Timeout')
-
-        // stub install status incomplete
-        .onCall(10)
-        .callsArgWith(1, null, { statusCode: 200 }, 'incomplete')
-
-        // stub install status complete
-        .onCall(11)
-        .callsArgWith(1, null, { statusCode: 200}, 'UPGRADE COMPLETE')
-
-        // stub installation info
-        .onCall(12)
-        .callsArgWith(1, null, { statusCode: 200}, 'Install Notes\n')
-
-        ;
-
-        sinon.stub(machineSvc, 'update');
+      sinon.stub(machineSvc, 'update');
     });
 
-    afterEach(function() {  
-      request.get.restore();
+    afterEach(function() {        
+      stubWaitForService.restore();
+      stubUpdate.restore();
+      stubSetConfigs.restore();
+      stubInstall.restore();
+      stubWaitForInstall.restore();
+      stubInstalled.restore();
       machineSvc.update.restore();
     });
+
+    it('service client uses correct machine host', function(done) {
+      task
+        .execute(scope, log)
+        .then(function() {          
+          expect(task.serviceClient.serviceHost).to.equal(env.machines[0].intIP);
+        })
+        .done(done);
+    }); 
 
     it('waits for the installer service', function(done) {
       task
         .execute(scope, log)
         .then(function() {          
-          var call1 = requestGet.stub.getCall(0)
-            , call2 = requestGet.stub.getCall(1)
-            ;
-          expect(call1.args[0].url).to.equal('http://192.168.0.2:8080/api/status');                    
-          expect(call2.args[0].url).to.equal('http://192.168.0.2:8080/api/status');
+          expect(stubWaitForService.callCount).to.equal(2);
         })
         .done(done);
     });  
@@ -125,35 +101,17 @@ describe('Ringtail Install Task', function() {
       task
         .execute(scope, log)
         .then(function() {
-          var call1 = requestGet.stub.getCall(2);
-          var call2 = requestGet.stub.getCall(3);
-          var call3 = requestGet.stub.getCall(4);
-          expect(call1.args[0]).to.equal('http://192.168.0.2:8080/api/UpdateInstallerService');
-          expect(call2.args[0].url).to.equal('http://192.168.0.2:8080/api/status');
-          expect(call3.args[0].url).to.equal('http://192.168.0.2:8080/api/status');
+          expect(stubInstall.called).to.be.true;
+          expect(stubWaitForInstall.calledOnce).to.be.true;
         })
         .done(done);
     });
 
-    it('configures the branch', function(done) {
+    it('configures the service configs', function(done) {
       task
         .execute(scope, log)
         .then(function() {
-          var call1 = requestGet.stub.getCall(5);          
-          expect(call1.args[0]).to.equal('http://192.168.0.2:8080/api/config?key=Common|BRANCH_NAME&value=NEW_BRANCH');          
-        })
-        .done(done);
-    });
-
-    it('configures additional configs', function(done) {
-      task
-        .execute(scope, log)
-        .then(function() {
-          var call1 = requestGet.stub.getCall(6)
-            , call2 = requestGet.stub.getCall(7)
-            ;
-          expect(call1.args[0]).to.equal('http://192.168.0.2:8080/api/config?key=CONFIG1&value=VALUE_OF_CONFIG1');
-          expect(call2.args[0]).to.equal('http://192.168.0.2:8080/api/config?key=CONFIG2&value=VALUE_OF_CONFIG2');
+          expect(stubSetConfigs.calledOnce).to.be.true;
         })
         .done(done);
     });
@@ -162,9 +120,7 @@ describe('Ringtail Install Task', function() {
       task
         .execute(scope, log)
         .then(function() {
-          var call1 = requestGet.stub.getCall(8)
-            ;
-          expect(call1.args[0]).to.equal('http://192.168.0.2:8080/api/installer');
+          expect(stubInstall.calledOnce).to.be.true;
         })
         .done(done);
     });
@@ -173,13 +129,7 @@ describe('Ringtail Install Task', function() {
       task
         .execute(scope, log)
         .then(function() {
-          var call1 = requestGet.stub.getCall(9)
-            , call2 = requestGet.stub.getCall(10)
-            , call3 = requestGet.stub.getCall(11)
-            ;
-          expect(call1.args[0]).to.equal('http://192.168.0.2:8080/api/status');
-          expect(call2.args[0]).to.equal('http://192.168.0.2:8080/api/status');
-          expect(call3.args[0]).to.equal('http://192.168.0.2:8080/api/status');
+          expect(stubWaitForInstall.calledOnce).to.be.true;
         })
         .done(done);
     });
@@ -188,11 +138,27 @@ describe('Ringtail Install Task', function() {
       task
         .execute(scope, log)
         .then(function() {
-          var call1 = requestGet.stub.getCall(12)
-            ;
-          expect(call1.args[0].url).to.equal('http://192.168.0.2:8080/api/installedBuilds');
-          expect(scope.env.machines[0].installNotes).to.be.an('array');
-          expect(scope.env.machines[0].installNotes[0]).to.equal('Install Notes');
+          expect(stubInstalled.calledOnce).to.be.true;
+        })
+        .done(done);
+    });
+
+    it('sets the install notes for the machine', function(done) {
+      task
+        .execute(scope, log)
+        .then(function() {                
+          expect(env.machines[0].installNotes.length).to.equal(2);
+          expect(env.machines[0].installNotes[0]).to.equal('one');
+          expect(env.machines[0].installNotes[1]).to.equal('two');      
+        })
+        .done(done);
+    });
+
+    it('saves the machine info', function(done) {
+      task
+        .execute(scope, log)
+        .then(function() {                
+          expect(machineSvc.update.calledOnce).to.be.true;
         })
         .done(done);
     });
