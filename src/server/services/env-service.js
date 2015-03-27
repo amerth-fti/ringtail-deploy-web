@@ -199,7 +199,7 @@ function joinEnvsSkytap(envs) {
  */
 function joinEnvSkytap(env) {
   if(env.remoteType === 'skytap' && env.remoteId) {
-    return skytap.environments.get({ configuration_id: env.remoteId })
+    return skytap.environments.get({ configuration_id: env.remoteId, keep_idle: true })
       .then(function(skyenv) {
         env.runstate = skyenv.runstate;
         return env;
