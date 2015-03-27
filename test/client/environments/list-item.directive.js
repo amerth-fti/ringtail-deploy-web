@@ -113,7 +113,7 @@ describe('listItem Directive', function() {
         environment.status = 'deployed';
         environment.runstate = null;
         run();
-        expect(controller.enableStart()).to.be.false;
+        expect(controller.showStartStop()).to.be.false;
       });
     });    
     describe('for local environments', function() {
@@ -125,7 +125,42 @@ describe('listItem Directive', function() {
     });      
   });
 
-  describe('.enableStart', function() {
+  describe('.disableStart', function() {
+    describe('for skytap environments', function() {
+      beforeEach(function() {
+        environment.remoteType = 'skytap';
+      });
+      it('returns false when runstate is "suspended"', function() {
+        environment.runstate = 'suspended';
+        run();
+        expect(controller.disableStart()).to.be.false;
+      });
+      it('returns false when runstate is "stopped"', function() {
+        environment.runstate = 'stopped';
+        run();
+        expect(controller.disableStart()).to.be.false;
+      });
+      it('returns true when runstate is "running"', function() {
+        environment.runstate = 'running';
+        run();
+        expect(controller.disableStart()).to.be.true;
+      });  
+      it('returns true when runstate is "busy"', function() {
+        environment.runstate = 'busy';
+        run();
+        expect(controller.disableStart()).to.be.true;
+      });     
+    });    
+    describe('for local environments', function() {
+      it('returns false', function() {
+        environment.remoteType = null;
+        run();
+        expect(controller.disableStart()).to.be.false;
+      });  
+    });
+  });
+
+  describe('.disablePause', function() {
     describe('for skytap environments', function() {
       beforeEach(function() {
         environment.remoteType = 'skytap';
@@ -133,24 +168,29 @@ describe('listItem Directive', function() {
       it('returns true when runstate is "suspended"', function() {
         environment.runstate = 'suspended';
         run();
-        expect(controller.enableStart()).to.be.true;
+        expect(controller.disablePause()).to.be.true;
       });
       it('returns true when runstate is "stopped"', function() {
         environment.runstate = 'stopped';
         run();
-        expect(controller.enableStart()).to.be.true;
+        expect(controller.disablePause()).to.be.true;
       });
       it('returns false when runstate is "running"', function() {
         environment.runstate = 'running';
         run();
-        expect(controller.enableStart()).to.be.false;
-      });      
+        expect(controller.disablePause()).to.be.false;
+      });  
+      it('returns true when runstate is "busy"', function() {
+        environment.runstate = 'busy';
+        run();
+        expect(controller.disablePause()).to.be.true;
+      });    
     });    
     describe('for local environments', function() {
       it('returns false', function() {
         environment.remoteType = null;
         run();
-        expect(controller.enableStart()).to.be.false;
+        expect(controller.disablePause()).to.be.false;
       });  
     });
   });

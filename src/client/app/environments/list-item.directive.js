@@ -26,7 +26,8 @@
     vm.environment    = this.environment;             
     vm.showBuildNotes = null;    
     vm.showStartStop  = showStartStop;
-    vm.enableStart    = enableStart;
+    vm.disableStart   = disableStart;
+    vm.disablePause   = disablePause;
     vm.showRedeploy   = showRedeploy;
     vm.showCancel     = showCancel;
     vm.showDeployLink = showDeployLink;    
@@ -72,10 +73,22 @@
       return !!environment.remoteType && !!environment.runstate && environment.status !== 'deploying';
     }
 
-    function enableStart() {
+    function disablePause() {
+      // disable button when
+      // 1) it's a remote environment
+      // 2) it's currently suspended or stopped
       var environment = vm.environment
         , runstate = environment.runstate;
-      return environment.remoteType && runstate === 'suspended' || runstate === 'stopped';
+      return !!environment.remoteType && runstate === 'suspended' || runstate === 'stopped' || runstate === 'busy';
+    }
+
+    function disableStart() {
+      // enable button when
+      // 1) it's a remote environment
+      // 2) it's currently running
+      var environment = vm.environment
+        , runstate = environment.runstate;
+      return !!environment.remoteType && runstate === 'running' || runstate === 'busy';
     }
 
     function showRedeploy() {

@@ -75,16 +75,16 @@
         class="btn glyphicon glyphicon-play"         
         ng-click="vm.start()" 
         ng-show="vm.showStartStop()"
-        ng-disabled="!vm.enableStart()" 
-        ng-class="{'btn-primary': vm.enableStart()}"          
+        ng-disabled="vm.disableStart()" 
+        ng-class="{'btn-primary': !vm.disableStart()}"          
         title="Start the environment"></button>
       <button 
         type="button" 
         class="btn glyphicon glyphicon-pause" 
         ng-click="vm.pause()" 
         ng-show="vm.showStartStop()"
-        ng-disabled="vm.enableStart()" 
-        ng-class="{'btn-primary': !vm.enableStart()}"          
+        ng-disabled="vm.disablePause()" 
+        ng-class="{'btn-primary': !vm.disablePause()}"          
         title="Stop the environment"></button>
       <button 
         type="button" 
