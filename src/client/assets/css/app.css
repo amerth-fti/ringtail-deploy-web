@@ -9,7 +9,7 @@
 }
 
 .environment-status {
-  text-align: center;
+  text-align: right;
 }
 
 .loading {
@@ -323,4 +323,52 @@ button {
 }
 .task-rundetails p {
   margin: 0;
+}
+
+.run-status,
+.deploy-status {
+  padding-top: 5px;
+  padding-bottom: 5px;
+  margin-bottom: 1px;
+  text-align: center;
+}
+
+.status-running,
+.status-deployed {
+  /*background-color: #5cb85c;*/
+  background-color: rgba(92,184,92,.8); 
+}
+.status-suspended {
+  background-color: #e0e0e0;
+}
+.status-busy,
+.status-deploying {
+  /*background-color: #428bca;*/
+  background-color: rgba(66,139,202,.8);
+}
+.status-failed {
+  /*background-color: #d9534f;*/
+  background-color: rgba(217,83,79,.8);
+}
+
+.environment {
+  padding: 0;
+  overflow: hidden;
+}
+.environment .status {
+  float: left;
+  position: absolute;
+  width: 20px;
+  height: 10000px;
+  
+}
+.environment .environment-info {
+  margin-left: 10px;
+  padding: 10px;
+}
+.environment .environment-controls { 
+  text-align: right;
+}
+.environment .deploy-list {
+  margin-top: 10px;
 }

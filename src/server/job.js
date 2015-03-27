@@ -72,7 +72,9 @@ Job.prototype.start = function start() {
       debug(err);
       job.stopped = new Date();
       job.status = 'Failed';
-      job.error = err;         
+      job.error = err;     
+      env.status = 'failed';
+      return envService.update(env);    
     });
     
   });

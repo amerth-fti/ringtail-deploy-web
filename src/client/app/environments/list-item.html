@@ -1,42 +1,45 @@
-<div class="row">
-  <div class="col-md-10 inner">
+<div 
+  class="status status-{{vm.runStatus}} status-{{vm.deployStatus}}"
+  title="Run Status: {{vm.runStatus | uppercase}}, Deploy Status: {{vm.deployStatus | uppercase}}"></div>    
+<div class="row environment-info">  
+  <div class="col-md-9">    
     <h4>          
       <span ng-click="vm.edit(environment)" class="configure glyphicon glyphicon-cog" />
       {{vm.environment.envName}}
     </h4>
 
-    <div class="row" ng-show="vm.environment.envDesc">
+    <div class="row">
       <div class="col-md-2"><strong>Info:</strong></div>
       <div class="col-md-10" ng-bind-html="vm.environment.envDesc | newlines | anchors | trust"></div>
     </div>
 
 
-    <div class="row top-buffer" ng-show="vm.environment.deployedBy">
+    <div class="row top-buffer">
       <div class="col-md-2"><strong>Requested by:</strong></div>
       <div class="col-md-10">{{vm.environment.deployedBy}}</div>
     </div>
 
-    <div class="row" ng-show="vm.environment.deployedUntil">
+    <div class="row">
       <div class="col-md-2"><strong>Requested until:</strong></div>
       <div class="col-md-10">{{vm.environment.deployedUntil | fromDateString | date: 'EEE, MMM dd, hh:mma (LOCAL)' }}</div>
     </div>
 
-    <div class="row" ng-show="vm.environment.deployedNotes">
+    <div class="row">
       <div class="col-md-2"><strong>Request notes:</strong></div>
       <div class="col-md-10" ng-bind-html="vm.environment.deployedNotes | newlines | anchors | trust"></div>
     </div>
 
-    <div class="row top-buffer" ng-show="vm.environment.deployedBranch">
+    <div class="row top-buffer">
       <div class="col-md-2"><strong>Branch:</strong></div>
       <div class="col-md-10">{{vm.environment.deployedBranch}}</div>        
     </div>
 
-    <div class="row" ng-show="vm.environment.deployedOn">
+    <div class="row">
       <div class="col-md-2"><strong>Build installed:</strong></div>
       <div class="col-md-10">{{vm.environment.deployedOn | fromDateString | date: 'EEE, MMM dd, hh:mma (LOCAL)'}}</div>        
     </div>
 
-    <div class="row" >
+    <div class="row">
       <div class="col-md-2"><strong>Build notes:</strong>        
         <span 
           class="small toggle-icon glyphicon" 
@@ -51,46 +54,41 @@
           </div>
         </div>
       </div>
-    </div>  
-
+    </div>
   </div>
-  <div class="col-md-2 environment-status">
-    
-    <h4 ng-show="vm.showButtons"><span>{{ vm.environment.runstate | uppercase}}</span></h4>
-    <div ng-show="vm.showButtons">
+  <div class="col-md-3 environment-controls">    
       <button 
         type="button" 
-        class="btn glyphicon glyphicon-play" 
+        class="btn glyphicon glyphicon-play"         
         ng-click="vm.start()" 
-        ng-disabled="!vm.showStart" 
-        ng-class="{'btn-primary': vm.showStart}"          
+        ng-show="vm.showStartStop()"
+        ng-disabled="!vm.enableStart()" 
+        ng-class="{'btn-primary': vm.enableStart()}"          
         title="Start the environment"></button>
       <button 
         type="button" 
         class="btn glyphicon glyphicon-pause" 
         ng-click="vm.pause()" 
-        ng-disabled="!vm.showPause" 
-        ng-class="{'btn-primary': vm.showPause}"          
+        ng-show="vm.showStartStop()"
+        ng-disabled="vm.enableStart()" 
+        ng-class="{'btn-primary': !vm.enableStart()}"          
         title="Stop the environment"></button>
       <button 
         type="button" 
         class="btn btn-warning glyphicon glyphicon-refresh" 
         ng-click="vm.redeploy()"          
+        ng-show="vm.showRedeploy()"
         title="Refresh the environment"
         ng-show="vm.enableDeploy"></button>
-    </div>
-    
-    <h4 ng-show="vm.showDeployLink">
-      <span>{{ vm.environment.status | uppercase }}</span>
-      <span ng-show="vm.showDeployLink" title="Reset Environment" class="small glyphicon glyphicon-exclamation-sign color-danger" ng-click="vm.reset()"></span>
-    </h4>
-    
-    <div ng-show="vm.showDeployLink">    
-        <!-- Show deployment job details when deploying -->
-        <a href="/app/jobs/{{vm.environment.deployedJobId}}">More Info</a>
-    </div>
-    
-    
-  </div>          
-
+      <button
+        type="button"
+        class="btn btn-danger glyphicon glyphicon-exclamation-sign"
+        title="Cancel Deployment"        
+        ng-show="vm.showCancel()"
+        ng-click="vm.reset()"></button>
+      
+      <p 
+        class="deploy-list" 
+        ng-show="vm.showDeployLink()"><a href="/app/jobs/{{vm.environment.deployedJobId}}">Deployment Info</a></p>      
+  </div>        
 </div>

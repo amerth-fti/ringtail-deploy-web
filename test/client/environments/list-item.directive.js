@@ -57,35 +57,133 @@ describe('listItem Directive', function() {
       expect(controller.environment).to.equal(environment);
     });
 
-    it('sets showStart is true when runstate is "suspended"', function() {
-      environment.runstate = 'suspended';
+    it('sets runStatus to "running" when not provided', function() {
+      environment.runstate = null;
       run();
-      expect(controller.showStart).to.be.true;
-    });
-
-    it('sets showStart to true when runstate is "stopped"', function() {
-      environment.runstate = 'stopped';
-      run();
-      expect(controller.showStart).to.be.true;
-    });
-
-    it('sets showButtons when status is "deployed"', function() {
-      environment.status = 'deployed';
-      run();
-      expect(controller.showButtons).to.be.true;
-    });
-
-    it('sets showDeployLink when status is "deploying"', function() {
-      environment.status = 'deploying';
-      run();
-      expect(controller.showDeployLink).to.be.true;
-    });
+      expect(controller.runStatus).to.equal('running');
+    });    
 
     it('polls when environment state is busy');
 
     it('polls when environment is deploying');
 
   });
+
+  describe('.showStartStop', function() {
+    describe('for skytap environments', function() {
+      beforeEach(function() {
+        environment.remoteType = 'skytap';
+      });
+      it('returns true when status is "deployed"', function() {
+        environment.status = 'deployed';
+        run();
+        expect(controller.showStartStop()).to.be.true;
+      });
+      it('returns false when status is "deploying"', function() {
+        environment.status = 'deploying';
+        run();
+        expect(controller.showStartStop()).to.be.false;
+      });
+      it('returns true when status is "failed"', function() {
+        environment.status = 'failed';
+        run();
+        expect(controller.showStartStop()).to.be.true;
+      });
+    });    
+    describe('for local environments', function() {
+      it('returns false', function() {
+        environment.remoteType = null;
+        run();
+        expect(controller.showStartStop()).to.be.false;
+      });  
+    });      
+  });
+
+  describe('.enableStart', function() {
+    describe('for skytap environments', function() {
+      beforeEach(function() {
+        environment.remoteType = 'skytap';
+      });
+      it('returns true when runstate is "suspended"', function() {
+        environment.runstate = 'suspended';
+        run();
+        expect(controller.enableStart()).to.be.true;
+      });
+      it('returns true when runstate is "stopped"', function() {
+        environment.runstate = 'stopped';
+        run();
+        expect(controller.enableStart()).to.be.true;
+      });
+      it('returns false when runstate is "running"', function() {
+        environment.runstate = 'running';
+        run();
+        expect(controller.enableStart()).to.be.false;
+      });
+    });    
+    describe('for local environments', function() {
+      it('returns false', function() {
+        environment.remoteType = null;
+        run();
+        expect(controller.enableStart()).to.be.false;
+      });  
+    });
+  });
+
+  describe('.showRedeploy', function() {    
+    it('returns true when status is "deployed"', function() {
+      environment.status = 'deployed';
+      run();
+      expect(controller.showRedeploy()).to.be.true;
+    });
+    it('returns true when status is "failed"', function() {
+      environment.status = 'failed';
+      run();
+      expect(controller.showRedeploy()).to.be.true;
+    });
+    it('returns false when status is "deploying"', function() {
+      environment.status = 'deploying';
+      run();
+      expect(controller.showRedeploy()).to.be.false;
+    });    
+  });
+
+  describe('.showCancel', function() {    
+    it('returns false when status is "deployed"', function() {
+      environment.status = 'deployed';
+      run();
+      expect(controller.showCancel()).to.be.false;
+    });
+    it('returns false when status is "failed"', function() {
+      environment.status = 'failed';
+      run();
+      expect(controller.showCancel()).to.be.false;
+    });
+    it('returns true when status is "deploying"', function() {
+      environment.status = 'deploying';
+      run();
+      expect(controller.showCancel()).to.be.true;
+    });    
+  });
+
+  describe('.showDeployLink', function() {    
+    it('returns false when status is "deployed"', function() {
+      environment.status = 'deployed';
+      run();
+      expect(controller.showDeployLink()).to.be.false;
+    });
+    it('returns true when status is "failed"', function() {
+      environment.status = 'failed';
+      run();
+      expect(controller.showDeployLink()).to.be.true;
+    });
+    it('returns true when status is "deploying"', function() {
+      environment.status = 'deploying';
+      run();
+      expect(controller.showDeployLink()).to.be.true;
+    });    
+  });
+
+
 
   describe('.start()', function() {
     var EnvironmentStarter
