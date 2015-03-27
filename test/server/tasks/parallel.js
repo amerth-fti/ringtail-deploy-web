@@ -5,8 +5,8 @@ var Q       = require('q')
   , expect  = chai.expect
   , assert  = chai.assert
 
-  , Parallel    = require('../../../src/server/tasks/Parallel')
-  , Task        = require('../../../src/server/tasks/Task')
+  , Parallel    = require('../../../src/server/tasks/parallel')
+  , Task        = require('../../../src/server/tasks/task')
   , taskfactory = require('../../../src/server/taskfactory')
   ;
 
