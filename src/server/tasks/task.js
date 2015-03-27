@@ -1,7 +1,7 @@
 var events  = require('events')
   , util    = require('util')
   , skytap  = require('node-skytap')
-  , Q       = require('Q')
+  , Q       = require('q')
   , _       = require('underscore');
 
 

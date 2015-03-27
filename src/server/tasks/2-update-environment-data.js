@@ -1,5 +1,5 @@
 var util    = require('util')  
-  , Q       = require('Q')
+  , Q       = require('q')
   , _       = require('underscore')
 
   , config  = require('../../../config')

@@ -1,5 +1,5 @@
 var debug           = require('debug')('deployer-skytap')
-  , Q               = require('Q')
+  , Q               = require('q')
   , Skytap          = require('node-skytap')
   , config          = require('../../../config')
   , skytap          = Skytap.init(config.skytap)

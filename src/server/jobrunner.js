@@ -1,7 +1,7 @@
 
 var debug   = require('debug')('deployer-jobrunner')
   , _       = require('underscore')
-  , Q       = require('Q')
+  , Q       = require('q')
   , jobs   = {}
   , jobId  = 0;
 

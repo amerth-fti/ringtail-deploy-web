@@ -1,5 +1,5 @@
 var debug           = require('debug')('deployer-regions')
-  , Q               = require('Q')
+  , Q               = require('q')
   , regionService   = require('../services/region-service')
   , envService      = require('../services/env-service')
   ;

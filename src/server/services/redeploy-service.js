@@ -1,5 +1,5 @@
 var debug       = require('debug')('deployer-redeployservice')
-  , Q           = require('Q')
+  , Q           = require('q')
   , _           = require('underscore')
   , envService  = require('../services/env-service')
   , Env         = require('../models/env')

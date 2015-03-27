@@ -1,5 +1,5 @@
 var util        = require('util')  
-  , Q           = require('Q')
+  , Q           = require('q')
   , _           = require('underscore')
   , envSvc      = require('../services/env-service')  
   , Task        = require('./task')
