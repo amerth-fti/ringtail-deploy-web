@@ -317,3 +317,10 @@ button {
 .task-remove {
   margin-top: 2px;
 }
+
+.task-rundetails {
+  font-family: monospace;
+}
+.task-rundetails p {
+  margin: 0;
+}
