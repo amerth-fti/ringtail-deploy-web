@@ -21,6 +21,10 @@
   margin: 9px 9px 0 0;
 }
 
+.color-warning {
+  color: #f0ad4e;
+}
+
 .color-danger {
   color: #d9534f;
 }
@@ -35,6 +39,8 @@
 .configure:hover {
   color: #ec971f;
 }
+
+
 
 button {
   border-width: 1px !important;  
@@ -341,6 +347,10 @@ button {
 .status-suspended {
   background-color: #e0e0e0;
 }
+.status-unknown {
+  /*background-color: #f0ad4e;*/
+  background-color: rgba(240,173,78,.8);
+}
 .status-busy,
 .status-deploying {
   /*background-color: #428bca;*/
@@ -372,3 +382,4 @@ button {
 .environment .deploy-list {
   margin-top: 10px;
 }
+

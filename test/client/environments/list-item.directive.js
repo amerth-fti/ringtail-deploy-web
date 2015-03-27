@@ -57,11 +57,30 @@ describe('listItem Directive', function() {
       expect(controller.environment).to.equal(environment);
     });
 
-    it('sets runStatus to "running" when not provided', function() {
-      environment.runstate = null;
-      run();
-      expect(controller.runStatus).to.equal('running');
-    });    
+    describe('with a local environment', function() {
+      it('sets runStatus to "running"', function() {
+        environment.remoteType = null;
+        run();
+        expect(controller.runStatus).to.equal('running');
+      });          
+    });
+
+    describe('with skytap environment', function() {
+      beforeEach(function() {
+        environment.remoteType = 'skytap';
+      });
+      it('sets runStatus to "unknown" when no runstate', function() {
+        environment.runstate = null;
+        run();
+        expect(controller.runStatus).to.equal('unknown');
+      });    
+      it('sets runStatus to the environment runstate', function() {
+        environment.runstate = 'running';
+        run();
+        expect(controller.runStatus).to.equal('running');
+      });    
+    });
+  
 
     it('polls when environment state is busy');
 
@@ -73,6 +92,7 @@ describe('listItem Directive', function() {
     describe('for skytap environments', function() {
       beforeEach(function() {
         environment.remoteType = 'skytap';
+        environment.runstate = 'running';
       });
       it('returns true when status is "deployed"', function() {
         environment.status = 'deployed';
@@ -88,6 +108,12 @@ describe('listItem Directive', function() {
         environment.status = 'failed';
         run();
         expect(controller.showStartStop()).to.be.true;
+      });
+      it('returns false when runstate is null', function() {
+        environment.status = 'deployed';
+        environment.runstate = null;
+        run();
+        expect(controller.enableStart()).to.be.false;
       });
     });    
     describe('for local environments', function() {
@@ -118,7 +144,7 @@ describe('listItem Directive', function() {
         environment.runstate = 'running';
         run();
         expect(controller.enableStart()).to.be.false;
-      });
+      });      
     });    
     describe('for local environments', function() {
       it('returns false', function() {

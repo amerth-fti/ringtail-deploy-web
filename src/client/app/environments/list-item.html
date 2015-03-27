@@ -6,10 +6,10 @@
     <h4>          
       <span ng-click="vm.edit(environment)" class="configure glyphicon glyphicon-cog" />
       {{vm.environment.envName}}
-    </h4>
+    </h4>  
 
     <div class="row">
-      <div class="col-md-2"><strong>Info:</strong></div>
+      <div class="col-md-2"><strong>Environment Info:</strong></div>
       <div class="col-md-10" ng-bind-html="vm.environment.envDesc | newlines | anchors | trust"></div>
     </div>
 
@@ -55,6 +55,19 @@
         </div>
       </div>
     </div>
+
+    <div class="row top-buffer" ng-show="vm.environment.remoteType === 'skytap'">
+      <div class="col-md-2"><strong>Skytap Info:</strong></div>
+      <div class="col-md-10">
+        <a href="https://cloud.skytap.com/configurations/{{vm.environment.remoteId}}">Environment {{vm.environment.remoteId}}</a>
+        <span 
+          class="color-warning glyphicon glyphicon-exclamation-sign"
+          ng-show="vm.runStatus === 'unknown'"
+          title="Could not find environment {{vm.environmnet.remoteId}}. Ringtail Deploy may be out of sync with Skytap."
+          ></span>
+
+      </div>
+    </div>
   </div>
   <div class="col-md-3 environment-controls">    
       <button 
@@ -82,7 +95,7 @@
         ng-show="vm.enableDeploy"></button>
       <button
         type="button"
-        class="btn btn-danger glyphicon glyphicon-exclamation-sign"
+        class="btn btn-danger glyphicon glyphicon-remove-sign"
         title="Cancel Deployment"        
         ng-show="vm.showCancel()"
         ng-click="vm.reset()"></button>

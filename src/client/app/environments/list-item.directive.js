@@ -43,11 +43,16 @@
     
     function activate(environment) {                
       vm.environment    = environment;      
-      vm.deployStatus   = environment.status;
-      vm.runStatus      = environment.runstate || 'running';
+      vm.deployStatus   = environment.status;      
 
       if(vm.showBuildNotes === null) {
         vm.showBuildNotes = false;
+      }
+
+      if(environment.remoteType) {
+        vm.runStatus = environment.runstate || 'unknown';
+      } else {
+        vm.runStatus = 'running';
       }
       
       pollWhileBusy(environment);
@@ -56,14 +61,15 @@
       $scope.$on('$destroy', function() {
         $timeout.cancel(vm.poll);
       });
-    }
+    }    
 
     function showStartStop() {
       // show buttons if
       // 1) it's a remote environment
-      // 2) the environment is not currently deploying
+      // 2) and the environment has a valid runstate
+      // 3) and the environment is not currently deploying      
       var environment = vm.environment;
-      return !!environment.remoteType && environment.status !== 'deploying';
+      return !!environment.remoteType && !!environment.runstate && environment.status !== 'deploying';
     }
 
     function enableStart() {
