@@ -1,6 +1,5 @@
 var fs = require('fs')
-  , path = __dirname + '/../data/'
-  , dbpath = path + 'deployer.db'
+  , path = __dirname + '/../data/'  
   ;
 
 exports.up = function(next){

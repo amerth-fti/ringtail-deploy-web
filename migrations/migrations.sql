@@ -1,4 +1,4 @@
--- createEnv
+-- 002-createEnv
 CREATE TABLE env (
   envId INTEGER PRIMARY KEY AUTOINCREMENT,
   envName NVARCHAR(255) NOT NULL,
@@ -17,10 +17,13 @@ CREATE TABLE env (
 );
 
 
--- dropEnv
+-- 002-dropEnv
 DROP TABLE env;
 
--- createMachine
+
+
+
+-- 003-createMachine
 CREATE TABLE machine (
   machineId INTEGER PRIMARY KEY AUTOINCREMENT,
   envId INTEGER NOT NULL,
@@ -35,18 +38,19 @@ CREATE TABLE machine (
   FOREIGN KEY (envId) REFERENCES env(envId)
 );
 
--- dropMachine
+-- 003-dropMachine
 DROP TABLE machine;
 
 
--- createRegion
+
+
+-- 004-createRegion
 CREATE TABLE region (
   regionId INTEGER PRIMARY KEY AUTOINCREMENT,
   regionName NVARCHAR(255) NOT NULL,
   regionDesc TEXT  
 );
 
--- createRegionEnv
 CREATE TABLE regionenv (
   regionId INTEGER NOT NULL,
   envId INTEGER NOT NULL,
@@ -55,27 +59,63 @@ CREATE TABLE regionenv (
   FOREIGN KEY (envId) REFERENCES env(envId)
 );
 
--- insertDefaultRegion
 INSERT INTO region (regionName, regionDesc)
 VALUES ('All', 'All environments');
 
--- insertDefaultRegionEnvs
 INSERT INTO regionenv
 SELECT 1, envId FROM env;
 
--- dropRegionEnv
+-- 004-dropRegion
 DROP TABLE regionenv;
-
--- dropRegion
 DROP TABLE region;
 
--- dropRegion
-DROP TABLE region;
 
--- deleteDefaultRegion
+
+
+-- 005-deleteDefaultRegion
 DELETE FROM region 
 WHERE regionId = 1;
 
--- deleteDefaultRegionEnvs
 DELETE FROM regionenv
 WHERE regionId = 1;
+
+-- 005-addDefaultRegion
+INSERT INTO region (regionId, regionName, regionDesc)
+VALUES (1, 'All', 'All environments');
+
+INSERT INTO regionenv
+SELECT 1, envId FROM env;
+
+
+
+
+-- 006-addRegionConfigs
+ALTER TABLE region ADD COLUMN serviceConfig TEXT;
+ALTER TABLE region ADD COLUMN browserConfig TEXT;
+
+-- 006-dropRegionConfigs
+ALTER TABLE region RENAME TO regiontemp;
+ALTER TABLE regionenv RENAME TO regionenvtemp;
+
+CREATE TABLE region (
+  regionId INTEGER PRIMARY KEY AUTOINCREMENT,
+  regionName NVARCHAR(255) NOT NULL,
+  regionDesc TEXT  
+);
+
+CREATE TABLE regionenv (
+  regionId INTEGER NOT NULL,
+  envId INTEGER NOT NULL,
+  PRIMARY KEY (regionId, envId),
+  FOREIGN KEY (regionId) REFERENCES region(regionId),
+  FOREIGN KEY (envId) REFERENCES env(envId)
+);
+
+INSERT INTO region (regionId, regionName, regionDesc)
+SELECT regionId, regionName, regionDesc FROM regiontemp;
+
+INSERT INTO regionenv(regionId, envId)
+SELECT regionId, envId FROM regionenvtemp;
+
+DROP TABLE regionenvtemp;
+DROP TABLE regiontemp;
