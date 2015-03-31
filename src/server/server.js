@@ -41,6 +41,8 @@ app.get   ('/api/regions/:regionId', controllers.regions.get);
 app.post  ('/api/regions', controllers.regions.create);
 app.put   ('/api/regions/:regionId', controllers.regions.update);
 app.delete('/api/regions/:regionId', controllers.regions.del);
+app.get   ('/api/regions/:regionId/branches', controllers.browse.branches);
+app.get   ('/api/regions/:regionId/branches/:branch/builds', controllers.browse.builds);
 
 
 // API - REGION ENVIRONMENT ROUTES
@@ -71,6 +73,7 @@ app.get ('/api/skytap/environments/:configuration_id', controllers.skytap.enviro
 
 // API - TASKS
 app.get ('/api/tasks', controllers.tasks.list);
+
 
 
 // CONVERT TO UNIVERSAL HANDLER
