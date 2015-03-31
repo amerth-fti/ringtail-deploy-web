@@ -2,53 +2,46 @@
 describe('main.controller', function() {
   beforeEach(module('app'));  
   
-  var $controller
-    , Region
-    , regions  
-    , scope
-    , globals
-    , routeParams
-    , controller
-    , $routeParams
+  var controller    
+    , regions = [ { regionId: 1 }, { regionId: 2 }]
     ;
 
-  regions = [ { regionId: 1 }, { regionId: 2 }];
 
-  beforeEach(inject(function($rootScope, _$controller_, _Region_) {
-    $controller = _$controller_;
-    Region = _Region_;
-    scope = $rootScope;
-    routeParams = { regionId: 1 };
-    globals = {};      
-
-    sinon.stub(Region, 'query', function() {
+  beforeEach(inject(function(Region) {
+    sinon.stub(Region, 'query', function() {   
       return regions;      
     });    
   }));
+
+
+  beforeEach(inject(function($controller, $rootScope, Region) {
+    controller = $controller('MainController', { $rootScope: $rootScope, Region: Region });
+  }));
+
   
-  describe('initialize', function() {    
-
-    it('sets the globals variable to the root scope', function() {      
-      controller = $controller('MainController', { $scope: scope, globals: globals, Region: Region });
-      expect(scope.globals).to.equal(globals);
-    });
-
-    it('retrieves the regions', function() {
-      controller = $controller('MainController', { $scope: scope, globals: globals, Region: Region });
-      expect(scope.vm.regions).to.equal(regions);
+  describe('.activate', function() {      
+    it('retrieves the regions', function() {      
+      expect(controller.regions).to.equal(regions);
     });    
-
   });
 
 
   describe('when routeParam regionId changes', function() {
-    it('the selected region changes', function() {      
-      controller = $controller('MainController', { $scope: scope, globals: globals, $routeParams: routeParams, Region: Region });
-      scope.vm.routeParams.regionId = 2;
-      scope.$digest();
-      expect(scope.vm.selectedRegion).to.equal(2);
-    });
+    it('the selected region changes', inject(function($rootScope, $routeParams) {            
+      $routeParams.regionId = 2;
+      $rootScope.$digest();
+      expect(controller.selectedRegion).to.equal(2);
+    }));
   });
 
+
+  describe('when rootScope emits region-saved', function() {   
+    it('updates the existing region', inject(function($rootScope) {
+      expect(controller.regions[0].regionName).to.be.undefined;
+
+      $rootScope.$emit('region-saved', { regionId: 1, regionName: 'test' });
+      expect(controller.regions[0].regionName).to.equal('test');
+    }));
+  });
 
 });

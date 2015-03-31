@@ -17,6 +17,8 @@ module.exports = RegionMapper;
 
 RegionMapper.prototype.parse = function parse(record) {
   var result = new Region(record);    
+  result.serviceConfig = tryParseJSON(record.serviceConfig);
+  result.browseConfig = tryParseJSON(record.browseConfig);
   return result;
 };
 
@@ -32,7 +34,9 @@ RegionMapper.prototype.insert = function insert(instance, next) {
 
   params = {    
     $regionName: instance.regionName,
-    $regionDesc: instance.regionDesc    
+    $regionDesc: instance.regionDesc,
+    $serviceConfig: stringifyJSON(instance.serviceConfig),
+    $browseConfig: stringifyJSON(instance.browseConfig)
   };
 
   return this.run(sql, params, next);
@@ -44,9 +48,11 @@ RegionMapper.prototype.update = function update(instance, next) {
     ;
 
   params = {
-    $regionId: instance.envId,
+    $regionId: instance.regionId,
     $regionName: instance.regionName,
-    $regionDesc: instance.regionDesc    
+    $regionDesc: instance.regionDesc,
+    $serviceConfig: stringifyJSON(instance.serviceConfig),
+    $browseConfig: stringifyJSON(instance.browseConfig)   
   };
 
   return this.run(sql, params, next);
@@ -128,3 +134,16 @@ RegionMapper.prototype.removeEnv = function removeEnv(regionId, envId, next) {
     .run(sql, params)
     .nodeify(next);
 };
+
+function tryParseJSON(string) {
+  try {
+    return JSON.parse(string);
+  }
+  catch(ex) {
+    return {};
+  }
+}
+
+function stringifyJSON(json) {
+  return JSON.stringify(json, null, 2);
+}

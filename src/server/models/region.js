@@ -9,7 +9,9 @@ schema = {
   "properties": [
     { "name": "regionId" },    
     { "name": "regionName", "required": true },
-    { "name": "regionDesc" }
+    { "name": "regionDesc" },
+    { "name": "serviceConfig" },
+    { "name": "browseConfig" }
   ]
 };
 /* jshint ignore:end */

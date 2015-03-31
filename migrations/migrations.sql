@@ -91,7 +91,7 @@ SELECT 1, envId FROM env;
 
 -- 006-addRegionConfigs
 ALTER TABLE region ADD COLUMN serviceConfig TEXT;
-ALTER TABLE region ADD COLUMN browserConfig TEXT;
+ALTER TABLE region ADD COLUMN browseConfig TEXT;
 
 -- 006-dropRegionConfigs
 ALTER TABLE region RENAME TO regiontemp;

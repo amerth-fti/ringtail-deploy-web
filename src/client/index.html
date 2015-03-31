@@ -20,11 +20,12 @@
   <script type="text/javascript" src="/assets/lib/underscore/underscore.js"></script>
 
   <script type="text/javascript" src="/config"></script>
-  <script type="text/javascript" src="/app/_module.js"></script>
-  <script type="text/javascript" src="/app/_routes.js"></script>
+  <script type="text/javascript" src="/app/_module.js"></script>  
   <script type="text/javascript" src="/app/_config.js"></script>
+  <script type="text/javascript" src="/app/_routes.js"></script>  
+  <script type="text/javascript" src="/app/_run.js"></script>
   <script type="text/javascript" src="/app/config.constant.js"></script>
-  <script type="text/javascript" src="/app/globals.constant.js"></script>
+  <script type="text/javascript" src="/app/globals.constant.js"></script>  
 
   <script type="text/javascript" src="/app/layout/main.controller.js"></script>
 
@@ -71,6 +72,8 @@
   <script type="text/javascript" src="/app/regions/_routes.js"></script>
   <script type="text/javascript" src="/app/regions/details-route.controller.js"></script>
   <script type="text/javascript" src="/app/regions/details.directive.js"></script>
+  <script type="text/javascript" src="/app/regions/edit-route.controller.js"></script>
+  <script type="text/javascript" src="/app/regions/edit.directive.js"></script>
   <script type="text/javascript" src="/app/regions/list-route.controller.js"></script>
   <script type="text/javascript" src="/app/regions/list.directive.js"></script>
 
@@ -103,7 +106,7 @@
 </head>
 <body ng-app="app">
 
-  <div ng-controller="MainController">
+  <div ng-controller="MainController as vm">
 
     <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
       <div class="container-fluid">

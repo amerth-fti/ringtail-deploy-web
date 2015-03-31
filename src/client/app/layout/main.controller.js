@@ -6,17 +6,12 @@
     .module('app')
     .controller('MainController', MainController);
 
-    MainController.$inject = [ '$scope', '$routeParams', 'globals', 'Region' ];
+    MainController.$inject = [ '$rootScope', 'Region' ];
       
-    function MainController($scope, $routeParams, globals, Region) {      
-      $scope.globals        = globals;
-
-      var vm = {};
-      $scope.vm         = vm;
-      vm.globals        = globals;
+    function MainController($rootScope, Region) {      
+      var vm            = this;      
       vm.regions        = null;        
-      vm.selectedRegion = null;
-      vm.routeParams    = $routeParams;
+      vm.selectedRegion = null;      
 
       activate();
 
@@ -24,13 +19,24 @@
 
       function activate() {
         vm.regions = Region.query(); 
-        watchRegionId();             
+        watchRegionId();
+        watchRegionUpdates();         
       }
 
       function watchRegionId() {
-        $scope.$watch('vm.routeParams.regionId', function(regionId) {
+        $rootScope.$watch('routeParams.regionId', function(regionId) {
           vm.selectedRegion = parseInt(regionId);
-        });        
+        });              
+      }
+
+      function watchRegionUpdates() {
+        $rootScope.$on('region-saved', function(e, savedRegion) {
+          vm.regions.forEach(function(region) {
+            if(region.regionId === savedRegion.regionId) {
+              angular.copy(savedRegion, region);
+            }
+          });
+        });     
       }
     }
 

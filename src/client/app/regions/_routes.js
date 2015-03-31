@@ -13,10 +13,15 @@
       templateUrl: '/app/regions/list-route.html',
       controller: 'RegionListRouteController',
       controllerAs: 'vm'
-    })
+    })    
     .when('/app/regions/:regionId', {
       templateUrl: '/app/regions/details-route.html',
       controller: 'RegionDetailsRouteController',
+      controllerAs: 'vm'
+    })
+    .when('/app/regions/:regionId/edit', {
+      templateUrl: '/app/regions/edit-route.html',
+      controller: 'RegionEditRouteController',
       controllerAs: 'vm'
     })
     .otherwise({

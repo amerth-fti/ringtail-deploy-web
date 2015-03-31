@@ -1,0 +1,88 @@
+<h2>Region {{vm.regionId}} - {{vm.region.regionName}}</h2>
+
+<div class="row">
+  <div class="col-md-8 col-lg-6">
+    <form>
+      
+      <fieldset>        
+        <div class="form-group">
+          <label for="regionName">Name</label>
+          <input type="text" class="form-control" ng-model="vm.region.regionName"></input>
+        </div>
+        <div class="form-group">
+          <label for="regionDesc">Description</label>
+          <textarea class="form-control" ng-model="vm.region.regionDesc"></textarea>
+        </div>      
+      
+      </fieldset>
+      <fieldset>
+        <legend>Install Service Settings</legend>
+        <div class="form-group">
+          <label>Service Update UNC Path</label>
+          <input type="text" class="form-control" ng-model="vm.region.serviceConfig.updatePath"></input>
+        </div>
+        <div class="form-group">
+          <label>Service User Account</label>
+          <input type="text" class="form-control" ng-model="vm.region.serviceConfig.runasUser"></input>
+        </div>
+        <div class="form-group">
+          <label>Service User Password</label>
+          <input type="password" class="form-control" ng-model="vm.region.serviceConfig.runasPassword"></input>
+        </div>
+      </fieldset>
+
+      <fieldset>
+        <legend>Build Browser Settings</legend>
+        <div class="form-group">
+          <select class="form-control" ng-model="vm.region.browseConfig.type">
+            <option value="ftp">FTP Share</option>
+            <option value="http">HTTP Share</option>
+          </select>
+        </div> 
+        <div ng-show="vm.region.browseConfig.type === 'ftp'">
+          <div class="form-group">
+            <label>FTP Host</label>
+            <input type="text" class="form-control" ng-model="vm.region.browseConfig.ftpHost">
+          </div>
+          <div class="form-group">            
+            <label>FTP User</label>
+            <input type="text" class="form-control" ng-model="vm.region.browseConfig.ftpUser">           
+          </div>
+          <div class="form-group">
+            <label>FTP Password</label>
+            <input type="password" class="form-control" ng-model="vm.region.browseConfig.ftpPassword">
+          </div>
+          <div class="form-group">
+            <label>FTP Proxy Host</label>
+            <input type="text" class="form-control" ng-model="vm.region.browseConfig.ftpProxyHost">
+          </div>
+          <div class="form-group">
+            <label>FTP Proxy Port</label>
+            <input type="text" class="form-control" ng-model="vm.region.browseConfig.ftpProxyPort">
+          </div>
+          <div class="form-group">
+            <label>FTP Proxy User</label>
+            <input type="text" class="form-control" ng-model="vm.region.browseConfig.ftpProxyUser">
+          </div>
+          <div class="form-group">
+            <label>FTP Proxy Password</label>
+            <input type="password" class="form-control" ng-model="vm.region.browseConfig.ftpProxyPassword">
+          </div>
+        </div>
+        <div ng-show="vm.region.browseConfig.type === 'http'">
+          <div class="form-group">
+            <label>HTTP Host</label>
+            <input type="text" class="form-control" ng-model="vm.region.browseConfig.httpHost">
+          </div>
+          <div class="form-group">
+            <label>HTTP Port</label>
+            <input type="text" class="form-control" ng-model="vm.region.browseConfig.httpPort">
+          </div>
+        </div>
+      </fieldset>    
+      <div class="pull-right">
+        <button class="btn btn-primary" ng-click="vm.save()">Save</button>
+        <button class="btn" ng-click="vm.cancel()">Cancel</button>
+    </form>    
+  </div>
+</div>
