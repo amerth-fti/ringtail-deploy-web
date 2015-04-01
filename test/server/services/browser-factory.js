@@ -13,6 +13,14 @@ describe('Browser Factory', function() {
 
   describe('.fromRegion', function() {
 
+    describe('when no browseConfig set', function() {
+      it('should create an EmptyBrowser', function() {
+        var region = {};
+        var result = sut.fromRegion(region);
+        expect(result).to.be.instanceOf(EmptyBrowser);
+      });
+    });
+
     describe('with unknown browser type', function() {      
       it('should create an EmptyBrowser', function() {
         var region = { browseConfig: { type: '' } };

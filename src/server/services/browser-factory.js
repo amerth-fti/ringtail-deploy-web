@@ -13,7 +13,7 @@ var EmptyBrowser  = require('./browsers/empty-browser')
  * browser
  */
 exports.fromRegion = function(region) {
-  var config = region.browseConfig
+  var config = region.browseConfig || {}
     , result = null
     ;
 
