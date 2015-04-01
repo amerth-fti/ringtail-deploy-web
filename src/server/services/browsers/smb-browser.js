@@ -33,7 +33,7 @@ SmbBrowser.prototype.branches = function branches(next) {
  * @return {promise}
  */
 SmbBrowser.prototype.builds = function builds(branch, next) {
-  var branchPath = this.smbPath + '\\' + branch;
+  var branchPath = path.join(this.smbPath, branch);
   return SmbBrowser.listDirs(branchPath).nodeify(next);
 };
 
