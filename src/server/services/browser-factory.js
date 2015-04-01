@@ -1,5 +1,16 @@
-var HttpBrowser = require('./browsers/http-browser');
+var EmptyBrowser  = require('./browsers/empty-browser')
+  , HttpBrowser   = require('./browsers/http-browser')
+  ;
 
+/**
+ * Creates a browser object based on the region's
+ * configurations settings in the browerConfig.type property
+ * 
+ * @param {Region} region - a region instance
+ * @return {Browser} returns a Browser instance which will
+ * default to EmptyBrowser if it can't build the appropriate
+ * browser
+ */
 exports.fromRegion = function(region) {
   var config = region.browseConfig
     , result = null
@@ -7,15 +18,17 @@ exports.fromRegion = function(region) {
 
   if(config.type === 'http') {
     result = new HttpBrowser(config);
-  } 
-  // TODO
+  }   
   // else if(config.type === 'ftp') {
-    
+  //   TODO  
   // }
   // TODO
   // else if (config.type === 'smb') {
-    
+  //   TODO
   // }
+  else {
+    result = new EmptyBrowser(config);
+  }
 
   return result;  
 };

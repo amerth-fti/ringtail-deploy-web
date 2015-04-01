@@ -1,7 +1,8 @@
-var request = require('request')
-  , path    = require('path')
-  , Q       = require('q')
-  , _       = require('underscore')
+var url       = require('url')
+  , path      = require('path')
+  ,  request  = require('request')  
+  , Q         = require('q')
+  , _         = require('underscore')
   ;
 
 function HttpBrowser(config) {
@@ -11,13 +12,23 @@ function HttpBrowser(config) {
 module.exports = HttpBrowser;
 
 
-
+/**
+ * Retrieves the list of branches as an array of strings
+ *
+ * @param {function} [next] - node callback
+ * @return {promise}
+ */
 HttpBrowser.prototype.branches = function branches(next) {
   var deferred = Q.defer()
+    , urlObj = {      
+        protocol: 'http',
+        host: this.httpHost,
+        pathname: '/Api/V1/Directory'
+      }
     , opts = {
-        uri: this.httpHost + '/Directory',
+        uri: url.format(urlObj),        
         json: true
-      };
+      };   
   request.get(opts, function(err, response, body) {
     if(err) deferred.reject(err);      
     else    deferred.resolve(body);
@@ -26,11 +37,23 @@ HttpBrowser.prototype.branches = function branches(next) {
 };
 
 
-
+/**
+ * Retrieves the list of builds for a branch as a list of strings
+ *
+ * @param {string} branch - the branch to retrieve builds for
+ * @param {function} [next] - node callback
+ * @return {promise}
+ */
 HttpBrowser.prototype.builds = function builds(branch, next) {
   var deferred = Q.defer()
+    , urlObj = {
+        protocol: 'http',
+        host: this.httpHost,
+        pathname: '/Api/V1/Directory',
+        query: { 'path': branch }        
+      }
     , opts = {
-        uri: this.httpHost + '/Directory?path=' + branch,
+        uri: url.format(urlObj),
         json: true
       };    
   request.get(opts, function(err, response, body) {

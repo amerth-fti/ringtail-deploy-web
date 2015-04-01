@@ -14,12 +14,8 @@ exports.branches = function branches(req, res, next) {
     .then(function(region) {  
       return browserFactory.fromRegion(region);
     })
-    .then(function(browser) {
-      var result = [];
-      if(browser) {      
-        result = browser.branches();
-      }
-      return result;
+    .then(function(browser) {      
+      return browser.branches();      
     })
     .then(function(branches) {
       res.send(branches);
@@ -43,11 +39,7 @@ exports.builds = function builds(req, res, next) {
       return browserFactory.fromRegion(region);
     })
     .then(function(browser) {
-      var result = [];
-      if(browser) {      
-        result = browser.builds(branch);
-      }
-      return result;
+      return browser.builds(branch);      
     })
     .then(function(builds) {      
       res.send(builds);
