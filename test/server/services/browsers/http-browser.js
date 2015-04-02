@@ -13,7 +13,7 @@ describe('HttpBrowser', function() {
       , mockRequest
       ;
     beforeEach(function() {      
-      sut = new HttpBrowser({ httpHost: 'localhost:8080' });
+      sut = new HttpBrowser({ httpBranchesUri: 'http://localhost:8080/Api/V1/Directory' });
       mockRequest = nock('http://localhost:8080')
         .get('/Api/V1/Directory')
         .reply(200, [ '2015', 'CONSOLIDATION' ]);
@@ -48,7 +48,7 @@ describe('HttpBrowser', function() {
       , branch = 'CONSOLIDATION'
       ;
     beforeEach(function() {
-      sut = new HttpBrowser({ httpHost: 'localhost:8080' });
+      sut = new HttpBrowser({ httpBuildsUri: 'http://localhost:8080/Api/V1/Directory?path=:branch' });
       mockRequest = nock('http://localhost:8080')
         .get('/Api/V1/Directory?path=CONSOLIDATION')
         .reply(200, [ 'consolidation/20140401.1', 'consolidation/20140401.2', 'consolidation/20140401.3' ]);

@@ -1,5 +1,4 @@
 var url       = require('url')
-  , path      = require('path')
   ,  request  = require('request')  
   , Q         = require('q')
   , _         = require('underscore')
@@ -19,14 +18,9 @@ module.exports = HttpBrowser;
  * @return {promise}
  */
 HttpBrowser.prototype.branches = function branches(next) {
-  var deferred = Q.defer()
-    , urlObj = {      
-        protocol: 'http',
-        host: this.httpHost,
-        pathname: '/Api/V1/Directory'
-      }
+  var deferred = Q.defer()  
     , opts = {
-        uri: url.format(urlObj),        
+        uri: this.httpBranchesUri,
         json: true
       };   
   request.get(opts, function(err, response, body) {
@@ -46,25 +40,17 @@ HttpBrowser.prototype.branches = function branches(next) {
  */
 HttpBrowser.prototype.builds = function builds(branch, next) {
   var deferred = Q.defer()
-    , urlObj = {
-        protocol: 'http',
-        host: this.httpHost,
-        pathname: '/Api/V1/Directory',
-        query: { 'path': branch }        
-      }
+    , uri = this.httpBuildsUri.replace(':branch', branch)
     , opts = {
-        uri: url.format(urlObj),
+        uri: uri,
         json: true
       };    
   request.get(opts, function(err, response, body) {
     if(err) deferred.reject(err);
-    else {
-      // results returned as:
-      //   ["consolidation/20150319.2","consolidation/20150311.1","consolidation/20150319.1"]
-      // lop off the prefix parts
+    else {    
       var results = body.map(function(val) {
         var parts = val.split('/');
-        return parts.length === 2 ? parts[1] : parts[0];
+        return parts[parts.length - 1];
       });
       deferred.resolve(results);
     }
