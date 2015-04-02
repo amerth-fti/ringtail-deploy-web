@@ -23,7 +23,8 @@
     "ringtail-deploy-client": "git://github.com/fti-technology/ringtail-deploy-client",
     "serve-static": "^1.7.1",
     "statements": "^0.1.0",
-    "underscore": "^1.7.0"
+    "underscore": "^1.7.0",
+    "edge":  "^0.10.1"
   },
   "devDependencies": {
     "chai": "^1.10.0",
