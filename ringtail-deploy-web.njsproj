@@ -101,6 +101,7 @@
     <Folder Include="test\client\" />
     <Folder Include="test\client\environments\" />
     <Folder Include="test\client\environments\editor\" />
+    <Folder Include="test\client\environments\redeploy\" />
     <Folder Include="test\client\environments\taskdefs\" />
     <Folder Include="test\client\environments\taskdefs\ringtail\" />
     <Folder Include="test\client\layout\" />

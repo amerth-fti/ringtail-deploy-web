@@ -21,8 +21,9 @@ exports.fromRegion = function(region) {
     result = new HttpBrowser(config);
   }   
   else if (config.type === 'ftp') {
-    result = new require('./browsers/ftp-browser')(config);
-  }
+      var FtpBrowser = require('./browsers/ftp-browser');
+      result = new FtpBrowser(config);
+   }
   else if (config.type === 'smb') {
     result = new SmbBrowser(config);
   }

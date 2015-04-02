@@ -2,6 +2,7 @@
   , Q = require('q')
   , edge = require('edge')
   , path = require('path')
+  , ftp = edge.func(path.join(__dirname, 'FTPOperations.csx'));
   ;
 
 function FTPBrowser(config) {
@@ -30,14 +31,9 @@ FTPBrowser.prototype.branches = function branches(next) {
       ftpProxyHost: this.ftpProxyHost,
       ftpProxyPort: '',
       action: currentAction.value,
-      branch: this.ftprootpath
+      branch: this.ftpRootPath
    };
   
-  /**
- * Include the C# source code VIA edge 
- */
- var ftp = edge.func(path.join(__dirname, 'FTPOperations.csx'));
-
   ftp(params, function (error, result) {
     if (error) deferred.reject(error);
     else deferred.resolve(result);
@@ -67,15 +63,10 @@ FTPBrowser.prototype.builds = function builds(branch, next) {
         ftpProxyHost: this.ftpProxyHost,
         ftpProxyPort: '',
         action: currentAction.value,
-        branch: this.ftprootpath.replace(/\/$/, '') + '/' + branch
+        branch: ''
       };
   
-  
-  /**
-  * Include the C# source code VIA edge 
-  */
-  var ftp = edge.func('FTPOperations.csx');
-  
+  params.branch = this.ftpRootPath.replace(/\/$/, '') + '/' + branch;
   ftp(params, function (error, result) {
     if (error) deferred.reject(error);
     else deferred.resolve(result);
@@ -105,15 +96,10 @@ FTPBrowser.prototype.files = function files(branch, next) {
         ftpProxyHost: this.ftpProxyHost,
         ftpProxyPort: '',
         action: currentAction.value,
-        branch: this.ftprootpath.replace(/\/$/, '') + '/' + branch
+        branch: this.ftpRootPath.replace(/\/$/, '') + '/' + branch
       };
   
-  
-  /**
-  * Include the C# source code VIA edge 
-  */
-  var ftp = edge.func('FTPOperations.csx');
-  
+  params.branch = this.ftpRootPath.replace(/\/$/, '') + '/' + branch;
   ftp(params, function (error, result) {
     if (error) deferred.reject(error);
     else deferred.resolve(result);
