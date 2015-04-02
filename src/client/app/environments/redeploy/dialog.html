@@ -1,19 +1,30 @@
 <div class="modal-header bg-primary">
   <button type="button" class="close" data-dismiss="modal" ng-click="vm.close()"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-  <h4 class="modal-title">Redeploy '{{vm.environment.envName}}'</h4>
+  <h4 class="modal-title">Redeploy '{{vm.tempEnv.envName}}'</h4>
 </div>
 <div class="modal-body">
   
   <form role="form">
     <div class="form-group">
-      <label>Install build from branch:</label>
-      <select class="form-control" ng-model="vm.environment.deployedBranch" ng-options="branch for branch in vm.branches" />
+      <label>Install from Branch:</label>
+      <select 
+        class="form-control" 
+        ng-model="vm.selectedBranch.branch" 
+        ng-options="branch for branch in vm.branches"
+        ng-change="vm.branchChanged()" />
     </div>
-    <deployinfo environment="vm.environment"></deployinfo>    
+    <div class="form-group" ng-show="vm.selectedBranch.branch">
+      <label>Install Build:</label>
+      <select 
+        class="form-control" 
+        ng-model="vm.selectedBranch.build" 
+        ng-options="build for build in vm.builds" />
+    </div>
+    <deployinfo environment="vm.tempEnv"></deployinfo>    
   </form>
 
   <div class="advanced" ng-show="vm.showAdvanced">    
-    <div ng-repeat="taskdef in vm.environment.config.taskdefs">
+    <div ng-repeat="taskdef in vm.tempEnv.config.taskdefs">
       <input 
         type="checkbox"
         name="selectedTaskDefs[]"

@@ -21,7 +21,7 @@ schema = {
     { "name": "deployedOn" },
     { "name": "deployedUntil" },
     { "name": "deployedNotes" },
-    { "name": "deployedBranch" },    
+    { "name": "deployedBranch" },      
     { "name": "deployedJobId" },
     { "name": "runstate" },
     { "name": "machines" }
