@@ -2,7 +2,7 @@
   , Q = require('q')
   , edge = require('edge')
   , path = require('path')
-  , ftp = edge.func(path.join(__dirname, 'FTPOperations.csx'));
+  , ftp = edge.func(path.join(__dirname, 'FTPOperations.csx'))
   ;
 
 function FTPBrowser(config) {
