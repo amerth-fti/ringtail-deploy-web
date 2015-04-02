@@ -1,6 +1,7 @@
 var EmptyBrowser  = require('./browsers/empty-browser')
   , HttpBrowser   = require('./browsers/http-browser')
-  , SmbBrowser    = require('./browsers/smb-browser')
+  , SmbBrowser = require('./browsers/smb-browser')
+  , FtpBrowser = require('./browsers/ftp-browser')
   ;
 
 /**
@@ -20,9 +21,9 @@ exports.fromRegion = function(region) {
   if(config.type === 'http') {
     result = new HttpBrowser(config);
   }   
-  // else if(config.type === 'ftp') {
-  //   TODO  
-  // }
+  else if (config.type === 'ftp') {
+    result = new FtpBrowser(config);
+   }
   else if (config.type === 'smb') {
     result = new SmbBrowser(config);
   }

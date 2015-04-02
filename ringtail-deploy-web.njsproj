@@ -1,260 +1,164 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-    <PropertyGroup>
-        <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-        <SchemaVersion>2.0</SchemaVersion>
-        <ProjectGuid>{7de1512b-b6ee-4201-9379-12fbaa13b194}</ProjectGuid>
-        <ProjectHome />
-        <ProjectView>ShowAllFiles</ProjectView>
-        <StartupFile>GruntFile.js</StartupFile>
-        <WorkingDirectory>.</WorkingDirectory>
-        <OutputPath>.</OutputPath>
-        <ProjectTypeGuids>{3AF33F2E-1136-4D97-BBB7-1795711AC8B8};{349c5851-65df-11da-9384-00065b846f21};{9092AA53-FB77-4645-B42D-1CCCA6BD08BD}</ProjectTypeGuids>
-        <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">11.0</VisualStudioVersion>
-        <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
-    </PropertyGroup>
-    <PropertyGroup Condition="'$(Configuration)' == 'Debug'" />
-    <PropertyGroup Condition="'$(Configuration)' == 'Release'" />
-    <ItemGroup>
-        <Content Include="bower.json" />
-        <Content Include="package.json" />
-        <Content Include="README.md" />
-        <Content Include="TASKDEFS.md" />
-        <Compile Include="GruntFile.js" />
-        <Compile Include="karma.conf.js" />
-        <Compile Include="migrations\1419735832450-create-data-dir.js" />
-        <Compile Include="migrations\1419735832451-create-env.js" />
-        <Compile Include="migrations\1419773666692-create-machine.js" />
-        <Compile Include="migrations\1422926946536-create-region.js" />
-        <Content Include="src\client\index.html" />
-        <Compile Include="src\server\job.js" />
-        <Compile Include="src\server\jobrunner.js" />
-        <Compile Include="src\server\server.js" />
-        <Compile Include="src\server\taskfactory.js" />
-        <Compile Include="src\client\app\config.constant.js" />
-        <Compile Include="src\client\app\globals.constant.js" />
-        <Compile Include="src\client\app\_config.js" />
-        <Compile Include="src\client\app\_module.js" />
-        <Compile Include="src\client\app\_routes.js" />
-        <Content Include="src\client\app\environments\deploy-info.directive.html" />
-        <Content Include="src\client\app\environments\list-item.directive.html" />
-        <Content Include="src\client\app\environments\list.html" />
-        <Compile Include="src\client\app\environments\deploy-info.directive.js" />
-        <Compile Include="src\client\app\environments\list-item.directive.js" />
-        <Compile Include="src\client\app\environments\list.directive.js" />
-        <Compile Include="src\client\app\environments\_module.js" />
-        <Content Include="src\client\app\jobs\details.html" />
-        <Content Include="src\client\app\jobs\task-details.directive.html" />
-        <Compile Include="src\client\app\jobs\details.controller.js" />
-        <Compile Include="src\client\app\jobs\task-details.directive.js" />
-        <Compile Include="src\client\app\layout\main.controller.js" />
-        <Content Include="src\client\app\regions\details-route.html" />
-        <Content Include="src\client\app\regions\details.html" />
-        <Compile Include="src\client\app\regions\details-route.controller.js" />
-        <Compile Include="src\client\app\regions\details.directive.js" />
-        <Compile Include="src\client\app\regions\_module.js" />
-        <Compile Include="src\client\app\regions\_routes.js" />
-        <Compile Include="src\client\app\shared\date-helpers.service.js" />
-        <Compile Include="src\client\app\shared\datepicker-popup.directive.js" />
-        <Compile Include="src\client\app\shared\environment.factory.js" />
-        <Compile Include="src\client\app\shared\loading.factory.js" />
-        <Compile Include="src\client\app\shared\underscore.js" />
-        <Compile Include="src\client\app\shared\_module.js" />
-        <Content Include="src\client\app\environments\editor\dialog.html" />
-        <Content Include="src\client\app\environments\editor\s1-method.html" />
-        <Content Include="src\client\app\environments\editor\s2-info.html" />
-        <Content Include="src\client\app\environments\editor\s3-machines.html" />
-        <Content Include="src\client\app\environments\editor\s4-config.html" />
-        <Content Include="src\client\app\environments\editor\s5-skytap.html" />
-        <Compile Include="src\client\app\environments\editor\dialog.factory.js" />
-        <Compile Include="src\client\app\environments\editor\s1-method.directive.js" />
-        <Compile Include="src\client\app\environments\editor\s2-info.directive.js" />
-        <Compile Include="src\client\app\environments\editor\s3-machines.directive.js" />
-        <Compile Include="src\client\app\environments\editor\s4-config.directive.js" />
-        <Compile Include="src\client\app\environments\editor\s5-skytap.directive.js" />
-        <Compile Include="src\client\app\environments\editor\wizard.factory.js" />
-        <Compile Include="src\client\app\environments\editor\_module.js" />
-        <Content Include="src\client\app\environments\machine\details.html" />
-        <Content Include="src\client\app\environments\machine\dialog.html" />
-        <Content Include="src\client\app\environments\machine\editor.html" />
-        <Compile Include="src\client\app\environments\machine\details.directive.js" />
-        <Compile Include="src\client\app\environments\machine\dialog.factory.js" />
-        <Compile Include="src\client\app\environments\machine\editor.directive.js" />
-        <Compile Include="src\client\app\environments\machine\_module.js" />
-        <Content Include="src\client\app\environments\redeploy\dialog.html" />
-        <Compile Include="src\client\app\environments\redeploy\dialog.factory.js" />
-        <Compile Include="src\client\app\environments\redeploy\_module.js" />
-        <Content Include="src\client\app\environments\starter\dialog.html" />
-        <Compile Include="src\client\app\environments\starter\dialog.factory.js" />
-        <Compile Include="src\client\app\environments\starter\_module.js" />
-        <Content Include="src\client\app\environments\taskdefs\list.html" />
-        <Compile Include="src\client\app\environments\taskdefs\list.directive.js" />
-        <Compile Include="src\client\app\environments\taskdefs\taskdef.service.js" />
-        <Compile Include="src\client\app\environments\taskdefs\_module.js" />
-        <Content Include="src\client\app\environments\taskdefs\raw\editor.html" />
-        <Compile Include="src\client\app\environments\taskdefs\raw\editor.directive.js" />
-        <Compile Include="src\client\app\environments\taskdefs\raw\_module.js" />
-        <Content Include="src\client\app\environments\taskdefs\ringtail\editor.html" />
-        <Content Include="src\client\app\environments\taskdefs\ringtail\field-editor.html" />
-        <Compile Include="src\client\app\environments\taskdefs\ringtail\config.service.js" />
-        <Compile Include="src\client\app\environments\taskdefs\ringtail\editor.directive.js" />
-        <Compile Include="src\client\app\environments\taskdefs\ringtail\field-editor.directive.js" />
-        <Compile Include="src\client\app\environments\taskdefs\ringtail\field.service.js" />
-        <Compile Include="src\client\app\environments\taskdefs\ringtail\_module.js" />
-        <Compile Include="src\client\app\shared\data\environment.service.js" />
-        <Compile Include="src\client\app\shared\data\job.service.js" />
-        <Compile Include="src\client\app\shared\data\project.service.js" />
-        <Compile Include="src\client\app\shared\data\region.service.js" />
-        <Compile Include="src\client\app\shared\data\role.service.js" />
-        <Compile Include="src\client\app\shared\data\skytap-environment.service.js" />
-        <Compile Include="src\client\app\shared\data\task.service.js" />
-        <Compile Include="src\client\app\shared\data\_module.js" />
-        <Compile Include="src\client\app\shared\filters\anchors.filter.js" />
-        <Compile Include="src\client\app\shared\filters\elapsed.filter.js" />
-        <Compile Include="src\client\app\shared\filters\from-date-string.filter.js" />
-        <Compile Include="src\client\app\shared\filters\newlines.filter.js" />
-        <Compile Include="src\client\app\shared\filters\reverse.filter.js" />
-        <Compile Include="src\client\app\shared\filters\trust.filter.js" />
-        <Compile Include="src\client\app\shared\filters\_module.js" />
-        <Content Include="src\client\assets\css\app.css" />
-        <Content Include="src\client\assets\img\ringtail.png" />
-        <Content Include="src\client\assets\img\skytap-logo.png" />
-        <Content Include="src\client\assets\img\ajax-loader.gif" />
-        <Compile Include="src\server\controllers\envs.js" />
-        <Compile Include="src\server\controllers\index.js" />
-        <Compile Include="src\server\controllers\jobs.js" />
-        <Compile Include="src\server\controllers\regionenvs.js" />
-        <Compile Include="src\server\controllers\regions.js" />
-        <Compile Include="src\server\controllers\skytap.js" />
-        <Compile Include="src\server\controllers\tasks.js" />
-        <Compile Include="src\server\mappers\env-mapper.js" />
-        <Compile Include="src\server\mappers\machine-mapper.js" />
-        <Compile Include="src\server\mappers\region-mapper.js" />
-        <Compile Include="src\server\models\env.js" />
-        <Compile Include="src\server\models\machine.js" />
-        <Compile Include="src\server\models\region.js" />
-        <Compile Include="src\server\services\env-service.js" />
-        <Compile Include="src\server\services\import-service.js" />
-        <Compile Include="src\server\services\machine-service.js" />
-        <Compile Include="src\server\services\redeploy-service.js" />
-        <Compile Include="src\server\services\region-service.js" />
-        <Compile Include="src\server\services\task-service.js" />
-        <Compile Include="src\server\tasks\1-logger.js" />
-        <Compile Include="src\server\tasks\1-update-environment.js" />
-        <Compile Include="src\server\tasks\1-update-expressions.js" />
-        <Compile Include="src\server\tasks\1-wait.js" />
-        <Compile Include="src\server\tasks\2-add-to-project.js" />
-        <Compile Include="src\server\tasks\2-create-environment.js" />
-        <Compile Include="src\server\tasks\2-delete-environment.js" />
-        <Compile Include="src\server\tasks\2-get-environment.js" />
-        <Compile Include="src\server\tasks\2-get-template.js" />
-        <Compile Include="src\server\tasks\2-public-ips-attach.js" />
-        <Compile Include="src\server\tasks\2-public-ips-detach.js" />
-        <Compile Include="src\server\tasks\2-start-environment.js" />
-        <Compile Include="src\server\tasks\2-suspend-environment.js" />
-        <Compile Include="src\server\tasks\2-update-environment-data.js" />
-        <Compile Include="src\server\tasks\2-update-environment.js" />
-        <Compile Include="src\server\tasks\2-vpn-detach.js" />
-        <Compile Include="src\server\tasks\3-custom-ringtail.js" />
-        <Compile Include="src\server\tasks\parallel.js" />
-        <Compile Include="src\server\tasks\task.js" />
-        <Compile Include="test\client\environments\list-item.directive.js" />
-        <Compile Include="test\client\environments\list.directive.js" />
-        <Compile Include="test\client\layout\main.controller.js" />
-        <Compile Include="test\client\regions\details.directive.js" />
-        <Compile Include="test\client\environments\editor\wizard.factory.js" />
-        <Compile Include="test\client\environments\taskdefs\taskdef.service.js" />
-        <Compile Include="test\client\environments\taskdefs\ringtail\config.service.js" />
-        <Compile Include="test\client\environments\taskdefs\ringtail\field.service.js" />
-        <Compile Include="test\client\shared\data\role.service.js" />
-        <Compile Include="test\server\tasks\1-logger.js" />
-        <Compile Include="test\server\tasks\1-update-environment.js" />
-        <Compile Include="test\server\tasks\1-update-expressions.js" />
-        <Compile Include="test\server\tasks\3-custom-ringtail.js" />
-        <Compile Include="test\server\tasks\parallel.js" />
-        <Compile Include="test\server\tasks\task.js" />
-    </ItemGroup>
-    <ItemGroup>
-        <Folder Include="migrations" />
-        <Folder Include="src" />
-        <Folder Include="src\client" />
-        <Folder Include="src\client\app" />
-        <Folder Include="src\client\app\environments" />
-        <Folder Include="src\client\app\environments\editor" />
-        <Folder Include="src\client\app\environments\machine" />
-        <Folder Include="src\client\app\environments\redeploy" />
-        <Folder Include="src\client\app\environments\starter" />
-        <Folder Include="src\client\app\environments\taskdefs" />
-        <Folder Include="src\client\app\environments\taskdefs\raw" />
-        <Folder Include="src\client\app\environments\taskdefs\ringtail" />
-        <Folder Include="src\client\app\jobs" />
-        <Folder Include="src\client\app\layout" />
-        <Folder Include="src\client\app\regions" />
-        <Folder Include="src\client\app\shared" />
-        <Folder Include="src\client\app\shared\data" />
-        <Folder Include="src\client\app\shared\filters" />
-        <Folder Include="src\client\assets" />
-        <Folder Include="src\client\assets\css" />
-        <Folder Include="src\client\assets\img" />
-        <Folder Include="src\server" />
-        <Folder Include="src\server\controllers" />
-        <Folder Include="src\server\mappers" />
-        <Folder Include="src\server\models" />
-        <Folder Include="src\server\services" />
-        <Folder Include="src\server\tasks" />
-        <Folder Include="test" />
-        <Folder Include="test\client" />
-        <Folder Include="test\client\environments" />
-        <Folder Include="test\client\environments\editor" />
-        <Folder Include="test\client\environments\taskdefs" />
-        <Folder Include="test\client\environments\taskdefs\ringtail" />
-        <Folder Include="test\client\layout" />
-        <Folder Include="test\client\regions" />
-        <Folder Include="test\client\shared" />
-        <Folder Include="test\client\shared\data" />
-        <Folder Include="test\server" />
-        <Folder Include="test\server\tasks" />
-    </ItemGroup>
-    <Import Project="$(MSBuildToolsPath)\Microsoft.Common.targets" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
-    <!--Do not delete the following Import Project.  While this appears to do nothing it is a marker for setting TypeScript properties before our import that depends on them.-->
-    <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.targets" Condition="False" />
-    <Import Project="$(VSToolsPath)\Node.js Tools\Microsoft.NodejsTools.targets" />
-    <ProjectExtensions>
-        <VisualStudio>
-          <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
-            <WebProjectProperties>
-              <UseIIS>False</UseIIS>
-              <AutoAssignPort>True</AutoAssignPort>
-              <DevelopmentServerPort>0</DevelopmentServerPort>
-              <DevelopmentServerVPath>/</DevelopmentServerVPath>
-              <IISUrl>http://localhost:48022/</IISUrl>
-              <NTLMAuthentication>False</NTLMAuthentication>
-              <UseCustomServer>True</UseCustomServer>
-              <CustomServerUrl>http://localhost:1337</CustomServerUrl>
-              <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
-            </WebProjectProperties>
-          </FlavorProperties>
-          <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}" User="">
-            <WebProjectProperties>
-              <StartPageUrl>
-              </StartPageUrl>
-              <StartAction>CurrentPage</StartAction>
-              <AspNetDebugging>True</AspNetDebugging>
-              <SilverlightDebugging>False</SilverlightDebugging>
-              <NativeDebugging>False</NativeDebugging>
-              <SQLDebugging>False</SQLDebugging>
-              <ExternalProgram>
-              </ExternalProgram>
-              <StartExternalURL>
-              </StartExternalURL>
-              <StartCmdLineArguments>
-              </StartCmdLineArguments>
-              <StartWorkingDirectory>
-              </StartWorkingDirectory>
-              <EnableENC>False</EnableENC>
-              <AlwaysStartWebServerOnDebug>False</AlwaysStartWebServerOnDebug>
-            </WebProjectProperties>
-          </FlavorProperties>
-        </VisualStudio>
-    </ProjectExtensions>
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{7de1512b-b6ee-4201-9379-12fbaa13b194}</ProjectGuid>
+    <ProjectHome />
+    <ProjectView>ShowAllFiles</ProjectView>
+    <StartupFile>src\server\server.js</StartupFile>
+    <WorkingDirectory>.</WorkingDirectory>
+    <OutputPath>.</OutputPath>
+    <ProjectTypeGuids>{3AF33F2E-1136-4D97-BBB7-1795711AC8B8};{349c5851-65df-11da-9384-00065b846f21};{9092AA53-FB77-4645-B42D-1CCCA6BD08BD}</ProjectTypeGuids>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">11.0</VisualStudioVersion>
+    <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)' == 'Debug'" />
+  <PropertyGroup Condition="'$(Configuration)' == 'Release'" />
+  <ItemGroup>
+    <Content Include="bower.json" />
+    <Content Include="package.json" />
+    <Content Include="README.md" />
+    <Content Include="TASKDEFS.md" />
+    <Compile Include="GruntFile.js" />
+    <Compile Include="karma.conf.js" />
+    <Compile Include="migrations\**" />
+    <Content Include="src\**" />
+    <Compile Include="src\server\services\browsers\ftp-browser.js" />
+    <Compile Include="test\**" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="migrations\" />
+    <Folder Include="src\" />
+    <Folder Include="src\client\" />
+    <Folder Include="src\client\app\" />
+    <Folder Include="src\client\app\environments\" />
+    <Folder Include="src\client\app\environments\editor\" />
+    <Folder Include="src\client\app\environments\machine\" />
+    <Folder Include="src\client\app\environments\redeploy\" />
+    <Folder Include="src\client\app\environments\starter\" />
+    <Folder Include="src\client\app\environments\taskdefs\" />
+    <Folder Include="src\client\app\environments\taskdefs\raw\" />
+    <Folder Include="src\client\app\environments\taskdefs\ringtail\" />
+    <Folder Include="src\client\app\jobs\" />
+    <Folder Include="src\client\app\layout\" />
+    <Folder Include="src\client\app\regions\" />
+    <Folder Include="src\client\app\shared\" />
+    <Folder Include="src\client\app\shared\data\" />
+    <Folder Include="src\client\app\shared\filters\" />
+    <Folder Include="src\client\assets\" />
+    <Folder Include="src\client\assets\bower_components\" />
+    <Folder Include="src\client\assets\bower_components\angular-animate\" />
+    <Folder Include="src\client\assets\bower_components\angular-bootstrap\" />
+    <Folder Include="src\client\assets\bower_components\angular-mocks\" />
+    <Folder Include="src\client\assets\bower_components\angular-resource\" />
+    <Folder Include="src\client\assets\bower_components\angular-route\" />
+    <Folder Include="src\client\assets\bower_components\angular\" />
+    <Folder Include="src\client\assets\bower_components\bootstrap\" />
+    <Folder Include="src\client\assets\bower_components\bootstrap\dist\" />
+    <Folder Include="src\client\assets\bower_components\bootstrap\dist\css\" />
+    <Folder Include="src\client\assets\bower_components\bootstrap\dist\fonts\" />
+    <Folder Include="src\client\assets\bower_components\bootstrap\dist\js\" />
+    <Folder Include="src\client\assets\bower_components\bootstrap\fonts\" />
+    <Folder Include="src\client\assets\bower_components\bootstrap\grunt\" />
+    <Folder Include="src\client\assets\bower_components\bootstrap\js\" />
+    <Folder Include="src\client\assets\bower_components\bootstrap\less\" />
+    <Folder Include="src\client\assets\bower_components\bootstrap\less\mixins\" />
+    <Folder Include="src\client\assets\bower_components\jquery\" />
+    <Folder Include="src\client\assets\bower_components\jquery\dist\" />
+    <Folder Include="src\client\assets\bower_components\jquery\src\" />
+    <Folder Include="src\client\assets\bower_components\jquery\src\ajax\" />
+    <Folder Include="src\client\assets\bower_components\jquery\src\ajax\var\" />
+    <Folder Include="src\client\assets\bower_components\jquery\src\attributes\" />
+    <Folder Include="src\client\assets\bower_components\jquery\src\core\" />
+    <Folder Include="src\client\assets\bower_components\jquery\src\core\var\" />
+    <Folder Include="src\client\assets\bower_components\jquery\src\css\" />
+    <Folder Include="src\client\assets\bower_components\jquery\src\css\var\" />
+    <Folder Include="src\client\assets\bower_components\jquery\src\data\" />
+    <Folder Include="src\client\assets\bower_components\jquery\src\data\var\" />
+    <Folder Include="src\client\assets\bower_components\jquery\src\effects\" />
+    <Folder Include="src\client\assets\bower_components\jquery\src\event\" />
+    <Folder Include="src\client\assets\bower_components\jquery\src\exports\" />
+    <Folder Include="src\client\assets\bower_components\jquery\src\manipulation\" />
+    <Folder Include="src\client\assets\bower_components\jquery\src\manipulation\var\" />
+    <Folder Include="src\client\assets\bower_components\jquery\src\queue\" />
+    <Folder Include="src\client\assets\bower_components\jquery\src\sizzle\" />
+    <Folder Include="src\client\assets\bower_components\jquery\src\sizzle\dist\" />
+    <Folder Include="src\client\assets\bower_components\jquery\src\traversing\" />
+    <Folder Include="src\client\assets\bower_components\jquery\src\traversing\var\" />
+    <Folder Include="src\client\assets\bower_components\jquery\src\var\" />
+    <Folder Include="src\client\assets\bower_components\underscore\" />
+    <Folder Include="src\client\assets\css\" />
+    <Folder Include="src\client\assets\img\" />
+    <Folder Include="src\server\" />
+    <Folder Include="src\server\controllers\" />
+    <Folder Include="src\server\mappers\" />
+    <Folder Include="src\server\models\" />
+    <Folder Include="src\server\services\" />
+    <Folder Include="src\server\services\browsers\" />
+    <Folder Include="src\server\tasks\" />
+    <Folder Include="test\" />
+    <Folder Include="test\client\" />
+    <Folder Include="test\client\environments\" />
+    <Folder Include="test\client\environments\editor\" />
+    <Folder Include="test\client\environments\taskdefs\" />
+    <Folder Include="test\client\environments\taskdefs\ringtail\" />
+    <Folder Include="test\client\layout\" />
+    <Folder Include="test\client\regions\" />
+    <Folder Include="test\client\shared\" />
+    <Folder Include="test\client\shared\data\" />
+    <Folder Include="test\client\shared\filters\" />
+    <Folder Include="test\server\" />
+    <Folder Include="test\server\fixtures\" />
+    <Folder Include="test\server\fixtures\smb-browser\" />
+    <Folder Include="test\server\fixtures\smb-browser\branch1\" />
+    <Folder Include="test\server\fixtures\smb-browser\branch1\20150401.1\" />
+    <Folder Include="test\server\fixtures\smb-browser\branch1\20150401.2\" />
+    <Folder Include="test\server\fixtures\smb-browser\branch2\" />
+    <Folder Include="test\server\services\" />
+    <Folder Include="test\server\services\browsers\" />
+    <Folder Include="test\server\tasks\" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.Common.targets" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <!--Do not delete the following Import Project.  While this appears to do nothing it is a marker for setting TypeScript properties before our import that depends on them.-->
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.targets" Condition="False" />
+  <Import Project="$(VSToolsPath)\Node.js Tools\Microsoft.NodejsTools.targets" />
+  <ProjectExtensions>
+    <VisualStudio>
+      <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
+        <WebProjectProperties>
+          <UseIIS>False</UseIIS>
+          <AutoAssignPort>True</AutoAssignPort>
+          <DevelopmentServerPort>0</DevelopmentServerPort>
+          <DevelopmentServerVPath>/</DevelopmentServerVPath>
+          <IISUrl>http://localhost:48022/</IISUrl>
+          <NTLMAuthentication>False</NTLMAuthentication>
+          <UseCustomServer>True</UseCustomServer>
+          <CustomServerUrl>http://localhost:1337</CustomServerUrl>
+          <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
+        </WebProjectProperties>
+      </FlavorProperties>
+      <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}" User="">
+        <WebProjectProperties>
+          <StartPageUrl>
+          </StartPageUrl>
+          <StartAction>CurrentPage</StartAction>
+          <AspNetDebugging>True</AspNetDebugging>
+          <SilverlightDebugging>False</SilverlightDebugging>
+          <NativeDebugging>False</NativeDebugging>
+          <SQLDebugging>False</SQLDebugging>
+          <ExternalProgram>
+          </ExternalProgram>
+          <StartExternalURL>
+          </StartExternalURL>
+          <StartCmdLineArguments>
+          </StartCmdLineArguments>
+          <StartWorkingDirectory>
+          </StartWorkingDirectory>
+          <EnableENC>False</EnableENC>
+          <AlwaysStartWebServerOnDebug>False</AlwaysStartWebServerOnDebug>
+        </WebProjectProperties>
+      </FlavorProperties>
+    </VisualStudio>
+  </ProjectExtensions>
 </Project>
