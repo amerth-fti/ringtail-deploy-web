@@ -1,5 +1,5 @@
 <div class="modal-header bg-primary">
-  <button type="button" class="close" data-dismiss="modal" ng-click="vm.close()"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+  <button type="button" class="close" data-dismiss="modal" ng-click="vm.cancel()"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
   <h4 class="modal-title">Redeploy '{{vm.tempEnv.envName}}'</h4>
 </div>
 <div class="modal-body">
@@ -7,18 +7,28 @@
   <form role="form">
     <div class="form-group">
       <label>Install from Branch:</label>
+      <div class="list-loading" ng-show="vm.loadingBranches">
+        <img src="/assets/img/bar-loader.gif">
+      </div>
       <select 
         class="form-control" 
-        ng-model="vm.selectedBranch.branch" 
-        ng-options="branch for branch in vm.branches"
-        ng-change="vm.branchChanged()" />
+        ng-disabled="vm.loadingBranches"
+        ng-model="vm.selectedBranch.branch"         
+        ng-change="vm.branchChanged()">
+        <option ng-repeat="branch in vm.branches" value="{{branch}}" ng-selected="branch === vm.selectedBranch.branch">{{branch}}</option>
+      </select>      
     </div>
-    <div class="form-group" ng-show="vm.selectedBranch.branch">
+    <div class="form-group"
       <label>Install Build:</label>
+      <div class="list-loading" ng-show="vm.loadingBuilds">
+        <img src="/assets/img/bar-loader.gif">
+      </div>
       <select 
-        class="form-control" 
-        ng-model="vm.selectedBranch.build" 
-        ng-options="build for build in vm.builds" />
+        class="form-control"         
+        ng-disabled="vm.loadingBuilds || vm.loadingBranches || !vm.selectedBranch.branch"
+        ng-model="vm.selectedBranch.build">
+        <option ng-repeat="build in vm.builds" value="{{build}}">{{build}}</option>
+      </select>
     </div>
     <deployinfo environment="vm.tempEnv"></deployinfo>    
   </form>

@@ -26,7 +26,9 @@
     vm.modalInstance      = this.modalInstance;
     vm.branches           = null;
     vm.builds             = null;
-    vm.duration           = 120;    
+    vm.duration           = 120;  
+    vm.loadingBranches    = false;
+    vm.loadingBuilds      = false;  
     vm.selectedTasks      = null;
     vm.selectedBranch     = null;
     vm.showAdvanced       = false;
@@ -44,8 +46,15 @@
     function activate() {
       vm.regionId = $rootScope.routeParams.regionId;
       vm.tempEnv = angular.copy(vm.environment);
-      vm.branches = Browse.branches({ regionId: vm.regionId });
       vm.selectedBranch = parseBranchPath(vm.tempEnv.deployedBranch);
+
+      vm.loadingBranches = true;
+      vm.branches = Browse.branches({ regionId: vm.regionId }, function() {
+        vm.loadingBranches = false;
+        if(vm.selectedBranch.branch) {
+          branchChanged();
+        }
+      });      
 
       if(vm.tempEnv.config && vm.tempEnv.config.taskdefs) {
         vm.selectedTasks = vm.tempEnv.config.taskdefs.slice(0);
@@ -98,7 +107,7 @@
       if(branchPath) {
         parts = branchPath.split('\\');
         result.branch = parts[0];
-        result.build = parts[1];
+        result.build = null;
       }
       return result;
     }
@@ -111,7 +120,12 @@
     }
 
     function branchChanged() {
-      vm.builds = Browse.builds({regionId: vm.regionId, branch: vm.selectedBranch.branch });      
+      if(vm.selectedBranch.branch) {        
+        vm.loadingBuilds = true;
+        vm.builds = Browse.builds({regionId: vm.regionId, branch: vm.selectedBranch.branch }, function() {
+          vm.loadingBuilds = false;
+        });
+      }
     }
 
   }

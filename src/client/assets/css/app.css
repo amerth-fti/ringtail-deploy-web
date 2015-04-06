@@ -383,3 +383,11 @@ button {
   margin-top: 10px;
 }
 
+.list-loading {
+  box-sizing: border-box;
+  position: absolute;
+  padding-left: 6px;
+  padding-top: 6px;
+  height: 34px;
+  text-align: center;
+}
