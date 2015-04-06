@@ -10,7 +10,8 @@ describe('Environment Redeploy Dialog Directive', function() {
     , $rootScope
     , element
     , controller
-    , stubBrowse
+    , stubBranches
+    , stubBuilds
     ;
 
 
@@ -36,7 +37,8 @@ describe('Environment Redeploy Dialog Directive', function() {
 
   // CREATE STUBBED INITIAL REQUESTS
   beforeEach(inject(function(Browse) {
-    stubBrowse = sinon.stub(Browse, 'branches').returns(['2015','CONSOLIDATION']);    
+    stubBranches = sinon.stub(Browse, 'branches').returns(['2015','CONSOLIDATION']);    
+    stubBuilds = sinon.stub(Browse, 'builds').returns(['20150401.1']);
   }));
 
 
@@ -79,11 +81,7 @@ describe('Environment Redeploy Dialog Directive', function() {
       run();      
       expect(controller.tempEnv).to.not.equal(environment);
       expect(controller.tempEnv.envId).to.equal(environment.envId);
-    });
-    it('should load the branches', function() {
-      run();
-      expect(stubBrowse.calledOnce).to.be.true;      
-    });
+    });    
     it('should not error if config is set', function() {
       environment.config = null;
       run();      
@@ -94,6 +92,28 @@ describe('Environment Redeploy Dialog Directive', function() {
       expect(controller.selectedTasks).to.not.equal(environment.config.taskdefs);
     });
 
+    describe('when loading the branches', function() {
+      it('should load the branches', function() {
+        run();
+        expect(stubBranches.calledOnce).to.be.true;      
+      });    
+      it('should indicate that branches are loading', function() {        
+        run();
+        expect(controller.loadingBranches).to.be.true;
+      });
+      it('should indicate that branches are done loading', function() {
+        run();
+        stubBranches.callArg(1);
+        expect(controller.loadingBranches).to.be.false;
+      });
+      it('should load the builds if a branch was selected', function() {        
+        environment.deployedBranch = 'CONSOLIDATION';              
+        run();
+        stubBranches.callArg(1);
+        expect(stubBuilds.calledOnce).to.be.true;
+      });
+    });    
+
     describe('when environment.deployedBranch is a string', function() {
       it('should set selectedBranch.branch property', function() {
         environment.deployedBranch = 'CONSOLIDATION';
@@ -103,13 +123,19 @@ describe('Environment Redeploy Dialog Directive', function() {
     });
 
     describe('when environment.deployedBranch is a path', function() {
-      it('should set selectedBranch.build property', function() {
+      it('should set selectedBranch.branch property ', function() {
         environment.deployedBranch = 'CONSOLIDATION\\20150401.1';
-        run();
+        run();        
         expect(controller.selectedBranch.branch).to.equal('CONSOLIDATION');
-        expect(controller.selectedBranch.build).to.equal('20150401.1');
+      });      
+      it('should set selectedBranch.build property to null', function() {
+        environment.deployedBranch = 'CONSOLIDATION\\20150401.1';
+        run();        
+        expect(controller.selectedBranch.build).to.equal(null);
       });
     });
+
+
   });
 
   describe('.cancel', function() {
@@ -197,18 +223,14 @@ describe('Environment Redeploy Dialog Directive', function() {
     });
   });
 
-  describe('.branchChanged', function() {
-    var stub;
-    beforeEach(inject(function(Browse) {
-      stub = sinon.stub(Browse, 'builds').returns(['20150401.1']);      
-    }));
+  describe('.branchChanged', function() {    
     it('should call Browse.builds with the region and selected branch', function() {              
       run();      
       controller.selectedBranch.branch = 'CONSOLIDATION';
       controller.branchChanged();
-      expect(stub.calledOnce).to.be.true;
-      expect(stub.getCall(0).args[0].regionId).to.equal(1);
-      expect(stub.getCall(0).args[0].branch).to.equal('CONSOLIDATION');
+      expect(stubBuilds.calledOnce).to.be.true;
+      expect(stubBuilds.getCall(0).args[0].regionId).to.equal(1);
+      expect(stubBuilds.getCall(0).args[0].branch).to.equal('CONSOLIDATION');
     });
     it('should set the builds on vm.builds', function() {
       run();
@@ -216,6 +238,19 @@ describe('Environment Redeploy Dialog Directive', function() {
       controller.branchChanged();
       expect(controller.builds).to.be.instanceOf(Array);
       expect(controller.builds[0]).to.equal('20150401.1');
+    });
+    it('should indicate that the builds are loading', function() {
+      run();
+      controller.selectedBranch.branch = 'CONSOLIDATION';
+      controller.branchChanged();
+      expect(controller.loadingBuilds).to.be.true;
+    });
+    it('should indicate that builds are done loading', function() {
+      run();
+      controller.selectedBranch.branch = 'CONSOLIDATION';
+      controller.branchChanged();
+      stubBuilds.callArg(1);
+      expect(controller.loadingBuilds).to.be.false;
     });
   });
 

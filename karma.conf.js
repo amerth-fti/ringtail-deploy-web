@@ -23,13 +23,13 @@ module.exports = function(config) {
       'src/client/assets/bower_components/angular-animate/angular-animate.js',
       'src/client/assets/bower_components/angular-bootstrap/ui-bootstrap.js',
       'src/client/assets/bower_components/angular-bootstrap/ui-bootstrap-tpls.js',
-      'src/client/assets/bower_components/underscore/underscore.js',
+      'src/client/assets/bower_components/underscore/underscore.js',            
 
       'src/client/app/**/_module.js',
       'src/client/app/**/*.js',
       'src/client/app/**/*.html',
 
-      'test/client/**/*.js'
+      'test/client/**/*.js',    
     ],
 
 
@@ -38,6 +38,10 @@ module.exports = function(config) {
       'src/client/index.html'
     ],
 
+    // get paths in alignment with deployment
+    proxies: {
+      '/assets/': 'src/client/assets/'
+    },
 
     // preprocess matching files before serving them to the browser
     // available preprocessors: https://npmjs.org/browse/keyword/karma-preprocessor
