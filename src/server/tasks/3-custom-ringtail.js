@@ -24,6 +24,7 @@ function TaskImpl(options) {
     var branch = this.getData(scope, 'branch')
       , config = this.getData(scope, 'config')
       , machine = this.getData(scope, 'machine')
+      , options = scope.options
       , serviceIP = machine.intIP
       , pollInterval = this.pollInterval
       , installInterval = this.installInterval
@@ -62,9 +63,10 @@ function TaskImpl(options) {
       // configure install service
       .then(function() {
         log('configuring install service');
-        var opts = { 'Common|BRANCH_NAME' : branch };
-        _.extend(opts, config);                    
-        return client.setConfigs(opts);
+        var configs = { 'Common|BRANCH_NAME' : branch };
+        _.extend(configs, config);
+        _.extend(configs, getConfigsFromOptions(options));
+        return client.setConfigs(configs);
       })
           
       // start installation
@@ -100,6 +102,29 @@ function TaskImpl(options) {
     });
 
   };
+}
+
+/** 
+ * Converts UI logic into additional options
+ * Could be refactred into client as a method call
+ * to help configure the service
+ */
+function getConfigsFromOptions(opts) {
+  var result = {};
+  if(opts) {
+    if(opts.keepRpfwInstalls) {      
+      result['Common|UNINSTALL_EXCLUSIONS'] = 'Framework Workers';
+    } else {      
+      result['Common|UNINSTALL_EXCLUSIONS'] = '';
+    }
+
+    if(opts.wipeRpfWorkers) {
+      result['Common|FILE_DELETIONS'] = 'C:\\Program Files\\FTI Technology\\Ringtail Processing Framework\\RPF_Supervisor';      
+    } else {
+      result['Common|FILE_DELETIONS'] = '';
+    }
+  }
+  return result;
 }
 
 util.inherits(TaskImpl, Task);

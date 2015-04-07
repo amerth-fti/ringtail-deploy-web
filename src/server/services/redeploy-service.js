@@ -8,7 +8,7 @@ var debug       = require('debug')('deployer-redeployservice')
   , Job         = require('../job')
   ;
 
-exports.redeploy = function redeploy(data, next) {
+exports.redeploy = function redeploy(data, opts, next) {
   debug('starting deploy');
 
   var env           = new Env(data)
@@ -17,14 +17,13 @@ exports.redeploy = function redeploy(data, next) {
     , jobId
     ;
 
-
   return Q
     .fcall(function() {            
       // create redeploy task
       job = new Job({
         name: 'Redeploy environment ' + env.envName,
         tasks: taskfactory.createTasks(selectedTasks),
-        rundata: { me: env },
+        rundata: { me: env, options: opts },
         env: env
       });
 

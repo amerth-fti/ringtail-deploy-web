@@ -46,7 +46,7 @@ describe('Ringtail Install Task', function() {
       }
     };
     scope  = {
-      'env': env
+      'env': env      
     };
 
     function returnInstalled() {
@@ -161,6 +161,69 @@ describe('Ringtail Install Task', function() {
           expect(machineSvc.update.calledOnce).to.be.true;
         })
         .done(done);
+    });
+
+
+    describe('when .keepRpfwInstalls option is true', function() {
+      beforeEach(function() {
+        scope.options = { keepRpfwInstalls: true };
+      });
+      it('sets the UNINSTALL_EXLUSIONS config', function(done) {        
+        task
+          .execute(scope, log)
+          .then(function() {
+            expect(stubSetConfigs.getCall(0).args[0]['Common|UNINSTALL_EXCLUSIONS']).to.equal('Framework Workers');
+            done();
+          })
+          .done();
+      });
+    });
+
+
+    describe('when .keepRpfwInstalls option is false', function() {
+      beforeEach(function() {
+        scope.options = { keepRpfwInstalls: false };
+      });
+      it('unsets the UNINSTALL_EXLUSIONS config', function(done) {        
+        task
+          .execute(scope, log)
+          .then(function() {
+            expect(stubSetConfigs.getCall(0).args[0]['Common|UNINSTALL_EXCLUSIONS']).to.equal('');
+            done();
+          })
+          .done();
+      });    
+    });
+
+    describe('when .wipeRpfWorkers option is true', function() {
+      beforeEach(function() {
+        scope.options = { wipeRpfWorkers: true };
+      });
+      it('sets the FILE_DELETIONS config', function(done) {        
+        task
+          .execute(scope, log)
+          .then(function() {
+            expect(stubSetConfigs.getCall(0).args[0]['Common|FILE_DELETIONS']).to.equal('C:\\Program Files\\FTI Technology\\Ringtail Processing Framework\\RPF_Supervisor');
+            done();
+          })
+          .done();
+      });
+    });
+
+
+    describe('when .wipeRpfWorkers option is false', function() {
+      beforeEach(function() {
+        scope.options = { wipeRpfWorkers: false };
+      });
+      it('unsets the FILE_DELETIONS config', function(done) {        
+        task
+          .execute(scope, log)
+          .then(function() {
+            expect(stubSetConfigs.getCall(0).args[0]['Common|FILE_DELETIONS']).to.equal('');
+            done();
+          })
+          .done();
+      });
     });
 
   });

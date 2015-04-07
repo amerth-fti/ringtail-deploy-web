@@ -25,7 +25,26 @@ describe('Environment Redeploy Dialog Directive', function() {
   beforeEach(inject(function($q) {
     environment = {       
       envId: 1,
-      config: { taskdefs: [ { task: '1'}, { task: '2' } ] },
+      config: { 
+        taskdefs: [
+          { 
+            task: '1', 
+            options: { 
+              data: {
+                config: { 'RoleResolver|ROLE': 'WEBSERVER '}
+              } 
+            }
+          }, 
+          { 
+            task: '2', 
+            options: {
+              data: { 
+                config: { 'RoleResolver|ROLE': 'RPF-SUPERVISOR' }
+              }
+            }
+          } 
+        ] 
+      },
       $redeploy: sinon.stub().returns($q.when(environment))
     };
     modalInstance = {
@@ -135,6 +154,37 @@ describe('Environment Redeploy Dialog Directive', function() {
       });
     });
 
+    describe('when ALLINONE machine present', function() {
+      it('should set .hasRpf to true ', function() {
+        environment.config.taskdefs[1].options.data.config['RoleResolver|ROLE'] = 'ALLINONE';
+        run();
+        expect(controller.hasRpf).to.be.true;
+      });
+    });
+
+    describe('when RPF-COORDINATOR machine present', function() {
+      it('should set .hasRpf to true ', function() {
+        environment.config.taskdefs[1].options.data.config['RoleResolver|ROLE'] = 'RPF-COORDINATOR';
+        run();
+        expect(controller.hasRpf).to.be.true;
+      });
+    });
+
+    describe('when RPF-SUPERVISOR machine present', function() {
+      it('should set .hasRpf to true ', function() {
+        environment.config.taskdefs[1].options.data.config['RoleResolver|ROLE'] = 'RPF-SUPERVISOR';
+        run();
+        expect(controller.hasRpf).to.be.true;
+      });
+    });
+
+    describe('when no RPF machines present', function() {
+      it('should set .hasRpf to false ', function() {
+        environment.config.taskdefs[1].options.data.config['RoleResolver|ROLE'] = 'DATABASE';
+        run();
+        expect(controller.hasRpf).to.be.false;
+      });
+    });
 
   });
 
@@ -170,6 +220,16 @@ describe('Environment Redeploy Dialog Directive', function() {
       run();
       controller.rebuild();      
       expect(controller.environment.$redeploy.calledOnce).to.be.true;
+    });
+    it('should pass the keepRpfwInstalls flag to environment.$redeploy', function() {
+      run();
+      controller.rebuild();
+      expect(controller.environment.$redeploy.getCall(0).args[0].keepRpfwInstalls).to.be.false;
+    });
+    it('should pass the wipeRpfWorkers flag to environment.$redeploy', function() {
+      run();
+      controller.rebuild();
+      expect(controller.environment.$redeploy.getCall(0).args[0].wipeRpfWorkers).to.be.false;
     });
     it('should close the modal and pass the environment', function() {
       run();

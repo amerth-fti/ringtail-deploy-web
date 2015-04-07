@@ -19,9 +19,9 @@
     };
   }
 
-  Controller.$inject = [ '$rootScope', '$location', 'Browse' ];
+  Controller.$inject = [ '$rootScope', '$location', 'Browse', 'TaskDef' ];
 
-  function Controller($rootScope, $location, Browse) {
+  function Controller($rootScope, $location, Browse, TaskDef) {
     var vm = this;
     vm.modalInstance      = this.modalInstance;
     vm.branches           = null;
@@ -32,6 +32,9 @@
     vm.selectedTasks      = null;
     vm.selectedBranch     = null;
     vm.showAdvanced       = false;
+    vm.hasRpf             = false;
+    vm.keepRpfwInstalls   = false;    
+    vm.wipeRpfWorkers     = false;
     vm.branchChanged      = branchChanged;    
     vm.cancel             = cancel;
     vm.rebuild            = rebuild;    
@@ -59,6 +62,8 @@
       if(vm.tempEnv.config && vm.tempEnv.config.taskdefs) {
         vm.selectedTasks = vm.tempEnv.config.taskdefs.slice(0);
       }  
+
+      vm.hasRpf = hasRole(vm.tempEnv, [ 'ALLINONE', 'SKYTAP-ALLINONE', 'RPF-COORDINATOR', 'RPF-SUPERVISOR', 'SKYTAP-RPF-COORDINATOR', 'SKYTAP-RPF-SUPERVISOR']);      
     }
     
     function cancel() {
@@ -71,7 +76,7 @@
       vm.environment.selectedTasks = vm.selectedTasks;
       
       // trigger the redeployment
-      vm.environment.$redeploy()
+      vm.environment.$redeploy({ keepRpfwInstalls: vm.keepRpfwInstalls, wipeRpfWorkers: vm.wipeRpfWorkers })
       // shut the dialog since we had success
       .then(function(environment) {
         vm.modalInstance.close(environment);
@@ -128,6 +133,15 @@
       }
     }
 
+    function hasRole(env, roles) {
+      var result = false;
+      if(env.config && env.config.taskdefs) {        
+        roles.forEach(function(role) {
+          result = result || !!TaskDef.findTaskDefForRole(env.config.taskdefs, role);
+        });        
+      }
+      return result;
+    }
   }
 
 }());

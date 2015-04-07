@@ -4,15 +4,16 @@
   "description": "Website for interacting with the Ringtail deployment service",
   "author": "Brian Mancini <bmancini@gmail.com>",
   "license": "MIT",
-    "scripts": {
-        "test": "grunt validate"
-    },
+  "scripts": {
+    "test": "grunt validate"
+  },
   "main": "src/server/server.js",
   "repository": "fti-technology/ringtail-deploy-web",
   "dependencies": {
     "body-parser": "^1.9.2",
     "chalk": "^1.0.0",
     "debug": "^2.1.0",
+    "edge": "^0.10.1",
     "express": "^4.10.1",
     "hops-model": "^0.3.0",
     "hops-sqlite": "^0.1.0",
@@ -23,8 +24,7 @@
     "ringtail-deploy-client": "git://github.com/fti-technology/ringtail-deploy-client",
     "serve-static": "^1.7.1",
     "statements": "^0.1.0",
-    "underscore": "^1.7.0",
-    "edge":  "^0.10.1"
+    "underscore": "^1.7.0"
   },
   "devDependencies": {
     "chai": "^1.10.0",

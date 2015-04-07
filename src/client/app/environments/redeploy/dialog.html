@@ -16,9 +16,9 @@
         ng-model="vm.selectedBranch.branch"         
         ng-change="vm.branchChanged()">
         <option ng-repeat="branch in vm.branches" value="{{branch}}" ng-selected="branch === vm.selectedBranch.branch">{{branch}}</option>
-      </select>      
+      </select>
     </div>
-    <div class="form-group"
+    <div class="form-group">
       <label>Install Build:</label>
       <div class="list-loading" ng-show="vm.loadingBuilds">
         <img src="/assets/img/bar-loader.gif">
@@ -30,6 +30,17 @@
         <option ng-repeat="build in vm.builds" value="{{build}}">{{build}}</option>
       </select>
     </div>
+    <div ng-show="vm.hasRpf || vm.hasSql">      
+      <p> 
+        <input type="checkbox" id="keepRpfwInstalls" ng-model="vm.keepRpfwInstalls" />
+        <label for="keepRpfwInstalls">Keep other RPF Worker Installations on Coordinator</label>      
+      </p>
+      <p> 
+        <input type="checkbox" id="wipeRpfWorkers" ng-model="vm.wipeRpfWorkers" />
+        <label for="wipeRpfWorkers">Wipe RPF Workers from Supervisors</label>      
+      </p>
+    </div>
+
     <deployinfo environment="vm.tempEnv"></deployinfo>    
   </form>
 
