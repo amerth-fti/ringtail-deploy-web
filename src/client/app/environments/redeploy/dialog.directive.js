@@ -33,8 +33,8 @@
     vm.selectedBranch     = null;
     vm.showAdvanced       = false;
     vm.hasRpf             = false;
-    vm.keepRpfwInstalls   = false;    
-    vm.wipeRpfWorkers     = false;
+    vm.keepRpfwInstalls   = true;    
+    vm.wipeRpfWorkers     = true;
     vm.branchChanged      = branchChanged;    
     vm.cancel             = cancel;
     vm.rebuild            = rebuild;    

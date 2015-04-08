@@ -224,12 +224,12 @@ describe('Environment Redeploy Dialog Directive', function() {
     it('should pass the keepRpfwInstalls flag to environment.$redeploy', function() {
       run();
       controller.rebuild();
-      expect(controller.environment.$redeploy.getCall(0).args[0].keepRpfwInstalls).to.be.false;
+      expect(controller.environment.$redeploy.getCall(0).args[0].keepRpfwInstalls).to.be.true;
     });
     it('should pass the wipeRpfWorkers flag to environment.$redeploy', function() {
       run();
       controller.rebuild();
-      expect(controller.environment.$redeploy.getCall(0).args[0].wipeRpfWorkers).to.be.false;
+      expect(controller.environment.$redeploy.getCall(0).args[0].wipeRpfWorkers).to.be.true;
     });
     it('should close the modal and pass the environment', function() {
       run();
