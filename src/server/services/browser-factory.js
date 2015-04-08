@@ -1,6 +1,7 @@
 var EmptyBrowser  = require('./browsers/empty-browser')
   , HttpBrowser   = require('./browsers/http-browser')
-  , SmbBrowser = require('./browsers/smb-browser')
+  , SmbBrowser    = require('./browsers/smb-browser')
+  , StaticBrowser = require('./browsers/static-browser')
   ;
 
 /**
@@ -26,6 +27,9 @@ exports.fromRegion = function(region) {
    }
   else if (config.type === 'smb') {
     result = new SmbBrowser(config);
+  }
+  else if (config.type === 'static') {
+    result = new StaticBrowser(config);
   }
   else {
     result = new EmptyBrowser(config);

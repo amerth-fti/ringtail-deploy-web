@@ -8,7 +8,8 @@ describe('Browser Factory', function() {
   var sut           = require('../../../src/server/services/browser-factory')
     , EmptyBrowser  = require('../../../src/server/services/browsers/empty-browser')
     , HttpBrowser   = require('../../../src/server/services/browsers/http-browser')
-    , SmbBrowser   = require('../../../src/server/services/browsers/smb-browser')
+    , SmbBrowser    = require('../../../src/server/services/browsers/smb-browser')
+    , StaticBrowser = require('../../../src/server/services/browsers/static-browser')
     ;
 
   describe('.fromRegion', function() {
@@ -42,6 +43,14 @@ describe('Browser Factory', function() {
         var region = { browseConfig: { type: 'smb' } };
         var result = sut.fromRegion(region);
         expect(result).to.be.instanceOf(SmbBrowser);
+      });
+    });
+
+    describe('with static browser type', function() {
+      it('should create a StaticBrowser', function() {
+        var region = { browseConfig: { type: 'static' } };
+        var result = sut.fromRegion(region);
+        expect(result).to.be.instanceOf(StaticBrowser);
       });
     });
     

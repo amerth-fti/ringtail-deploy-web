@@ -35,6 +35,7 @@
         <legend>Build Browser Settings</legend>
         <div class="form-group">
           <select class="form-control" ng-model="vm.region.browseConfig.type">
+            <option value="static">Static Branches</option>
             <option value="ftp">FTP Share</option>
             <option value="http">HTTP Share</option>
             <option value="smb">Windows Share</option>
@@ -69,14 +70,21 @@
           </div>      
           <div class="form-group">
             <label>Builds URI</label>
-            <input type="text" class="form-control" ng-model="vm.region.browseConfig.httpBuildsUri">
             <p class="help-block">Use :branch marker for string replacement of the branch. Ie: http://localhost:8080/Api/V1/Directory?path=:branch</p>
+            <input type="text" class="form-control" ng-model="vm.region.browseConfig.httpBuildsUri">            
           </div>          
         </div>
         <div ng-show="vm.region.browseConfig.type === 'smb'">
           <div class="form-group">
             <label>UNC Path</label>
             <input type="text" class="form-control" ng-model="vm.region.browseConfig.smbPath">
+          </div>
+        </div>
+        <div ng-show="vm.region.browseConfig.type === 'static'">
+          <div class="form-group">
+            <label>Branches</label>
+            <p class="help-block">Put each branch on a new line</p>
+            <textarea class="form-control" ng-model="vm.region.browseConfig.staticBranches"></textarea>
           </div>
         </div>
       </fieldset>    
