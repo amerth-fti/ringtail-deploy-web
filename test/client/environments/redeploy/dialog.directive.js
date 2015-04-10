@@ -56,8 +56,8 @@ describe('Environment Redeploy Dialog Directive', function() {
 
   // CREATE STUBBED INITIAL REQUESTS
   beforeEach(inject(function(Browse) {
-    stubBranches = sinon.stub(Browse, 'branches').returns(['2015','CONSOLIDATION']);    
-    stubBuilds = sinon.stub(Browse, 'builds').returns(['20150401.1']);
+    stubBranches = sinon.stub(Browse, 'branches');
+    stubBuilds = sinon.stub(Browse, 'builds');
   }));
 
 
@@ -117,19 +117,26 @@ describe('Environment Redeploy Dialog Directive', function() {
         expect(stubBranches.calledOnce).to.be.true;      
       });    
       it('should indicate that branches are loading', function() {        
-        run();
+        run();        
         expect(controller.loadingBranches).to.be.true;
       });
       it('should indicate that branches are done loading', function() {
-        run();
-        stubBranches.callArg(1);
+        stubBranches.onCall(0).callsArgWith(1, [ ]);
+        run();        
         expect(controller.loadingBranches).to.be.false;
       });
       it('should load the builds if a branch was selected', function() {        
         environment.deployedBranch = 'CONSOLIDATION';              
-        run();
-        stubBranches.callArg(1);
+        stubBranches.onCall(0).callsArgWith(1, [ ]);
+        run();        
         expect(stubBuilds.calledOnce).to.be.true;
+      });
+      it('sould set the branches to the sorted list', function() {        
+        stubBranches.onCall(0).callsArgWith(1, [ 'bbb', 'ccc', 'aaa']);
+        run();        
+        expect(controller.branches[0]).to.equal('aaa');
+        expect(controller.branches[1]).to.equal('bbb');
+        expect(controller.branches[2]).to.equal('ccc');        
       });
     });    
 
@@ -293,24 +300,35 @@ describe('Environment Redeploy Dialog Directive', function() {
       expect(stubBuilds.getCall(0).args[0].branch).to.equal('CONSOLIDATION');
     });
     it('should set the builds on vm.builds', function() {
+      stubBuilds.onCall(0).callsArgWith(1, [ '20150401.1' ]);
       run();
       controller.selectedBranch.branch = 'CONSOLIDATION';
       controller.branchChanged();
       expect(controller.builds).to.be.instanceOf(Array);
       expect(controller.builds[0]).to.equal('20150401.1');
     });
-    it('should indicate that the builds are loading', function() {
+    it('should indicate that the builds are loading', function() {      
       run();
       controller.selectedBranch.branch = 'CONSOLIDATION';
       controller.branchChanged();
       expect(controller.loadingBuilds).to.be.true;
     });
     it('should indicate that builds are done loading', function() {
+      stubBuilds.onCall(0).callsArgWith(1, [ ]);
+      run();
+      controller.selectedBranch.branch = 'CONSOLIDATION';
+      controller.branchChanged();      
+      expect(controller.loadingBuilds).to.be.false;
+    });
+    it('should sorted builds', function() {
+      stubBuilds.onCall(0).callsArgWith(1, [ '20150401.3', '20150331.1', '20150401.1' ]);
       run();
       controller.selectedBranch.branch = 'CONSOLIDATION';
       controller.branchChanged();
-      stubBuilds.callArg(1);
-      expect(controller.loadingBuilds).to.be.false;
+      expect(controller.builds).to.be.instanceOf(Array);
+      expect(controller.builds[0]).to.equal('20150331.1');
+      expect(controller.builds[1]).to.equal('20150401.1');
+      expect(controller.builds[2]).to.equal('20150401.3');
     });
   });
 

@@ -52,8 +52,11 @@
       vm.selectedBranch = parseBranchPath(vm.tempEnv.deployedBranch);
 
       vm.loadingBranches = true;
-      vm.branches = Browse.branches({ regionId: vm.regionId }, function() {
+      Browse.branches({ regionId: vm.regionId }, function(branches) {
         vm.loadingBranches = false;
+        vm.branches = branches.sort(function(a, b) {
+          return a.localeCompare(b);
+        });
         if(vm.selectedBranch.branch) {
           branchChanged();
         }
@@ -127,8 +130,11 @@
     function branchChanged() {
       if(vm.selectedBranch.branch) {        
         vm.loadingBuilds = true;
-        vm.builds = Browse.builds({regionId: vm.regionId, branch: vm.selectedBranch.branch }, function() {
+        Browse.builds({regionId: vm.regionId, branch: vm.selectedBranch.branch }, function(builds) {
           vm.loadingBuilds = false;
+          vm.builds = builds.sort(function(a, b) {
+            return a.localeCompare(b);
+          });
         });
       }
     }
