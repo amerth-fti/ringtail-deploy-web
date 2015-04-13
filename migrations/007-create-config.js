@@ -5,8 +5,10 @@ var crypto      = require('crypto')
   ;
 
 exports.up = function(next){    
-  migrations.runBlock('007-createConfigs', next);
-  migrateConfigs();
+  migrations.runBlock('007-createConfigs', function(err) {
+    if(err) next(err);
+    else migrateConfigs(next);
+  });
 };
 
 exports.down = function(next) {
@@ -15,39 +17,58 @@ exports.down = function(next) {
 
 
 
-function migrateConfigs() {
-  envService.findAll()
-  .then(processEnvs);
+function migrateConfigs(next) {
+  return envService
+    .findAll()
+    .then(processEnvs)
+    .nodeify(next);
 }
 
 function processEnvs(envs) {
-  envs.forEach(function(env) {
+  var migrations = {};
 
-    var configs = []
-      , installTasks = getInstallTaskDefs(env)
+  // process each environment
+  envs.forEach(function(env) {
+    var installTasks = getInstallTaskDefs(env)
+      , machineTask
+      , machine
+      , config
+      , hash
       ;
 
     // handle single machine
-    if(env.machines.length === 1 && hasTaskDefs(env)) {                  
-      var machineTask = findTaskDefForMachineIndex(installTasks, 0);
-      var machine = env.machines[0];
+    if(env.machines.length === 1) {    
+      machineTask = findTaskDefForMachineIndex(installTasks, 0);
+      machine = env.machines[0];
+
+      // ensure there is an installation task
       if(machineTask) {
-        configs[0] = { 
-          configId: null, 
-          data: machineTask.options.data.config, 
-          roles: [ machine.role ] 
-        };
-        configs[0].configId = createHashId(configs[0]);
+        hash = createHash(machineTask.options.data.config);
+
+        // check for an existing migration
+        if(migrations[hash]) {
+          migrations[hash].machines.push(machine);
+        } 
+        // create the migration since it doesn't exist
+        else {
+          config = { 
+            configId: null, 
+            data: machineTask.options.data.config, 
+            roles: [ machine.role ]
+          };
+          migrations[hash] = { hash: hash, config: config, machines: [ machine ] };
+        }
       }
     }
     // handle multiple machines
     else if(env.machines.length > 1) {
+      env.machines.forEach(function(machine, idx) {
+        
+      });
+    }
 
-    }     
-
-    // create the configs
-
-  });
+  });  
+  return migrations;
 }
 
 function hasTaskDefs(env) {
@@ -56,19 +77,28 @@ function hasTaskDefs(env) {
 
 // Give a list of taskdefs
 // This will pluck out all of the installation taskdefs
-function getInstallTaskDefs(taskdefs) {
-  var results = [];
-  taskdefs.forEach(function(taskdef) {
-    if(taskdef.task === '3-ringtail-taskdef') {
-      results.push(taskdef);
-    } else if(taskdef.task === 'parallel') {
-      taskdef.options.taskdefs.forEach(function(subtaskdef) {
-        if(subtaskdef.task === '3-ringtail-taskdef') {
-          results.push(subtaskdef);
-        }
-      });
-    }
-  });
+function getInstallTaskDefs(env) {
+  var results = []
+    , taskdefs
+    ;
+  if(hasTaskDefs(env)) {
+    taskdefs = env.config.taskdefs;
+    taskdefs.forEach(function(taskdef) {      
+      // handle ringail task
+      if(taskdef.task === '3-custom-ringtail') {
+        results.push(taskdef);
+      } 
+      // handle parallel
+      else if(taskdef.task === 'parallel') {
+        taskdef.options.taskdefs.forEach(function(subtaskdef) {
+          if(subtaskdef.task === '3-ringtail-taskdef') {
+            results.push(subtaskdef);
+          }
+        });
+      }
+    });
+  }  
+  return results;
 }
 
 // Given a list of installation TaskDefs
@@ -76,8 +106,8 @@ function getInstallTaskDefs(taskdefs) {
 // machine index
 function findTaskDefForMachineIndex(installtasks, idx) {
   var result = null;
-  installtasks.forEach(function(task) {
-    if(task.options.data.machine === 'scope.me.machines[' + idx + ']') {
+  installtasks.forEach(function(task) {    
+    if(task.options.data.machine === 'scope.me.machines[' + idx + ']') {      
       result = task;
     }
   }); 
@@ -85,9 +115,11 @@ function findTaskDefForMachineIndex(installtasks, idx) {
 }
 
 // Creates an MD5 hash from the given json data
-function createHashId(config) {
-  var str = JSON.stringify(config.data);
-  return crypto.md5(str);
+function createHash(data) {
+  var md5 = crypto.createHash('md5');
+  var str = JSON.stringify(data);
+  md5.update(str);
+  return md5.digest('base64');
 }
 
 
