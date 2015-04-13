@@ -26,23 +26,7 @@ describe('Environment Redeploy Dialog Directive', function() {
     environment = {       
       envId: 1,
       config: { 
-        taskdefs: [
-          { 
-            task: '1', 
-            options: { 
-              data: {
-                config: { 'RoleResolver|ROLE': 'WEBSERVER '}
-              } 
-            }
-          }, 
-          { 
-            task: '2', 
-            options: {
-              data: { 
-                config: { 'RoleResolver|ROLE': 'RPF-SUPERVISOR' }
-              }
-            }
-          } 
+        taskdefs: [          
         ] 
       },
       $redeploy: sinon.stub().returns($q.when(environment))
@@ -161,35 +145,79 @@ describe('Environment Redeploy Dialog Directive', function() {
       });
     });
 
-    describe('when ALLINONE machine present', function() {
-      it('should set .hasRpf to true ', function() {
-        environment.config.taskdefs[1].options.data.config['RoleResolver|ROLE'] = 'ALLINONE';
-        run();
-        expect(controller.hasRpf).to.be.true;
-      });
-    });
+    describe('.hasRpf ', function() {
+      var roleAssertions = {
+        'ALLINONE': true,
+        'DATABASE': false,
+        'AGENT': false,
+        'WEB': false,
+        'RPF-COORDINATOR': true,
+        'RPF-SUPERVISOR': true,
+        'SKYTAP-ALLINONE': true,
+        'SKYTAP-DATABASE': false,
+        'SKYTAP-AGENT': false,
+        'SKYTAP-WEB': false,
+        'SKYTAP-RPF-COORDINATOR': true,
+        'SKYTAP-RPF-SUPERVISOR': true
+      };      
 
-    describe('when RPF-COORDINATOR machine present', function() {
-      it('should set .hasRpf to true ', function() {
-        environment.config.taskdefs[1].options.data.config['RoleResolver|ROLE'] = 'RPF-COORDINATOR';
-        run();
-        expect(controller.hasRpf).to.be.true;
-      });
-    });
+      describe('with single machine', function() {      
+        beforeEach(function() {
+          environment.config.taskdefs[0] = {
+            task: '3-custom-ringtail',
+            options: { data: { config: { } } }
+          };
+        });  
 
-    describe('when RPF-SUPERVISOR machine present', function() {
-      it('should set .hasRpf to true ', function() {
-        environment.config.taskdefs[1].options.data.config['RoleResolver|ROLE'] = 'RPF-SUPERVISOR';
-        run();
-        expect(controller.hasRpf).to.be.true;
-      });
-    });
+        for(var role in roleAssertions) {
+          if(roleAssertions.hasOwnProperty(role)) {          
+            var assertion = roleAssertions[role]
+              , title = 'should be ' + assertion + ' for ' + role
+              ;
 
-    describe('when no RPF machines present', function() {
-      it('should set .hasRpf to false ', function() {
-        environment.config.taskdefs[1].options.data.config['RoleResolver|ROLE'] = 'DATABASE';
-        run();
-        expect(controller.hasRpf).to.be.false;
+            /*jshint es5:false */
+            /*jshint loopfunc:true */
+            it(title, function() {
+              environment.config.taskdefs[0].options.data.config['RoleResolver|ROLE'] = role;
+              run();
+              expect(controller.hasRpf).to.equal(assertion);
+            });
+            /*jshint loopfunc:false*/
+          }          
+        }
+      });    
+
+      describe('with multiple machine', function() {
+        beforeEach(function() {
+          environment.config.taskdefs[0] = {
+            task: 'parallel',
+            options: {
+              taskdefs: [
+                {
+                  task: '3-custom-ringtail',
+                  options: { data: { config: { } } }
+                }
+              ]
+            }
+          };
+        });  
+
+        for(var role in roleAssertions) {
+          if(roleAssertions.hasOwnProperty(role)) {          
+            var assertion = roleAssertions[role]
+              , title = 'should be ' + assertion + ' for ' + role
+              ;
+
+            /*jshint es5:false */
+            /*jshint loopfunc:true */
+            it(title, function() {
+              environment.config.taskdefs[0].options.taskdefs[0].options.data.config['RoleResolver|ROLE'] = role;
+              run();
+              expect(controller.hasRpf).to.equal(assertion);
+            });
+            /*jshint loopfunc:false*/
+          }          
+        }
       });
     });
 
@@ -272,6 +300,11 @@ describe('Environment Redeploy Dialog Directive', function() {
   });
 
   describe('.toggleSelectedTask', function() {
+    beforeEach(function() {      
+      environment.config.taskdefs[0] = { task: '1' };
+      environment.config.taskdefs[1] = { task: '2' };     
+    });
+
     it('should remove from selectedTasks if it is included', function() {
       run();
       expect(controller.selectedTasks.length).to.equal(2);

@@ -143,7 +143,7 @@
       var result = false;
       if(env.config && env.config.taskdefs) {        
         roles.forEach(function(role) {
-          result = result || !!TaskDef.findTaskDefForRole(env.config.taskdefs, role);
+          result = result || !!TaskDef.getEnvTaskDefForRole(env, role);
         });        
       }
       return result;
