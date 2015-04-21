@@ -5,6 +5,7 @@
   "author": "Brian Mancini <bmancini@gmail.com>",
   "license": "MIT",
   "scripts": {
+    "start": "node src/server/server.js",
     "test": "grunt validate"
   },
   "main": "src/server/server.js",
