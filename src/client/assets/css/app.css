@@ -50,26 +50,9 @@ button {
   color: #777;
 }
 
-.badge.status-glyph {  
-  background-color: inherit !important;
-}
-.active .badge.status-glyph {
-  background-color: #fff !important;
-}
-.badge.status-glyph.Running {
-  color: #31708f !important;
-}
+.
 
-.badge.status-glyph.Pending {
-  color: inherit !important;
-}
 
-.badge.status-glyph.Failed {
-  color: #a94442 !important;
-}
-.badge.status-glyph.Succeeded {
-  color: #3c763d !important;
-}
 
 .animate-show {
   opacity: 1;
@@ -312,18 +295,6 @@ button {
   margin-top: 25px;
 }
 
-.task-name {
-  display: inline-block;
-  width: 144px;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  overflow-x: hidden;
-  margin-right: 4px;
-}
-.task-remove {
-  margin-top: 2px;
-}
-
 .task-rundetails {
   font-family: monospace;
 }
@@ -390,4 +361,47 @@ button {
   padding-top: 6px;
   height: 34px;
   text-align: center;
+}
+
+
+.nowrap {  
+  display: inline-block;
+  width: 100%;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow-x: hidden;  
+  box-sizing: border-box;
+}
+.nowrap.has-glyph {
+  padding-right: 12px;  
+}
+
+.corner-glyph {
+  position: absolute;
+  right: 8px;  
+  top: 10px;
+  opacity: .75;
+}
+.corner-glyph.no-color {
+  background-color: inherit !important;
+  border: none;
+}
+.active .corner-glyph {  
+  opacity: 1.0;
+  color: inherit !important;
+}
+
+.status-glyph.Running {
+  color: #31708f;
+}
+
+.status-glyph.Pending {
+  color: inherit;
+}
+
+.status-glyph.Failed {
+  color: #a94442;
+}
+.status-glyph.Succeeded {
+  color: #3c763d;
 }

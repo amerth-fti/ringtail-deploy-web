@@ -5,22 +5,20 @@
 </div>
 
 <div class="job-details-body row">  
-  <div class="col-md-3 col-lg-2">
+  <div class="col-lg-2">
     <div class="list-group">      
       <a class="list-group-item " 
          ng-repeat="task in vm.job.tasks"
          ng-class="{ active: task == vm.currentTask }"
-         ng-click="vm.selectTask(task)">         
-        {{$index + 1}}. {{task.name}}
-        <span class="badge status-glyph {{task.status}}">
-          <span 
-            class="glyphicon" 
-            ng-class="{ 'glyphicon-time': task.status === 'Pending', 'glyphicon-ok': task.status === 'Succeeded', 'glyphicon-fire': task.status === 'Failed', 'glyphicon-road': task.status === 'Running' }"></span>
-        </span>
+         ng-click="vm.selectTask(task)">                 
+        <span class="nowrap has-glyph">{{$index + 1}}. {{task.name}}</span>          
+        <span class="corner-glyph status-glyph {{task.status}}">
+          <span class="glyphicon" ng-class="{ 'glyphicon-time': task.status === 'Pending', 'glyphicon-ok': task.status === 'Succeeded', 'glyphicon-fire': task.status === 'Failed', 'glyphicon-road': task.status === 'Running' }"></span>
+        </span>        
       </a>
     </div>
   </div>
-  <div class="col-md-9 col-lg-10">
+  <div class="col-lg-10">
     <task-details></task-details>
   </div>
 </div>

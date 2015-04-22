@@ -9,8 +9,11 @@
         ng-click="vm.editTaskdef(taskdef, index)"
         >          
         <a href="#">
-          <span class="task-name">{{ taskdef.options.name || taskdef.task }}</span>
-          <span class="pull-right glyphicon glyphicon-remove" ng-click="vm.removeTaskdef(taskdef, index)"></span> 
+          <span class="nowrap has-glyph">{{ taskdef.options.name || taskdef.task }}
+          <span class="corner-glyph no-color">
+            <span class="glyphicon glyphicon-remove text-xs" ng-click="vm.removeTaskdef(taskdef, index)"></span>           
+          </span>
+          </span>          
         </a>
       </li>
     </ul>

@@ -1,12 +1,10 @@
 <tabset>
   <tab ng-repeat="tab in vm.tabs" active="tab.active" disabled="tab.disabled" select="vm.selectTab($index)">
-    <tab-heading>
+    <tab-heading>      
+      <span class="status-glyph {{tab.task.status}}">
+        <span class="glyphicon" ng-class="{ 'glyphicon-time': tab.task.status === 'Pending', 'glyphicon-ok': tab.task.status === 'Succeeded', 'glyphicon-fire': tab.task.status === 'Failed', 'glyphicon-road': tab.task.status === 'Running' }"></span>
+      </span>
       {{tab.title}}
-      <span class="badge status-glyph {{tab.task.status}}">
-      <span 
-        class="glyphicon" 
-        ng-class="{ 'glyphicon-time': tab.task.status === 'Pending', 'glyphicon-ok': tab.task.status === 'Succeeded', 'glyphicon-fire': tab.task.status === 'Failed', 'glyphicon-road': tab.task.status === 'Running' }"></span>
-    </span>
     </tab-heading>
     <p></p>        
     <div class="panel panel-default">
