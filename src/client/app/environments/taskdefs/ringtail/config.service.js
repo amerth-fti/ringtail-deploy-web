@@ -106,13 +106,13 @@
       ]
     },
     {
-      "roles": ["SKYTAP-RPF-COORDINATOR", "SKYTAP-ALLINONE", "DEV-FULL"],
+      "roles": ["SKYTAP-RPF-COORDINATOR", "RPF-COORDINATOR", "SKYTAP-ALLINONE", "DEV-FULL"],
       "configs": [
         "RingtailProcessingFrameworkWorkers|RPFWORKERPATH"
       ]
     },
     {
-      "roles": ["SKYTAP-RPF-COORDINATOR", "SKYTAP-RPF-SUPERVISOR", "RPF-COORDINATOR", "RPF-SUPERVISOR", "SKYTAP-ALLINONE", "DEV-FULL"],
+      "roles": ["SKYTAP-RPF-COORDINATOR", "RPF-COORDINATOR", "SKYTAP-RPF-SUPERVISOR",  "RPF-SUPERVISOR", "SKYTAP-ALLINONE", "DEV-FULL"],
       "configs": [
         "RingtailProcessingFramework|ADDLOCAL",
         "RingtailProcessingFramework|IS_SQLSERVER_SERVER",
