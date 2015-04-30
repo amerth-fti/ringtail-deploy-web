@@ -18,11 +18,18 @@ function TaskImpl(options) {
 
     return Q.fcall(function() {
       log('deleting environment %s', configuration_id);    
-      return skytap.environments.del({ configuration_id: configuration_id })    ;
+      return skytap.environments.del({ configuration_id: configuration_id });      
     })
 
     .then(function() {
       log('environment %s deleted', configuration_id);
+    })
+
+    .fail(function(err) {
+      if(err.error !== 'Couldn\'t get the requested environment') 
+        throw err;
+      else 
+        log('Environment was previously deleted');
     });
 
   };
