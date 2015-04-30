@@ -1,5 +1,5 @@
 var path        = require('path')  
-  , debug       = require('debug')('deployer-app')
+  , debug       = require('debug')('deployer')
   , express     = require('express')
   , serveStatic = require('serve-static')  
   , bodyParser  = require('body-parser')
@@ -114,11 +114,27 @@ function convertToClient(results) {
 }
 
 
-
-
-console.log('Listening on %s:%d ', (config.host ? config.host : '*'), config.port);
 if(config.host) {
-  app.listen(config.port, config.host);
+  app.listen(config.port, config.host, function() {
+    debug('Listening on %s:%d ', (config.host ? config.host : '*'), config.port);
+  });
 } else {
-  app.listen(config.port);
+  app.listen(config.port, function() {
+    debug('Listening on %s:%d ', (config.host ? config.host : '*'), config.port);
+  });
 }
+
+
+// OVERWRITE DEFAULT DEBUG
+var debugapp = require('debug');
+var util = require('util');
+var fs = require('fs');
+
+debugapp.log = function() {      
+  // taken from node.js inside debug library  
+  var text = util.format.apply(this, arguments);
+
+  // log to console and file
+  console.log(text);  
+  fs.appendFileSync('access.log', text + '\n');  
+};
