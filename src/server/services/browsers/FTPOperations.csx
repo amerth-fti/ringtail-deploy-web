@@ -109,8 +109,7 @@ using HtmlAgilityPack;
             else
             {
                 ftpUrl = options.FtpHost.TrimEnd('/');
-                ftpUrl = options.FtpHost + "/" + options.Branch.TrimStart('/');
-                Console.WriteLine(ftpUrl);
+                ftpUrl = options.FtpHost + "/" + options.Branch.TrimStart('/');                
             }
             //Clean up the URL
             ftpUrl = ValidateAndFixFtp(ftpUrl);
