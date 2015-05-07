@@ -55,7 +55,18 @@
       angular.element($element[0].querySelector('.field-editor-container')).html(element);
     }
 
-    function updateEnvironmentConfig(values) {
+    function updateEnvironmentConfig(values) {      
+      var newValues = {};
+
+      Object
+        .keys(values)
+        .sort(function(a, b) {
+          return a.localeCompare(b);
+        })
+        .forEach(function(key) {
+          newValues[key] = values[key];
+        });
+
       vm.environment.config.taskdefs.forEach(function(taskdef) {
         // check for install task
         if(taskdef.task === '3-custom-ringtail') {
@@ -63,7 +74,7 @@
               taskdef.options.data.config && 
               ( taskdef.options.data.config.ROLE === vm.selectedRole ||
                 taskdef.options.data.config['RoleResolver|ROLE'] === vm.selectedRole)) {
-            taskdef.options.data.config = _.clone(values);
+            taskdef.options.data.config = newValues;
           }
         } 
         // check parallel task
@@ -74,7 +85,7 @@
                   taskdef.options.data.config && 
                   ( taskdef.options.data.config.ROLE === vm.selectedRole ||
                     taskdef.options.data.config['RoleResolver|ROLE'] === vm.selectedRole)) {
-                taskdef.options.data.config = _.clone(values);
+                taskdef.options.data.config = newValues
               }
             }
           });
