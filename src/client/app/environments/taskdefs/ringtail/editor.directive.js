@@ -85,7 +85,7 @@
                   taskdef.options.data.config && 
                   ( taskdef.options.data.config.ROLE === vm.selectedRole ||
                     taskdef.options.data.config['RoleResolver|ROLE'] === vm.selectedRole)) {
-                taskdef.options.data.config = newValues
+                taskdef.options.data.config = newValues;
               }
             }
           });
