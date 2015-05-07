@@ -102,7 +102,11 @@
         "RingtailConfigurator|IS_SQLSERVER_SERVER",
         "RingtailConfigurator|IS_SQLSERVER_USERNAME",
         "RingtailConfigurator|IS_SQLSERVER_PASSWORD",
-        "RingtailConfigurator|IS_SQLSERVER_DATABASE"
+        "RingtailConfigurator|IS_SQLSERVER_DATABASE",
+        "RingtailConfigurator|DB_PORT",
+        "RingtailConfigurator|AGENT_VIRTUAL_NAME",
+        "RingtailConfigurator|APP_POOL",
+        "RingtailConfigurator|AGENT_APP_POOL"
       ]
     },
     {

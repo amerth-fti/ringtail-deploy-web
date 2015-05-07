@@ -118,6 +118,10 @@
     "RingtailConfigurator|IS_SQLSERVER_DATABASE": "IS_SQLSERVER_DATABASE_PORTAL",
     "RingtailConfigurator|CONFIG_USERNAME": "CONFIGURATOR_CONFIG_USERNAME",
     "RingtailConfigurator|CONFIG_PASSWORD": "CONFIGURATOR_CONFIG_PASSWORD",
+    "RingtailConfigurator|DB_PORT": "CONFIGURATOR_DB_PORT",
+    "RingtailConfigurator|AGENT_VIRTUAL_NAME": "CONFIGURATOR_AGENT_VIRTUAL_NAME",
+    "RingtailConfigurator|APP_POOL": "CONFIGURATOR_APP_POOL",
+    "RingtailConfigurator|AGENT_APP_POOL": "CONFIGURATOR_AGENT_APP_POOL",
 
     "RingtailProcessingFrameworkWorkers|RPFWORKERPATH": "RPFWORKERPATH",
 
@@ -430,6 +434,30 @@
       "key": "CONFIGURATOR_CONFIG_PASSWORD",
       "title": "Ringtail Database User Password",
       "description": "The password for the Ringtail Database User"
+    },
+    {
+      "key": "CONFIGURATOR_AGENT_VIRTUAL_NAME",
+      "title": "Agent Virtual Name",
+      "description": "Virtual name for the agent used by the configurator",
+      "default": "Agent"
+    },
+    {
+      "key": "CONFIGURATOR_APP_POOL",
+      "title": "App Pool Name",
+      "description": "The App Pool Name used by the configurator for the Legal mapping",
+      "default": "DefaultAppPool"
+    },
+    {
+      "key": "CONFIGURATOR_AGENT_APP_POOL",
+      "title": "Agent App Pool Name",
+      "description": "The Agent App Pool Name used by the configurator for the Primary agent mapping",
+      "default": "DefaultAppPool"
+    },
+    {
+      "key": "CONFIGURATOR_DB_PORT",
+      "title": "Configurator Portal database port",
+      "description": "The port the configurator will use to connect to the Portal database",
+      "default": "1433"
     },
     {
       "key": "RPFWORKERPATH",
