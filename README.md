@@ -8,14 +8,21 @@ This project is a web-driven Ringtail environment management tool. At present it
 
 * Download the latest stable release of Node.JS [v0.10](http://nodejs.org/dist/)
 
-* Navigate to the source code path.
+* Download and install [Git](https://www.git-scm.com/download/win)
+
+* Navigate to the downloaded source code path for cloned repository for this project
 
 * Install all NPM dependencies.
 ```
 npm install
 ```
 
-* Install all Bower dependencies
+* Install Bower
+```
+npm install -g bower
+```
+
+* Install the project's Bower dependencies
 ```
 bower install
 ```
@@ -31,13 +38,19 @@ $(npm bin)/migrate up
 
 * Copy the config.json.example file to config.json and modify it with the correct credentials
 
-* Start the server with `grunt watch` or `npm start`.  You can also start the server directly.
+* Start the server
 ```bash
+-- Via grunt (requires running 'npm install -g grunt')
+grunt watch
+
+-- Via NPM
+npm start
+
 -- Bash
 debug=deployer* node src/server/server
 
 -- Windows Command Prompt
-set DEBUG=deployer* node src/server/server
+set DEBUG=deployer* & node src/server/server
 ```
 
 ##Deployment Tasks
