@@ -119,3 +119,37 @@ SELECT regionId, envId FROM regionenvtemp;
 
 DROP TABLE regionenvtemp;
 DROP TABLE regiontemp;
+
+
+-- createConfigs
+CREATE TABLE config (
+  configId INTEGER PRIMARY KEY AUTOINCREMENT,
+  data TEXT,
+  roles TEXT
+);
+
+ALTER TABLE machine ADD COLUMN config TEXT;
+
+-- dropConfigs
+DROP TABLE config;
+
+ALTER TABLE machine RENAME TO machinetemp;
+
+CREATE TABLE machine (
+  machineId INTEGER PRIMARY KEY AUTOINCREMENT,
+  envId INTEGER NOT NULL,
+  machineName NVARCHAR(255) NOT NULL,
+  machineDesc TEXT,
+  remoteId INTEGER,
+  intIP NVARCHAR(255),
+  extIP NVARCHAR(255),
+  role NVARCHAR(255),
+  installNotes TEXT,
+  registryNotes TEXT,
+  FOREIGN KEY (envId) REFERENCES env(envId)
+);
+
+INSERT INTO machine (machineId, envId, machineName, machineDesc, remoteId, intIP, extIP, role, installNotes, registryNotes)
+SELECT machineId, envId, machineName, machineDesc, remoteId, intIP, extIP, role, installNotes, registryNotes FROM machinetemp;
+
+DROP table machinetemp;
