@@ -1,0 +1,17 @@
+<div class="modal-body">
+  <h4>Configuration</h4>
+  <div class="config-editor-container">
+    <div>
+      <config-list environment="vm.environment"></config-list>
+    </div>
+  </div>
+</div>
+
+<div class="modal-footer">
+  <button type="button" class="btn btn-default pull-left" ng-click="vm.addConfig()">Add Config</button>
+
+  <button type="button" class="btn btn-default" ng-click="vm.prev()" ng-show="vm.wizard.mode === 'new'">Previous</button>
+  <button type="button" class="btn btn-primary" ng-click="vm.next()" ng-show="vm.wizard.mode === 'new'">Next</button>  
+  <button type="button" class="btn btn-primary" ng-click="vm.update()" ng-show="vm.wizard.mode === 'edit'">Update</button>
+  <button type="button" class="btn btn-warning" ng-click="vm.cancel()">Cancel</button>
+</div>

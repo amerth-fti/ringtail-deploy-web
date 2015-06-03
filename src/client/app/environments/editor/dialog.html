@@ -8,8 +8,9 @@
   <div class="col-sm-12">
       <ul class="nav nav-tabs">        
         <li role="presentation" ng-click="vm.wizard.show('info')" ng-class="{ active: vm.wizard.stage === 'info' }"><a>Information</a></li>
+        <li role="presentation" ng-click="vm.wizard.show('configs')" ng-class="{ active: vm.wizard.stage === 'configs' }"><a>Configs</a></li>
         <li role="presentation" ng-click="vm.wizard.show('machines')" ng-class="{ active: vm.wizard.stage === 'machines' }"><a>Machines</a></li>
-        <li role="presentation" ng-click="vm.wizard.show('config')"ng-class="{ active: vm.wizard.stage === 'config' }"><a>Redeploy Definition</a></li>
+        <li role="presentation" ng-click="vm.wizard.show('taskdefs')"ng-class="{ active: vm.wizard.stage === 'taskdefs' }"><a>Process</a></li>
       </ul>
     </div>
   </div>
@@ -40,6 +41,15 @@
   >
 </envwizard-info>
 
+<envwizard-configs 
+  ng-show="vm.wizard.stage === 'configs'"
+  environment="vm.environment" 
+  wizard="vm.wizard"
+  cancel="vm.cancel"  
+  update="vm.update"
+  >
+</envwizard-configs>
+
 <envwizard-machines 
   ng-show="vm.wizard.stage === 'machines'"
   environment="vm.environment"  
@@ -49,13 +59,13 @@
   >
 </envwizard-machines>
 
-<envwizard-config 
-  ng-show="vm.wizard.stage === 'config'"
+<envwizard-taskdefs 
+  ng-show="vm.wizard.stage === 'taskdefs'"
   environment="vm.environment" 
   wizard="vm.wizard"
   cancel="vm.cancel"
   create="vm.create"
   update="vm.update"
   >
-</envwizard-config>
+</envwizard-taskdefs>
 

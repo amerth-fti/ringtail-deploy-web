@@ -14,7 +14,7 @@
         update: '=',
         wizard: '='
       },
-      templateUrl: '/app/environments/editor/s3-machines.html',
+      templateUrl: '/app/environments/editor/s4-machines.html',
       controller: NewEnvironmentMachinesController,
       controllerAs: 'vm',
       bindToController: true
@@ -60,7 +60,7 @@
     }
 
     function next() {
-      vm.wizard.stage = 'config';
+      vm.wizard.stage = 'taskdefs';
     }
 
     function prev() {
