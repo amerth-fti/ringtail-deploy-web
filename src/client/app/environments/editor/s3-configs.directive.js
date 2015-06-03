@@ -3,9 +3,9 @@
   
   angular
     .module('app.environments.editor')
-    .directive('envwizardInfo', envwizardInfo);
+    .directive('envwizardConfigs', envwizardConfigs);
   
-  function envwizardInfo() {
+  function envwizardConfigs() {
     return { 
       restrict: 'E',
       scope: {        
@@ -14,7 +14,7 @@
         update: '=',
         wizard: '='
       },
-      templateUrl: '/app/environments/editor/s2-info.html',
+      templateUrl: '/app/environments/editor/s3-configs.html',
       controller: NewEnvironmentInfoController,
       controllerAs: 'vm',
       bindToController: true
@@ -36,7 +36,7 @@
     }
 
     function next() {
-      vm.wizard.stage = 'configs';      
+      vm.wizard.stage = 'machines';      
     }
 
     function prev() {

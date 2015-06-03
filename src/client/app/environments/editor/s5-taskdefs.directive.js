@@ -3,7 +3,7 @@
   
   angular
     .module('app.environments.editor')
-    .directive('envwizardConfig', envwizardConfig);
+    .directive('envwizardTaskdefs', envwizardConfig);
   
   function envwizardConfig() {
     return { 
@@ -15,7 +15,7 @@
         update: '=',
         wizard: '=',
       },
-      templateUrl: '/app/environments/editor/s4-config.html',
+      templateUrl: '/app/environments/editor/s5-taskdefs.html',
       controller: DirectiveController,
       controllerAs: 'vm',
       bindToController: true
