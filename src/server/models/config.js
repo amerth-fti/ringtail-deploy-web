@@ -8,6 +8,7 @@ var Model       = require('hops-model')
 schema = {
   "properties": [
     { "name": "configId" },
+    { "name": "configName" },
     { "name": "data", type: "json" },
     { "name": "roles", type: "array" }
   ]

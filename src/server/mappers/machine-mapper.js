@@ -40,7 +40,8 @@ MachineMapper.prototype.insert = function insert(machine, next) {
     $extIP: machine.extIP,
     $role: machine.role,
     $installNotes: machine.installNotes ? JSON.stringify(machine.installNotes, null, 2) : null,
-    $registryNotes: machine.registryNotes
+    $registryNotes: machine.registryNotes,
+    $configId: machine.configId
   };
 
   return this.run(sql, params, next);
@@ -61,7 +62,8 @@ MachineMapper.prototype.update = function update(machine, next) {
     $extIP: machine.extIP,
     $role: machine.role,
     $installNotes: machine.installNotes ? JSON.stringify(machine.installNotes, null, 2) : null,
-    $registryNotes: machine.registryNotes
+    $registryNotes: machine.registryNotes,
+    $configId: machine.configId
   };
 
   return this.run(sql, params, next);

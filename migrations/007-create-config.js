@@ -1,13 +1,23 @@
 var crypto      = require('crypto')
+  , util        = require('util')
+  , q           = require('q')
   , migrations  = require('./migrations')
   , envService  = require('../src/server/services/env-service')  
   , configSvc   = require('../src/server/services/config-service')
+  , machineSvc  = require('../src/server/services/machine-service')
+  , Config      = require('../src/server/models/config')
   ;
 
 exports.up = function(next){    
   migrations.runBlock('007-createConfigs', function(err) {
     if(err) next(err);
-    else migrateConfigs(next);
+    else migrateConfigs(function(err) {
+      if(err) { 
+        console.log(err);
+        console.log(err.stack);
+      next(err);
+    }
+    });
   });
 };
 
@@ -25,63 +35,83 @@ function migrateConfigs(next) {
 }
 
 function processEnvs(envs) {
-  var migrations = {};
 
   // process each environment
-  envs.forEach(function(env) {
-    var installTasks = getInstallTaskDefs(env)
-      , machineTask
-      , machine
-      , config
-      , hash
-      ;
+  var promises = envs.map(function(env) {
+    return function() {
+    
+      // find the install definition
+      var installTasks = getInstallTasks(env);
 
-    // handle single machine
-    if(env.machines.length === 1) {    
-      machineTask = findTaskDefForMachineIndex(installTasks, 0);
-      machine = env.machines[0];
-
-      // ensure there is an installation task
-      if(machineTask) {
-        hash = createHash(machineTask.options.data.config);
-
-        // check for an existing migration
-        if(migrations[hash]) {
-          migrations[hash].machines.push(machine);
-        } 
-        // create the migration since it doesn't exist
-        else {
-          config = { 
-            configId: null, 
-            data: machineTask.options.data.config, 
-            roles: [ machine.role ]
-          };
-          migrations[hash] = { hash: hash, config: config, machines: [ machine ] };
-        }
+      // we can only operate if we have a install task
+      // if none is defined, or if more than one, we abort
+      if(installTasks.length === 0) {
+        migrations.log('config', util.format('env %s skipped, no install tasks', env.envId));
+        return q(0);
       }
-    }
-    // handle multiple machines
-    else if(env.machines.length > 1) {
-      env.machines.forEach(function(machine, idx) {
-        
-      });
-    }
 
-  });  
-  return migrations;
-}
+      // process each machine by creating a new config
+      // and attaching the config to the machine    
+      function processEnv(machine, machineIndex) {
+        var machineTask     
+          , taskConfig
+          , config
+          ;      
 
-function hasTaskDefs(env) {
-  return env.config && env.config.taskdefs;
+        // retrieve the config for this guy
+        machineTask = findInstallTaskForMachine(installTasks, machineIndex);
+        if(!machineTask) {
+          migrations.log('config', util.format('env %s, machine %s skipped, no install task for machine', env.envId, machine.machineId));
+          return q(0);
+        }
+
+        taskConfig = machineTask.options.data.config;
+
+        // create the config 
+        config = new Config({ 
+          configName: env.envName + ' - ' + machine.machineName,
+          data: taskConfig,
+          roles: [ machine.role ]
+        });
+
+        return configSvc
+          .create(config)
+          .then(function(config) {
+            machine.configId = config.configId;
+            return machineSvc.update(machine);
+          })
+          .then(function() {
+            migrations.log('config', util.format('env %s, machine %s updated', env.envId, machine.machineId));          
+            return q(1);
+          })
+          .catch(function(err) {
+            console.log(err.stack);
+            migrations.log('config', util.format('env %s, machine %s failed', env.envId, machine.machineId));
+            return q(0);
+          });
+      }
+
+      var promises = env.machines.map(function(machine, index) { 
+        return function() {
+          return processEnv(machine, index);
+        };
+      });    
+      return promises.reduce(q.when, promises, q());
+
+    };
+
+  });
+
+  return promises.reduce(q.when, promises, q());
 }
 
 // Give a list of taskdefs
 // This will pluck out all of the installation taskdefs
-function getInstallTaskDefs(env) {
+function getInstallTasks(env) {
   var results = []
     , taskdefs
     ;
-  if(hasTaskDefs(env)) {
+  if(env.config && env.config.taskdefs) {
     taskdefs = env.config.taskdefs;
     taskdefs.forEach(function(taskdef) {      
       // handle ringail task
@@ -89,9 +119,9 @@ function getInstallTaskDefs(env) {
         results.push(taskdef);
       } 
       // handle parallel
-      else if(taskdef.task === 'parallel') {
+      else if(taskdef.task === 'parallel') {                
         taskdef.options.taskdefs.forEach(function(subtaskdef) {
-          if(subtaskdef.task === '3-ringtail-taskdef') {
+          if(subtaskdef && subtaskdef.task === '3-custom-ringtail') {            
             results.push(subtaskdef);
           }
         });
@@ -104,7 +134,7 @@ function getInstallTaskDefs(env) {
 // Given a list of installation TaskDefs
 // This methods will find the one that maps to the supplied
 // machine index
-function findTaskDefForMachineIndex(installtasks, idx) {
+function findInstallTaskForMachine(installtasks, idx) {
   var result = null;
   installtasks.forEach(function(task) {    
     if(task.options.data.machine === 'scope.me.machines[' + idx + ']') {      
@@ -112,19 +142,4 @@ function findTaskDefForMachineIndex(installtasks, idx) {
     }
   }); 
   return result;
-}
-
-// Creates an MD5 hash from the given json data
-function createHash(data) {
-  var md5 = crypto.createHash('md5');
-  var str = JSON.stringify(data);
-  md5.update(str);
-  return md5.digest('base64');
-}
-
-
-// TODO
-// Remove the configs from the 3-ringtail-install taskdefs
-function removeConfigFromTaskDefs() {
-
 }
