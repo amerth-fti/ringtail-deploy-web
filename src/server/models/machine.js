@@ -18,7 +18,8 @@ schema = {
     { "name": "extIP" },
     { "name": "role" },
     { "name": "installNotes" },
-    { "name": "registryNotes" }
+    { "name": "registryNotes" },
+    { "name": "configId" }
   ]
 };
 /* jshint ignore:end */

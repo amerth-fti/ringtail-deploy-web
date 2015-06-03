@@ -1,11 +1,12 @@
 -- insert
-insert into machine (envId, machineName, machineDesc, remoteId, intIP, extIP, role, installNotes, registryNotes)
-values ($envId, $machineName, $machineDesc, $remoteId, $intIP, $extIP, $role, $installNotes, $registryNotes);
+insert into machine (envId, machineName, machineDesc, remoteId, intIP, extIP, role, installNotes, registryNotes, configId)
+values ($envId, $machineName, $machineDesc, $remoteId, $intIP, $extIP, $role, $installNotes, $registryNotes, $configId);
 
 -- update
 update machine set
   envId = $envId, machineName = $machineName, machineDesc = $machineDesc, remoteId = $remoteId, 
-  intIP = $intIP, extIP = $extIP, role = $role, installNotes = $installNotes, registryNotes = $registryNotes
+  intIP = $intIP, extIP = $extIP, role = $role, installNotes = $installNotes, registryNotes = $registryNotes, 
+  configId = $configId
 where machineId = $machineId;
 
 -- delete

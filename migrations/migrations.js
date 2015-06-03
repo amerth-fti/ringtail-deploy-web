@@ -1,4 +1,5 @@
 var Q           = require('q')
+  , util        = require('util')
   , chalk       = require('chalk')
   , statements  = require('statements')
   , Sqlite      = require('hops-sqlite')
@@ -32,6 +33,13 @@ exports.runBlock = function runBlock(blockName, next) {
   /* jshint newcap: false */
   funcs.reduce(Q.when, Q())
   .then(function() { next(); })
-  .done();
-  /* jshint newcap: true */
+  .done();  
+};
+
+exports.log = function log(prefix, message) {
+  /* jshint es5: false */
+  /* jshint noarg: false */
+  prefix = chalk.yellow(prefix);
+  message = chalk.gray(message);
+  console.log('    %s: %s', prefix, message);
 };

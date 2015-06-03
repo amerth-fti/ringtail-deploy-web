@@ -121,16 +121,17 @@ DROP TABLE regionenvtemp;
 DROP TABLE regiontemp;
 
 
--- createConfigs
+-- 007-createConfigs
 CREATE TABLE config (
   configId INTEGER PRIMARY KEY AUTOINCREMENT,
+  configName NVARCHAR(255),
   data TEXT,
   roles TEXT
 );
 
-ALTER TABLE machine ADD COLUMN config TEXT;
+ALTER TABLE machine ADD COLUMN configId INTEGER;
 
--- dropConfigs
+-- 007-dropConfigs
 DROP TABLE config;
 
 ALTER TABLE machine RENAME TO machinetemp;
