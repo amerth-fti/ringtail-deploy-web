@@ -5,7 +5,7 @@ values ($configId, $configName, $data, $roles);
 -- update
 update config set
   configName = $configName, data = $data, roles = $roles  
-where config = $config;
+where configId = $configId;
 
 -- delete
 delete from config

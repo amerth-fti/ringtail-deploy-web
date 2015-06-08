@@ -15,24 +15,62 @@
         wizard: '='
       },
       templateUrl: '/app/environments/editor/s3-configs.html',
-      controller: NewEnvironmentInfoController,
+      controller: Controller,
       controllerAs: 'vm',
       bindToController: true
     };
   }
   
-  NewEnvironmentInfoController.$inject = [ ];
+  Controller.$inject = [ 'Config', 'ConfigEditor'];
   
-  function NewEnvironmentInfoController() {
+  function Controller(Config, ConfigEditor) {
     var vm = this;
-    vm.next         = next;
-    vm.prev         = prev;
+    vm.configs   = null;
+    vm.add       = add;
+    vm.edit      = edit;
+    vm.copy      = copy;
+    vm.remove    = remove;
+    vm.next      = next;
+    vm.prev      = prev;
     
     activate();
     
     //////////
     
     function activate() {
+      vm.configs = Config.findByEnv({ envId: vm.environment.envId });
+    }
+
+    function add() {
+      var config = new Config({
+        configName: null,
+        roles: [ '' ],
+        data: { }
+      });
+      ConfigEditor.open(config, vm.environment.role)
+        .result
+        .then(function(config) {
+          if(config) {
+            vm.configs.push(config);
+          }
+        });
+    }
+
+    function edit(config) {      
+      ConfigEditor.open(config, vm.environment.host);
+    }
+
+    function remove(config) {      
+      config.$remove().then(function() {
+        var index = vm.configs.indexOf(config);
+        vm.configs.splice(index, 1);
+      });    
+    }
+
+    function copy(config) {
+      var newConfig  = angular.copy(config);
+      newConfig.configId = null;
+      ConfigEditor.open(newConfig, vm.environment.host);
     }
 
     function next() {
@@ -41,7 +79,7 @@
 
     function prev() {
       vm.wizard.stage = 'method';
-    }
+    }  
   }
   
 }());

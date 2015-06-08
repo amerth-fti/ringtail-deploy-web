@@ -33,7 +33,7 @@ ConfigMapper.prototype.insert = function insert(config, next) {
     ;
 
   params = {
-    $configId: config.configid,
+    $configId: config.configId,
     $configName: config.configName,
     $data: config.data ? JSON.stringify(config.data, null, 2) : null,
     $roles: config.roles ? JSON.stringify(config.roles, null, 2) : null    
@@ -48,12 +48,12 @@ ConfigMapper.prototype.update = function update(config, next) {
     ;
 
   params = {
-    $configId: config.configid,
+    $configId: config.configId,
     $configName: config.configName,
     $data: config.data ? JSON.stringify(config.data, null, 2) : null,
     $roles: config.roles ? JSON.stringify(config.roles, null, 2) : null
   };
-
+console.log(params);
   return this.run(sql, params, next);
 };
 

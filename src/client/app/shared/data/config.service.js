@@ -10,10 +10,10 @@
   function Environment($resource) {
     return $resource(
       'api/configs/:configId', 
-      null,      
+      { configId: '@configId' },
       {
-        findByEnv: { method: 'GET', url: 'api/envs/:envId/configs', isArray: true },
-        update  : { method: 'PUT', url: 'api/config/:configId' }
+        findByEnv: { method: 'GET',  url: 'api/envs/:envId/configs', isArray: true },
+        update   : { method: 'PUT',  url: 'api/configs/:configId' }        
       }
     );
   }
