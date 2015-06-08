@@ -12,3 +12,30 @@ exports.findByEnv = function findByenv(req, res, next) {
     next();    
   }); 
 };
+
+exports.create = function create(req, res, next) {
+  var config = req.body;
+  configSvc.create(config, function(err, config) {
+    res.result = config;
+    res.err    = err;
+    next();
+  });
+};
+
+exports.update = function update(req, res, next) {
+  var config = req.body;
+  configSvc.update(config, function(err, config) {
+    res.result = config;
+    res.err    = err;
+    next();
+  });
+};
+
+exports.del = function del(req, res, next) {
+  var configId = req.params.configId;
+  configSvc.del(configId, function(err, result) { 
+    res.result = result;
+    res.err    = err;
+    next();
+  });
+};

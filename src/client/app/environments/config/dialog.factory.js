@@ -32,10 +32,10 @@
   Controller.$inject = [ '$scope', '$modalInstance', 'config', 'host' ];
 
   function Controller($scope, $modalInstance, config, host) {
-    var vm    = this;
-    vm.config = config;
+    var vm    = this;    
     vm.host   = host;
-    vm. mode  = null;
+    vm.config = null;
+    vm.mode   = null;
     vm.cancel = cancel;
     vm.submit = submit;
 
@@ -44,7 +44,8 @@
     //////////
 
     function activate() {
-      vm.mode = vm.config ? 'edit' : 'create';      
+      vm.mode = config.configId ? 'edit' : 'create';
+      vm.config = angular.copy(config);
     }
 
 
@@ -53,9 +54,16 @@
     }
 
     function submit() {
-      config.$update().then(function(result) {
-        $modalInstance.close(result);    
-      });      
+      angular.copy(vm.config, config);
+      if(vm.mode === 'edit') {
+        config.$update().then(function(result) {
+          $modalInstance.close(result);    
+        });
+      } else {
+        config.$save().then(function(result) {
+          $modalInstance.close(result);
+        });
+      }
     }
     
   }

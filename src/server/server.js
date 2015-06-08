@@ -44,6 +44,10 @@ app.delete('/api/regions/:regionId', controllers.regions.del);
 app.get   ('/api/regions/:regionId/branches', controllers.browse.branches);
 app.get   ('/api/regions/:regionId/branches/:branch/builds', controllers.browse.builds);
 
+// API - CONFIG ROUTES
+app.post  ('/api/configs', controllers.configs.create);
+app.put   ('/api/configs/:configId', controllers.configs.update);
+app.delete('/api/configs/:configId', controllers.configs.del);
 
 // API - REGION ENVIRONMENT ROUTES
 app.get   ('/api/regions/:regionId/envs', controllers.regionenvs.list);
