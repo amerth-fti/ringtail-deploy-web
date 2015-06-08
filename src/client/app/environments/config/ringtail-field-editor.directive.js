@@ -1,56 +1,45 @@
 (function() {
   'use strict';
-  
+
   angular
     .module('app.environments.config')
-    .directive('configEditor', configEditor);
-  
-  function configEditor() {
+    .directive('ringtailFieldEditor', ringtailFieldEditor);
+
+  function ringtailFieldEditor() {
     return { 
       restrict: 'E',
       scope: {
-        config: '=',
-        host: '='
+        role: '=',
+        host: '=',
+        config: '='
       },
-      templateUrl: '/app/environments/config/editor.html',
+      templateUrl: '/app/environments/config/ringtail-field-editor.html',
       controller: Controller,
       controllerAs: 'vm',
       bindToController: true
     };
   }
-  
-  Controller.$inject = [ '_', 'Role', 'RingtailConfig', 'RingtailField' ];
-  
-  function Controller(_, Role, RingtailConfig, RingtailField) {
-    var vm = this;
+
+  Controller.$inject = [ '$scope', '_', 'RingtailConfig', 'Role', 'RingtailField' ];
+
+  function Controller($scope, _, RingtailConfig, Role, RingtailField) {
+    var vm          = this;
+    vm.host         = this.host;
+    vm.role         = this.role;
     vm.config       = this.config;
-    vm.host         = this.host;  
-    vm.data         = null;  
     vm.fields       = null;    
-    vm.roles        = null;    
-    vm.selectedRole = null;
-    vm.roleChanged  = roleChanged;
-    vm.updateField  = updateField;
+    vm.updateField  = updateField;        
 
     activate();
-    
+
     //////////
 
     function activate() {      
-      vm.data         = vm.config.data;
-      vm.selectedRole = vm.config.roles[0];
-      vm.roles = Role.query();      
-      roleChanged();
-    }    
-
-    function roleChanged() {
-      vm.config.roles[0] = vm.selectedRole;
-      buildFields(
-        RingtailConfig.configsForRole(vm.selectedRole)
-      );
+      var configs = RingtailConfig.configsForRole(vm.role);
+      processConfigs(configs);      
     }
 
-    function buildFields(configKeys) {      
+    function processConfigs(configKeys) {      
       var fields
         , fieldLookup = {}
         ;
@@ -59,8 +48,8 @@
         
         var field = RingtailField.getFieldForConfigKey(configKey)
           , configKeyParts = configKey.split('|')
-          , currentValue = unescapeValue(vm.config.data[configKey])
-          , commonValue = unescapeValue(vm.config.data['Common|' + configKeyParts[1]])
+          , currentValue = unescapeValue(vm.config[configKey])
+          , commonValue = unescapeValue(vm.config['Common|' + configKeyParts[1]])
           ;
 
         field.configKey = [ configKey ];
@@ -118,10 +107,10 @@
       //write values for all field mappings
       field.configKey.forEach(function(configKey) {
         if(!ignore) {
-          vm.config.data[configKey] = value;
+          vm.config[configKey] = value;
         }
         else {
-          delete vm.config.data[configKey];
+          delete vm.config[configKey];
         }
       });      
 
@@ -151,6 +140,8 @@
         updateField(field);
       });
     }
+
   }
-  
+
+
 }());

@@ -82,11 +82,7 @@
       opts = opts || {
         remoteType: null
       };
-
-      return roles().filter(function(role) {
-        return  (opts.remoteType === 'skytap' && role.toLowerCase().indexOf('skytap') >= 0) ||
-                (opts.remoteType === null     && role.toLowerCase().indexOf('skytap') === -1);
-      });
+      return roles();
     }
 
     function roles(roles) {

@@ -12,7 +12,7 @@
       open: open
     };
 
-    function open(config) {
+    function open(config, host) {
       return $modal.open({
         templateUrl: '/app/environments/config/dialog.html',
         controller: Controller,
@@ -20,17 +20,21 @@
         resolve: {
           config: function() {
             return config;
+          },
+          host: function() {
+            return host;
           }
         }
       });
     }
   }
 
-  Controller.$inject = [ '$scope', '$modalInstance', 'config' ];
+  Controller.$inject = [ '$scope', '$modalInstance', 'config', 'host' ];
 
-  function Controller($scope, $modalInstance, config) {
+  function Controller($scope, $modalInstance, config, host) {
     var vm    = this;
     vm.config = config;
+    vm.host   = host;
     vm. mode  = null;
     vm.cancel = cancel;
     vm.submit = submit;

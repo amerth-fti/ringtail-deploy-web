@@ -1,0 +1,42 @@
+<div class="form-group">
+  <label>Role</label>  
+  <select 
+    class="form-control"
+    ng-model="vm.selectedRole"
+    ng-change="vm.roleChanged()">
+    <option value=""></option>
+    <option 
+      ng-repeat="role in vm.roles"
+      ng-selected="{{role === vm.selectedRole}}"      
+      value="{{role}}"
+    >{{role}}</option>
+  </select>
+</div>
+<h4>Installation Configuration</h4>
+<div class="field-editor-container">  
+  <form>  
+    <div 
+      class="form-group ringtail-field"
+      ng-repeat="field in vm.fields" 
+      ng-class="{ 'has-success': field.valid, 'has-error': !field.valid }"
+      >    
+        <label>{{field.title}}</label>       
+        <p class="help-block">{{field.description}}</p>
+        <input 
+          type="text" 
+          class="form-control"
+          ng-model="field.value"
+          ng-change="vm.updateField(field)"
+          ng-if="!field.options"
+        ></input>      
+        <select
+          class="form-control"
+          ng-model="field.value"
+          ng-options="option as option for option in field.options"
+          ng-change="vm.updateField(field)"
+          ng-if="field.options"
+        ></select>
+      </p>
+    </div>
+  </form>
+</div>
