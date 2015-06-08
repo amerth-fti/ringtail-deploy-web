@@ -34,8 +34,8 @@
       vm.configs = Config.findByEnv({ envId: vm.environment.envId });
     }
 
-    function edit(config) {
-      ConfigEditor.open(config);
+    function edit(config) {      
+      ConfigEditor.open(config, vm.environment.host);
     }
 
     function remove(config) {

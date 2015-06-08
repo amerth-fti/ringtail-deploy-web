@@ -21,8 +21,7 @@
           environment: function() {
             return environment;
           }
-        },
-        size: 'lg'
+        }        
       });
     }
   }
