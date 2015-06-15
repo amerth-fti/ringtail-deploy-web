@@ -1,7 +1,7 @@
-var path        = require('path')  
+var path        = require('path')
   , debug       = require('debug')('deployer')
   , express     = require('express')
-  , serveStatic = require('serve-static')  
+  , serveStatic = require('serve-static')
   , bodyParser  = require('body-parser')
   , controllers = require('./controllers')
   , config      = require('../../config')
@@ -10,7 +10,7 @@ var path        = require('path')
 app = express();
 
 // CONFIGURE BODY PARSER
-app.use(bodyParser.json());
+app.use(bodyParser.json({ limit: '1mb' }));
 
 
 // STATIC FILE ROUTES
@@ -95,7 +95,7 @@ function convertToClient(results) {
   if(results && results.toClient) {
     results = results.toClient();
   }
-  else if(util.isArray(results)) {    
+  else if(util.isArray(results)) {
     results = results.map(function(result) {
       if(result.toClient) {
         result = result.toClient();
@@ -130,11 +130,11 @@ var debugapp = require('debug');
 var util = require('util');
 var fs = require('fs');
 
-debugapp.log = function() {      
-  // taken from node.js inside debug library  
+debugapp.log = function() {
+  // taken from node.js inside debug library
   var text = util.format.apply(this, arguments);
 
   // log to console and file
-  console.log(text);  
-  fs.appendFileSync('access.log', text + '\n');  
+  console.log(text);
+  fs.appendFileSync('access.log', text + '\n');
 };
