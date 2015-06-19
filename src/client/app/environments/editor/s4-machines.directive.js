@@ -1,16 +1,17 @@
 (function() {
   'use strict';
-  
+
   angular
     .module('app.environments.editor')
     .directive('envwizardMachines', envwizardMachines);
-  
+
   function envwizardMachines() {
-    return { 
+    return {
       restrict: 'E',
       scope: {
         cancel: '=',
         environment: '=',
+        configs: '=',
         update: '=',
         wizard: '='
       },
@@ -20,31 +21,32 @@
       bindToController: true
     };
   }
-  
+
   NewEnvironmentMachinesController.$inject = [ 'MachineEditor' ];
-  
+
   function NewEnvironmentMachinesController(MachineEditor) {
     var vm            = this;
-    vm.roles          = null;
+    vm.environment    = this.environment;
+    vm.configs        = this.configs;
     vm.addMachine     = addMachine;
     vm.editMachine    = editMachine;
     vm.next           = next;
     vm.prev           = prev;
     vm.removeMachine  = removeMachine;
-    
+
     activate();
-    
+
     //////////
-    
+
     function activate() {
       vm.machine = {};
     }
 
     function addMachine() {
-      var opts = { 
+      var opts = {
         remoteType: vm.environment.remoteType
       };
-      MachineEditor.open(null, opts)
+      MachineEditor.open(vm.configs, null, opts)
       .result
       .then(function(result) {
         vm.environment.machines = vm.environment.machines || [];
@@ -53,10 +55,10 @@
     }
 
     function editMachine(machine) {
-      var opts = { 
+      var opts = {
         remoteType: vm.environment.remoteType
       };
-      MachineEditor.open(machine, opts);
+      MachineEditor.open(vm.configs, machine, opts);
     }
 
     function next() {
@@ -72,5 +74,5 @@
       vm.environment.machines.splice(index, 1);
     }
   }
-  
+
 }());

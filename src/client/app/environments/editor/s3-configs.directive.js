@@ -1,16 +1,17 @@
 (function() {
   'use strict';
-  
+
   angular
     .module('app.environments.editor')
     .directive('envwizardConfigs', envwizardConfigs);
-  
+
   function envwizardConfigs() {
-    return { 
+    return {
       restrict: 'E',
-      scope: {        
+      scope: {
         cancel: '=',
         environment: '=',
+        configs: '=',
         update: '=',
         wizard: '='
       },
@@ -20,25 +21,25 @@
       bindToController: true
     };
   }
-  
+
   Controller.$inject = [ 'Config', 'ConfigEditor'];
-  
+
   function Controller(Config, ConfigEditor) {
     var vm = this;
-    vm.configs   = null;
+    vm.configs   = this.configs;
     vm.add       = add;
     vm.edit      = edit;
     vm.copy      = copy;
     vm.remove    = remove;
     vm.next      = next;
     vm.prev      = prev;
-    
+
     activate();
-    
+
     //////////
-    
+
     function activate() {
-      vm.configs = Config.findByEnv({ envId: vm.environment.envId });
+
     }
 
     function add() {
@@ -56,15 +57,15 @@
         });
     }
 
-    function edit(config) {      
+    function edit(config) {
       ConfigEditor.open(config, vm.environment.host);
     }
 
-    function remove(config) {      
+    function remove(config) {
       config.$remove().then(function() {
         var index = vm.configs.indexOf(config);
         vm.configs.splice(index, 1);
-      });    
+      });
     }
 
     function copy(config) {
@@ -74,12 +75,12 @@
     }
 
     function next() {
-      vm.wizard.stage = 'machines';      
+      vm.wizard.stage = 'machines';
     }
 
     function prev() {
       vm.wizard.stage = 'method';
-    }  
+    }
   }
-  
+
 }());

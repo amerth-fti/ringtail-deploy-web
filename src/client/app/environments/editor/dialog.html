@@ -6,7 +6,7 @@
 
 <div class="row" ng-show="vm.wizard.mode === 'edit'">
   <div class="col-sm-12">
-      <ul class="nav nav-tabs">        
+      <ul class="nav nav-tabs">
         <li role="presentation" ng-click="vm.wizard.show('info')" ng-class="{ active: vm.wizard.stage === 'info' }"><a>Information</a></li>
         <li role="presentation" ng-click="vm.wizard.show('configs')" ng-class="{ active: vm.wizard.stage === 'configs' }"><a>Configs</a></li>
         <li role="presentation" ng-click="vm.wizard.show('machines')" ng-class="{ active: vm.wizard.stage === 'machines' }"><a>Machines</a></li>
@@ -16,52 +16,54 @@
   </div>
 </div>
 
-<envwizard-method 
+<envwizard-method
   ng-show="vm.wizard.stage === 'method'"
-  environment="vm.environment" 
-  wizard="vm.wizard" 
+  environment="vm.environment"
+  wizard="vm.wizard"
   cancel="vm.cancel"
   >
 </envwizard-method>
 
-<envwizard-skytap 
+<envwizard-skytap
   ng-show="vm.wizard.stage === 'skytap'"
-  environment="vm.environment" 
-  wizard="vm.wizard" 
+  environment="vm.environment"
+  wizard="vm.wizard"
   cancel="vm.cancel"
   >
 </envwizard-skytap>
 
-<envwizard-info 
+<envwizard-info
   ng-show="vm.wizard.stage === 'info'"
-  environment="vm.environment" 
-  wizard="vm.wizard"  
+  environment="vm.environment"
+  wizard="vm.wizard"
   cancel="vm.cancel"
   update="vm.update"
   >
 </envwizard-info>
 
-<envwizard-configs 
+<envwizard-configs
   ng-show="vm.wizard.stage === 'configs'"
-  environment="vm.environment" 
+  environment="vm.environment"
+  configs="vm.configs"
   wizard="vm.wizard"
-  cancel="vm.cancel"  
+  cancel="vm.cancel"
   update="vm.update"
   >
 </envwizard-configs>
 
-<envwizard-machines 
+<envwizard-machines
   ng-show="vm.wizard.stage === 'machines'"
-  environment="vm.environment"  
-  wizard="vm.wizard" 
+  environment="vm.environment"
+  configs="vm.configs"
+  wizard="vm.wizard"
   cancel="vm.cancel"
   update="vm.update"
   >
 </envwizard-machines>
 
-<envwizard-taskdefs 
+<envwizard-taskdefs
   ng-show="vm.wizard.stage === 'taskdefs'"
-  environment="vm.environment" 
+  environment="vm.environment"
   wizard="vm.wizard"
   cancel="vm.cancel"
   create="vm.create"

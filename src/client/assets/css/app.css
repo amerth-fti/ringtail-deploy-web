@@ -17,7 +17,7 @@
   background-position: center center;
   background-repeat: no-repeat;
   min-height: 32px;
-  min-width: 32px; 
+  min-width: 32px;
   margin: 9px 9px 0 0;
 }
 
@@ -43,7 +43,7 @@
 
 
 button {
-  border-width: 1px !important;  
+  border-width: 1px !important;
 }
 
 .text-muted {
@@ -80,7 +80,7 @@ button {
   padding-top: 20px;
 }
 
-.environment-list .inner .row { 
+.environment-list .inner .row {
   margin-left: 10px;
 }
 
@@ -124,10 +124,10 @@ button {
   padding-left: 15px;
 }
 .model-body.pad-right {
-  padding-right: 15px;  
+  padding-right: 15px;
 }
 .model-body.pad-top {
-  padding-top: 15px;  
+  padding-top: 15px;
 }
 .model-body.pad-bottom {
   padding-bottom: 15px;
@@ -140,56 +140,44 @@ button {
 .machine-details {
   text-align: center;
 }
-.machine-details .machine-role {
-  border-radius: 50%;
+.machine-details .machine-config {
+  border-radius: 5px;
   padding-top: 15px;
   padding-bottom: 15px;
   font-weight: bold;
 }
-.machine-details .role- {
+.machine-details .config- {
   background-color: #b0b0b0;
 }
-.machine-details .role-DEV-FULL {
+.machine-details .config-0 {
   background-color: #66CCFF;
 }
-.machine-details .role-WEB {
+.machine-details .config-1 {
   background-color: #99CCFF;
 }
-.machine-details .role-AGENT {
+.machine-details .config-2 {
   background-color: #CC99FF;
 }
-.machine-details .role-AGENT {
+.machine-details .config-3 {
   background-color: #FF99FF;
 }
-.machine-details .role-WEBAGENT {
+.machine-details .config-4 {
   background-color: #FF99CC;
 }
-.machine-details .role-RPF-COORDINATOR {
+.machine-details .config-5 {
   background-color: #FF9999;
 }
-.machine-details .role-RPF-SUPERVISOR {
-  background-color: #FF6666; 
+.machine-details .config-6 {
+  background-color: #FF6666;
 }
-.machine-details .role-DATABASE {
+.machine-details .config-7 {
   background-color: #FFCC99;
 }
-.machine-details .role-SKYTAP-ALLINONE {
+.machine-details .config-8 {
   background-color: #FFFF99;
 }
-.machine-details .role-SKYTAP-WEB {
+.machine-details .config-9 {
   background-color: #CCFF99;
-}
-.machine-details .role-SKYTAP-AGENT {
-  background-color: #99FF99;
-}
-.machine-details .role-SKYTAP-DB {
-  background-color: #99FFCC;
-}
-.machine-details .role-SKYTAP-RPF-SUPERVISOR {
-  background-color: #66FFFF;
-}
-.machine-details .role-SKYTAP-RPF-COORDINATOR {
-  background-color: #66FF66;
 }
 
 .machine-details .machine-name {
@@ -202,6 +190,10 @@ button {
 
 .remove-machine {
   cursor: pointer;
+  background-color: #fff;
+  border-radius: 50%;
+  margin-top: -4px;
+  margin-left: -4px;
 }
 
 .cursor-pointer {
@@ -283,7 +275,7 @@ button {
 }
 
 
-.config-editor-container {  
+.config-editor-container {
   padding-right: 10px;
 }
 .taskdef-editor-container {
@@ -320,7 +312,7 @@ button {
 .status-running,
 .status-deployed {
   /*background-color: #5cb85c;*/
-  background-color: rgba(92,184,92,.8); 
+  background-color: rgba(92,184,92,.8);
 }
 .status-suspended {
   background-color: #e0e0e0;
@@ -348,13 +340,13 @@ button {
   position: absolute;
   width: 20px;
   height: 10000px;
-  
+
 }
 .environment .environment-info {
   margin-left: 10px;
   padding: 10px;
 }
-.environment .environment-controls { 
+.environment .environment-controls {
   text-align: right;
 }
 .environment .deploy-list {
@@ -371,21 +363,21 @@ button {
 }
 
 
-.nowrap {  
+.nowrap {
   display: inline-block;
   width: 100%;
   text-overflow: ellipsis;
   white-space: nowrap;
-  overflow-x: hidden;  
+  overflow-x: hidden;
   box-sizing: border-box;
 }
 .nowrap.has-glyph {
-  padding-right: 12px;  
+  padding-right: 12px;
 }
 
 .corner-glyph {
   position: absolute;
-  right: 8px;  
+  right: 8px;
   top: 10px;
   opacity: .75;
 }
@@ -393,7 +385,7 @@ button {
   background-color: inherit !important;
   border: none;
 }
-.active .corner-glyph {  
+.active .corner-glyph {
   opacity: 1.0;
   color: inherit !important;
 }
