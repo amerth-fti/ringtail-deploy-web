@@ -1,12 +1,12 @@
 (function() {
   'use strict';
-  
+
   angular
     .module('app.environments.config')
     .directive('configEditor', configEditor);
-  
+
   function configEditor() {
-    return { 
+    return {
       restrict: 'E',
       scope: {
         config: '=',
@@ -18,30 +18,30 @@
       bindToController: true
     };
   }
-  
+
   Controller.$inject = [ '_', 'Role', 'RingtailConfig', 'RingtailField' ];
-  
+
   function Controller(_, Role, RingtailConfig, RingtailField) {
     var vm = this;
     vm.config       = this.config;
-    vm.host         = this.host;  
-    vm.data         = null;  
-    vm.fields       = null;    
-    vm.roles        = null;    
+    vm.host         = this.host;
+    vm.data         = null;
+    vm.fields       = null;
+    vm.roles        = null;
     vm.selectedRole = null;
     vm.roleChanged  = roleChanged;
     vm.updateField  = updateField;
 
     activate();
-    
+
     //////////
 
-    function activate() {      
+    function activate() {
       vm.data         = vm.config.data;
       vm.selectedRole = vm.config.roles[0];
-      vm.roles = Role.query();      
+      vm.roles = Role.roles();
       roleChanged();
-    }    
+    }
 
     function roleChanged() {
       vm.config.roles[0] = vm.selectedRole;
@@ -50,13 +50,13 @@
       );
     }
 
-    function buildFields(configKeys) {      
+    function buildFields(configKeys) {
       var fields
         , fieldLookup = {}
         ;
 
       fields = configKeys.map(function(configKey) {
-        
+
         var field = RingtailField.getFieldForConfigKey(configKey)
           , configKeyParts = configKey.split('|')
           , currentValue = unescapeValue(vm.config.data[configKey])
@@ -64,7 +64,7 @@
           ;
 
         field.configKey = [ configKey ];
-        field.value = currentValue || commonValue || field.default;        
+        field.value = currentValue || commonValue || field.default;
         return field;
       });
 
@@ -88,7 +88,7 @@
     }
 
     function escapeValue(value) {
-      var result = value; 
+      var result = value;
       if(value && value.indexOf(' ') > 0) {
         result = '"""' + value + '"""';
       }
@@ -100,7 +100,7 @@
       return result;
     }
 
-    function updateField(field) { 
+    function updateField(field) {
       var value
         , ignore
         ;
@@ -113,7 +113,7 @@
 
       // escape value
       value = field.value;
-      value = escapeValue(value);    
+      value = escapeValue(value);
 
       //write values for all field mappings
       field.configKey.forEach(function(configKey) {
@@ -123,7 +123,7 @@
         else {
           delete vm.config.data[configKey];
         }
-      });      
+      });
 
       // propagate protocol changes
       if(field.type === 'protocol') {
@@ -152,5 +152,5 @@
       });
     }
   }
-  
+
 }());

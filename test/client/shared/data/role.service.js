@@ -3,14 +3,14 @@ describe('Roles Service', function() {
   var sut;
 
   beforeEach(inject(function($injector) {
-    sut = $injector.get( 'Role' );    
+    sut = $injector.get( 'Role' );
     sut.roles([
       'SKYTAP-WEB',
       'SKYTAP-DB',
       'WEB',
       'DB'
     ]);
-  }));  
+  }));
 
 
   describe('.distinct', function() {
@@ -26,7 +26,7 @@ describe('Roles Service', function() {
       var data = [ null, 'WEB' ]
         , result = sut.distinct(data);
       expect(result.length).to.equal(1);
-      expect(result[0]).to.equal('WEB');      
+      expect(result[0]).to.equal('WEB');
     });
   });
 
@@ -36,7 +36,7 @@ describe('Roles Service', function() {
       var env
         , result
         ;
-      env = { 
+      env = {
         machines: [
           { role: 'WEB' },
           { role: 'DB' },
@@ -47,23 +47,6 @@ describe('Roles Service', function() {
       expect(result.length).to.equal(2);
       expect(result[0]).to.equal('WEB');
       expect(result[1]).to.equal('DB');
-    });
-  });
-
-
-  describe('.query', function() {
-    it('should return local roles with null options', function() {
-      var result = sut.query();
-      expect(result.length).to.equal(2);
-      expect(result[0]).to.equal('WEB');
-      expect(result[1]).to.equal('DB');
-    });
-
-    it('should return skytap roles with skytap remote type', function() {
-      var result = sut.query({ remoteType: 'skytap' });
-      expect(result.length).to.equal(2);
-      expect(result[0]).to.equal('SKYTAP-WEB');
-      expect(result[1]).to.equal('SKYTAP-DB');
     });
   });
 
