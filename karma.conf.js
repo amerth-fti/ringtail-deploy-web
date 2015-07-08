@@ -11,6 +11,17 @@ module.exports = function(config) {
     // available frameworks: https://npmjs.org/browse/keyword/karma-adapter
     frameworks: [ 'mocha', 'sinon-chai' ],
 
+    // load the plugins
+    plugins: [
+      'karma-chrome-launcher',
+      'karma-coverage',
+      'karma-mocha',
+      'karma-mocha-reporter',
+      'karma-ng-html2js-preprocessor',
+      'karma-phantomjs-launcher',
+      'karma-sinon-chai'
+    ],
+
 
     // list of files / patterns to load in the browser
     files: [
@@ -23,13 +34,13 @@ module.exports = function(config) {
       'src/client/assets/bower_components/angular-animate/angular-animate.js',
       'src/client/assets/bower_components/angular-bootstrap/ui-bootstrap.js',
       'src/client/assets/bower_components/angular-bootstrap/ui-bootstrap-tpls.js',
-      'src/client/assets/bower_components/underscore/underscore.js',            
+      'src/client/assets/bower_components/underscore/underscore.js',
 
       'src/client/app/**/_module.js',
       'src/client/app/**/*.js',
       'src/client/app/**/*.html',
 
-      'test/client/**/*.js',    
+      'test/client/**/*.js',
     ],
 
 
