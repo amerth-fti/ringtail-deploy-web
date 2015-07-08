@@ -7,7 +7,7 @@ var events  = require('events')
 
 function Task(options) {
   events.EventEmitter.call(this);
-  
+
   this.status = 'Pending';
   this.started = null;
   this.stopped = null;
@@ -28,16 +28,16 @@ function Task(options) {
     }
   }
 
-  var self = this;  
-  this.log = function log() {    
+  var self = this;
+  this.log = function log() {
 
     // format the log data
-    var data = util.format.apply(this, arguments);  
+    var data = util.format.apply(this, arguments);
 
-    // add data to the current task's log 
-    self.runlog.push({ date: new Date(), data: data });  
+    // add data to the current task's log
+    self.runlog.push({ date: new Date(), data: data });
 
-    // emit that we had a log event  
+    // emit that we had a log event
     self.emit('log', data);
   };
 }
@@ -52,15 +52,15 @@ module.exports = Task;
 
 
 Task.prototype.start = function start(scope) {
-  this.started = new Date();  
+  this.started = new Date();
   this.status = 'Running';
-  this.emit('start', this);  
+  this.emit('start', this);
   var self = this;
 
   return Q.fcall(function() {
     return self.execute(scope, self.log);
   })
-  .then(function(result) {    
+  .then(function(result) {
     if(self.storeIn) {
       self.log('stroring scope variable "%s"', self.storeIn);
       scope[self.storeIn] = result;
@@ -69,7 +69,7 @@ Task.prototype.start = function start(scope) {
     }
 
   })
-  .then(function() {    
+  .then(function() {
     self.log('task complete');
     self.endTime = new Date();
     self.status = 'Succeeded';
@@ -89,19 +89,21 @@ Task.prototype.start = function start(scope) {
 
 };
 
+Task.prototype.execute = function() {
+  // This should get redefined in implementer
+};
 
-
-Task.prototype.getData = function getData(scope, key, expand) {  
+Task.prototype.getData = function getData(scope, key, expand) {
   try
   {
     if(expand)
       return getDataFromObject(scope, this.data, key);
-    else  
-      /*jshint es5:false */     
+    else
+      /*jshint es5:false */
       /*jshint evil:true */
-      return eval(this.data[key]);  
+      return eval(this.data[key]);
   }
-  catch (ex) {    
+  catch (ex) {
     return this.data[key];
   }
 };
@@ -113,15 +115,15 @@ Task.prototype.validate = function validate() {
   return results.length > 0 ? results : null;
 };
 
-function getDataFromObject(scope, obj, key) {    
-  
+function getDataFromObject(scope, obj, key) {
+
   try
-  {     
+  {
     /*jshint es5:false */
-    /*jshint evil:true */      
+    /*jshint evil:true */
     var val = key ? eval(obj[key]) : eval(obj)
       , temp;
-    
+
     if(Object.prototype.toString.call(val) === '[object Object]') {
       temp = {};
 
@@ -131,17 +133,17 @@ function getDataFromObject(scope, obj, key) {
         temp[valkey] = getDataFromObject(scope, val, valkey);
       }
       val = temp;
-    }  
+    }
 
     else if (Object.prototype.toString.call(val) === '[object Array]') {
       val = val.map(function(element) {
         return getDataFromObject(scope, element);
       });
-    } 
-    
+    }
+
     return val;
   }
-  catch (ex) {    
+  catch (ex) {
     return obj[key];
   }
 }
@@ -153,7 +155,7 @@ function validateRequired(required, data) {
     if(data[item] === undefined) {
       results.push({ field: item, message: 'Value is required', type: 'required' });
     }
-  }); 
+  });
 
   return results;
 }
