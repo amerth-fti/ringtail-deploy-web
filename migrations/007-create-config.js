@@ -2,17 +2,14 @@ var crypto      = require('crypto')
   , util        = require('util')
   , q           = require('q')
   , migrations  = require('./migrations')
-  , envService  = require('../src/server/services/env-service')  
-  , configSvc   = require('../src/server/services/config-service')
-  , machineSvc  = require('../src/server/services/machine-service')
   , Config      = require('../src/server/models/config')
   ;
 
-exports.up = function(next){    
+exports.up = function(next){
   migrations.runBlock('007-createConfigs', function(err) {
     if(err) next(err);
     else migrateConfigs(function(err) {
-      if(err) { 
+      if(err) {
         console.log(err);
         console.log(err.stack);
       next(err);
@@ -28,6 +25,7 @@ exports.down = function(next) {
 
 
 function migrateConfigs(next) {
+  var envService  = require('../src/server/services/env-service');
   return envService
     .findAll()
     .then(processEnvs)
@@ -35,11 +33,13 @@ function migrateConfigs(next) {
 }
 
 function processEnvs(envs) {
+  var configSvc   = require('../src/server/services/config-service')
+    , machineSvc  = require('../src/server/services/machine-service');
 
   // process each environment
   var promises = envs.map(function(env) {
     return function() {
-    
+
       // find the install definition
       var installTasks = getInstallTasks(env);
 
@@ -51,12 +51,12 @@ function processEnvs(envs) {
       }
 
       // process each machine by creating a new config
-      // and attaching the config to the machine    
+      // and attaching the config to the machine
       function processEnv(machine, machineIndex) {
-        var machineTask     
+        var machineTask
           , taskConfig
           , config
-          ;      
+          ;
 
         // retrieve the config for this guy
         machineTask = findInstallTaskForMachine(installTasks, machineIndex);
@@ -67,8 +67,8 @@ function processEnvs(envs) {
 
         taskConfig = machineTask.options.data.config;
 
-        // create the config 
-        config = new Config({ 
+        // create the config
+        config = new Config({
           configName: env.envName + ' - ' + machine.machineName,
           data: taskConfig,
           roles: [ machine.role ]
@@ -81,7 +81,7 @@ function processEnvs(envs) {
             return machineSvc.update(machine);
           })
           .then(function() {
-            migrations.log('config', util.format('env %s, machine %s updated', env.envId, machine.machineId));          
+            migrations.log('config', util.format('env %s, machine %s updated', env.envId, machine.machineId));
             return q(1);
           })
           .catch(function(err) {
@@ -91,11 +91,11 @@ function processEnvs(envs) {
           });
       }
 
-      var promises = env.machines.map(function(machine, index) { 
+      var promises = env.machines.map(function(machine, index) {
         return function() {
           return processEnv(machine, index);
         };
-      });    
+      });
       return promises.reduce(q.when, promises, q());
 
     };
@@ -113,21 +113,21 @@ function getInstallTasks(env) {
     ;
   if(env.config && env.config.taskdefs) {
     taskdefs = env.config.taskdefs;
-    taskdefs.forEach(function(taskdef) {      
+    taskdefs.forEach(function(taskdef) {
       // handle ringail task
       if(taskdef.task === '3-custom-ringtail') {
         results.push(taskdef);
-      } 
+      }
       // handle parallel
-      else if(taskdef.task === 'parallel') {                
+      else if(taskdef.task === 'parallel') {
         taskdef.options.taskdefs.forEach(function(subtaskdef) {
-          if(subtaskdef && subtaskdef.task === '3-custom-ringtail') {            
+          if(subtaskdef && subtaskdef.task === '3-custom-ringtail') {
             results.push(subtaskdef);
           }
         });
       }
     });
-  }  
+  }
   return results;
 }
 
@@ -136,10 +136,10 @@ function getInstallTasks(env) {
 // machine index
 function findInstallTaskForMachine(installtasks, idx) {
   var result = null;
-  installtasks.forEach(function(task) {    
-    if(task.options.data.machine === 'scope.me.machines[' + idx + ']') {      
+  installtasks.forEach(function(task) {
+    if(task.options.data.machine === 'scope.me.machines[' + idx + ']') {
       result = task;
     }
-  }); 
+  });
   return result;
 }
