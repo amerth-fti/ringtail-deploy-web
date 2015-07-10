@@ -53,6 +53,15 @@ debug=deployer* node src/server/server
 set DEBUG=deployer* & node src/server/server
 ```
 
+##Regions
+To modify regions, you will need to open the Sqlite database with a Sqlite executable that can be downloaded [here](https://www.sqlite.org/download.html). You can then make edits or insert new records in the region table. For example to insert a new record:
+
+```
+INSERT INTO region (regionName, regionDesc)
+VALUES ('Another', 'This is another region');
+```
+
+
 ##Deployment Tasks
 Refer to the [Deploy Task Definitions Guide](TASKDEFS.md) for information on creating and working with deployment tasks.
 

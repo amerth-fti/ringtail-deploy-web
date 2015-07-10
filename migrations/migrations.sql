@@ -48,7 +48,7 @@ DROP TABLE machine;
 CREATE TABLE region (
   regionId INTEGER PRIMARY KEY AUTOINCREMENT,
   regionName NVARCHAR(255) NOT NULL,
-  regionDesc TEXT  
+  regionDesc TEXT
 );
 
 CREATE TABLE regionenv (
@@ -65,6 +65,9 @@ VALUES ('All', 'All environments');
 INSERT INTO regionenv
 SELECT 1, envId FROM env;
 
+INSERT INTO region (regionName, regionDesc)
+VALUES ('Dev', 'First region');
+
 -- 004-dropRegion
 DROP TABLE regionenv;
 DROP TABLE region;
@@ -73,7 +76,7 @@ DROP TABLE region;
 
 
 -- 005-deleteDefaultRegion
-DELETE FROM region 
+DELETE FROM region
 WHERE regionId = 1;
 
 DELETE FROM regionenv
@@ -100,7 +103,7 @@ ALTER TABLE regionenv RENAME TO regionenvtemp;
 CREATE TABLE region (
   regionId INTEGER PRIMARY KEY AUTOINCREMENT,
   regionName NVARCHAR(255) NOT NULL,
-  regionDesc TEXT  
+  regionDesc TEXT
 );
 
 CREATE TABLE regionenv (
