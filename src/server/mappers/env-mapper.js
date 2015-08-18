@@ -1,4 +1,4 @@
-var util          = require('util')  
+var util          = require('util')
   , Q             = require('q')
   , statements    = require('statements')
   , SqliteMapper  = require('hops-sqlite')
@@ -21,7 +21,7 @@ EnvMapper.prototype.parse = function parse(record) {
   return result;
 };
 
-EnvMapper.prototype.parseArray = function parseArray(array) {  
+EnvMapper.prototype.parseArray = function parseArray(array) {
   return array.map(this.parse);
 };
 
@@ -122,6 +122,25 @@ EnvMapper.prototype.findByRegion = function findByRegion(regionId, paging, next)
     .then(this.parseArray.bind(this))
     .nodeify(next);
 };
+
+
+EnvMapper.prototype.findByRegionCount = function findByRegionCount(regionId, next) {
+  var sql = envSql.findByRegionCount
+    , params
+    ;
+
+  params = {
+    $regionId: regionId
+  };
+
+  return this
+    .get(sql, params)
+    .then(function(row) {
+      return row.total;
+    })
+    .nodeify(next);
+};
+
 
 EnvMapper.prototype.findById = function findById(envId, next) {
   var sql = envSql.findById

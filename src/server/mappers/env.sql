@@ -11,7 +11,7 @@ values (
 
 -- update
 update env
-set 
+set
   envName = $envName, envDesc = $envDesc, status = $status, remoteType = $remoteType, remoteId = $remoteId, config = $config,
   deployedBy = $deployedBy, deployedOn = $deployedOn, deployedUntil = $deployedUntil, deployedNotes = $deployedNotes, deployedBranch = $deployedBranch, deployedJobId = $deployedJobId,
   host = $host
@@ -45,3 +45,9 @@ join regionenv re on re.envId = e.envId
 where re.regionId = $regionId
 order by envName collate nocase
 limit $pagesize offset $offset;
+
+-- findByRegionCount
+select count(*) total
+from env e
+join regionenv re on re.envId = e.envId
+where re.regionId = $regionId;

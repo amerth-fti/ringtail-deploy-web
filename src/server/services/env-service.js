@@ -9,11 +9,11 @@ var debug           = require('debug')('deployer-envservice')
   , machineService  = require('./machine-service')
   , skytap          = Skytap.init(config.skytap)
   , envMapper       = new EnvMapper(dbPath)
-  , machineMapper   = new MachineMapper(dbPath)  
+  , machineMapper   = new MachineMapper(dbPath)
   , findById
   ;
 
-/** 
+/**
  * Gets the list of environments
  *
  * @api public
@@ -34,13 +34,29 @@ exports.findAll = function list(paging, next) {
 
 
 exports.findByRegion = function findByRegion(regionId, paging, next) {
+  var total;
+
   paging = paging || {};
   paging.pagesize = paging.pagesize || 25;
   paging.page = paging.page || 1;
 
-  return envMapper.findByRegion(regionId, paging)
+
+  return Q.all([
+      envMapper.findByRegionCount(regionId),
+      envMapper.findByRegion(regionId, paging)
+    ])
+    .then(function(results) {
+      total = results[0]; // count
+      return results[1];  // array[env]
+    })
     .then(joinEnvsMachines)
     .then(joinEnvsSkytap)
+    .then(function(envs) {
+      envs.total    = total;
+      envs.page     = paging.page;
+      envs.pagesize = paging.pagesize;
+      return envs;
+    })
     .nodeify(next);
 };
 
@@ -55,10 +71,10 @@ exports.findById = findById = function get(envId, next) {
 
 exports.create = function create(data, next) {
   var env = new Env(data);
-  
+
   return env
     .validate()
-    .then(function() { 
+    .then(function() {
       return envMapper
         .insert(env)
         .then(function(result) {
@@ -73,7 +89,7 @@ exports.create = function create(data, next) {
           env.machines = machines;
           return env;
         });
-    })    
+    })
     .then(joinEnvSkytap)
     .nodeify(next);
 };
@@ -81,7 +97,7 @@ exports.create = function create(data, next) {
 exports.update = function update(data, next) {
   debug('update environment');
   var env = new Env(data);
-  
+
   return env.validate()
     .then(function() { return envMapper.update(env); })
     .then(function() {
@@ -100,7 +116,7 @@ exports.update = function update(data, next) {
     .nodeify(next);
 };
 
-exports.start = function start(data, suspendOnIdle, next) {  
+exports.start = function start(data, suspendOnIdle, next) {
   var env = new Env(data)
     , opts;
 
@@ -109,7 +125,7 @@ exports.start = function start(data, suspendOnIdle, next) {
     suspend_on_idle: suspendOnIdle,
     runstate: 'running'
   };
-    
+
   return skytap.environments.update(opts)
     .then(function() { return envMapper.update(env); })
     .then(function(result) { return env; })
@@ -137,7 +153,7 @@ exports.pause = function pause(data, next) {
 
 
 exports.reset = function reset(envId, next) {
-  var env;  
+  var env;
 
   return envMapper.findById(envId)
     .then(function(found) {
@@ -149,7 +165,7 @@ exports.reset = function reset(envId, next) {
         .then(function() {
           return env;
         });
-    }) 
+    })
     .then(joinEnvMachines)
     .then(joinEnvSkytap)
     .nodeify(next);
@@ -157,13 +173,13 @@ exports.reset = function reset(envId, next) {
 
 /**
  * Helper function to join machines for the list of envs
- * 
+ *
  * @api private
  * @param {Array} envs
  */
 function joinEnvsMachines(envs) {
   var promises = envs.map(joinEnvMachines);
-  return Q.all(promises);    
+  return Q.all(promises);
 }
 
 /**
@@ -182,7 +198,7 @@ function joinEnvMachines(env) {
 
 /**
  * Helper function to join skytap data for a list of envs
- * 
+ *
  * @api private
  * @param {Array[Env]} envs
  */
@@ -193,7 +209,7 @@ function joinEnvsSkytap(envs) {
 
 /**
  * Helper function to join skytap data for a list of envs
- * 
+ *
  * @api private
  * @param {Env} env
  */

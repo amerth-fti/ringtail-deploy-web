@@ -6,11 +6,14 @@ var debug           = require('debug')('deployer-regions')
 
 exports.list = function region(req, res, next) {
   debug('listing environments for region');
-  var regionId = req.param('regionId');
+  var regionId = req.param('regionId')
+    , page     = req.query.page
+    , pagesize = req.query.pagesize
+    ;
   envService
-    .findByRegion(regionId, null, function(err, result) {
-      res.result  = result;
-      res.err     = err;
+    .findByRegion(regionId, { page: page, pagesize: pagesize }, function(err, result) {
+      res.result = result;
+      res.err = err;
       next();
     });
 };

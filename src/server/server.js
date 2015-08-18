@@ -80,6 +80,15 @@ app.get ('/api/tasks', controllers.tasks.list);
 app.all ('/api/*', function(req, res) {
 
   if(res.result) {
+
+    // apply paging headers
+    if(res.result.total) {
+      res.set('X-Paging-Total', res.result.total);
+      res.set('X-Paging-Page', res.result.page);
+      res.set('X-Paging-PageSize', res.result.pagesize);
+      res.set('X-Paging-LastPage', Math.ceil(res.result.total / res.result.pagesize));
+    }
+
     var client = convertToClient(res.result);
     res.status(200).send(client);
   } else if (res.err) {
