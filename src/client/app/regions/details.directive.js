@@ -6,7 +6,7 @@
     .directive('regionDetails', regionDetails);
 
   function regionDetails() {
-    return { 
+    return {
       restrict: 'E',
       scope: {
         regionId: '='
@@ -24,15 +24,30 @@
     var vm            = this;
     vm.region         = null;
     vm.environments   = null;
+    vm.page           = 1;
+    vm.pagesize       = 10;
+    vm.total          = 0;
+    vm.lastpage       = 1;
+    vm.pagingActive   = false;
     vm.newEnvironment = newEnvironment;
-    
+    vm.loadPage       = loadPage;
+
     activate();
 
     //////////
-    
+
     function activate() {
-      vm.region       = Region.get({ regionId: vm.regionId });
-      vm.environments = Environment.region({ regionId: vm.regionId });
+      vm.region = Region.get({ regionId: vm.regionId });
+      vm.loadPage();
+    }
+
+    function loadPage() {
+      Environment.region({ regionId: vm.regionId, page: vm.page, pagesize: vm.pagesize }, function(envs, headers) {
+        vm.environments = envs;
+        vm.total = parseInt(headers('X-Paging-Total'));
+        vm.lastpage = parseInt(headers('X-Paging-LastPage'));
+        vm.pagingActive = vm.lastpage > 1;
+      });
     }
 
     function newEnvironment() {

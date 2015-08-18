@@ -1,4 +1,9 @@
-<h2>{{vm.region.regionName}} 
-  <span class="small btn-add glyphicon glyphicon-plus-sign" ng-click="vm.newEnvironment()"></span>  
+<h2>{{vm.region.regionName}}
+  <span class="small btn-add glyphicon glyphicon-plus-sign" ng-click="vm.newEnvironment()"></span>
 </h2>
-<environments-list environments="vm.environments"></environment-list>
+
+<environments-list environments="vm.environments"></environments-list>
+
+<div ng-show="vm.pagingActive">
+  <pagination ng-model="vm.page" items-per-page="vm.pagesize" total-items="vm.total" ng-change="vm.loadPage()"></pagination>
+</div>
