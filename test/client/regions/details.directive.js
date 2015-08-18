@@ -17,20 +17,21 @@ describe('region-details Directive', function() {
     ;
 
   beforeEach(inject(function(_$rootScope_, _$q_, _Environment_, _EnvironmentEditor_, _Region_) {
-    $rootScope = _$rootScope_;    
+    $rootScope = _$rootScope_;
     $q = _$q_;
     Environment = _Environment_;
     EnvironmentEditor = _EnvironmentEditor_;
     Region = _Region_;
   }));
 
-  beforeEach(function() {    
+  beforeEach(function() {
     sinon.stub(Region, 'get', function() {
       return { regionId: 1 };
-    });    
-    sinon.stub(Environment, 'region', function() {
-      return [ { envId: 1 } ];
-    });    
+    });
+
+    sinon
+      .stub(Environment, 'region')
+      .yields([{ envId: 1 }], sinon.stub());
   });
 
   beforeEach(inject(function($compile) {
@@ -38,7 +39,7 @@ describe('region-details Directive', function() {
     $compile(element)($rootScope);
     $rootScope.$digest();
 
-    controller = element.controller('regionDetails');    
+    controller = element.controller('regionDetails');
   }));
 
   describe('#activate', function() {
@@ -58,10 +59,10 @@ describe('region-details Directive', function() {
       open = sinon.stub(EnvironmentEditor, 'open', function() {
         var deferred = $q.defer();
         deferred.resolve({ envId: 2 });
-        return { result: deferred.promise };    
+        return { result: deferred.promise };
       });
     });
-    
+
     it('opens the editor', function(done) {
       controller.newEnvironment()
       .then(function() {
