@@ -1,82 +1,107 @@
-var util    = require('util')  
+var util    = require('util')
   , Q       = require('q')
   , _       = require('underscore')
   , request = require('request')
   , Task    = require('./task')
   , machineSvc = require('../services/machine-service')
+  , configSvc  = require('../services/config-service')
   , RingtailClient = require('ringtail-deploy-client')
   ;
 
 
-function TaskImpl(options) {  
-  this.name = 'Install Ringtail';  
+function TaskImpl(options) {
+  this.name = 'Install Ringtail';
   this.pollInterval = 15000;
   this.installInterval = 60000;
-  Task.call(this, options);  
+  Task.call(this, options);
 
   this.validators.required.push('branch');
-  this.validators.required.push('config');
-  this.validators.required.push('machine');  
   this.serviceClient = null;
 
-  this.execute = function execute(scope, log) {  
-    
-    var branch = this.getData(scope, 'branch')
-      , config = this.getData(scope, 'config')
-      , machine = this.getData(scope, 'machine')
-      , options = scope.options
-      , serviceIP = machine.intIP
-      , pollInterval = this.pollInterval
+  this.execute = function execute(scope, log) {
+
+    var options         = scope.options
+      , machineId       = options.machineId
+      , configId        = options.configId
+      , pollInterval    = this.pollInterval
       , installInterval = this.installInterval
+      , branch          = this.getData(scope, 'branch')
+      , machine
+      , config
+      , serviceIP
       , client
       , me = this
       ;
 
-    client = this.serviceClient = new RingtailClient({ serviceHost: serviceIP });
-
     return Q.fcall(function() {
-      log('start installation');      
-      log('will use: %s', client.installUrl);
-      log('will use: %s', client.statusUrl);
-      log('will use: %s', client.updateUrl);
-      log('will use: %s', client.configUrl);
-      log('will use: %s', client.installedUrl);
+      log('start installation');
+
+      // Load the machine
+      return Q.fcall(function() {
+        log('loading machine ' + machineId);
+        return machineSvc
+          .get(machineId)
+          .then(function(result) {
+            machine   = result;
+            serviceIP = result.internalIP;
+          });
+      })
+
+      // load the config for the machine
+      .then(function() {
+        log('loading config ' + configId);
+        return configSvc
+          .get(configId)
+          .then(function(result) {
+            config = result;
+          });
+      })
+
+      // Create the Ringtail Install Service client
+      .then(function() {
+        log('will use: %s', client.installUrl);
+        log('will use: %s', client.statusUrl);
+        log('will use: %s', client.updateUrl);
+        log('will use: %s', client.configUrl);
+        log('will use: %s', client.installedUrl);
+        client = this.serviceClient = new RingtailClient({ serviceHost: serviceIP });
+      })
 
       // wait for the service to be available
-      return Q.fcall(function() {
-        log('waiting for service to start');   
+      .then(function() {
+        log('waiting for service to start');
         return client.waitForService();
       })
 
       // upgrade install service
       .then(function() {
-        log('updating install service to latest version');        
-        return client.update();          
+        log('updating install service to latest version');
+        return client.update();
       })
 
       // wait for service to return
       .then(function() {
-        log('waiting for service to return');        
-        return client.waitForService();          
+        log('waiting for service to return');
+        return client.waitForService();
       })
 
       // configure install service
       .then(function() {
         log('configuring install service');
         var configs = { 'Common|BRANCH_NAME' : branch };
-        _.extend(configs, config);
+        _.extend(configs, config.data);
         _.extend(configs, getConfigsFromOptions(options));
         return client.setConfigs(configs);
       })
-          
+
       // start installation
       .then(function() {
-        log('starting installation');        
+        log('starting installation');
         return client.install();
-      })      
+      })
 
-      // wait for installation to complete  
-      .then(function() {   
+      // wait for installation to complete
+      .then(function() {
         log('waiting for install to complete, refer to Run Details');
         return client.waitForInstall(function(status) {
           me.rundetails = status;
@@ -87,7 +112,7 @@ function TaskImpl(options) {
       .then(function() {
         log('retrieving install info for %s', serviceIP);
         return client
-          .installed()          
+          .installed()
           .then(function(builds) {
             machine.installNotes = builds;
             return machineSvc.update(machine);
@@ -104,7 +129,7 @@ function TaskImpl(options) {
   };
 }
 
-/** 
+/**
  * Converts UI logic into additional options
  * Could be refactred into client as a method call
  * to help configure the service
@@ -112,14 +137,14 @@ function TaskImpl(options) {
 function getConfigsFromOptions(opts) {
   var result = {};
   if(opts) {
-    if(opts.keepRpfwInstalls) {      
+    if(opts.keepRpfwInstalls) {
       result['Common|UNINSTALL_EXCLUSIONS'] = 'Framework Workers';
-    } else {      
+    } else {
       result['Common|UNINSTALL_EXCLUSIONS'] = '';
     }
 
     if(opts.wipeRpfWorkers) {
-      result['Common|FILE_DELETIONS'] = 'C:\\Program Files\\FTI Technology\\Ringtail Processing Framework\\RPF_Supervisor';      
+      result['Common|FILE_DELETIONS'] = 'C:\\Program Files\\FTI Technology\\Ringtail Processing Framework\\RPF_Supervisor';
     } else {
       result['Common|FILE_DELETIONS'] = '';
     }
@@ -129,4 +154,4 @@ function getConfigsFromOptions(opts) {
 
 util.inherits(TaskImpl, Task);
 
-module.exports = TaskImpl;    
+module.exports = TaskImpl;
