@@ -17,7 +17,27 @@ function TaskImpl(options) {
   me.execute = function execute(scope, log) {
     var options  = scope.options
       , installs = options.installs
+      , env      = this.getData(scope, 'me')
       ;
+
+    // create install definitions for all of the machines
+    // that have configId values set. This is used to
+    // run the installation for all machines as opposed to
+    // specific machines.
+    if(installs === 'all') {
+      installs = env.machines.map(function(machine) {
+        if(machine.configId) {
+          return {
+            name: machine.machineName,
+            machineId: machine.machineId,
+            configId: machine.configId
+          };
+        }
+      });
+      installs = _.filter(installs, function(install) {
+        return !!install;
+      });
+    }
 
     // build the taskdefs for each install pair
     this.taskdefs = installs.map(function(install) {
