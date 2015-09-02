@@ -16,13 +16,13 @@ function TaskImpl(options) {
   Task.call(this, options);
 
   this.validators.required.push('branch');
-  this.serviceClient = null;
+  this.serviceClient = null;  // used by unit test to capture the client
 
   this.execute = function execute(scope, log) {
 
     var options         = scope.options
-      , machineId       = options.machineId
-      , configId        = options.configId
+      , machineId       = this.machineId
+      , configId        = this.configId
       , pollInterval    = this.pollInterval
       , installInterval = this.installInterval
       , branch          = this.getData(scope, 'branch')
@@ -43,7 +43,7 @@ function TaskImpl(options) {
           .get(machineId)
           .then(function(result) {
             machine   = result;
-            serviceIP = result.internalIP;
+            serviceIP = result.intIP;
           });
       })
 
@@ -59,12 +59,12 @@ function TaskImpl(options) {
 
       // Create the Ringtail Install Service client
       .then(function() {
+        client = me.serviceClient = new RingtailClient({ serviceHost: serviceIP });
         log('will use: %s', client.installUrl);
         log('will use: %s', client.statusUrl);
         log('will use: %s', client.updateUrl);
         log('will use: %s', client.configUrl);
         log('will use: %s', client.installedUrl);
-        client = this.serviceClient = new RingtailClient({ serviceHost: serviceIP });
       })
 
       // wait for the service to be available
