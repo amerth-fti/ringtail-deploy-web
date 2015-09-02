@@ -6,7 +6,7 @@
     .directive('envRedeploy', directive);
 
   function directive() {
-    return { 
+    return {
       restrict: 'E',
       scope: {
         environment: '=',
@@ -26,20 +26,20 @@
     vm.modalInstance      = this.modalInstance;
     vm.branches           = null;
     vm.builds             = null;
-    vm.duration           = 120;  
+    vm.duration           = 120;
     vm.loadingBranches    = false;
-    vm.loadingBuilds      = false;  
+    vm.loadingBuilds      = false;
     vm.selectedTasks      = null;
     vm.selectedBranch     = null;
     vm.showAdvanced       = false;
     vm.hasRpf             = false;
-    vm.keepRpfwInstalls   = null;    
+    vm.keepRpfwInstalls   = null;
     vm.wipeRpfWorkers     = null;
-    vm.branchChanged      = branchChanged;    
+    vm.branchChanged      = branchChanged;
     vm.cancel             = cancel;
-    vm.rebuild            = rebuild;    
+    vm.rebuild            = rebuild;
     vm.toggleAdvanced     = toggleAdvanced;
-    vm.toggleSelectedTask = toggleSelectedTask;    
+    vm.toggleSelectedTask = toggleSelectedTask;
     vm.regionId           = null;
 
     activate();
@@ -60,24 +60,24 @@
         if(vm.selectedBranch.branch) {
           branchChanged();
         }
-      });      
+      });
 
       if(vm.tempEnv.config && vm.tempEnv.config.taskdefs) {
         vm.selectedTasks = vm.tempEnv.config.taskdefs.slice(0);
-      }  
+      }
 
-      vm.hasRpf = hasRole(vm.tempEnv, [ 'ALLINONE', 'SKYTAP-ALLINONE', 'RPF-COORDINATOR', 'RPF-SUPERVISOR', 'SKYTAP-RPF-COORDINATOR', 'SKYTAP-RPF-SUPERVISOR']);      
+      vm.hasRpf = hasRole(vm.tempEnv, [ 'ALLINONE', 'SKYTAP-ALLINONE', 'RPF-COORDINATOR', 'RPF-SUPERVISOR', 'SKYTAP-RPF-COORDINATOR', 'SKYTAP-RPF-SUPERVISOR']);
     }
-    
+
     function cancel() {
       vm.modalInstance.dismiss();
     }
 
-    function rebuild() {      
+    function rebuild() {
       angular.copy(vm.tempEnv, vm.environment);
       vm.environment.deployedBranch = constructBranchPath();
       vm.environment.selectedTasks = vm.selectedTasks;
-      
+
       // trigger the redeployment
       vm.environment.$redeploy({ keepRpfwInstalls: vm.keepRpfwInstalls, wipeRpfWorkers: vm.wipeRpfWorkers })
       // shut the dialog since we had success
@@ -87,7 +87,7 @@
       })
       // transition to the job details
       .then(function(environment) {
-        var path = '/app/jobs/' + environment.deployedJobId;          
+        var path = '/app/jobs/' + environment.deployedJobId;
         $location.path(path);
       });
     }
@@ -103,14 +103,14 @@
       } else {
         vm.selectedTasks.push(taskdef);
       }
-    }    
+    }
 
     function parseBranchPath(branchPath) {
       var parts
         , result = {
             branch: null,
-            build: null        
-          }        
+            build: null
+          }
         ;
       if(branchPath) {
         parts = branchPath.split('\\');
@@ -128,7 +128,7 @@
     }
 
     function branchChanged() {
-      if(vm.selectedBranch.branch) {        
+      if(vm.selectedBranch.branch) {
         vm.loadingBuilds = true;
         Browse.builds({regionId: vm.regionId, branch: vm.selectedBranch.branch }, function(builds) {
           vm.loadingBuilds = false;
@@ -141,11 +141,13 @@
 
     function hasRole(env, roles) {
       var result = false;
-      if(env.config && env.config.taskdefs) {        
+
+      env.machines.forEach(function(machine) {
         roles.forEach(function(role) {
-          result = result || !!TaskDef.getEnvTaskDefForRole(env, role);
-        });        
-      }
+          result = result || machine.role === role;
+        });
+      });
+
       return result;
     }
   }
