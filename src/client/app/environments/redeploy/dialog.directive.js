@@ -19,9 +19,9 @@
     };
   }
 
-  Controller.$inject = [ '$rootScope', '$location', 'Browse', 'TaskDef' ];
+  Controller.$inject = [ '$rootScope', '$location', 'Browse' ];
 
-  function Controller($rootScope, $location, Browse, TaskDef) {
+  function Controller($rootScope, $location, Browse) {
     var vm = this;
     vm.modalInstance      = this.modalInstance;
     vm.branches           = null;

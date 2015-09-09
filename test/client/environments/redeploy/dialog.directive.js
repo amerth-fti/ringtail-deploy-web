@@ -23,17 +23,18 @@ describe('Environment Redeploy Dialog Directive', function() {
 
   // CREATE DEFAULT OBJECTS
   beforeEach(inject(function($q) {
-    environment = {       
+    environment = {
       envId: 1,
-      config: { 
-        taskdefs: [          
-        ] 
+      config: {
+        taskdefs: [
+        ]
       },
+      machines: [ { role: '' } ],
       $redeploy: sinon.stub().returns($q.when(environment))
     };
     modalInstance = {
       dismiss: sinon.stub(),
-      close: sinon.stub()      
+      close: sinon.stub()
     };
   }));
 
@@ -52,7 +53,7 @@ describe('Environment Redeploy Dialog Directive', function() {
 
 
   // CONSTRUCT THE DIRECTIVE
-  beforeEach(inject(function($compile) {    
+  beforeEach(inject(function($compile) {
 
     // create the element
     element = angular.element('<env-redeploy environment="vm.environment" modal-instance="vm.modalInstance"></env-redeploy>');
@@ -61,10 +62,10 @@ describe('Environment Redeploy Dialog Directive', function() {
     $rootScope.vm = {
       environment: environment,
       modalInstance: modalInstance
-    };    
+    };
 
     // compile the element
-    $compile(element)($rootScope);  
+    $compile(element)($rootScope);
   }));
 
 
@@ -72,22 +73,22 @@ describe('Environment Redeploy Dialog Directive', function() {
   function run() {
     $rootScope.$digest();
     controller = element.controller('envRedeploy');
-  }   
+  }
 
 
   describe('.activate', function() {
     it('should set the regionId to the routeParam', function() {
-      run();      
+      run();
       expect(controller.regionId).to.equal(1);
     });
     it('should create a copy of the environment so cancel works correctly', function() {
-      run();      
+      run();
       expect(controller.tempEnv).to.not.equal(environment);
       expect(controller.tempEnv.envId).to.equal(environment.envId);
-    });    
+    });
     it('should not error if config is set', function() {
       environment.config = null;
-      run();      
+      run();
     });
     it('should copy the tasks defs to selectedTasks', function() {
       run();
@@ -98,49 +99,49 @@ describe('Environment Redeploy Dialog Directive', function() {
     describe('when loading the branches', function() {
       it('should load the branches', function() {
         run();
-        expect(stubBranches.calledOnce).to.be.true;      
-      });    
-      it('should indicate that branches are loading', function() {        
-        run();        
+        expect(stubBranches.calledOnce).to.be.true;
+      });
+      it('should indicate that branches are loading', function() {
+        run();
         expect(controller.loadingBranches).to.be.true;
       });
       it('should indicate that branches are done loading', function() {
         stubBranches.onCall(0).callsArgWith(1, [ ]);
-        run();        
+        run();
         expect(controller.loadingBranches).to.be.false;
       });
-      it('should load the builds if a branch was selected', function() {        
-        environment.deployedBranch = 'CONSOLIDATION';              
+      it('should load the builds if a branch was selected', function() {
+        environment.deployedBranch = 'CONSOLIDATION';
         stubBranches.onCall(0).callsArgWith(1, [ ]);
-        run();        
+        run();
         expect(stubBuilds.calledOnce).to.be.true;
       });
-      it('sould set the branches to the sorted list', function() {        
+      it('sould set the branches to the sorted list', function() {
         stubBranches.onCall(0).callsArgWith(1, [ 'bbb', 'ccc', 'aaa']);
-        run();        
+        run();
         expect(controller.branches[0]).to.equal('aaa');
         expect(controller.branches[1]).to.equal('bbb');
-        expect(controller.branches[2]).to.equal('ccc');        
+        expect(controller.branches[2]).to.equal('ccc');
       });
-    });    
+    });
 
     describe('when environment.deployedBranch is a string', function() {
       it('should set selectedBranch.branch property', function() {
         environment.deployedBranch = 'CONSOLIDATION';
         run();
         expect(controller.selectedBranch.branch).to.equal('CONSOLIDATION');
-      });  
+      });
     });
 
     describe('when environment.deployedBranch is a path', function() {
       it('should set selectedBranch.branch property ', function() {
         environment.deployedBranch = 'CONSOLIDATION\\20150401.1';
-        run();        
+        run();
         expect(controller.selectedBranch.branch).to.equal('CONSOLIDATION');
-      });      
+      });
       it('should set selectedBranch.build property to null', function() {
         environment.deployedBranch = 'CONSOLIDATION\\20150401.1';
-        run();        
+        run();
         expect(controller.selectedBranch.build).to.equal(null);
       });
     });
@@ -159,66 +160,29 @@ describe('Environment Redeploy Dialog Directive', function() {
         'SKYTAP-WEB': false,
         'SKYTAP-RPF-COORDINATOR': true,
         'SKYTAP-RPF-SUPERVISOR': true
-      };      
+      };
 
-      describe('with single machine', function() {      
-        beforeEach(function() {
-          environment.config.taskdefs[0] = {
-            task: '3-custom-ringtail',
-            options: { data: { config: { } } }
-          };
-        });  
 
-        for(var role in roleAssertions) {
-          if(roleAssertions.hasOwnProperty(role)) {          
-            var assertion = roleAssertions[role]
-              , title = 'should be ' + assertion + ' for ' + role
-              ;
-
-            /*jshint es5:false */
-            /*jshint loopfunc:true */
-            it(title, function() {
-              environment.config.taskdefs[0].options.data.config['RoleResolver|ROLE'] = role;
-              run();
-              expect(controller.hasRpf).to.equal(assertion);
-            });
-            /*jshint loopfunc:false*/
-          }          
-        }
-      });    
-
-      describe('with multiple machine', function() {
-        beforeEach(function() {
-          environment.config.taskdefs[0] = {
-            task: 'parallel',
-            options: {
-              taskdefs: [
-                {
-                  task: '3-custom-ringtail',
-                  options: { data: { config: { } } }
-                }
-              ]
-            }
-          };
-        });  
-
-        for(var role in roleAssertions) {
-          if(roleAssertions.hasOwnProperty(role)) {          
-            var assertion = roleAssertions[role]
-              , title = 'should be ' + assertion + ' for ' + role
-              ;
-
-            /*jshint es5:false */
-            /*jshint loopfunc:true */
-            it(title, function() {
-              environment.config.taskdefs[0].options.taskdefs[0].options.data.config['RoleResolver|ROLE'] = role;
-              run();
-              expect(controller.hasRpf).to.equal(assertion);
-            });
-            /*jshint loopfunc:false*/
-          }          
-        }
+      beforeEach(function() {
+        environment.machines = [ { role: null } ];
       });
+
+      for(var role in roleAssertions) {
+        if(roleAssertions.hasOwnProperty(role)) {
+          var assertion = roleAssertions[role]
+            , title = 'should be ' + assertion + ' for ' + role
+            ;
+
+          /*jshint es5:false */
+          /*jshint loopfunc:true */
+          it(title, function() {
+            environment.machines[0].role = role;
+            run();
+            expect(controller.hasRpf).to.equal(assertion);
+          });
+          /*jshint loopfunc:false*/
+        }
+      }
     });
 
   });
@@ -230,50 +194,50 @@ describe('Environment Redeploy Dialog Directive', function() {
       expect(modalInstance.dismiss.calledOnce).to.be.true;
     });
   });
-  
+
   describe('.rebuild', function() {
     it('should copy the tempEnv to the scoped environment', function() {
       run();
       controller.tempEnv.envName = 'test changed';
-      controller.rebuild();      
+      controller.rebuild();
       expect(controller.tempEnv).to.not.equal(controller.environment);
       expect(controller.environment.envName).to.equal('test changed');
     });
     it('should set environment.deployedBranch to a branch', function() {
       run();
       controller.selectedBranch = { branch: 'CONSOLIDATION', build: null };
-      controller.rebuild();        
+      controller.rebuild();
       expect(controller.environment.deployedBranch).to.equal('CONSOLIDATION');
     });
     it('should set environment.deployedBranch to a branch + build', function() {
       run();
       controller.selectedBranch = { branch: 'CONSOLIDATION', build: '20150401.1' };
-      controller.rebuild();        
+      controller.rebuild();
       expect(controller.environment.deployedBranch).to.equal('CONSOLIDATION\\20150401.1');
-    });    
+    });
     it('should call environment.$redeploy', function() {
       run();
-      controller.rebuild();      
+      controller.rebuild();
       expect(controller.environment.$redeploy.calledOnce).to.be.true;
     });
-    it('should pass the keepRpfwInstalls flag to environment.$redeploy', function() {      
+    it('should pass the keepRpfwInstalls flag to environment.$redeploy', function() {
       run();
       controller.keepRpfwInstalls = true;
       controller.rebuild();
       expect(controller.environment.$redeploy.getCall(0).args[0].keepRpfwInstalls).to.be.true;
     });
-    it('should pass null for keepRpfwInstalls to environment.$redeploy by default', function() {      
+    it('should pass null for keepRpfwInstalls to environment.$redeploy by default', function() {
       run();
       controller.rebuild();
       expect(controller.environment.$redeploy.getCall(0).args[0].keepRpfwInstalls).to.be.null;
     });
-    it('should pass the wipeRpfWorkers flag to environment.$redeploy', function() {      
+    it('should pass the wipeRpfWorkers flag to environment.$redeploy', function() {
       run();
       controller.wipeRpfWorkers = true;
       controller.rebuild();
       expect(controller.environment.$redeploy.getCall(0).args[0].wipeRpfWorkers).to.be.true;
     });
-    it('should pass the wipeRpfWorkers flag to environment.$redeploy by default', function() {      
+    it('should pass the wipeRpfWorkers flag to environment.$redeploy by default', function() {
       run();
       controller.rebuild();
       expect(controller.environment.$redeploy.getCall(0).args[0].wipeRpfWorkers).to.be.null;
@@ -289,7 +253,7 @@ describe('Environment Redeploy Dialog Directive', function() {
       var locationStub = sinon.stub($location, 'path');
       controller.environment.deployedJobId = 1;
       run();
-      controller.rebuild();      
+      controller.rebuild();
       $rootScope.$apply();
       expect(locationStub.calledOnce).to.be.true;
       expect(locationStub.getCall(0).args[0]).to.equal('/app/jobs/1');
@@ -303,7 +267,7 @@ describe('Environment Redeploy Dialog Directive', function() {
       controller.toggleAdvanced();
       expect(controller.showAdvanced).to.be.true;
     });
-    it('should set vm.showAdvanced to false when it is true', function() {      
+    it('should set vm.showAdvanced to false when it is true', function() {
       run();
       controller.showAdvanced = true;
       controller.toggleAdvanced();
@@ -312,9 +276,9 @@ describe('Environment Redeploy Dialog Directive', function() {
   });
 
   describe('.toggleSelectedTask', function() {
-    beforeEach(function() {      
+    beforeEach(function() {
       environment.config.taskdefs[0] = { task: '1' };
-      environment.config.taskdefs[1] = { task: '2' };     
+      environment.config.taskdefs[1] = { task: '2' };
     });
 
     it('should remove from selectedTasks if it is included', function() {
@@ -335,9 +299,9 @@ describe('Environment Redeploy Dialog Directive', function() {
     });
   });
 
-  describe('.branchChanged', function() {    
-    it('should call Browse.builds with the region and selected branch', function() {              
-      run();      
+  describe('.branchChanged', function() {
+    it('should call Browse.builds with the region and selected branch', function() {
+      run();
       controller.selectedBranch.branch = 'CONSOLIDATION';
       controller.branchChanged();
       expect(stubBuilds.calledOnce).to.be.true;
@@ -352,7 +316,7 @@ describe('Environment Redeploy Dialog Directive', function() {
       expect(controller.builds).to.be.instanceOf(Array);
       expect(controller.builds[0]).to.equal('20150401.1');
     });
-    it('should indicate that the builds are loading', function() {      
+    it('should indicate that the builds are loading', function() {
       run();
       controller.selectedBranch.branch = 'CONSOLIDATION';
       controller.branchChanged();
@@ -362,7 +326,7 @@ describe('Environment Redeploy Dialog Directive', function() {
       stubBuilds.onCall(0).callsArgWith(1, [ ]);
       run();
       controller.selectedBranch.branch = 'CONSOLIDATION';
-      controller.branchChanged();      
+      controller.branchChanged();
       expect(controller.loadingBuilds).to.be.false;
     });
     it('should sorted builds', function() {

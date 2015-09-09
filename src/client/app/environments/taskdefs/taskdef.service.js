@@ -13,31 +13,25 @@
       addTask: addTask
     };
 
-    function create(environment) {
-      var taskdefs = [];
-
-      taskdefs.push({
-        'task': '3-install-many',
-        'options': {
-          'name': 'Install Ringtail',
-          'installs': 'all'
-        }
-      });
-
+    function create() {
       return {
-        'taskdefs': taskdefs
+        'taskdefs': [ createDefaultTaskDef() ]
       };
     }
 
     function addTask(environment) {
-      var taskdef = {
+      var newTaskDef = createDefaultTaskDef();
+      environment.config.taskdefs.push(newTaskDef);
+    }
+
+    function createDefaultTaskDef() {
+      return {
         'task': '3-install-many',
         'options': {
           'name': 'Install Ringtail',
           'installs': 'all'
         }
       };
-      environment.config.taskdefs.push(taskdef);
     }
   }
 
