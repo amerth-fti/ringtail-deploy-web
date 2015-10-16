@@ -3,6 +3,7 @@ node_js:
   - "node"
 before_install: npm install -g grunt-cli
 before_script:
+  - mkdir data
   - cp config.js.example config.js
   - npm install -g bower
   - bower install
