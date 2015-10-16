@@ -6,8 +6,8 @@
     .factory('EnvironmentEditor', EnvironmentEditor);
 
   EnvironmentEditor.$inject = [ '$modal' ];
-  
-  function EnvironmentEditor($modal) {    
+
+  function EnvironmentEditor($modal) {
     return {
       open: open
     };
@@ -21,27 +21,27 @@
           environment: function() {
             return environment;
           }
-        },
-        size: 'lg'
+        }
       });
     }
   }
-    
-  EnvironmentEditorController.$inject = [ '$modalInstance', '$routeParams', 'Environment', 'environment', 'Wizard', 'Region' ];
 
-  function EnvironmentEditorController($modalInstance, $routeParams, Environment, environment, Wizard, Region) {
+  EnvironmentEditorController.$inject = [ '$modalInstance', '$routeParams', 'Environment', 'environment', 'Wizard', 'Region', 'Config' ];
+
+  function EnvironmentEditorController($modalInstance, $routeParams, Environment, environment, Wizard, Region, Config) {
     var vm          = this;
     vm.environment  = null;
+    vm.configs      = null;
     vm.cancel       = cancel;
     vm.create       = create;
     vm.update       = update;
     vm.wizard       = null;
-    
+
     activate();
 
     //////////
-    
-    function activate() {  
+
+    function activate() {
       var mode;
       if(environment) {
         vm.environment = angular.copy(environment);
@@ -51,15 +51,14 @@
         mode = 'new';
       }
       vm.wizard = new Wizard(mode);
-
-
+      vm.configs = Config.findByEnv({ envId: vm.environment.envId });
     }
 
     function cancel() {
       $modalInstance.dismiss();
     }
 
-    function create() {      
+    function create() {
       vm.environment
         .$save()
 

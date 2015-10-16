@@ -1,0 +1,22 @@
+<div class="modal-header bg-primary">
+  <button type="button" class="close" data-dismiss="modal" ng-click="vm.cancel()"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+  <h4 class="modal-title">
+    <span ng-show="vm.mode === 'edit'">Edit</span>
+    <span ng-show="vm.mode === 'create'">New</span>
+    <span>Config</span>
+  </h4>
+</div>
+<div class="model-body pad-all">
+  <div class="row">
+    <div class="col-sm-12">
+      <config-editor config="vm.config" host="vm.host"></config-editor>
+    </div>
+  </div>
+</div>
+<div class="modal-footer">  
+  <button type="button" class="btn btn-primary" ng-click="vm.submit()">
+    <span ng-show="vm.mode === 'edit'">Update</span>
+    <span ng-show="vm.mode === 'create'">Create</span>
+  </button>
+  <button type="button" class="btn btn-warning" ng-click="vm.cancel()">Cancel</button>
+</div>

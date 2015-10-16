@@ -36,7 +36,7 @@
     }
 
     function next() {
-      vm.wizard.stage = 'machines';      
+      vm.wizard.stage = 'configs';      
     }
 
     function prev() {

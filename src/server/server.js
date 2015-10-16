@@ -44,6 +44,10 @@ app.delete('/api/regions/:regionId', controllers.regions.del);
 app.get   ('/api/regions/:regionId/branches', controllers.browse.branches);
 app.get   ('/api/regions/:regionId/branches/:branch/builds', controllers.browse.builds);
 
+// API - CONFIG ROUTES
+app.post  ('/api/configs', controllers.configs.create);
+app.put   ('/api/configs/:configId', controllers.configs.update);
+app.delete('/api/configs/:configId', controllers.configs.del);
 
 // API - REGION ENVIRONMENT ROUTES
 app.get   ('/api/regions/:regionId/envs', controllers.regionenvs.list);
@@ -60,6 +64,7 @@ app.put ('/api/envs/:envId/start', controllers.envs.start);
 app.put ('/api/envs/:envId/pause', controllers.envs.pause);
 app.put ('/api/envs/:envId/redeploy', controllers.envs.redeploy);
 app.put ('/api/envs/:envId/reset', controllers.envs.reset);
+app.get ('/api/envs/:envId/configs', controllers.configs.findByEnv);
 
 
 // API - TASK ROUTES

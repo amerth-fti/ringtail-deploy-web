@@ -1,8 +1,8 @@
 
 <div class="machine-details" ng-class="{editable: vm.editable}">
-  <div class="machine-role role-{{vm.machine.role}}">
-    <span ng-show="vm.machine.role">{{vm.machine.role}}</span>
-    <span ng-show="!vm.machine.role">NO ROLE</span>
+  <div class="machine-config config-{{vm.configIndex}}">
+    <span ng-show="vm.configName">{{vm.configName}}</span>
+    <span ng-show="!vm.configName">NONE</span>
   </div>
   <h4 class="machine-name">{{ vm.machine.machineName }}</h4>
   <span class="machine-ip">{{ vm.machine.intIP }}</span>

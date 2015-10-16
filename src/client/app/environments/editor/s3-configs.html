@@ -1,0 +1,30 @@
+<div class="modal-body">
+  <h4>Configuration</h4>
+  <div class="config-editor-container">
+    <div>
+      <ul class="list-group">
+        <li ng-repeat="config in vm.configs" class="list-group-item">    
+          {{config.configName}}
+          <div class="pull-right">     
+            <span ng-click="vm.edit(config)" class="glyphicon glyphicon-pencil" title="Edit"></span> 
+            <span ng-click="vm.copy(config)" class="glyphicon glyphicon-copy" title="Copy"></span>
+            <span style="display: inline-block; padding-left: 10px;"></span>
+            <span ng-click="vm.remove(config)" class="glyphicon glyphicon-trash" title="Delete"></span>
+          </div>
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<div class="modal-footer">
+  <button class="pull-left btn btn-primary" ng-click="vm.add()">
+    <span>Add Config</span>
+    <span class="glyphicon glyphicon-plus-sign"></span>
+  </button>
+
+  <button type="button" class="btn btn-default" ng-click="vm.prev()" ng-show="vm.wizard.mode === 'new'">Previous</button>
+  <button type="button" class="btn btn-primary" ng-click="vm.next()" ng-show="vm.wizard.mode === 'new'">Next</button>  
+  <button type="button" class="btn btn-primary" ng-click="vm.update()" ng-show="vm.wizard.mode === 'edit'">Update</button>
+  <button type="button" class="btn btn-warning" ng-click="vm.cancel()">Cancel</button>
+</div>

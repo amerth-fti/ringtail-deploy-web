@@ -6,17 +6,17 @@
     .service('Role', Role);
 
   Role.$inject = [  ];
- 
+
   function Role() {
     var _roles = [
       'DEV-FULL',
-      'AGENT',            
+      'AGENT',
       'WEBAGENT',
-      'WEB',  
+      'WEB',
       'RPF-COORDINATOR',
-      'RPF-SUPERVISOR',    
+      'RPF-SUPERVISOR',
       'DATABASE',
-      'SKYTAP-ALLINONE',      
+      'SKYTAP-ALLINONE',
       'SKYTAP-AGENT',
       'SKYTAP-DB',
       'SKYTAP-RPF-COORDINATOR',
@@ -29,7 +29,7 @@
        * Finds the distinct roles in an array of roles
        * @param {Array} roles
        * @returns {Array}
-       */       
+       */
       distinct: distinct,
       /**
        * Finds the distinct roles in an environment
@@ -38,19 +38,12 @@
        */
       environment: environment,
       /**
-       * Gets the roles based on the query options
-       * @param {Object} [opts]
-       * @config {String} remoteType 
-       * @returns {Array}
-       */
-      query: query,
-      /** 
        * Gets or sets the roles for the service
        * @config {Array} [roles]
        * @returns {Array}
        */
-      roles: roles           
-    };    
+      roles: roles
+    };
 
     function distinct(roles) {
       var keys = {}
@@ -78,19 +71,8 @@
       return roles;
     }
 
-    function query(opts) {
-      opts = opts || {
-        remoteType: null
-      };
-
-      return roles().filter(function(role) {
-        return  (opts.remoteType === 'skytap' && role.toLowerCase().indexOf('skytap') >= 0) ||
-                (opts.remoteType === null     && role.toLowerCase().indexOf('skytap') === -1);
-      });
-    }
-
     function roles(roles) {
-      if(roles) { 
+      if(roles) {
         _roles = roles;
       }
       return _roles;

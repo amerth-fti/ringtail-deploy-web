@@ -5,10 +5,10 @@
       Add machines to this environment.
     </div>
   </div>
-  <div class="row">         
+  <div class="row">
     <div class="col-sm-3" ng-repeat="machine in vm.environment.machines">
       <span class="pull-left btn-remove glyphicon glyphicon-remove-sign remove-machine" ng-click="vm.removeMachine(machine)"></span>
-      <machine-details machine="machine" editable="true" ng-click="vm.editMachine(machine)"></machine-details>
+      <machine-details configs="vm.configs" machine="machine" editable="true" ng-click="vm.editMachine(machine)"></machine-details>
     </div>
   </div>
 </div>

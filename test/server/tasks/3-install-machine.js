@@ -8,17 +8,23 @@ var mocha   = require('mocha')
 
   , Env         = require('../../../src/server/models/env')
   , Machine     = require('../../../src/server/models/machine')
-  , Task        = require('../../../src/server/tasks/3-custom-ringtail')
+  , Task        = require('../../../src/server/tasks/3-install-machine')
   , machineSvc  = require('../../../src/server/services/machine-service')
+  , configSvc   = require('../../../src/server/services/config-service')
   ;
 
 describe('Ringtail Install Task', function() {
 
   describe('#execute', function() {
     var task
+      , options
       , log
       , scope
       , env
+      , machine
+      , config
+      , stubGetMachine
+      , stubGetConfig
       , stubWaitForService
       , stubUpdate
       , stubSetConfigs
@@ -27,26 +33,32 @@ describe('Ringtail Install Task', function() {
       , stubInstalled
       ;
 
-    env = new Env({ deployedBranch: 'NEW_BRANCH' });
-    env.machines = [ 
-      new Machine({ role: 'SKYTAP-WEB', intIP: '192.168.0.2' }),
-      new Machine({ role: 'SKYTAP-DB', intIP: '192.168.0.3' }),
-      new Machine({ role: 'SKYTAP-RPF', intIP: '192.168.0.4' })
-    ];
-
-    task   = new Task();
+    options = {
+      'machineId': 1,
+      'configId': 12
+    };
+    task = new Task(options);
     task.pollInterval = 0;
     task.installInterval = 0;
     task.data = {
-      'branch': 'scope.env.deployedBranch',
-      'machine': 'scope.env.machines[0]',
-      'config': {
-        'CONFIG1': 'VALUE_OF_CONFIG1',
-        'CONFIG2': 'VALUE_OF_CONFIG2'
-      }
+      'branch': 'scope.env.deployedBranch'
     };
-    scope  = {
-      'env': env      
+    env = new Env({ deployedBranch: 'NEW_BRANCH' });
+    scope = {
+      'env': env
+    };
+    machine = {
+      role: 'SKYTAP-WEB',
+      intIP: '192.168.0.2'
+    };
+    config = {
+      configId: 1,
+      configName: 'test',
+      data: {
+        'RingtailConfigurator|CONFIGURATORPORT': 10000,
+        'RingtailConfigurator|HOST': 'localhost'
+      },
+      roles: ['AGENT']
     };
 
     function returnInstalled() {
@@ -56,9 +68,11 @@ describe('Ringtail Install Task', function() {
       /* jshint ignore:end */
     }
 
-    beforeEach(function() {      
+    beforeEach(function() {
       log = sinon.spy();
-          
+
+      stubGetMachine      = sinon.stub(machineSvc, 'get').returns(new Q(machine));
+      stubGetConfig       = sinon.stub(configSvc, 'get').returns(new Q(config));
       stubWaitForService  = sinon.stub(RingtailClient.prototype, 'waitForService');
       stubUpdate          = sinon.stub(RingtailClient.prototype, 'update');
       stubSetConfigs      = sinon.stub(RingtailClient.prototype, 'setConfigs');
@@ -69,7 +83,9 @@ describe('Ringtail Install Task', function() {
       sinon.stub(machineSvc, 'update');
     });
 
-    afterEach(function() {        
+    afterEach(function() {
+      machineSvc.get.restore();
+      configSvc.get.restore();
       stubWaitForService.restore();
       stubUpdate.restore();
       stubSetConfigs.restore();
@@ -79,23 +95,41 @@ describe('Ringtail Install Task', function() {
       machineSvc.update.restore();
     });
 
+    it('loads the machine', function(done) {
+      task
+        .execute(scope, log)
+        .then(function() {
+          expect(stubGetMachine.calledOnce).to.be.true;
+        })
+        .done(done);
+    });
+
+    it('loads the config', function(done) {
+      task
+        .execute(scope, log)
+        .then(function() {
+          expect(stubGetConfig.calledOnce).to.be.true;
+        })
+        .done(done);
+    });
+
     it('service client uses correct machine host', function(done) {
       task
         .execute(scope, log)
-        .then(function() {          
-          expect(task.serviceClient.serviceHost).to.equal(env.machines[0].intIP);
+        .then(function() {
+          expect(task.serviceClient.serviceHost).to.equal(machine.intIP);
         })
         .done(done);
-    }); 
+    });
 
     it('waits for the installer service', function(done) {
       task
         .execute(scope, log)
-        .then(function() {          
+        .then(function() {
           expect(stubWaitForService.callCount).to.equal(2);
         })
         .done(done);
-    });  
+    });
 
     it('triggers an update of the install service', function(done) {
       task
@@ -146,10 +180,10 @@ describe('Ringtail Install Task', function() {
     it('sets the install notes for the machine', function(done) {
       task
         .execute(scope, log)
-        .then(function() {                
-          expect(env.machines[0].installNotes.length).to.equal(2);
-          expect(env.machines[0].installNotes[0]).to.equal('one');
-          expect(env.machines[0].installNotes[1]).to.equal('two');      
+        .then(function() {
+          expect(machine.installNotes.length).to.equal(2);
+          expect(machine.installNotes[0]).to.equal('one');
+          expect(machine.installNotes[1]).to.equal('two');
         })
         .done(done);
     });
@@ -157,7 +191,7 @@ describe('Ringtail Install Task', function() {
     it('saves the machine info', function(done) {
       task
         .execute(scope, log)
-        .then(function() {                
+        .then(function() {
           expect(machineSvc.update.calledOnce).to.be.true;
         })
         .done(done);
@@ -168,7 +202,7 @@ describe('Ringtail Install Task', function() {
       beforeEach(function() {
         scope.options = { keepRpfwInstalls: true };
       });
-      it('sets the UNINSTALL_EXLUSIONS config', function(done) {        
+      it('sets the UNINSTALL_EXLUSIONS config', function(done) {
         task
           .execute(scope, log)
           .then(function() {
@@ -184,7 +218,7 @@ describe('Ringtail Install Task', function() {
       beforeEach(function() {
         scope.options = { keepRpfwInstalls: false };
       });
-      it('unsets the UNINSTALL_EXLUSIONS config', function(done) {        
+      it('unsets the UNINSTALL_EXLUSIONS config', function(done) {
         task
           .execute(scope, log)
           .then(function() {
@@ -192,14 +226,14 @@ describe('Ringtail Install Task', function() {
             done();
           })
           .done();
-      });    
+      });
     });
 
     describe('when .wipeRpfWorkers option is true', function() {
       beforeEach(function() {
         scope.options = { wipeRpfWorkers: true };
       });
-      it('sets the FILE_DELETIONS config', function(done) {        
+      it('sets the FILE_DELETIONS config', function(done) {
         task
           .execute(scope, log)
           .then(function() {
@@ -215,7 +249,7 @@ describe('Ringtail Install Task', function() {
       beforeEach(function() {
         scope.options = { wipeRpfWorkers: false };
       });
-      it('unsets the FILE_DELETIONS config', function(done) {        
+      it('unsets the FILE_DELETIONS config', function(done) {
         task
           .execute(scope, log)
           .then(function() {

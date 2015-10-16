@@ -1,38 +1,39 @@
 (function() {
   'use strict';
-  
+
   angular
     .module('app.environments.machine')
     .directive('machineEditor', machineEditor);
-  
+
   function machineEditor() {
-    return { 
+    return {
       restrict: 'E',
       scope: {
         machine: '=',
-        remoteType: '='
+        remoteType: '=',
+        configs: '='
       },
       templateUrl: '/app/environments/machine/editor.html',
-      controller: MachineEditorController,
-      controllerAs: 'vm'
+      controller: Controller,
+      controllerAs: 'vm',
+      bindToController: true
     };
   }
-  
-  MachineEditorController.$inject = [ '$scope', 'Role' ];
-  
-  function MachineEditorController($scope, Role) {
+
+  Controller.$inject = [ 'Config' ];
+
+  function Controller(Role) {
     var vm = this;
-    vm.machine    = $scope.machine;
-    vm.remoteType = $scope.remoteType;
-    vm.roles      = null;
+    vm.machine    = this.machine;
+    vm.remoteType = this.remoteType;
+    vm.configs    = this.configs;
 
     activate();
-    
+
     //////////
 
     function activate() {
-      vm.roles = Role.query({ remoteType: vm.remoteType });
     }
   }
-  
+
 }());
