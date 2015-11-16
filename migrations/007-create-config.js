@@ -12,8 +12,10 @@ exports.up = function(next){
       if(err) {
         console.log(err);
         console.log(err.stack);
+      } else {
+        migrations.log('config', 'Completed');
+      }
       next(err);
-    }
     });
   });
 };
@@ -27,7 +29,7 @@ exports.down = function(next) {
 function migrateConfigs(next) {
   var envService  = require('../src/server/services/env-service');
   return envService
-    .findAll()
+    .findAll({ pagesize: 1000 })
     .then(processEnvs)
     .nodeify(next);
 }

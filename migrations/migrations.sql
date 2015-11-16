@@ -156,4 +156,37 @@ CREATE TABLE machine (
 INSERT INTO machine (machineId, envId, machineName, machineDesc, remoteId, intIP, extIP, role, installNotes, registryNotes)
 SELECT machineId, envId, machineName, machineDesc, remoteId, intIP, extIP, role, installNotes, registryNotes FROM machinetemp;
 
-DROP table machinetemp;
+
+
+
+-- 008-modifyTasks
+ALTER TABLE env ADD COLUMN oldConfig TEXT;
+UPDATE env set oldConfig = config;
+
+
+-- 008-dropModifyTasks
+UPDATE env set config = oldConfig;
+
+ALTER TABLE env RENAME TO envtemp;
+
+CREATE TABLE env (
+  envId INTEGER PRIMARY KEY AUTOINCREMENT,
+  envName NVARCHAR(255) NOT NULL,
+  envDesc TEXT,
+  remoteType INTEGER,
+  remoteId INTEGER,
+  status NVARCHAR(255),
+  config TEXT,
+  deployedBy NVARCHAR(255),
+  deployedOn TIMESTAMP,
+  deployedUntil TIMESTAMP,
+  deployedNotes TEXT,
+  deployedBranch NVARCHAR(255),
+  deployedJobId INTEGER,
+  host NVARCHAR(255)
+);
+
+INSERT INTO env (envId, envName, envDesc, remoteType, remoteId, status, config, deployedBy, deployedOn, deployedUntil, deployedNotes, deployedBranch, deployedJobId, host)
+SELECT envId, envName, envDesc, remoteType, remoteId, status, config, deployedBy, deployedOn, deployedUntil, deployedNotes, deployedBranch, deployedJobId, host);
+
+DROP table envtemp;
