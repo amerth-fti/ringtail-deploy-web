@@ -48,7 +48,7 @@
         roles: [ '' ],
         data: { }
       });
-      ConfigEditor.open(config, vm.environment.role)
+      ConfigEditor.open(config, vm.environment.host)
         .result
         .then(function(config) {
           if(config) {
