@@ -2,37 +2,37 @@
   <label>Name</label>
   <input type="text" class="form-control" ng-model="vm.config.configName" />
 </div>
-<div class="form-group">  
-  <label>Role</label>  
-  <select 
+<div class="form-group">
+  <label>Role</label>
+  <select
     class="form-control"
     ng-model="vm.selectedRole"
     ng-change="vm.roleChanged()">
     <option value=""></option>
-    <option 
+    <option
       ng-repeat="role in vm.roles"
-      ng-selected="{{role === vm.selectedRole}}"      
+      ng-selected="{{role === vm.selectedRole}}"
       value="{{role}}"
     >{{role}}</option>
   </select>
 </div>
 <h4>Installation Configuration</h4>
-<div class="field-editor-container">  
-  <form>  
-    <div 
+<div class="field-editor-container" ng-show="vm.simple">
+  <form>
+    <div
       class="form-group ringtail-field"
-      ng-repeat="field in vm.fields" 
+      ng-repeat="field in vm.fields"
       ng-class="{ 'has-success': field.valid, 'has-error': !field.valid }"
-      >    
-        <label>{{field.title}}</label>       
+      >
+        <label>{{field.title}}</label>
         <p class="help-block">{{field.description}}</p>
-        <input 
-          type="text" 
+        <input
+          type="text"
           class="form-control"
           ng-model="field.value"
           ng-change="vm.updateField(field)"
           ng-if="!field.options"
-        ></input>      
+        ></input>
         <select
           class="form-control"
           ng-model="field.value"
@@ -43,4 +43,7 @@
       </p>
     </div>
   </form>
+</div>
+<div ng-show="!vm.simple">
+  <textarea class="form-control" rows="20" ng-model="vm.dataJson" ng-change="vm.rawDataChanged()"></textarea>
 </div>

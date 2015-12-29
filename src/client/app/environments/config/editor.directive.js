@@ -19,18 +19,20 @@
     };
   }
 
-  Controller.$inject = [ '_', 'Role', 'RingtailConfig', 'RingtailField' ];
+  Controller.$inject = [ '_', 'Role', 'RingtailConfig', 'RingtailField', '$scope' ];
 
-  function Controller(_, Role, RingtailConfig, RingtailField) {
+  function Controller(_, Role, RingtailConfig, RingtailField, $scope) {
     var vm = this;
     vm.config       = this.config;
     vm.host         = this.host;
-    vm.data         = null;
+    vm.dataJson     = null;
     vm.fields       = null;
     vm.roles        = null;
     vm.selectedRole = null;
+    vm.simple       = false;
     vm.roleChanged  = roleChanged;
     vm.updateField  = updateField;
+    vm.rawDataChanged = rawDataChanged;
 
     activate();
 
@@ -41,6 +43,19 @@
       vm.selectedRole = vm.config.roles[0];
       vm.roles = Role.roles();
       roleChanged();
+
+      // ensure that changes to the parent simple mode
+      // render the simple editor here, this is sort of hacky
+      // and should use a "state" obj that gets passed into
+      // the directive or something like that
+      $scope.$parent.$watch('vm.simple', function(simple) {
+        vm.simple = simple;
+      });
+
+      // re-parse the data object if there are any changes
+      $scope.$watch('vm.config.data', function(config) {
+        dataToJson();
+      }, true);
     }
 
     function roleChanged() {
@@ -150,6 +165,39 @@
         field.value = createUrl(protocol, field);
         updateField(field);
       });
+    }
+
+    function findField(configKey) {
+      var results = _.filter(vm.fields, function(field) {
+        return field.configKey.indexOf(configKey) >= 0;
+      });
+      return results[0];
+    }
+
+    function dataToJson() {
+      vm.dataJson = JSON.stringify(vm.data, null, 2);
+    }
+
+    function rawDataChanged() {
+      try
+      {
+        var data = JSON.parse(vm.dataJson)
+          , key
+          , field
+          ;
+        for (key in data) {
+          if(true) {
+            field = findField(key);
+            if(field) {
+              field.value = data[key];
+              updateField(field);
+            }
+          }
+        }
+      }
+      catch(ex)
+      {
+      }
     }
   }
 
