@@ -14,6 +14,7 @@
 
     function open(environment) {
       return $modal.open({
+        size: 'lg',
         templateUrl: '/app/environments/editor/dialog.html',
         controller: EnvironmentEditorController,
         controllerAs: 'vm',
@@ -26,12 +27,12 @@
     }
   }
 
-  EnvironmentEditorController.$inject = [ '$modalInstance', '$routeParams', 'Environment', 'environment', 'Wizard', 'Region', 'Config' ];
+  EnvironmentEditorController.$inject = [ '$modalInstance', '$routeParams', 'Environment', 'environment', 'Wizard', 'Region', 'Config', '$scope' ];
 
-  function EnvironmentEditorController($modalInstance, $routeParams, Environment, environment, Wizard, Region, Config) {
+  function EnvironmentEditorController($modalInstance, $routeParams, Environment, environment, Wizard, Region, Config, $scope) {
     var vm          = this;
     vm.environment  = null;
-    vm.configs      = null;
+    vm.configs      = [];
     vm.cancel       = cancel;
     vm.create       = create;
     vm.update       = update;
@@ -51,7 +52,9 @@
         mode = 'new';
       }
       vm.wizard = new Wizard(mode);
-      vm.configs = Config.findByEnv({ envId: vm.environment.envId });
+      Config.findByEnv({ envId: vm.environment.envId }, function(configs) {
+        vm.configs.push.apply(vm.configs, configs);
+      });
     }
 
     function cancel() {

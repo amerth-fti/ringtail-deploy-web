@@ -1,9 +1,7 @@
 
 <div class="machine-details" ng-class="{editable: vm.editable}">
   <div class="machine-config config-{{vm.configIndex}}">
-    <span ng-show="vm.configName">{{vm.configName}}</span>
-    <span ng-show="!vm.configName">NONE</span>
+    <h4 class="machine-name">{{ vm.machine.machineName }}</h4>
+    <span class="machine-ip">{{ vm.machine.intIP }}</span>
   </div>
-  <h4 class="machine-name">{{ vm.machine.machineName }}</h4>
-  <span class="machine-ip">{{ vm.machine.intIP }}</span>
 </div>

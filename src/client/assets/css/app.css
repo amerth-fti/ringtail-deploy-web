@@ -139,11 +139,14 @@ button {
 
 .machine-details {
   text-align: center;
+  margin-bottom: 15px;
 }
 .machine-details .machine-config {
   border-radius: 5px;
   padding-top: 15px;
   padding-bottom: 15px;
+  padding-left: 7.5px;
+  padding-right: 7.5px;
   font-weight: bold;
 }
 .machine-details .config- {
@@ -182,6 +185,9 @@ button {
 
 .machine-details .machine-name {
   margin-bottom: 0;
+  overflow-x: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
 
 .machine-details.editable {

@@ -20,9 +20,9 @@
     };
   }
 
-  Controller.$inject = [ ];
+  Controller.$inject = [ '$scope' ];
 
-  function Controller() {
+  function Controller($scope) {
     var vm         = this;
     vm.configs     = this.configs;
     vm.machine     = this.machine;
@@ -36,15 +36,31 @@
     //////////
 
     function activate() {
+      $scope.$parent.$watch('vm.configs', configsChanged, true);
+      $scope.$watch('vm.machine', machineChanged, true);
+    }
+
+    function configsChanged(configs) {
+      vm.configs = configs;
+      selectConfig(vm.machine, vm.configs);
+    }
+
+    function selectConfig(machine, configs) {
+
       // find the config from the list of configs
-      for(var i = 0; i < vm.configs.length; i++) {
-        if(vm.configs[i].configId === vm.machine.configId) {
-          vm.config = vm.configs[0];
+      for(var i = 0; i < configs.length; i++) {
+        if(configs[i].configId === machine.configId) {
+          vm.config = configs[i];
           vm.configName = vm.config.configName;
           vm.configIndex = i;
           break;
         }
       }
+    }
+
+    function machineChanged(machine) {
+      vm.machine = machine;
+      selectConfig(vm.machine, vm.configs);
     }
   }
 
