@@ -41,11 +41,11 @@ describe('Ringtail Install Task', function() {
     task.pollInterval = 0;
     task.installInterval = 0;
     task.data = {
-      'branch': 'scope.env.deployedBranch'
+      'branch': 'scope.me.deployedBranch'
     };
     env = new Env({ deployedBranch: 'NEW_BRANCH' });
     scope = {
-      'env': env
+      'me': env
     };
     machine = {
       role: 'SKYTAP-WEB',
@@ -145,7 +145,21 @@ describe('Ringtail Install Task', function() {
       task
         .execute(scope, log)
         .then(function() {
-          expect(stubSetConfigs.calledOnce).to.be.true;
+          var args = stubSetConfigs.getCall(0).args[0];
+          for (var key in config.data) {
+            if(true)
+              expect(args[key]).to.equal(config.data[key]);
+          }
+        })
+        .done(done);
+    });
+
+    it('configures the branch name', function(done) {
+      task
+        .execute(scope, log)
+        .then(function() {
+          var args = stubSetConfigs.getCall(0).args[0];
+          expect(args['Common|BRANCH_NAME']).to.equal('NEW_BRANCH');
         })
         .done(done);
     });
