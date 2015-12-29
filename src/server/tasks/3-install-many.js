@@ -1,7 +1,7 @@
 var util    = require('util')
   , Q       = require('q')
   , _       = require('underscore')
-  , Parallel    = require('./Parallel')
+  , Parallel    = require('./parallel')
   , machineSvc  = require('../services/machine-service')
   ;
 
