@@ -15,44 +15,44 @@ function TaskImpl(options) {
 
   // override the execute method
   me.execute = function execute(scope, log) {
-    var options  = scope.options
-      , installs = options.installs
-      , env      = this.getData(scope, 'me')
-      ;
+    return Q.fcall(function() {
+      var installs = options.installs
+        , env      = scope.me
+        , installOptsArray
+        ;
 
-    // create install definitions for all of the machines
-    // that have configId values set. This is used to
-    // run the installation for all machines as opposed to
-    // specific machines.
-    if(installs === 'all') {
-      installs = env.machines.map(function(machine) {
-        if(machine.configId) {
-          return {
-            name: machine.machineName,
-            machineId: machine.machineId,
-            configId: machine.configId
-          };
-        }
-      });
-      installs = _.filter(installs, function(install) {
-        return !!install;
-      });
-    }
+      // create install definitions for all of the machines
+      // that have configId values set. This is used to
+      // run the installation for all machines as opposed to
+      // specific machines.
+      if(installs === 'all') {
+        installOptsArray = env.machines.map(function(machine) {
+          if(machine.configId) {
+            return {
+              name: machine.machineName,
+              machineId: machine.machineId,
+              configId: machine.configId
+            };
+          }
+        });
+        installOptsArray = _.filter(installOptsArray, function(installOpts) {
+          return !!installOpts;
+        });
+      }
+      else
+        throw new Error('Install type of ' + installs + ' is not supported');
 
-    // build the taskdefs for each install pair
-    this.taskdefs = installs.map(function(install) {
-      return {
-        task: '3-install-machine',
-        options: {
-          name: install.machineName,
-          machineId: install.machineId,
-          configId: install.configId
-        }
-      };
+      // build the taskdefs for each install pair
+      me.taskdefs = installOptsArray.map(function(installOpts) {
+        return {
+          task: '3-install-machine',
+          options: installOpts
+        };
+      });
+
+      // call the parent parellel version of execute
+      return me.parentExecute(scope, log);
     });
-
-    // call the parent parellel version of execute
-    return me.parentExecute();
   };
 }
 

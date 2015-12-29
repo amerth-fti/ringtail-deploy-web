@@ -24,7 +24,7 @@ exports.get = function get(req, res, next) {
       res.result  = result;
       res.err     = err;
       next();
-    });   
+    });
 };
 
 
@@ -80,8 +80,8 @@ exports.redeploy = function redeploy(req, res, next) {
   debug('redeploy');
   var data = req.body
     , opts = parseQueryString(req.query)
-    ;      
-console.log(opts);    
+    ;
+
   redeployService
     .redeploy(data, opts, function(err, result) {
       res.result = result;
@@ -104,8 +104,8 @@ exports.reset = function reset(req, res, next) {
 };
 
 
-/* 
- * Default functionality returns strings for the 
+/*
+ * Default functionality returns strings for the
  * values. There don't appear to any good middleware modules
  * for parsing the values... so here we go
  */
@@ -113,7 +113,7 @@ function parseQueryString(qs) {
   var result = {};
   for(var key in qs) {
     // parse numbers or boolean values
-    if(typeof(qs[key]) === 'string' && /^\d+$|^false$|^true$/.test(qs[key])) {            
+    if(typeof(qs[key]) === 'string' && /^\d+$|^false$|^true$/.test(qs[key])) {
       result[key] = JSON.parse(qs[key]);
     }
     // use everything else

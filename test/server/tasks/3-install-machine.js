@@ -13,7 +13,7 @@ var mocha   = require('mocha')
   , configSvc   = require('../../../src/server/services/config-service')
   ;
 
-describe('Ringtail Install Task', function() {
+describe('3-install-machine', function() {
 
   describe('#execute', function() {
     var task
