@@ -37,7 +37,7 @@
   function MachineEditorController($scope, $modalInstance, configs, machine, options) {
     var vm      = this;
     vm.configs  = configs;
-    vm.machine  = machine || {};
+    vm.machine  = null;
     vm.mode     = null;
     vm.options  = options;
     vm.cancel   = cancel;
@@ -48,6 +48,7 @@
     //////////
 
     function activate() {
+      vm.machine = angular.copy(machine || {});
       vm.mode = vm.machine ? 'edit' : 'create';
     }
 
@@ -57,8 +58,10 @@
     }
 
     function submit() {
-      $scope.machine = angular.copy(vm.machine, $scope.machine);
-      $modalInstance.close($scope.machine);
+      machine.machineName = vm.machine.machineName;
+      machine.configId = vm.machine.configId;
+      machine.intIP = vm.machine.intIP;
+      $modalInstance.close(machine);
     }
 
   }

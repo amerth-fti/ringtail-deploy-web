@@ -20,9 +20,9 @@
     };
   }
 
-  Controller.$inject = [ 'Config' ];
+  Controller.$inject = [ ];
 
-  function Controller(Role) {
+  function Controller() {
     var vm = this;
     vm.machine    = this.machine;
     vm.remoteType = this.remoteType;
