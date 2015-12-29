@@ -35,14 +35,14 @@ describe('3-install-machine', function() {
 
     options = {
       'machineId': 1,
-      'configId': 12
+      'configId': 12,
+      data: {
+        'branch': 'scope.me.deployedBranch'
+      }
     };
     task = new Task(options);
     task.pollInterval = 0;
     task.installInterval = 0;
-    task.data = {
-      'branch': 'scope.me.deployedBranch'
-    };
     env = new Env({ deployedBranch: 'NEW_BRANCH' });
     scope = {
       'me': env

@@ -101,6 +101,16 @@ describe('3-install-many', function() {
           .then(done)
           .catch(done);
       });
+      it('includes the task data reference for the branch', function(done) {
+        task
+          .execute(scope, log)
+          .then(function() {
+            expect(task.taskdefs[0].options.data.branch).to.equal('scope.me.deployedBranch');
+            expect(task.taskdefs[1].options.data.branch).to.equal('scope.me.deployedBranch');
+          })
+          .then(done)
+          .catch(done);
+      });
     });
 
   });

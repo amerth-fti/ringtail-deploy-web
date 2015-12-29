@@ -31,7 +31,10 @@ function TaskImpl(options) {
             return {
               name: machine.machineName,
               machineId: machine.machineId,
-              configId: machine.configId
+              configId: machine.configId,
+              data: {
+                branch: 'scope.me.deployedBranch'
+              }
             };
           }
         });
