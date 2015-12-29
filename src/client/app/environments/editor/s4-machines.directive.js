@@ -46,7 +46,7 @@
       var opts = {
         remoteType: vm.environment.remoteType
       };
-      MachineEditor.open(vm.configs, null, opts)
+      MachineEditor.open(vm.configs, {}, opts)
       .result
       .then(function(result) {
         vm.environment.machines = vm.environment.machines || [];

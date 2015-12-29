@@ -4,7 +4,7 @@ values ($configId, $configName, $data, $roles);
 
 -- update
 update config set
-  configName = $configName, data = $data, roles = $roles  
+  configName = $configName, data = $data, roles = $roles
 where configId = $configId;
 
 -- delete
@@ -12,7 +12,7 @@ delete from config
 where configId = $configId;
 
 -- findByEnv
-select c.*
+select distinct c.*
 from config c
   join machine m on c.configId = m.configId
 where m.envId = $envId

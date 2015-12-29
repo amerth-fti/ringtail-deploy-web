@@ -48,8 +48,8 @@
     //////////
 
     function activate() {
-      vm.machine = angular.copy(machine || {});
-      vm.mode = vm.machine ? 'edit' : 'create';
+      vm.machine = angular.copy(machine);
+      vm.mode = vm.machine.machineId ? 'edit' : 'create';
     }
 
 
