@@ -88,7 +88,10 @@ function TaskImpl(options) {
       // configure install service
       .then(function() {
         log('configuring install service');
-        var configs = { 'Common|BRANCH_NAME' : branch };
+        var configs = {
+          'Common|BRANCH_NAME' : branch,
+          'RoleResolver|ROLE' : config.roles[0]
+        };
         _.extend(configs, config.data);
         _.extend(configs, getConfigsFromOptions(options));
         return client.setConfigs(configs);
