@@ -190,3 +190,28 @@ INSERT INTO env (envId, envName, envDesc, remoteType, remoteId, status, config, 
 SELECT envId, envName, envDesc, remoteType, remoteId, status, config, deployedBy, deployedOn, deployedUntil, deployedNotes, deployedBranch, deployedJobId, host);
 
 DROP table envtemp;
+
+
+-- 009-addEnvToConfig
+ALTER TABLE config ADD COLUMN envId INTEGER;
+
+UPDATE config
+SET envId = (select envId from machine where machine.configId = config.configId);
+
+DELETE FROM config
+WHERE envId IS NULL;
+
+-- 009-dropEnvToConfig
+ALTER TABLE config RENAME TO configtemp;
+
+CREATE TABLE config (
+  configId INTEGER PRIMARY KEY AUTOINCREMENT,
+  configName NVARCHAR(255),
+  data TEXT,
+  roles TEXT
+);
+
+INSERT INTO config (configId, configName, data, roles)
+SELECT configId, configName, data, roles FROM configTemp;
+
+DROP TABLE configtemp;
