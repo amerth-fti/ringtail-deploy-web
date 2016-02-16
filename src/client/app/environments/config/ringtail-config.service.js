@@ -31,11 +31,10 @@
 
   }
 
-  /* jshint es5:false    */
-  /* jshint ignore:start */
+  /* eslint-disable */
   rolesData = [
-    { 
-      "roles": ["SKYTAP-WEB", "WEB", "WEBAGENT", "SKYTAP-ALLINONE"], 
+    {
+      "roles": ["SKYTAP-WEB", "WEB", "WEBAGENT", "SKYTAP-ALLINONE"],
       "configs": [
         "Ringtail8|IS_SQLSERVER_SERVER",
         "Ringtail8|IS_SQLSERVER_USERNAME",
@@ -72,7 +71,7 @@
       ]
     },
     {
-      "roles": ["SKYTAP-WEB", "WEB", "WEBAGENT", "SKYTAP-ALLINONE", "DEV-FULL"], 
+      "roles": ["SKYTAP-WEB", "WEB", "WEBAGENT", "SKYTAP-ALLINONE", "DEV-FULL"],
       "configs": [
         "RingtailLegalApplicationServer|IS_SQLSERVER_SERVER",
         "RingtailLegalApplicationServer|IS_SQLSERVER_USERNAME",
@@ -134,24 +133,24 @@
     {
       "roles": ["SKYTAP-DB", "DATABASE", "DEV-FULL", "SKYTAP-ALLINONE"],
       "configs": [
-        "RingtailDatabaseUtility|IS_SQLSERVER_SERVER",        
+        "RingtailDatabaseUtility|IS_SQLSERVER_SERVER",
         "RingtailDatabaseUtility|IS_SQLSERVER_USERNAME",
-        "RingtailDatabaseUtility|IS_SQLSERVER_PASSWORD",        
+        "RingtailDatabaseUtility|IS_SQLSERVER_PASSWORD",
         "RingtailDatabaseUtility|IS_SQLSERVER_DATABASE"
       ]
     },
     {
       "roles": ["SKYTAP-DB", "DATABASE", "DEV-FULL", "SKYTAP-ALLINONE"],
       "configs": [
-        "DatabaseUpgrader|IS_SQLSERVER_SERVER",        
+        "DatabaseUpgrader|IS_SQLSERVER_SERVER",
         "DatabaseUpgrader|IS_SQLSERVER_USERNAME",
         "DatabaseUpgrader|IS_SQLSERVER_PASSWORD",
         "DatabaseUpgrader|DATACAMEL_ACTION",
         "DatabaseUpgrader|DATACAMEL_DATABASES"
       ]
     }
-  ]
-  /* jshint ignore:end */
+  ];
+  /* eslint-enable */
 
 }());
 

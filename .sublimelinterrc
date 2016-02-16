@@ -1,7 +1,0 @@
-{
-  "linters": {
-    "eslint": {
-      "@disable": true
-    }
-  }
-}

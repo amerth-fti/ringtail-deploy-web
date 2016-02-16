@@ -1,0 +1,12 @@
+{
+  "env": {
+    "node": true,
+    "mocha": true
+  },
+  "globals": {
+    "inject": true,
+    "sinon": true,
+    "angular": true,
+    "expect": true
+  }
+}

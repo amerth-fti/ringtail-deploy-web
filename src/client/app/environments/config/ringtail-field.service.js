@@ -1,8 +1,8 @@
 (function() {
-  
+
   var fieldMappings
     , fields
-    ;  
+    ;
 
   angular
     .module('app.environments.config')
@@ -23,7 +23,7 @@
 
       // find the field
       if(fieldKey) {
-        field = _.clone(fieldLookup[fieldKey]);                
+        field = _.clone(fieldLookup[fieldKey]);
       }
 
       // couldn't find field, use unknown
@@ -33,7 +33,7 @@
         field.title = configKey;
       }
 
-      // set whether field is valid      
+      // set whether field is valid
       field.validate = function() {
         field.valid = !!field.value;
       };
@@ -46,19 +46,18 @@
   }
 
 
-  /* jshint es5:false */
-  /* jshint ignore:start */
+  /* eslint-disable */
   fieldMappings = {
     "RingtailDatabaseUtility|IS_SQLSERVER_SERVER": "IS_SQLSERVER_SERVER_PORTAL",
     "RingtailDatabaseUtility|IS_SQLSERVER_USERNAME": "IS_SQLSERVER_USERNAME_PORTAL",
     "RingtailDatabaseUtility|IS_SQLSERVER_PASSWORD": "IS_SQLSERVER_PASSWORD_PORTAL",
     "RingtailDatabaseUtility|IS_SQLSERVER_DATABASE": "IS_SQLSERVER_DATABASE_PORTAL",
     "RingtailDatabaseUtility|WEBUSER": "WEBUSER",
-    "DatabaseUpgrader|IS_SQLSERVER_SERVER": "IS_SQLSERVER_SERVER_PORTAL",       
+    "DatabaseUpgrader|IS_SQLSERVER_SERVER": "IS_SQLSERVER_SERVER_PORTAL",
     "DatabaseUpgrader|IS_SQLSERVER_USERNAME": "IS_SQLSERVER_USERNAME_PORTAL",
     "DatabaseUpgrader|IS_SQLSERVER_PASSWORD": "IS_SQLSERVER_PASSWORD_PORTAL",
     "DatabaseUpgrader|DATACAMEL_ACTION": "DATACAMEL_ACTION",
-    "DatabaseUpgrader|DATACAMEL_DATABASES": "DATACAMEL_DATABASES",   
+    "DatabaseUpgrader|DATACAMEL_DATABASES": "DATACAMEL_DATABASES",
 
     "RingtailLegalApplicationServer|IS_SQLSERVER_SERVER": "IS_SQLSERVER_SERVER_PORTAL",
     "RingtailLegalApplicationServer|IS_SQLSERVER_USERNAME": "IS_SQLSERVER_USERNAME_PORTAL",
@@ -78,10 +77,10 @@
     "Ringtail8|IS_SQLSERVER_USERNAME": "IS_SQLSERVER_USERNAME_PORTAL",
     "Ringtail8|IS_SQLSERVER_PASSWORD": "IS_SQLSERVER_PASSWORD_PORTAL",
     "Ringtail8|IS_SQLSERVER_DATABASE": "IS_SQLSERVER_DATABASE_PORTAL",
-    "Ringtail8|RINGTAILWEBAPPNAME": "RINGTAILWEBAPPNAME",    
-    "Ringtail8|RINGTAILIISWEBAPPLICATIONNAME": "RINGTAILIISWEBAPPLICATIONNAME",  
+    "Ringtail8|RINGTAILWEBAPPNAME": "RINGTAILWEBAPPNAME",
+    "Ringtail8|RINGTAILIISWEBAPPLICATIONNAME": "RINGTAILIISWEBAPPLICATIONNAME",
     "Ringtail8|RINGTAILIISVIRTUALDIRECTORYPHYSICALPATH": "RINGTAILIISVIRTUALDIRECTORYPHYSICALPATH",
-    "Ringtail8|RINGTAILSTSIISAPPLICATIONNAME": "RINGTAILSTSIISAPPLICATIONNAME",  
+    "Ringtail8|RINGTAILSTSIISAPPLICATIONNAME": "RINGTAILSTSIISAPPLICATIONNAME",
     "Ringtail8|RINGTAILSTSIISVIRTUALDIRECTORYPHYSICALPATH": "RINGTAILSTSIISVIRTUALDIRECTORYPHYSICALPATH",
     "Ringtail8|RINGTAILUIIISAPPLICATONNAME": "RINGTAILUIIISAPPLICATONNAME",
     "Ringtail8|RINGTAILUIIISVIRTUALDIRECTORYPHYSICALPATH": "RINGTAILUIIISVIRTUALDIRECTORYPHYSICALPATH",
@@ -90,9 +89,9 @@
     "Ringtail8|RMCIISWEBAPPLICATIONNAME": "RMCIISWEBAPPLICATIONNAME",
     "Ringtail8|RMCAPPNAME": "RMCAPPNAME",
     "Ringtail8|RMCIISVIRTUALDIRECTORYPHYSICALPATH": "RMCIISVIRTUALDIRECTORYPHYSICALPATH",
-    "Ringtail8|SSLUSAGEPROPERTY": "WEBSERSSLUSAGE",  
+    "Ringtail8|SSLUSAGEPROPERTY": "WEBSERSSLUSAGE",
     "Ringtail8|WEBSERVERSSLUSAGE": "WEBSERSSLUSAGE",
-    "Ringtail8|RINGTAILIISWEBAPPLICATIONURL": "RINGTAILIISWEBAPPLICATIONURL",  
+    "Ringtail8|RINGTAILIISWEBAPPLICATIONURL": "RINGTAILIISWEBAPPLICATIONURL",
     "Ringtail8|RINGTAILUISTATICCONTENTURL": "RINGTAILUISTATICCONTENTURL",
     "Ringtail8|RINGTAILCLASSICURL": "RINGTAILCLASSICURL",
     "Ringtail8|RINGTAILSTSURL": "RINGTAILSTSURL",
@@ -104,7 +103,7 @@
     "Ringtail8|RINGTAILSTSCERTIFICATEISSUERNAME": "RINGTAILSTSCERTIFICATEISSUERNAME",
     "Ringtail8|RINGTAILCLASSICWEBSITENAME": "RINGTAILCLASSICWEBSITENAME",
     "Ringtail8|RINGTAILCLASSICWEBSITEMAPPING": "RINGTAILCLASSICWEBSITEMAPPING",
-    "Ringtail8|RINGTAILSTSCERTIFICATENAME": "RINGTAILSTSCERTIFICATENAME",    
+    "Ringtail8|RINGTAILSTSCERTIFICATENAME": "RINGTAILSTSCERTIFICATENAME",
     "Ringtail8|SELFSERVICEAUTHENTICATIONMODE": "SELFSERVICEAUTHENTICATIONMODE",
 
     "RingtailConfigurator|CONFIGURATORPORT": "CONFIGURATORPORT",
@@ -136,7 +135,7 @@
     "RingtailProcessingFramework|SERVICEUSERNAME": "SERVICEUSERNAME",
     "RingtailProcessingFramework|SERVICEPASSWORD": "SERVICEPASSWORD",
     "RingtailProcessingFramework|RPFWORKERPATH": "RPFWORKERPATH"
-  }
+  };
 
 
   fields = [
@@ -144,10 +143,10 @@
       "key": "UNKNOWN",
       "title": "Unknown field",
     },
-    { 
-      "key": "IS_SQLSERVER_SERVER_PORTAL",      
+    {
+      "key": "IS_SQLSERVER_SERVER_PORTAL",
       "title": "Portal Database Server Name",
-      "description": "The instance name of the SQL server that contains the Ringtail Portal database.",      
+      "description": "The instance name of the SQL server that contains the Ringtail Portal database.",
     },
     {
       "key": "IS_SQLSERVER_USERNAME_PORTAL",
@@ -158,7 +157,7 @@
     {
       "key": "IS_SQLSERVER_PASSWORD_PORTAL",
       "title": "Portal Database Server Password",
-      "description": "The SQL Server password used to connect to the SQL server."  
+      "description": "The SQL Server password used to connect to the SQL server."
     },
     {
       "key": "IS_SQLSERVER_DATABASE_PORTAL",
@@ -169,7 +168,7 @@
       "key": "IS_SQLSERVER_SERVER_RPF",
       "title": "Ringtail Processing Framework Database Server Name",
       "description": "The instance name of the SQL server that contains the Ringtail Processing Framework database."
-    },      
+    },
     {
       "key": "IS_SQLSERVER_USERNAME_RPF",
       "title": "Ringtail Processing Framework Database Login",
@@ -179,33 +178,33 @@
     {
       "key": "IS_SQLSERVER_PASSWORD_RPF",
       "title": "Ringtail Processing Framework Database Password",
-      "description": "The SQL Server password used to connect to the SQL server."  
-    },    
+      "description": "The SQL Server password used to connect to the SQL server."
+    },
     {
       "key": "IS_SQLSERVER_DATABASE_RPF",
       "title": "Ringtail Processing Framework Database",
       "description": "The RPF database name"
     },
-    {    
+    {
       "key": "WEBUSER",
       "title": "Ringtail database user",
       "description": "The Ringtail database user",
-      "default": "webuser"    
+      "default": "webuser"
     },
-    {    
+    {
       "key": "RINGTAILSTSURL",
       "title": "Ringtail Security Token Service URL",
       "description": "The URL of the Ringtail STS Application. (e.g.: http://host/RingtailSTS)",
       "type": "url",
       "defaultPath": "RingtailSTS"
-    },  
+    },
     {
       "key": "RMCIISWEBAPPLICATIONURL",
       "title": "Ringtail Management Console URL",
       "description": "The URL of the Ringtail Management Console Application. (e.g. http://host/RMC)",
       "type": "url",
       "defaultPath": "RMC"
-    },    
+    },
     {
       "key": "LEGALPATH",
       "title": "Ringtail Legal Application Name",
@@ -216,7 +215,7 @@
       "key": "RINGTAILSTSCERTIFICATETHUMBPRINT",
       "title": "Certificate Thumbprint",
       "description": "The thumbprint of the installed Ringtail Secure Token Service (STS) certificate.",
-      "default": "2c 3f 36 e4 cc b3 24 82 d9 66 11 69 1e e7 2a 5a 2c 0e c4 30",      
+      "default": "2c 3f 36 e4 cc b3 24 82 d9 66 11 69 1e e7 2a 5a 2c 0e c4 30",
     },
     {
       "key": "RINGTAILSTSCERTIFICATENAME",
@@ -235,7 +234,7 @@
       "key": "WEBBROWSERPROTOCOL",
       "title": "Client Web Browser Protocol",
       "description": "Specify the protocol used by the client web browser when accessing Ringtail; select either http or https.",
-      "default": "http",      
+      "default": "http",
       "options": ["http", "https"],
       "type": "protocol"
     },
@@ -259,7 +258,7 @@
       "description": "The physical path where the files for the Web application will be deployed.",
       "default": "C:\\inetpub\\wwwroot\\Ringtail\\",
       "ignoreWhen": "C:\\inetpub\\wwwroot\\Ringtail\\"
-    },  
+    },
     {
       "key": "RINGTAILSTSIISAPPLICATIONNAME",
       "title": "Ringtail STS Application Name",
@@ -286,7 +285,7 @@
       "title": "Ringtail UI Static Content Physical Path",
       "description": "The physical path where the files for the Ringtail UI Static Application will be deployed.",
       "default": "C:\\inetpub\\wwwroot\\UIStatic\\",
-      "ignoreWhen": "C:\\inetpub\\wwwroot\\UIStatic\\"    
+      "ignoreWhen": "C:\\inetpub\\wwwroot\\UIStatic\\"
     },
     {
       "key": "RLMIISWEBAPPLICATIONNAME",
@@ -321,7 +320,7 @@
       "title": "Ringtail Management Console Physical Path",
       "description": "The physical path where files for Ringtail Management Console will be deployed.",
       "default": "C:\\inetpub\\wwwroot\\RMC\\",
-      "ignoreWhen": "C:\\inetpub\\wwwroot\\RMC\\"      
+      "ignoreWhen": "C:\\inetpub\\wwwroot\\RMC\\"
     },
     {
       "key": "RINGTAILIISWEBAPPLICATIONURL",
@@ -343,7 +342,7 @@
       "description": "The Ringtail Legal (Classic) Application URL (e.g. http://host/Classic)",
       "type": "url",
       "defaultPath": "Classic"
-    },  
+    },
     {
       "key": "RINGTAILHELPURL",
       "title": "Ringtail Help URL",
@@ -395,7 +394,7 @@
     {
       "key": "DATACAMEL_DATABASES",
       "title": "Databases to Upgrade",
-      "description": "The portal name or a list of comma separated cases"      
+      "description": "The portal name or a list of comma separated cases"
     },
     {
       "key": "CONFIGURATORPORT",
@@ -403,7 +402,7 @@
       "description": "The port that the Ringtail Configurator will listen on",
       "default": "10000"
     },
-    { 
+    {
       "key": "CONFIGURATORHOST",
       "title": "Configurator Host",
       "description": "The host that the Ringtail Configurator is installed on",
@@ -413,11 +412,11 @@
       "key": "CONFIGURATOR_NT_DOMAIN",
       "title": "Configurator NT Domain",
       "description": "The domain for the user that has access to the Ringtail Configurator"
-    }, 
+    },
     {
       "key": "CONFIGURATOR_NT_USER",
       "title": "Configuator NT User",
-      "description": "The user that has access to the Ringtail Configurator",      
+      "description": "The user that has access to the Ringtail Configurator",
     },
     {
       "key": "CONFIGURATOR_NT_PASS",
@@ -493,13 +492,13 @@
     {
       "key": "SERVICEUSERNAME",
       "title": "Ringtail Process Framework Service 'Log on as' User",
-      "description": "The user account that the RPF Service will Log on as (e.g. DomainName\\UserName)"      
+      "description": "The user account that the RPF Service will Log on as (e.g. DomainName\\UserName)"
     },
     {
       "key": "SERVICEPASSWORD",
       "title": "Ringtail Process Framework Service 'Log on as' Password",
       "description": "The password for the user account that the RPF Service will Log on as"
     }
-  ]
-  /* jshint ignore:end */  
+  ];
+  /* eslint-enable */
 }());

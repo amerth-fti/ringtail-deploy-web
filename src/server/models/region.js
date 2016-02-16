@@ -3,18 +3,17 @@ var Model       = require('hops-model')
   , Machine
   ;
 
-/* jshint es5:false */
-/* jshint ignore:start */
+/* eslint-disable */
 schema = {
   "properties": [
-    { "name": "regionId" },    
+    { "name": "regionId" },
     { "name": "regionName", "required": true },
     { "name": "regionDesc" },
     { "name": "serviceConfig" },
     { "name": "browseConfig" }
   ]
 };
-/* jshint ignore:end */
+/* eslint-enable */
 
 
 Machine = Model.extend(schema);

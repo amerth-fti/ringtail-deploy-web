@@ -3,8 +3,7 @@ var Model       = require('hops-model')
   , Machine
   ;
 
-/* jshint es5:false */
-/* jshint ignore:start */
+/* eslint-disable */
 schema = {
   "properties": [
     { "name": "machineId" },
@@ -12,7 +11,7 @@ schema = {
     { "name": "created" },
     { "name": "updated" },
     { "name": "machineName", "required": true },
-    { "name": "machineDesc" }, 
+    { "name": "machineDesc" },
     { "name": "remoteId" },
     { "name": "intIP" },
     { "name": "extIP" },
@@ -22,7 +21,7 @@ schema = {
     { "name": "configId" }
   ]
 };
-/* jshint ignore:end */
+/* eslint-enable */
 
 
 Machine = Model.extend(schema);

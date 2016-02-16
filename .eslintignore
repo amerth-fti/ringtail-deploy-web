@@ -1,0 +1,8 @@
+
+# Ingore assets
+src/client/assets
+
+data
+config.js
+config.js.example
+karma.conf.js

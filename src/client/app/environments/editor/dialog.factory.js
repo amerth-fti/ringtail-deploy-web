@@ -51,7 +51,7 @@
       } else {
         vm.environment = new Environment();
         mode = 'new';
-        create().then(configs)
+        create().then(configs);
       }
       vm.wizard = new Wizard(mode);
     }

@@ -59,7 +59,7 @@ exports.remove = function remove(req, res, next) {
       res.err = err;
       next();
     });
-}
+};
 
 exports.start = function start(req, res, next) {
   debug('starting environment');

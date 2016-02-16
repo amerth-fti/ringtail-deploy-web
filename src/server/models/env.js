@@ -3,8 +3,7 @@ var Model       = require('hops-model')
   , Environment
   ;
 
-/* jshint es5:false */
-/* jshint ignore:start */
+/* eslint-disable */
 schema = {
   "properties": [
     { "name": "envId" },
@@ -13,7 +12,7 @@ schema = {
     { "name": "envName", "required": true },
     { "name": "envDesc" },
     { "name": "host" },
-    { "name": "status", "required": true, "default": "deployed" }, 
+    { "name": "status", "required": true, "default": "deployed" },
     { "name": "remoteType", "required": true },
     { "name": "remoteId" },
     { "name": "config" },
@@ -21,13 +20,13 @@ schema = {
     { "name": "deployedOn" },
     { "name": "deployedUntil" },
     { "name": "deployedNotes" },
-    { "name": "deployedBranch" },      
+    { "name": "deployedBranch" },
     { "name": "deployedJobId" },
     { "name": "runstate" },
     { "name": "machines" }
   ]
 };
-/* jshint ignore:end */
+/* eslint-enable */
 
 
 Environment = Model.extend(schema);

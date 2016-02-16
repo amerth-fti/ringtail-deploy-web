@@ -112,7 +112,7 @@ exports.remove = function remove(envId, next) {
   return envMapper
     .remove(envId)
     .nodeify(next);
-}
+};
 
 exports.start = function start(data, suspendOnIdle, next) {
   var env = new Env(data)

@@ -3,8 +3,7 @@ var Model       = require('hops-model')
   , Config
   ;
 
-/* jshint es5:false */
-/* jshint ignore:start */
+/* eslint-disable */
 schema = {
   "properties": [
     { "name": "configId" },
@@ -14,7 +13,7 @@ schema = {
     { "name": "envId" }
   ]
 };
-/* jshint ignore:end */
+/* eslint-enable */
 
 
 Config = Model.extend(schema);
