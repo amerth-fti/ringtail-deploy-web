@@ -55,6 +55,7 @@ exports.remove = function remove(req, res, next) {
   var envId = req.params.envId;
   envService
     .remove(envId, function(err) {
+      res.result = {};
       res.err = err;
       next();
     });

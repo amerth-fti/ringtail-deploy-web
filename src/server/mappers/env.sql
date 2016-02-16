@@ -19,7 +19,7 @@ set
 where envId = $envId;
 
 
--- delete
+-- remove
 delete from env
 where envId = $envId;
 

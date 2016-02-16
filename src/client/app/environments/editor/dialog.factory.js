@@ -15,6 +15,7 @@
     function open(environment) {
       return $modal.open({
         size: 'lg',
+        'backdrop': false,
         templateUrl: '/app/environments/editor/dialog.html',
         controller: EnvironmentEditorController,
         controllerAs: 'vm',
@@ -56,9 +57,10 @@
     }
 
     function cancel() {
+      if(vm.wizard.mode === 'new') {
+        vm.environment.$remove();
+      }
       $modalInstance.dismiss();
-      // TODO iff new mode we delete
-      // else just
     }
 
     function create() {

@@ -77,8 +77,8 @@ var sql = envSql.update
 };
 
 
-EnvMapper.prototype.del = function del(envId, next) {
-  var sql = envSql.delete
+EnvMapper.prototype.remove = function remove(envId, next) {
+  var sql = envSql.remove
     , params;
 
   params = {

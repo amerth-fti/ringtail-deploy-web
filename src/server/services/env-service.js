@@ -110,7 +110,7 @@ exports.update = function update(data, next) {
 exports.remove = function remove(envId, next) {
   debug('removing environemnt ' + envId);
   return envMapper
-    .del(envId)
+    .remove(envId)
     .nodeify(next);
 }
 
