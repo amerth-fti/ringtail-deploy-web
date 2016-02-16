@@ -55,7 +55,7 @@ ConfigMapper.prototype.update = function update(config, next) {
     $roles: config.roles ? JSON.stringify(config.roles, null, 2) : null,
     $envId: config.envId
   };
-console.log(params);
+
   return this.run(sql, params, next);
 };
 

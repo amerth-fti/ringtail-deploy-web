@@ -10,7 +10,8 @@ schema = {
     { "name": "configId" },
     { "name": "configName" },
     { "name": "data", type: "json" },
-    { "name": "roles", type: "array" }
+    { "name": "roles", type: "array" },
+    { "name": "envId" }
   ]
 };
 /* jshint ignore:end */

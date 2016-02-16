@@ -67,10 +67,9 @@ exports.findById = findById = function get(envId, next) {
     .nodeify(next);
 };
 
-
-
 exports.create = function create(data, next) {
   var env = new Env(data);
+  env.envName = '';
 
   return env
     .validate()
@@ -79,14 +78,6 @@ exports.create = function create(data, next) {
         .insert(env)
         .then(function(result) {
           env.envId = result.lastID;
-          return env;
-        });
-    })
-    .then(function() {
-      return machineService
-        .createMany(env.envId, env.machines)
-        .then(function(machines) {
-          env.machines = machines;
           return env;
         });
     })
