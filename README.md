@@ -6,7 +6,7 @@ This project is a web-driven Ringtail environment management tool. At present it
 
 ##Getting Started
 
-* Download the latest stable release of Node.JS [v0.10](http://nodejs.org/dist/)
+* Download the latest stable release of [Node.JS](http://nodejs.org/dist/)
 
 * Download and install [Git](https://www.git-scm.com/download/win)
 
