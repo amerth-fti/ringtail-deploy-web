@@ -73,7 +73,13 @@
     function copy(config) {
       var newConfig  = angular.copy(config);
       newConfig.configId = null;
-      ConfigEditor.open(newConfig, vm.environment.host);
+      ConfigEditor.open(newConfig, vm.environment.host)
+        .result
+        .then(function(config) {
+          if(config) {
+            vm.configs.push(config);
+          }
+        });
     }
 
     function next() {
