@@ -1,7 +1,7 @@
 language: node_js
 node_js:
   - "node"
-before_install: npm install -g grunt-cli
+  - "4.2"
 before_script:
   - mkdir data
   - cp config.js.example config.js
