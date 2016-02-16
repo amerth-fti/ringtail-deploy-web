@@ -193,13 +193,23 @@ DROP table envtemp;
 
 
 -- 009-addEnvToConfig
-ALTER TABLE config ADD COLUMN envId INTEGER;
+ALTER TABLE config RENAME TO configtemp;
 
-UPDATE config
-SET envId = (select envId from machine where machine.configId = config.configId);
+CREATE TABLE config (
+  configId INTEGER PRIMARY KEY AUTOINCREMENT,
+  configName NVARCHAR(255),
+  data TEXT,
+  roles TEXT,
+  envId INTEGER,
+  FOREIGN KEY (envId) REFERENCES env(envId)
+);
 
-DELETE FROM config
-WHERE envId IS NULL;
+INSERT INTO config (configId, configName, data, roles, envId)
+SELECT configId, configName, data, roles, (select envId from machine where machine.configId = configtemp.configId)
+FROM configtemp;
+
+DROP TABLE configtemp;
+
 
 -- 009-dropEnvToConfig
 ALTER TABLE config RENAME TO configtemp;
