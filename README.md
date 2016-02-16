@@ -40,25 +40,17 @@ $(npm bin)/migrate up
 
 * Start the server
 ```bash
--- Via grunt (requires running 'npm install -g grunt')
-grunt watch
+-- For development
+npm run watch
 
--- Via NPM
-npm start
+-- For production
+DEBUG=deployer* npm start
 
--- Bash
+-- Directly in bash
 debug=deployer* node src/server/server
 
--- Windows Command Prompt
+-- Directly in Windows Command Prompt
 set DEBUG=deployer* & node src/server/server
-```
-
-##Regions
-To modify regions, you will need to open the Sqlite database with a Sqlite executable that can be downloaded [here](https://www.sqlite.org/download.html). You can then make edits or insert new records in the region table. For example to insert a new record:
-
-```
-INSERT INTO region (regionName, regionDesc)
-VALUES ('Another', 'This is another region');
 ```
 
 
@@ -69,7 +61,7 @@ Refer to the [Deploy Task Definitions Guide](TASKDEFS.md) for information on cre
 
 In lieu of a formal style guide, please maintain consistency with style and patterns in place in the application. Add appropriate unit tests to client and server code.
 
-Validate changes with `grunt validate`.
+Validate changes with `npm test`.
 
 
 
