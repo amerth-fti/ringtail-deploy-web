@@ -50,6 +50,16 @@ exports.update = function update(req, res, next) {
     });
 };
 
+exports.remove = function remove(req, res, next) {
+  debug('removing environment');
+  var envId = req.params.envId;
+  envService
+    .remove(envId, function(err) {
+      res.err = err;
+      next();
+    });
+}
+
 exports.start = function start(req, res, next) {
   debug('starting environment');
   var data          = req.body

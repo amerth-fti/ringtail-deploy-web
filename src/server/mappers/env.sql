@@ -20,7 +20,7 @@ where envId = $envId;
 
 
 -- delete
-delete env
+delete from env
 where envId = $envId;
 
 

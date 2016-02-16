@@ -56,15 +56,16 @@ app.delete('/api/regions/:regionId/envs/:envId', controllers.regionenvs.remove);
 
 
 // API - ENVIRONMENT ROUTES
-app.get ('/api/envs', controllers.envs.list);
-app.post('/api/envs', controllers.envs.create);
-app.get ('/api/envs/:envId', controllers.envs.get);
-app.put ('/api/envs/:envId', controllers.envs.update);
-app.put ('/api/envs/:envId/start', controllers.envs.start);
-app.put ('/api/envs/:envId/pause', controllers.envs.pause);
-app.put ('/api/envs/:envId/redeploy', controllers.envs.redeploy);
-app.put ('/api/envs/:envId/reset', controllers.envs.reset);
-app.get ('/api/envs/:envId/configs', controllers.configs.findByEnv);
+app.get   ('/api/envs', controllers.envs.list);
+app.post  ('/api/envs', controllers.envs.create);
+app.get   ('/api/envs/:envId', controllers.envs.get);
+app.put   ('/api/envs/:envId', controllers.envs.update);
+app.delete('/api/envs/:envId', controllers.envs.remove);
+app.put   ('/api/envs/:envId/start', controllers.envs.start);
+app.put   ('/api/envs/:envId/pause', controllers.envs.pause);
+app.put   ('/api/envs/:envId/redeploy', controllers.envs.redeploy);
+app.put   ('/api/envs/:envId/reset', controllers.envs.reset);
+app.get   ('/api/envs/:envId/configs', controllers.configs.findByEnv);
 
 
 // API - TASK ROUTES
