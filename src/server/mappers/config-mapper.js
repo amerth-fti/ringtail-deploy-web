@@ -16,9 +16,9 @@ util.inherits(ConfigMapper, SqliteMapper);
 module.exports = ConfigMapper;
 
 ConfigMapper.prototype.parse = function parse(record) {
-  var result = new Config(record);  
+  var result = new Config(record);
   result.data = result.data ? JSON.parse(result.data) : null;
-  result.roles = result.roles ? JSON.parse(result.roles) : null;  
+  result.roles = result.roles ? JSON.parse(result.roles) : null;
   return result;
 };
 
@@ -36,7 +36,8 @@ ConfigMapper.prototype.insert = function insert(config, next) {
     $configId: config.configId,
     $configName: config.configName,
     $data: config.data ? JSON.stringify(config.data, null, 2) : null,
-    $roles: config.roles ? JSON.stringify(config.roles, null, 2) : null    
+    $roles: config.roles ? JSON.stringify(config.roles, null, 2) : null,
+    $envId: config.envId
   };
 
   return this.run(sql, params, next);
@@ -51,7 +52,8 @@ ConfigMapper.prototype.update = function update(config, next) {
     $configId: config.configId,
     $configName: config.configName,
     $data: config.data ? JSON.stringify(config.data, null, 2) : null,
-    $roles: config.roles ? JSON.stringify(config.roles, null, 2) : null
+    $roles: config.roles ? JSON.stringify(config.roles, null, 2) : null,
+    $envId: config.envId
   };
 console.log(params);
   return this.run(sql, params, next);

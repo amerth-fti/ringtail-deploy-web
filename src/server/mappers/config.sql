@@ -1,10 +1,10 @@
 -- insert
-insert into config (configId, configName, data, roles)
-values ($configId, $configName, $data, $roles);
+insert into config (configId, configName, data, roles, envId)
+values ($configId, $configName, $data, $roles, $envId);
 
 -- update
 update config set
-  configName = $configName, data = $data, roles = $roles
+  configName = $configName, data = $data, roles = $roles, envId = $envId
 where configId = $configId;
 
 -- delete
@@ -12,11 +12,10 @@ delete from config
 where configId = $configId;
 
 -- findByEnv
-select distinct c.*
-from config c
-  join machine m on c.configId = m.configId
-where m.envId = $envId
-order by c.configName;
+select distinct *
+from config
+where envId = $envId
+order by configName;
 
 -- findById
 select *
