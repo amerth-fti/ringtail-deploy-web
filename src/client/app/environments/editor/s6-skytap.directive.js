@@ -1,12 +1,12 @@
 (function() {
   'use strict';
-  
+
   angular
     .module('app.environments.editor')
     .directive('envwizardSkytap', envwizardSkytap);
-  
+
   function envwizardSkytap() {
-    return { 
+    return {
       restrict: 'E',
       scope: {
         cancel: '=',
@@ -19,14 +19,14 @@
       bindToController: true
     };
   }
-  
+
   NewEnvironmentSkytapController.$inject = [ 'SkytapEnvironment', 'environmentFactory' ];
-  
+
   function NewEnvironmentSkytapController(SkytapEnvironment, environmentFactory) {
     var vm = this;
     vm.pageData     = null;
     vm.currentPage  = 1;
-    vm.environments = null;      
+    vm.environments = null;
     vm.pagingActive = false;
     vm.pageSize     = 10;
     vm.selected     = null;
@@ -35,11 +35,11 @@
     vm.next         = next;
     vm.pageChanged  = pageChanged;
     vm.prev         = prev;
-    
+
     activate();
-    
+
     //////////
-    
+
     function activate() {
       SkytapEnvironment.query(function(environments) {
         vm.environments = sortEnvs(environments);
@@ -50,13 +50,15 @@
       });
     }
 
-    function next() {      
+    function next() {
       SkytapEnvironment.get({ id: vm.selected.id })
         .$promise
         .then(function(env) {
+          var originalEnvId = vm.environment.envId;
           vm.environment = environmentFactory.fromSkytap(env);
+          vm.environment.envId = originalEnvId;
           vm.wizard.stage = 'info';
-        });      
+        });
     }
 
     function pageChanged() {
@@ -84,8 +86,8 @@
         }
         return result;
       });
-      
+
     }
   }
-  
+
 }());
