@@ -14,7 +14,7 @@ var debug         = require('debug')('deployer-machine-service')
 exports.create = create = function create(data, next) {
   debug('creating machine %j', data);
   var machine = new Machine(data);
-  
+
   return machine
     .validate()
     .then(function() {
@@ -35,7 +35,7 @@ exports.update = update = function update(data, next) {
   return machine
     .validate()
     .then(function() {
-      return machineMapper.update(machine);      
+      return machineMapper.update(machine);
     })
     .then(function() {
       return machine;
@@ -53,17 +53,17 @@ exports.get = function get(machineId, next) {
 exports.del = del = function del(machineId, next) {
   debug('deleting machine %s', machineId);
   return machineMapper
-    .del(machineId)    
+    .del(machineId)
     .nodeify(next);
 };
 
 exports.createMany = function createMany(envId, data, next) {
   var promises = [];
-  
+
   if(data) {
-    data.forEach(function(datum) {      
+    data.forEach(function(datum) {
       datum.envId = envId;
-    });    
+    });
     promises = data.map(function(datum) {
       return create(datum);
     });
@@ -77,11 +77,13 @@ exports.sync = function sync(envId, oldMachines, newData, next) {
   var upserts = []
     , deletes = [];
 
+  if(!newData) return [];
+
   newData.forEach(function(newData) {
-    if(!newData.machineId) {      
+    if(!newData.machineId) {
       newData.envId = envId;
       upserts.push(create(newData));
-    } else {      
+    } else {
       upserts.push(update(newData));
     }
   });
@@ -103,7 +105,7 @@ exports.sync = function sync(envId, oldMachines, newData, next) {
           });
         });
     });
-    
+
 };
 
 function filterById(machines, id) {

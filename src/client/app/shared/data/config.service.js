@@ -3,17 +3,17 @@
 
   angular
     .module('shared.data')
-    .service('Config', Environment);
+    .service('Config', Config);
 
-  Environment.$inject = [ '$resource' ];
- 
-  function Environment($resource) {
+  Config.$inject = [ '$resource' ];
+
+  function Config($resource) {
     return $resource(
-      'api/configs/:configId', 
+      'api/configs/:configId',
       { configId: '@configId' },
       {
         findByEnv: { method: 'GET',  url: 'api/envs/:envId/configs', isArray: true },
-        update   : { method: 'PUT',  url: 'api/configs/:configId' }        
+        update   : { method: 'PUT',  url: 'api/configs/:configId' }
       }
     );
   }

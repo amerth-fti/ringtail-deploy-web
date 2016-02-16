@@ -1,14 +1,14 @@
 (function() {
   'use strict';
-  
+
   angular
     .module('app.environments.editor')
     .directive('envwizardInfo', envwizardInfo);
-  
+
   function envwizardInfo() {
-    return { 
+    return {
       restrict: 'E',
-      scope: {        
+      scope: {
         cancel: '=',
         environment: '=',
         update: '=',
@@ -20,28 +20,28 @@
       bindToController: true
     };
   }
-  
+
   NewEnvironmentInfoController.$inject = [ ];
-  
+
   function NewEnvironmentInfoController() {
     var vm = this;
     vm.next         = next;
     vm.prev         = prev;
-    
+
     activate();
-    
+
     //////////
-    
+
     function activate() {
     }
 
     function next() {
-      vm.wizard.stage = 'configs';      
+      vm.wizard.stage = 'configs';
     }
 
     function prev() {
       vm.wizard.stage = 'method';
     }
   }
-  
+
 }());

@@ -1,17 +1,17 @@
 (function() {
   'use strict';
-  
+
   angular
     .module('app.environments.editor')
     .directive('envwizardMethod', envwizardMethod);
-  
+
   function envwizardMethod() {
-    return { 
+    return {
       restrict: 'E',
       scope: {
         cancel: '=',
         environment: '=',
-        wizard: '='   
+        wizard: '='
       },
       templateUrl: '/app/environments/editor/s1-method.html',
       controller: NewEnvironmentMethodController,
@@ -19,32 +19,30 @@
       bindToController: true
     };
   }
-  
-  NewEnvironmentMethodController.$inject = [ 'Environment' ];
-  
-  function NewEnvironmentMethodController(Environment ) {
+
+  NewEnvironmentMethodController.$inject = [ ];
+
+  function NewEnvironmentMethodController() {
     var vm = this;
     vm.selectLocal  = selectLocal;
     vm.selectSkytap = selectSkytap;
-    
+
     activate();
-    
+
     //////////
-    
+
     function activate() {
     }
 
     function selectLocal() {
-      vm.environment = new Environment();
       vm.environment.remoteType = null;
-      vm.wizard.stage = 'info';      
+      vm.wizard.stage = 'info';
     }
 
     function selectSkytap() {
-      vm.environment = new Environment();
       vm.environment.remoteType = 'skytap';
       vm.wizard.stage = 'skytap';
     }
   }
-  
+
 }());

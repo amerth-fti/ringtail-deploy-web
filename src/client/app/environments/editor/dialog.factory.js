@@ -34,7 +34,6 @@
     vm.environment  = null;
     vm.configs      = [];
     vm.cancel       = cancel;
-    vm.create       = create;
     vm.update       = update;
     vm.wizard       = null;
 
@@ -47,52 +46,45 @@
       if(environment) {
         vm.environment = angular.copy(environment);
         mode = 'edit';
+        configs();
       } else {
         vm.environment = new Environment();
         mode = 'new';
+        create().then(configs)
       }
       vm.wizard = new Wizard(mode);
-      Config.findByEnv({ envId: vm.environment.envId }, function(configs) {
-        vm.configs.push.apply(vm.configs, configs);
-      });
     }
 
     function cancel() {
       $modalInstance.dismiss();
+      // TODO iff new mode we delete
+      // else just
     }
 
     function create() {
-      vm.environment
+      return vm.environment
         .$save()
-
-        // add to regions
         .then(function(environment) {
-          var defaultRegion = '1'
-            , currentRegion = $routeParams.regionId
-            ;
-
-          // insert default
-          Region.addEnv({regionId:defaultRegion, envId: environment.envId});
-
-          // insert current
-          if(currentRegion && defaultRegion !== currentRegion) {
-            Region.addEnv({regionId:currentRegion, envId: environment.envId});
-          }
-
-          return environment;
-        })
-        .then(function(environment){
-          $modalInstance.close(environment);
+          var currentRegion = $routeParams.regionId;
+          Region.addEnv({regionId:currentRegion, envId: environment.envId});
         });
     }
 
     function update() {
-      angular.copy(vm.environment, environment);
-      environment
+      if(environment) {
+        angular.copy(vm.environment, environment);
+      }
+      return vm.environment
         .$update()
         .then(function(environment){
           $modalInstance.close(environment);
         });
+    }
+
+    function configs() {
+      return Config.findByEnv({ envId: vm.environment.envId }, function(configs) {
+        vm.configs.push.apply(vm.configs, configs);
+      });
     }
   }
 

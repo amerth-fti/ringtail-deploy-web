@@ -16,7 +16,7 @@
   <button type="button" class="btn btn-default pull-left" ng-click="vm.addTask()">Add Task</button>
 
   <button type="button" class="btn btn-default" ng-click="vm.prev()" ng-show="vm.wizard.mode === 'new'">Previous</button>
-  <button type="button" class="btn btn-primary" ng-click="vm.create()" ng-show="vm.wizard.mode === 'new'" ng-disabled="vm.invalid">Create</button>
-  <button type="button" class="btn btn-primary" ng-click="vm.update()" ng-show="vm.wizard.mode === 'edit'" ng-disabled="vm.invalid">Update</button>    
+  <button type="button" class="btn btn-primary" ng-click="vm.update()" ng-show="vm.wizard.mode === 'new'" ng-disabled="vm.invalid">Create</button>
+  <button type="button" class="btn btn-primary" ng-click="vm.update()" ng-show="vm.wizard.mode === 'edit'" ng-disabled="vm.invalid">Update</button>
   <button type="button" class="btn btn-warning" ng-click="vm.cancel()">Cancel</button>
 </div>

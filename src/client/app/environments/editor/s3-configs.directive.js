@@ -46,7 +46,8 @@
       var config = new Config({
         configName: null,
         roles: [ '' ],
-        data: { }
+        data: { },
+        envId: vm.environment.envId
       });
       ConfigEditor.open(config, vm.environment.host)
         .result
@@ -58,6 +59,7 @@
     }
 
     function edit(config) {
+      config.envId = vm.environment.envId;
       ConfigEditor.open(config, vm.environment.host);
     }
 
