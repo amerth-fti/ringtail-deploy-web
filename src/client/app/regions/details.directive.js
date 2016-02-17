@@ -25,7 +25,7 @@
     vm.region         = null;
     vm.environments   = null;
     vm.page           = 1;
-    vm.pagesize       = 10;
+    vm.pagesize       = 100;
     vm.total          = 0;
     vm.lastpage       = 1;
     vm.pagingActive   = false;
