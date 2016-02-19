@@ -7,7 +7,7 @@ var events  = require('events')
 
 function Task(options) {
   events.EventEmitter.call(this);
-
+  this.jobId = null;
   this.status = 'Pending';
   this.started = null;
   this.stopped = null;

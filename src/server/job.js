@@ -2,14 +2,14 @@ var debug       = require('debug')('deployer')
   , Q           = require('q')
   , envService  = require('./services/env-service');
 
-function Job(params) {  
+function Job(params) {
   this.id = 0;
   this.status = 'Pending';
   this.started = null;
   this.stopped = null;
   this.name = null;
   this.tasks = [];
-  this.rundata =  { };  
+  this.rundata =  { };
   this.env = null;
 
   for(var key in params) {
@@ -26,12 +26,12 @@ Job.prototype.start = function start() {
 
   /* jshint es5:false */
   /* jshint newcap:false */
-  var chain = Q(0)  
+  var chain = Q(0)
     , job = this
     , env = this.env;
 
   // initialize the job data
-  this.status = 'Pending';  
+  this.status = 'Pending';
   this.started = new Date();
 
   // start job on next tick
@@ -41,21 +41,22 @@ Job.prototype.start = function start() {
     // mark environment as starting
     chain.then(function() {
       env.status = 'deploying';
-      env.deployedJobId = job.id;      
-      return envService.update(env);      
+      env.deployedJobId = job.id;
+      return envService.update(env);
     });
-    
-    // create task chain    
-    job.tasks.forEach(function(task) {    
-      task.on('log', debug);      
 
-      chain = chain.then(function () {        
+    // create task chain
+    job.tasks.forEach(function(task) {
+      task.on('log', debug);
+      task.jobId = job.id;
+
+      chain = chain.then(function () {
         return task.start(job.rundata);
-      });    
+      });
     });
 
     // mark as complete
-    chain.then(function() {      
+    chain.then(function() {
       job.status = 'Succeeded';
       job.stopped = new Date();
     });
@@ -72,10 +73,10 @@ Job.prototype.start = function start() {
       debug(err);
       job.stopped = new Date();
       job.status = 'Failed';
-      job.error = err;     
+      job.error = err;
       env.status = 'failed';
-      return envService.update(env);    
+      return envService.update(env);
     });
-    
+
   });
 };

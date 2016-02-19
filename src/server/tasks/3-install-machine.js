@@ -90,7 +90,9 @@ function TaskImpl(options) {
         log('configuring install service');
         var configs = {
           'Common|BRANCH_NAME' : branch,
-          'RoleResolver|ROLE' : config.roles[0]
+          'RoleResolver|ROLE' : config.roles[0],
+          'JobLogger|ENV_NAME': machine.machineName + ' (machine-' + machineId + ')',
+          'JobLogger|JOB_ID': me.jobId
         };
         _.extend(configs, config.data);
         _.extend(configs, getConfigsFromOptions(options));

@@ -21,6 +21,7 @@ function TaskImpl(options) {
         self.emit('log', data);
       });
 
+      task.jobId = self.jobId;
       return task.start(scope);
     });
 
