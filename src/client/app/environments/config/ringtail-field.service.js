@@ -134,7 +134,11 @@
     "RingtailProcessingFramework|RT_COORDINATOR_URL": "RT_COORDINATOR_URL",
     "RingtailProcessingFramework|SERVICEUSERNAME": "SERVICEUSERNAME",
     "RingtailProcessingFramework|SERVICEPASSWORD": "SERVICEPASSWORD",
-    "RingtailProcessingFramework|RPFWORKERPATH": "RPFWORKERPATH"
+    "RingtailProcessingFramework|RPFWORKERPATH": "RPFWORKERPATH",
+
+    "NativeFileServiceSetup|SERVICEUSER": "NATIVE_FILE_SERVICEUSER",
+    "NativeFileServiceSetup|SERVICEPASSWORD": "NATIVE_FILE_SERVICEPASSWORD",
+    "NativeFileServiceSetup|NATIVEFILESERVICESERVERS": "NATIVE_FILE_SERVERS"
   };
 
 
@@ -498,6 +502,21 @@
       "key": "SERVICEPASSWORD",
       "title": "Ringtail Process Framework Service 'Log on as' Password",
       "description": "The password for the user account that the RPF Service will Log on as"
+    },
+    {
+      "key": "NATIVE_FILE_SERVICEUSER",
+      "title": "Native File Viewer Service Account",
+      "description": "The service account used for native file viewer"
+    },
+    {
+      "key": "NATIVE_FILE_SERVICEPASSWORD",
+      "title": "Native File Viewer Service Account Password",
+      "description": "The service account password used for the native file viewer"
+    },
+    {
+      "key": "NATIVE_FILE_SERVERS",
+      "title": "Native File Viewer Server",
+      "description": "Ther server used by native file viewer"
     }
   ];
   /* eslint-enable */

@@ -11,7 +11,9 @@
     var _roles = [
       'DEV-FULL',
       'AGENT',
+      'AGT_NATIVE',
       'WEBAGENT',
+      'NOHELP_WEB',
       'WEB',
       'RPF-COORDINATOR',
       'RPF-SUPERVISOR',

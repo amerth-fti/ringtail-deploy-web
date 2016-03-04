@@ -34,7 +34,7 @@
   /* eslint-disable */
   rolesData = [
     {
-      "roles": ["SKYTAP-WEB", "WEB", "WEBAGENT", "SKYTAP-ALLINONE"],
+      "roles": ["SKYTAP-WEB", "WEB", "WEBAGENT", "NOHELP_WEB", "SKYTAP-ALLINONE"],
       "configs": [
         "Ringtail8|IS_SQLSERVER_SERVER",
         "Ringtail8|IS_SQLSERVER_USERNAME",
@@ -71,7 +71,7 @@
       ]
     },
     {
-      "roles": ["SKYTAP-WEB", "WEB", "WEBAGENT", "SKYTAP-ALLINONE", "DEV-FULL"],
+      "roles": ["SKYTAP-WEB", "WEB", "WEBAGENT", "NOHELP_WEB", "SKYTAP-ALLINONE", "DEV-FULL"],
       "configs": [
         "RingtailLegalApplicationServer|IS_SQLSERVER_SERVER",
         "RingtailLegalApplicationServer|IS_SQLSERVER_USERNAME",
@@ -89,7 +89,7 @@
       ],
     },
     {
-      "roles": ["SKYTAP-AGENT", "SKYTAP-WEBAGENT", "SKYTAP-WEB", "AGENT", "WEBAGENT", "WEB", "SKYTAP-ALLINONE", "DEV-FULL"],
+      "roles": ["SKYTAP-AGENT", "SKYTAP-WEBAGENT", "SKYTAP-WEB", "AGENT", "AGT_NATIVE", "WEBAGENT", "WEB", "NOHELP_WEB", "SKYTAP-ALLINONE", "DEV-FULL"],
       "configs": [
         "RingtailConfigurator|CONFIGURATORPORT",
         "RingtailConfigurator|HOST",
@@ -106,6 +106,14 @@
         "RingtailConfigurator|AGENT_VIRTUAL_NAME",
         "RingtailConfigurator|APP_POOL",
         "RingtailConfigurator|AGENT_APP_POOL"
+      ]
+    },
+    {
+      "roles": ["AGT_NATIVE"],
+      "configs": [
+        "NativeFileServiceSetup|SERVICEUSER",
+        "NativeFileServiceSetup|SERVICEPASSWORD",
+        "NativeFileServiceSetup|NATIVEFILESERVICESERVERS"
       ]
     },
     {
