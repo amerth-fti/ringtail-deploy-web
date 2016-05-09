@@ -27,6 +27,8 @@ npm install -g bower
 bower install
 ```
 
+* Copy the config.json.example file to config.json and modify it with the correct credentials
+
 * Migrate the Sqlite Database
 ```bash
 -- In Bash:
@@ -35,8 +37,6 @@ $(npm bin)/migrate up
 -- Windows Command Prompt
 "node_modules/.bin/migrate" up
 ```
-
-* Copy the config.json.example file to config.json and modify it with the correct credentials
 
 * Start the server
 ```bash
