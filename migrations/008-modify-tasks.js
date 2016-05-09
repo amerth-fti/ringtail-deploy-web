@@ -12,8 +12,11 @@ exports.up = function(next){
       if(err) {
         console.log(err);
         console.log(err.stack);
-      next(err);
-    }
+        next(err);
+      }
+      else {
+        next();
+      }
     });
   });
 };
@@ -28,6 +31,9 @@ function migrateTasks(next) {
   return envService
     .findAll({ pagesize: 1000 })
     .then(processEnvs)
+    .then(function() {
+      migrations.log('tasks', 'task migration is complete');
+    })
     .nodeify(next);
 }
 
