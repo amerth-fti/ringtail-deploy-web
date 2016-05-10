@@ -87,4 +87,11 @@ You can run the image as such. Please refer to the docker documentation for othe
 docker run -p 8081:8080 -t deploy-web
 ```
 
+If you don't know your docker ip, you can run the below command. To access the running deployment-web server, go to http://DOCKER_IP:8081/
+
+```sh
+docker-machine ip default
+```
+
+
 If you are on a corporate proxy, you may configure your dock proxies with the help of this link. http://www.netinstructions.com/how-to-install-docker-on-windows-behind-a-proxy/
