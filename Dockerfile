@@ -64,14 +64,17 @@ RUN git clone https://github.com/fti-technology/ringtail-deploy-web.git
 WORKDIR ringtail-deploy-web
 
 #SETUP CONFIG
-RUN cp config.js.example config.js
-RUN sed -i "s,SKYTAP_USERNAME,$SKYTAP_USER,g" config.js
-RUN sed -i "s,SKYTAP_TOKEN,$SKYTAP_TOKEN,g" config.js
-RUN if [ -z ${PROXY_URL+x} ]; then echo "####NO PROXY URL SET####"; \
+RUN if [ -z ${PROXY_URL+x} ]; then echo "####NO PROXY URL SET####" \
+	&& sed -i "s/'SKYTAP_TOKEN',/'SKYTAP_TOKEN'/g" config.js \
+	&& sed -i "s/proxy.*[']//g" config.js; \
 else \
 	sed -i "s,OPTIONAL_PROXY_SETTING,$PROXY_URL,g" config.js \
 	&& echo "----SKYTAP PROXY SET----"; \
 fi
+RUN cp config.js.example config.js
+RUN sed -i "s,SKYTAP_USERNAME,$SKYTAP_USER,g" config.js
+RUN sed -i "s,SKYTAP_TOKEN,$SKYTAP_TOKEN,g" config.js
+
 
 RUN npm install
 RUN npm install bower -g
