@@ -79,10 +79,14 @@ RUN sed -i "s,SKYTAP_TOKEN,$SKYTAP_TOKEN,g" config.js
 RUN npm install
 RUN npm install bower -g
 RUN bower install --allow-root
-RUN $(npm bin)/migrate up
+
+#DON'T RUN MIGRATE UNTIL DOCKER RUN AND VOLUME MOUNTED
+RUN touch start.sh && chmod +x start.sh
+RUN echo "$(npm bin)/migrate up" >> start.sh
+RUN echo "npm start" >> start.sh
 
 #EXPOSE PORTS
 EXPOSE 8080
 
 #START APP
-CMD [ "npm", "start" ]
+CMD [ "sh", "start.sh" ]
