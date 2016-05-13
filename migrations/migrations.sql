@@ -66,7 +66,7 @@ INSERT INTO regionenv
 SELECT 1, envId FROM env;
 
 INSERT INTO region (regionName, regionDesc)
-VALUES ('Dev', 'First region');
+VALUES ('Default', 'First region');
 
 -- 004-dropRegion
 DROP TABLE regionenv;
