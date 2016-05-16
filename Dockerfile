@@ -58,10 +58,13 @@ else \
 	&& echo "----NPM PROXY SET----"; \
 fi
 
+RUN npm install bower -g
+
 #GET CODE
 WORKDIR /home/deployweb
 RUN git clone https://github.com/fti-technology/ringtail-deploy-web.git
 WORKDIR ringtail-deploy-web
+RUN mkdir data
 
 #SETUP CONFIG
 RUN cp config.js.example config.js
@@ -76,14 +79,13 @@ RUN sed -i "s,SKYTAP_USERNAME,$SKYTAP_USER,g" config.js
 RUN sed -i "s,SKYTAP_TOKEN,$SKYTAP_TOKEN,g" config.js
 
 
-RUN npm install
-RUN npm install bower -g
+RUN npm install --production
 RUN bower install --allow-root
 
 #DON'T RUN MIGRATE UNTIL DOCKER RUN AND VOLUME MOUNTED
 RUN touch start.sh && chmod +x start.sh
-RUN echo "$(npm bin)/migrate up" >> start.sh
-RUN echo "npm start" >> start.sh
+RUN echo "$(npm bin)/migrate up --state-file data/.migrate" >> start.sh
+RUN echo "DEBUG=deployer* npm start" >> start.sh
 
 #EXPOSE PORTS
 EXPOSE 8080

@@ -107,5 +107,5 @@ docker-machine ip default
 This will run a detached process, mounted to the data volume, which will automatically restart the container if the machine restarts.
 
 ```sh
-sudo docker run --restart=always -v deploywebdata:/home/deployweb/ringtail-deploy-web -d -p 80:8080 -t deploy-web 
+sudo docker run --restart=always -v deploywebdata:/home/deployweb/ringtail-deploy-web/data -d -p 80:8080 -t deploy-web 
 ```
