@@ -1,6 +1,7 @@
 var EmptyBrowser  = require('./browsers/empty-browser')
   , HttpBrowser   = require('./browsers/http-browser')
   , SmbBrowser    = require('./browsers/smb-browser')
+  , debug = require('debug')('deployer-browser-factory')
   , StaticBrowser = require('./browsers/static-browser')
   ;
 
@@ -18,11 +19,21 @@ exports.fromRegion = function(region) {
     , result = null
     ;
 
+  debug('looking via %s', config.type);
+
   if(config.type === 'http') {
     result = new HttpBrowser(config);
   }   
   else if (config.type === 'ftp') {
-      var FtpBrowser = require('./browsers/ftp-browser');
+      var FtpBrowser;
+      try 
+      {
+        FtpBrowser = require('./browsers/ftp-browser');
+      }
+      catch (e) 
+      {
+        debug(e);
+      }
       result = new FtpBrowser(config);
    }
   else if (config.type === 'smb') {

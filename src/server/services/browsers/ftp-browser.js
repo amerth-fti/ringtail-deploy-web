@@ -1,4 +1,5 @@
 ﻿var _ = require('underscore')
+  , debug = require('debug')('deployer-browsers-ftp-browser')
   , Q = require('q')
   , edge = require('edge')
   , path = require('path')
@@ -33,6 +34,7 @@ FTPBrowser.prototype.branches = function branches(next) {
       action: currentAction.value,
       branch: this.ftpRootPath
    };
+
   
   ftp(params, function (error, result) {
     if (error) deferred.reject(error);
@@ -65,6 +67,7 @@ FTPBrowser.prototype.builds = function builds(branch, next) {
         action: currentAction.value,
         branch: ''
       };
+
   
   params.branch = this.ftpRootPath.replace(/\/$/, '') + '/' + branch;
   ftp(params, function (error, result) {
@@ -98,6 +101,7 @@ FTPBrowser.prototype.files = function files(branch, next) {
         action: currentAction.value,
         branch: this.ftpRootPath.replace(/\/$/, '') + '/' + branch
       };
+
   
   params.branch = this.ftpRootPath.replace(/\/$/, '') + '/' + branch;
   ftp(params, function (error, result) {
