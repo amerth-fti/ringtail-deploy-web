@@ -42,13 +42,6 @@
           ng-model="vm.selectedBranch.file">
           <option ng-repeat="file in vm.files" disabled="disabled" value="{{file}}">{{file}}</option>
         </list>
-        <!-- <select 
-          class="form-control"
-          ng-readonly="true"      
-          ng-disabled="vm.loadingFiles || vm.loadingBuilds || vm.loadingBranches || !vm.selectedBranch.build"
-          ng-model="vm.selectedBranch.file">
-          <option ng-repeat="file in vm.files" disabled="disabled" value="{{file}}">{{file}}</option>
-        </select> -->
       </div>
     </div>    
     <div ng-show="vm.hasRpf || vm.hasSql">      
