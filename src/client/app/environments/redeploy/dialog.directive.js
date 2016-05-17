@@ -44,9 +44,10 @@
     vm.toggleAdvanced     = toggleAdvanced;
     vm.toggleSelectedTask = toggleSelectedTask;
     vm.regionId           = null;
-    vm.filesInvalid       = true;
+    //vm.filesInvalid       = true;
+    vm.filesInvalid       = false;
     vm.fileCount          = 0;
-
+    vm.hideFiles          = true;
     activate();
 
     //////////
@@ -138,7 +139,7 @@
         vm.selectedBranch.build = null;
         Browse.builds({regionId: vm.regionId, branch: vm.selectedBranch.branch }, function(builds) {
           vm.loadingBuilds = false;
-          vm.filesInvalid = true;
+          //vm.filesInvalid = true;
           vm.loadingFiles = false;
           vm.fileCount = 0;
           vm.builds = builds.sort(function(a, b) {
@@ -155,11 +156,12 @@
           vm.loadingFiles = false;
           vm.fileCount = files.length;
           if(files.length > 0) {
-            vm.filesInvalid = false;
+            vm.hideFiles = false;
+            //vm.filesInvalid = false;
           }
           else {
             files.push("No files found....");
-            vm.filesInvalid = true;
+            //vm.filesInvalid = true;
           }
 
           vm.files = files.sort(function(a, b) {

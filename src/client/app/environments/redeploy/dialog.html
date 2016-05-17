@@ -31,7 +31,7 @@
         <option ng-repeat="build in vm.builds" value="{{build}}">{{build}}</option>
       </select>
     </div>
-    <div class="form-group  skytap-selectlist-sm">
+    <div class="form-group skytap-selectlist-sm" ng-hide="vm.hideFiles">
       <label>Installers found in selected location:</label>
       <div class="list-loading" ng-show="vm.loadingFiles">
         <img src="/assets/img/bar-loader.gif">
