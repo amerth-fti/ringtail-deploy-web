@@ -35,8 +35,10 @@
       <label>Installers found in selected location:</label>
       <div class="list-loading" ng-show="vm.loadingFiles">
         <img src="/assets/img/bar-loader.gif">
-      </div>       
-      <div class="skytap-selectlist-item">
+      </div>
+      <span class="glyphicon" ng-class="{ 'glyphicon-fire color-danger': vm.fileCount === 0}"></span>      
+      
+      <div class="list-group">      
         <list
           ng-readonly="true"      
           ng-model="vm.selectedBranch.file">

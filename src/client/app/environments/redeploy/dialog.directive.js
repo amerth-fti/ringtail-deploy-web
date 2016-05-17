@@ -160,6 +160,7 @@
             //vm.filesInvalid = false;
           }
           else {
+            vm.hideFiles = false;
             files.push("No files found....");
             //vm.filesInvalid = true;
           }
