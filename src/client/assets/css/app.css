@@ -209,6 +209,9 @@ button {
 .skytap-selectlist {
   min-height: 220px;
 }
+.skytap-selectlist-sm {
+  min-height: 30px;
+}
 .skytap-selectlist-item {
   overflow: hidden;
   text-overflow: ellipsis;
@@ -217,7 +220,6 @@ button {
 .install-note {
   padding-left: 15px;
 }
-
 
 /*
  * Sidebar

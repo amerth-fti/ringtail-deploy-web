@@ -102,7 +102,7 @@ FTPBrowser.prototype.files = function files(branch, next) {
         branch: this.ftpRootPath.replace(/\/$/, '') + '/' + branch
       };
 
-  
+  branch = branch.replace('\\', '/');
   params.branch = this.ftpRootPath.replace(/\/$/, '') + '/' + branch;
   ftp(params, function (error, result) {
     if (error) deferred.reject(error);

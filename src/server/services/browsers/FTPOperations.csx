@@ -15,6 +15,7 @@ using System.Net;
 using System.Threading.Tasks;
 using System.Web.Script.Serialization;
 using HtmlAgilityPack;
+using System.Diagnostics;
 
  // Required for edge to invoke the C# from Nodejs
     public class Startup
@@ -39,7 +40,7 @@ using HtmlAgilityPack;
         }
         string GetRemoteFiles(dynamic input)
         {
-            return Helper.GetRemoteBranches(input);
+            return Helper.GetRemoteFiles(input);
         }
     }
 
@@ -103,18 +104,21 @@ using HtmlAgilityPack;
         private static FtpWebRequest FtpConnectionRequest(Options options)
         {
             var ftpUrl = string.Empty;
-            
+
             if (string.IsNullOrEmpty(options.Branch))
                 ftpUrl = options.FtpHost;
             else
             {
                 ftpUrl = options.FtpHost.TrimEnd('/');
-                ftpUrl = options.FtpHost + "/" + options.Branch.TrimStart('/');                
+                ftpUrl = options.FtpHost + "/" + options.Branch.TrimStart('/');
+                ftpUrl = ftpUrl.Replace(" ", "%20");
             }
             //Clean up the URL
             ftpUrl = ValidateAndFixFtp(ftpUrl);
 
-            var request = (FtpWebRequest)WebRequest.Create(ftpUrl);
+
+            Uri uri = new Uri(ftpUrl, UriKind.Absolute);
+            var request = (FtpWebRequest)WebRequest.Create(uri);
             request.Credentials = new NetworkCredential(options.FtpUser, options.FtpPassword);
             string proxy = null;
             // setup proxy details 

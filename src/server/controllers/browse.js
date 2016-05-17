@@ -4,7 +4,6 @@ var debug           = require('debug')('deployer-branches')
   , browserFactory  = require('../services/browser-factory')  
   ;
 
-
 exports.branches = function branches(req, res, next) {  
   var id = req.params.regionId;
 
@@ -25,8 +24,6 @@ exports.branches = function branches(req, res, next) {
     });
 };
 
-
-
 exports.builds = function builds(req, res, next) {
   var id      = req.params.regionId
     , branch  = req.params.branch
@@ -43,6 +40,28 @@ exports.builds = function builds(req, res, next) {
     })
     .then(function(builds) {      
       res.send(builds);
+    })
+    .fail(function(err) {
+      res.status(500).send(err.message);
+    });
+};
+
+exports.files = function files(req, res, next) {
+  var id      = req.params.regionId
+    , branch  = req.params.branch
+    ;
+
+  Q.fcall(function() { 
+      return regionService.findById(id);
+    })
+    .then(function(region) {  
+      return browserFactory.fromRegion(region);
+    })
+    .then(function(browser) {
+      return browser.files(branch);      
+    })
+    .then(function(files) {      
+      res.send(files);
     })
     .fail(function(err) {
       res.status(500).send(err.message);

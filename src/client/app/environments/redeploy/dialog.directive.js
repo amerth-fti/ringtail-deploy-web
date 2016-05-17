@@ -26,9 +26,11 @@
     vm.modalInstance      = this.modalInstance;
     vm.branches           = null;
     vm.builds             = null;
+    vm.files              = ["Select a branch and build"];
     vm.duration           = 120;
     vm.loadingBranches    = false;
     vm.loadingBuilds      = false;
+    vm.loadingFiles      = false;
     vm.selectedTasks      = null;
     vm.selectedBranch     = null;
     vm.showAdvanced       = false;
@@ -36,11 +38,14 @@
     vm.keepRpfwInstalls   = null;
     vm.wipeRpfWorkers     = null;
     vm.branchChanged      = branchChanged;
+    vm.buildChanged       = buildChanged;
     vm.cancel             = cancel;
     vm.rebuild            = rebuild;
     vm.toggleAdvanced     = toggleAdvanced;
     vm.toggleSelectedTask = toggleSelectedTask;
     vm.regionId           = null;
+    vm.filesInvalid       = true;
+    vm.fileCount          = 0;
 
     activate();
 
@@ -130,9 +135,34 @@
     function branchChanged() {
       if(vm.selectedBranch.branch) {
         vm.loadingBuilds = true;
+        vm.selectedBranch.build = null;
         Browse.builds({regionId: vm.regionId, branch: vm.selectedBranch.branch }, function(builds) {
           vm.loadingBuilds = false;
+          vm.filesInvalid = true;
+          vm.loadingFiles = false;
+          vm.fileCount = 0;
           vm.builds = builds.sort(function(a, b) {
+            return a.localeCompare(b);
+          });
+        });
+      }
+    }
+
+    function buildChanged() {
+      if(vm.selectedBranch.build) {
+        vm.loadingFiles = true;
+        Browse.files({regionId: vm.regionId, branch: constructBranchPath() }, function(files) {
+          vm.loadingFiles = false;
+          vm.fileCount = files.length;
+          if(files.length > 0) {
+            vm.filesInvalid = false;
+          }
+          else {
+            files.push("No files found....");
+            vm.filesInvalid = true;
+          }
+
+          vm.files = files.sort(function(a, b) {
             return a.localeCompare(b);
           });
         });
