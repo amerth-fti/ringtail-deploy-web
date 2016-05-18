@@ -19,8 +19,6 @@ exports.fromRegion = function(region) {
     , result = null
     ;
 
-  debug('looking via %s', config.type);
-
   if(config.type === 'http') {
     result = new HttpBrowser(config);
   }   

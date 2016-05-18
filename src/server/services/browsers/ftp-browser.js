@@ -35,6 +35,7 @@ FTPBrowser.prototype.branches = function branches(next) {
       branch: this.ftpRootPath
    };
 
+  debug('looking for branches via ftp');
   
   ftp(params, function (error, result) {
     if (error) deferred.reject(error);
