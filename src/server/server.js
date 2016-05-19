@@ -55,6 +55,8 @@ app.get('/config', function(req, res) {
     .send('window.appConfig = ' + JSON.stringify(config.client));
 });
 
+app.get('/api/online', function(req, res){ return res.send(200); });
+
 // API - REGION ROUTES
 app.get   ('/api/regions', controllers.regions.list);
 app.get   ('/api/regions/:regionId', controllers.regions.get);
@@ -63,6 +65,7 @@ app.put   ('/api/regions/:regionId', controllers.regions.update);
 app.delete('/api/regions/:regionId', controllers.regions.del);
 app.get   ('/api/regions/:regionId/branches', controllers.browse.branches);
 app.get   ('/api/regions/:regionId/branches/:branch/builds', controllers.browse.builds);
+app.get   ('/api/regions/:regionId/branches/:branch/files', controllers.browse.files);
 
 // API - CONFIG ROUTES
 app.post  ('/api/configs', controllers.configs.create);

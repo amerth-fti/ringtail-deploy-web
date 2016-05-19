@@ -13,7 +13,8 @@
       null,
       {
         branches: { method: 'GET', url: 'api/regions/:regionId/branches', isArray: true },
-        builds:   { method: 'GET', url: 'api/regions/:regionId/branches/:branch/builds', isArray: true }
+        builds:   { method: 'GET', url: 'api/regions/:regionId/branches/:branch/builds', isArray: true },
+        files:    { method: 'GET', url: 'api/regions/:regionId/branches/:branch/files', isArray: true }
       }
     );      
   }
