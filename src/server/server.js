@@ -5,9 +5,29 @@ var path        = require('path')
   , bodyParser  = require('body-parser')
   , controllers = require('./controllers')
   , config      = require('../../config')
+  , stylus      = require('stylus')
+  , nib         = require('nib')
+  , join        = require('path').join
   , app;
 
 app = express();
+
+//STYLUS MIDDLEWARE
+var stylusDir = join(__dirname, '/../client/assets/stylus');
+var cssDir = join(__dirname, '/../client/');
+
+function compile(str, path){
+  return stylus(str)
+  .set('filename', path)
+  .use(nib());
+}
+
+app.use(stylus.middleware({
+  src: cssDir,
+  debug: true,
+  force: true,
+  compile: compile
+}));
 
 // CONFIGURE BODY PARSER
 app.use(bodyParser.json({ limit: '1mb' }));
