@@ -132,7 +132,9 @@
           <h3 class="title">Regions</h3>
           <ul class="nav nav-sidebar">            
             <li ng-repeat="region in vm.regions" ng-class="{ active: region.regionId === vm.selectedRegion }">
-              <a href="/app/regions/{{region.regionId}}" ng-click="vm.changeRegion(region)">{{region.regionName}}</a>
+              <a href="/app/regions/{{region.regionId}}">
+                {{region.regionName}}
+              </a>
             </li>
           </ul>                    
         </div>

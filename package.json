@@ -25,6 +25,7 @@
     "hops-model": "^0.3.0",
     "hops-sqlite": "^0.1.0",
     "migrate": "^0.2.2",
+    "nib": "^1.1.0",
     "node-skytap": "^0.7.0",
     "q": "^1.4.1",
     "request": "^2.69.0",
@@ -32,6 +33,7 @@
     "serve-static": "^1.10.2",
     "sqlite3": "^3.1.1",
     "statements": "^0.1.0",
+    "stylus": "^0.54.5",
     "underscore": "^1.8.3"
   },
   "devDependencies": {
