@@ -90,6 +90,7 @@
 </div>
 <div class="modal-footer">  
   <a style="float: left" ng-click="vm.toggleAdvanced()">Advanced</a> 
-  <button type="button" class="btn btn-primary" ng-disabled="vm.filesInvalid" ng-click="vm.rebuild()">Start</button>
+  <div class='environment-loading' ng-show="!!vm.message">{{vm.message}} <div class='loading sm inline bar'/></div>
+  <button type="button" class="btn btn-primary" ng-disabled="vm.filesInvalid || !vm.isDeployed" ng-click="vm.rebuild()">Start</button>
   <button type="button" class="btn btn-default" ng-click="vm.cancel()">Cancel</button>
 </div>

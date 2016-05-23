@@ -19,9 +19,9 @@
     };
   }
 
-  Controller.$inject = [ '$rootScope', '$location', 'Browse' ];
+  Controller.$inject = [ '$timeout', '$rootScope', '$location', 'Browse', 'EnvironmentStarter' ];
 
-  function Controller($rootScope, $location, Browse) {
+  function Controller($timeout, $rootScope, $location, Browse, EnvironmentStarter) {
     var vm = this;
     vm.modalInstance      = this.modalInstance;
     vm.branches           = null;
@@ -48,8 +48,11 @@
     vm.toggleSelectedTask = toggleSelectedTask;
     vm.regionId           = null;
     vm.filesInvalid       = false;
+    vm.isDeployed         = true;
     vm.fileCount          = 0;
     vm.hideFiles          = true;
+    vm.poll               = null;
+    vm.message            = null;
     activate();
 
     //////////
@@ -74,7 +77,54 @@
         vm.selectedTasks = vm.tempEnv.config.taskdefs.slice(0);
       }
 
+      checkEnvironmentStatus();
+
       vm.hasRpf = hasRole(vm.tempEnv, [ 'ALLINONE', 'SKYTAP-ALLINONE', 'RPF-COORDINATOR', 'RPF-SUPERVISOR', 'SKYTAP-RPF-COORDINATOR', 'SKYTAP-RPF-SUPERVISOR']);
+    }
+
+    function checkEnvironmentStatus(cb) {
+      var taskArray = ['3-install-many'];
+
+      vm.environment.$get(function(environment){
+        vm.environment = environment;
+
+        if(vm.selectedTasks.length && taskArray.indexOf(vm.selectedTasks[0].task) > -1 
+          && (vm.environment.runstate != 'running' && vm.environment.runstate != 'busy')) {
+          startSkytapEnvironment(cb);
+        } else {
+          pollWhileBusy(vm.environment, cb);
+        }
+      });
+    }
+
+    function startSkytapEnvironment(cb) {
+      vm.isDeployed = false;
+      vm.environment.$start();
+      vm.environment.runstate = 'busy';
+
+      if(!cb) vm.message = 'Environment Busy';
+      pollWhileBusy(vm.environment, cb);
+    }
+
+    function pollWhileBusy(environment, cb) {
+      if(environment.runstate === 'busy' || environment.status === 'deploying' || cb) {
+        vm.poll = $timeout(function() {
+          environment.$get(function(environment){
+            if(environment.runstate == 'running' && environment.status != 'deploying') {
+              vm.message = null;
+              vm.isDeployed = true;
+              if(cb) cb();  
+              return;
+            };
+
+          vm.message = 'Environment Busy';
+          pollWhileBusy(environment, cb);
+          });
+        }, 5000);
+      } else if(environment.runstate == 'running') {
+        vm.message = null;
+        vm.isDeployed = true; 
+      }
     }
 
     function cancel() {
@@ -82,6 +132,11 @@
     }
 
     function rebuild() {
+      vm.message = 'Processing';
+      checkEnvironmentStatus(doRebuild);
+    }
+
+    function doRebuild() {
       angular.copy(vm.tempEnv, vm.environment);
       vm.environment.deployedBranch = constructBranchPath();
       vm.environment.selectedTasks = vm.selectedTasks;
@@ -141,7 +196,6 @@
         vm.selectedBranch.build = null;
         Browse.builds({regionId: vm.regionId, branch: vm.selectedBranch.branch }, function(builds) {
           vm.loadingBuilds = false;
-          //vm.filesInvalid = true;
           vm.loadingFiles = false;
           vm.fileCount = 0;
           vm.builds = builds.sort(function(a, b) {
@@ -160,12 +214,10 @@
           vm.fileCount = files.length;
           if(files.length > 0) {
             vm.hideFiles = false;
-            //vm.filesInvalid = false;
           }
           else {
             vm.hideFiles = false;
             files.push('No files found....');
-            //vm.filesInvalid = true;
           }
 
           vm.files = files.sort(function(a, b) {
