@@ -26,14 +26,17 @@
     vm.modalInstance      = this.modalInstance;
     vm.branches           = null;
     vm.builds             = null;
-    vm.files              = ["Select a branch and build"];
+    vm.files              = ['Select a branch and build'];
+    vm.launchKeys         = null;
     vm.duration           = 120;
     vm.loadingBranches    = false;
     vm.loadingBuilds      = false;
-    vm.loadingFiles      = false;
+    vm.loadingFiles       = false;
+    vm.loadingLaunchKeys  = false;
     vm.selectedTasks      = null;
     vm.selectedBranch     = null;
     vm.showAdvanced       = false;
+    vm.hideLaunchKeys     = true;
     vm.hasRpf             = false;
     vm.keepRpfwInstalls   = null;
     vm.wipeRpfWorkers     = null;
@@ -44,7 +47,6 @@
     vm.toggleAdvanced     = toggleAdvanced;
     vm.toggleSelectedTask = toggleSelectedTask;
     vm.regionId           = null;
-    //vm.filesInvalid       = true;
     vm.filesInvalid       = false;
     vm.fileCount          = 0;
     vm.hideFiles          = true;
@@ -152,6 +154,7 @@
     function buildChanged() {
       if(vm.selectedBranch.build) {
         vm.loadingFiles = true;
+        getLaunchKeysForBuild();
         Browse.files({regionId: vm.regionId, branch: constructBranchPath() }, function(files) {
           vm.loadingFiles = false;
           vm.fileCount = files.length;
@@ -161,7 +164,7 @@
           }
           else {
             vm.hideFiles = false;
-            files.push("No files found....");
+            files.push('No files found....');
             //vm.filesInvalid = true;
           }
 
@@ -171,6 +174,56 @@
         });
       }
     }
+
+    function getLaunchKeysForBuild() {
+      if(vm.hideLaunchKeys === true) {
+        return;
+      }
+
+      if(vm.selectedBranch.build) {
+        vm.hideLaunchKeys = false;
+        Browse.files({regionId: vm.regionId, branch: constructBranchPath() }, function(files) {
+          vm.hideLaunchKeys = false;
+          vm.fileCount = files.length;
+          if(files.length > 0) {
+            vm.hideLaunchKeys = false;
+            //vm.filesInvalid = false;
+          }
+          else {
+            vm.hideLaunchKeys = false;
+            files.push('No files found....');
+            //vm.filesInvalid = true;
+          }
+
+          vm.launchKeys = files.sort(function(a, b) {
+            return a.localeCompare(b);
+          });
+        });
+      }
+    }      
+
+    function launchKeySelection() {
+      // if(vm.selectedBranch.build) {
+      //   vm.hideLaunchKeys = false;
+      //   Browse.files({regionId: vm.regionId, branch: constructBranchPath() }, function(files) {
+      //     vm.hideLaunchKeys = false;
+      //     vm.fileCount = files.length;
+      //     if(files.length > 0) {
+      //       vm.hideLaunchKeys = false;
+      //       //vm.filesInvalid = false;
+      //     }
+      //     else {
+      //       vm.hideLaunchKeys = false;
+      //       files.push('No files found....');
+      //       //vm.filesInvalid = true;
+      //     }
+
+      //     vm.launchKeys = files.sort(function(a, b) {
+      //       return a.localeCompare(b);
+      //     });
+      //   });
+      // }
+    }    
 
     function hasRole(env, roles) {
       var result = false;
