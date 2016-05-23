@@ -1,3 +1,8 @@
+$danger-color = #d9534f;
+$info-color = #f0ad4e;
+$standard-color = #337ab7;
+$good-green-color = #2ECC40;
+
 .environment-status {
   text-align: right;
 }
@@ -9,7 +14,35 @@
   min-height: 32px;
   min-width: 32px;
   margin: 9px 9px 0 0;
+  background-color:transparent;
+  
+  &.sm {
+    background-size:16px 16px;
+    min-width:16px;
+    min-height: 16px;
+  }
+  
+  &.inline {
+    display: inline-block;
+  }
+  
+  &.bar {
+    background-image: url('../img/bar-loader.gif');
+  }
 }
+
+.color-warning {
+  color: $info-color;
+}
+
+.color-danger {
+  color: $danger-color;
+  
+  &:hover {
+    color: #c9302c;
+  }
+}
+
 
 .col-centered {
   text-align: center;
@@ -21,7 +54,7 @@
 
 .configure {
   cursor: pointer;
-  color: #f0ad4e;
+  color: $info-color;
   
   &:hover {
     color: #ec971f;
@@ -37,6 +70,13 @@ region-details{
   .configure{
     font-size: 22px;
   }
+}
+
+env-redeploy {
+  .environment-loading {
+    display: inline-block;
+    color: $good-green-color;
+  } 
 }
 
 
@@ -205,18 +245,6 @@ region-details{
       .deploy-list {
         margin-top: 10px;
       }
-      
-      .color-warning {
-        color: #f0ad4e;
-      }
-
-      .color-danger {
-        color: #d9534f;
-        
-        &:hover {
-          color: #c9302c;
-        }
-      }
     }
     
     .status {
@@ -247,6 +275,8 @@ region-details{
         background-color: rgba(217,83,79,.8);
       }
     }
+    
+    
   }
 }
 
