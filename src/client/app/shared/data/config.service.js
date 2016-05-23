@@ -13,6 +13,7 @@
       { configId: '@configId' },
       {
         findByEnv: { method: 'GET',  url: 'api/envs/:envId/configs', isArray: true },
+        launchKeys: { method: 'GET',  url: 'api/envs/:envId/branches/:branch/launchKeys', isArray: true },
         update   : { method: 'PUT',  url: 'api/configs/:configId' }
       }
     );

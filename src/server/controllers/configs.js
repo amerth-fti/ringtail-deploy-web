@@ -2,6 +2,7 @@ var debug = require('debug')('deployer-configs')
   , Q     = require('q')
   , _     = require('underscore')
   , configSvc = require('../services/config-service')
+  , launchKeySvc = require('../services/launchkey-service')  
   ;
 
 exports.findByEnv = function findByenv(req, res, next) {
@@ -12,6 +13,19 @@ exports.findByEnv = function findByenv(req, res, next) {
     next();    
   }); 
 };
+
+exports.launchKeys = function launchKeys(req, res, next) {
+  var envId,
+    machineId = 1,
+    branch = req.params.branch,
+    data = {machineId: machineId, branch: branch};
+  launchKeySvc.requestLaunchKeys(data, function(err, keys) {
+    res.result  = keys;
+    res.err     = err;
+    next();   
+  });
+};
+
 
 exports.create = function create(req, res, next) {
   var config = req.body;
