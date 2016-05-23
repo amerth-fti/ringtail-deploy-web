@@ -19,9 +19,9 @@
     };
   }
 
-  Controller.$inject = [ '$timeout', '$rootScope', '$location', 'Browse', 'EnvironmentStarter' ];
+  Controller.$inject = [ '$timeout', '$rootScope', '$location', 'Browse', 'EnvironmentStarter', 'Config' ];
 
-  function Controller($timeout, $rootScope, $location, Browse, EnvironmentStarter) {
+  function Controller($timeout, $rootScope, $location, Browse, EnvironmentStarter, Config) {
     var vm = this;
     vm.modalInstance      = this.modalInstance;
     vm.branches           = null;
@@ -231,50 +231,12 @@
       if(vm.hideLaunchKeys === true) {
         return;
       }
-
-      if(vm.selectedBranch.build) {
-        vm.hideLaunchKeys = false;
-        Browse.files({regionId: vm.regionId, branch: constructBranchPath() }, function(files) {
-          vm.hideLaunchKeys = false;
-          vm.fileCount = files.length;
-          if(files.length > 0) {
-            vm.hideLaunchKeys = false;
-            //vm.filesInvalid = false;
-          }
-          else {
-            vm.hideLaunchKeys = false;
-            files.push('No files found....');
-            //vm.filesInvalid = true;
-          }
-
-          vm.launchKeys = files.sort(function(a, b) {
-            return a.localeCompare(b);
-          });
-        });
-      }
+      
+      Config.launchKeys({envId: vm.tempEnv.envId, branch: constructBranchPath() }, function(files) {
+      });
     }      
 
     function launchKeySelection() {
-      // if(vm.selectedBranch.build) {
-      //   vm.hideLaunchKeys = false;
-      //   Browse.files({regionId: vm.regionId, branch: constructBranchPath() }, function(files) {
-      //     vm.hideLaunchKeys = false;
-      //     vm.fileCount = files.length;
-      //     if(files.length > 0) {
-      //       vm.hideLaunchKeys = false;
-      //       //vm.filesInvalid = false;
-      //     }
-      //     else {
-      //       vm.hideLaunchKeys = false;
-      //       files.push('No files found....');
-      //       //vm.filesInvalid = true;
-      //     }
-
-      //     vm.launchKeys = files.sort(function(a, b) {
-      //       return a.localeCompare(b);
-      //     });
-      //   });
-      // }
     }    
 
     function hasRole(env, roles) {
