@@ -8,21 +8,28 @@ var debug         = require('debug')('deployer-launchkey-service')
   ;
 
 exports.requestLaunchKeys = function requestLaunchKeys(data, next) {
-  return [];
-  // debug('requestLaunchKeys %j', data);
-  // var branch = data.branch,
-  //   me = this,
-  //   machineId = data.machineId,
-  //   serviceIP,
-  //   machine,
-  //   client;
+  debug('requestLaunchKeys %j', data);
+  var branch = data.branch,
+    me = this,
+    machineId = data.machineId,
+    serviceIP,
+    machine,
+    client,
+    keys;
 
-  //   machineService
-  //   .get(machineId)
-  //   .then(function(result) {
-  //     machine   = result;
-  //     serviceIP = result.intIP;
-  //   });
-  //   client = me.serviceClient = new RingtailClient({ serviceHost: serviceIP });
-  //   return client.getLaunchKeys(branch);
+  machineService
+    .get(machineId)
+    .then(function(result) {
+      machine   = result;
+      serviceIP = result.intIP;
+    })
+    .then(function(result) {
+      debug('requestLaunchKeys %j', serviceIP);
+      client = me.serviceClient = new RingtailClient({ serviceHost: serviceIP });
+      keys =  client.getLaunchKeys(branch);
+      debug('requestLaunchKeys %j', keys);
+    });
+
+
+  return keys;
 };
