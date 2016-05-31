@@ -194,6 +194,8 @@
       if(vm.selectedBranch.branch) {
         vm.loadingBuilds = true;
         vm.selectedBranch.build = null;
+        vm.launchKeys = null;
+        vm.hideLaunchKeys = true;        
         Browse.builds({regionId: vm.regionId, branch: vm.selectedBranch.branch }, function(builds) {
           vm.loadingBuilds = false;
           vm.loadingFiles = false;
@@ -208,6 +210,8 @@
     function buildChanged() {
       if(vm.selectedBranch.build) {
         vm.loadingFiles = true;
+        vm.launchKeys = null;
+        vm.hideLaunchKeys = true;
         getLaunchKeysForBuild();
         Browse.files({regionId: vm.regionId, branch: constructBranchPath() }, function(files) {
           vm.loadingFiles = false;
@@ -228,11 +232,9 @@
     }
 
     function getLaunchKeysForBuild() {
-      if(vm.hideLaunchKeys === true) {
-        return;
-      }
-      
-      Config.launchKeys({envId: vm.tempEnv.envId, branch: constructBranchPath() }, function(files) {
+      Config.launchKeys({envId: vm.tempEnv.envId, branch: constructBranchPath() }, function(keys) {
+        vm.launchKeys = keys;
+        vm.hideLaunchKeys = keys === null || keys.length === 0;
       });
     }      
 
