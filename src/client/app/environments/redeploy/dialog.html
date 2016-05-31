@@ -57,7 +57,7 @@
         multiple="true"
         ng-model="vm.selectedBranch.launchKeys"
         ng-change="vm.launchKeySelection()">
-        <option ng-repeat="launchKey in vm.launchKeys" value="{{launchKey}}">{{launchKey}}</option>
+        <option ng-repeat="launchKey in vm.launchKeys" value="{{launchKey.FeatureKey}}">{{launchKey.FeatureKey}}</option>
       </select>
     </div>      
     <div ng-show="vm.hasRpf || vm.hasSql">      
