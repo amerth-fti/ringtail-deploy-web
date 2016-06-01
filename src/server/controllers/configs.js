@@ -15,10 +15,10 @@ exports.findByEnv = function findByenv(req, res, next) {
 };
 
 exports.launchKeys = function launchKeys(req, res, next) {
-  var envId,
+  var envId = req.params.envId,
     machineId = 1,
     branch = req.params.branch,
-    data = {machineId: machineId, branch: branch};
+    data = {envId: envId, branch: branch};
   launchKeySvc.requestLaunchKeys(data, function(err, keys) {
     res.result  = keys;
     res.err     = err;
