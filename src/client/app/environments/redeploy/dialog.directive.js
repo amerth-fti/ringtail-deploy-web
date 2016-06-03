@@ -236,7 +236,14 @@
         vm.launchKeys = keys;
         vm.hideLaunchKeys = keys === null || keys.length === 0;
       });
-    }      
+   
+    }
+
+    // function onFormSubmit() {
+    //   var filteredLaunchKeys = vm.launchKeys;  // TODO LOOK FOR THE FILTERED ONES.... don't send them all!
+    //   Config.sendLaunchKeys({envId: vm.tempEnv.envId, launchKeys: filteredLaunchKeys }, function(keys) {
+    //   }); 
+    // }
 
     function launchKeySelection() {
     }    

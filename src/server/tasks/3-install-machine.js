@@ -95,6 +95,8 @@ function TaskImpl(options) {
           'JobLogger|JOB_ID': me.jobId
         };
         _.extend(configs, config.data);
+        // TODO: wrie in new column with illumination keys.
+        //_.extend(configs, config.launchKeys);
         _.extend(configs, getConfigsFromOptions(options));
         return client.setConfigs(configs);
       })

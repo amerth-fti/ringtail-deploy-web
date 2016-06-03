@@ -16,7 +16,6 @@ exports.findByEnv = function findByenv(req, res, next) {
 
 exports.launchKeys = function launchKeys(req, res, next) {
   var envId = req.params.envId,
-    machineId = 1,
     branch = req.params.branch,
     data = {envId: envId, branch: branch};
   launchKeySvc.requestLaunchKeys(data, function(err, keys) {
@@ -26,6 +25,18 @@ exports.launchKeys = function launchKeys(req, res, next) {
   });
 };
 
+exports.sendLaunchKeys = function sendLaunchKeys(req, res, next) {
+  var body = req.body,
+    envId = body.envId,
+    launchKeys = body.launchKeys,
+    data = {envId: envId, launchKeys: launchKeys};
+
+  launchKeySvc.sendLaunchKeys(data, function(err, keys) {
+    res.result  = keys;
+    res.err     = err;
+    next();   
+  });
+};
 
 exports.create = function create(req, res, next) {
   var config = req.body;

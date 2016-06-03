@@ -18,7 +18,7 @@ exports.list = function list(req, res, next) {
 
 exports.get = function get(req, res, next) {
   debug('getting environment');
-  var envId = req.param('envId');
+  var envId = req.params.envId;
   envService
     .findById(envId, function(err, result) {
       res.result  = result;

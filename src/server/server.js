@@ -90,6 +90,7 @@ app.put   ('/api/envs/:envId/redeploy', controllers.envs.redeploy);
 app.put   ('/api/envs/:envId/reset', controllers.envs.reset);
 app.get   ('/api/envs/:envId/configs', controllers.configs.findByEnv);
 app.get   ('/api/envs/:envId/branches/:branch/launchKeys', controllers.configs.launchKeys);
+app.put   ('/api/envs/sendLaunchKeys', controllers.configs.sendLaunchKeys);
 
 
 // API - TASK ROUTES
