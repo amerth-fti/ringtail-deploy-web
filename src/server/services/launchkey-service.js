@@ -108,13 +108,13 @@ var branch = data.branch,
                   user;
 
               configs.forEach(function(config){
-                 if(config && config.data && config.data["Ringtail8|IS_SQLSERVER_DATABASE"]){
-                   db = config.data["Ringtail8|IS_SQLSERVER_DATABASE"];
-                   password = config.data["Ringtail8|IS_SQLSERVER_PASSWORD"];
-                   server = config.data["Ringtail8|IS_SQLSERVER_SERVER"];
-                   user = config.data["Ringtail8|IS_SQLSERVER_USERNAME"];
+                 if(config && config.data && config.data['Ringtail8|IS_SQLSERVER_DATABASE']){
+                   db = config.data['Ringtail8|IS_SQLSERVER_DATABASE'];
+                   password = config.data['Ringtail8|IS_SQLSERVER_PASSWORD'];
+                   server = config.data['Ringtail8|IS_SQLSERVER_SERVER'];
+                   user = config.data['Ringtail8|IS_SQLSERVER_USERNAME'];
 
-                   return connectionString = "Data Source = " + server + ";Initial Catalog = " + db + ";User id = " + user + ";Password = " + password + ";";
+                   return connectionString = 'Data Source = ' + server + ';Initial Catalog = ' + db + ';User id = ' + user + ';Password = ' + password + ';';
                  }
               });
             });
