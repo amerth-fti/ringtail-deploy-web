@@ -36,6 +36,7 @@ ConfigMapper.prototype.insert = function insert(config, next) {
     $configId: config.configId,
     $configName: config.configName,
     $data: config.data ? JSON.stringify(config.data, null, 2) : null,
+    $launchKey: config.launchKey ? JSON.stringify(config.launchKey, null, 2) : null,
     $roles: config.roles ? JSON.stringify(config.roles, null, 2) : null,
     $envId: config.envId
   };
@@ -52,6 +53,7 @@ ConfigMapper.prototype.update = function update(config, next) {
     $configId: config.configId,
     $configName: config.configName,
     $data: config.data ? JSON.stringify(config.data, null, 2) : null,
+    $launchKey: config.launchKey ? JSON.stringify(config.launchKey, null, 2) : null,
     $roles: config.roles ? JSON.stringify(config.roles, null, 2) : null,
     $envId: config.envId
   };

@@ -18,11 +18,23 @@ exports.launchKeys = function launchKeys(req, res, next) {
   var envId = req.params.envId,
     branch = req.params.branch,
     data = {envId: envId, branch: branch};
-  launchKeySvc.requestLaunchKeys(data, function(err, keys) {
-    res.result  = keys;
-    res.err     = err;
-    next();   
-  });
+    launchKeySvc.requestLaunchKeys(data, function(err, keys) {
+      res.result  = keys;
+      res.err     = err;
+      next();   
+    });
+};
+
+exports.litKeys = function litKeys(req, res, next) {
+  var envId = req.params.envId,
+    branch = req.params.branch,
+    data = {envId: envId, branch: branch};
+    launchKeySvc.getLitKeys(data, function(err, keys) {
+      var result = {litKeys: keys};
+      res.result  = result;
+      res.err     = err;
+      next();   
+    });
 };
 
 exports.sendLaunchKeys = function sendLaunchKeys(req, res, next) {

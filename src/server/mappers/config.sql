@@ -4,7 +4,7 @@ values ($configId, $configName, $data, $roles, $envId);
 
 -- update
 update config set
-  configName = $configName, data = $data, roles = $roles, envId = $envId
+  configName = $configName, data = $data, roles = $roles, envId = $envId, launchKey = $launchKey
 where configId = $configId;
 
 -- delete

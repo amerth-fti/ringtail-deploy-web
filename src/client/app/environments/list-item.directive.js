@@ -37,6 +37,7 @@
     vm.reset          = reset;
     vm.start          = start;
     vm.poll           = null;
+
     
     activate(vm.environment);
     

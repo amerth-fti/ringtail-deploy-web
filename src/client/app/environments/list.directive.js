@@ -22,7 +22,6 @@
 
   function EnvironmentListController() {
     var vm = this;
-    
     activate();
 
     //////////
