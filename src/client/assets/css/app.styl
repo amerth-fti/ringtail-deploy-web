@@ -3,6 +3,11 @@ $info-color = #f0ad4e;
 $standard-color = #337ab7;
 $good-green-color = #2ECC40;
 
+//overwrite bootstrap and make everything square, like ringtail
+* {
+  border-radius: 0 !important;
+}
+
 .environment-status {
   text-align: right;
 }
@@ -475,5 +480,19 @@ env-redeploy {
   
   &.Running {
     color: #31708f;
+  }
+}
+
+body[page=login] {
+  .container {
+    width: 400px;
+  }
+
+  input {
+    margin-bottom: 10px;
+  }
+
+  nav.navbar-fixed-top {
+    position: relative;
   }
 }

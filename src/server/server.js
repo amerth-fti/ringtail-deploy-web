@@ -43,8 +43,24 @@ app.use('/app', serveStatic(__dirname + '/../client/app'));
 function defaultRoute(req, res) {
   res.sendFile(path.resolve(__dirname +'/../client/index.html'));
 }
-app.get('/', defaultRoute);
-app.get('/app/*', defaultRoute);
+
+function checkLogin(req, res, next) {
+  if(!config.ldap || !config.ldap.enabled) {
+    return next()
+  }
+
+  //need actual logic
+  var isLoggedin = false;
+
+  if(!isLoggedin){
+    return res.sendFile(path.resolve(__dirname +'/../client/login.html'));
+  } else {
+    return next();
+  }
+}
+
+app.get('/', checkLogin, defaultRoute);
+app.get('/app/*', checkLogin, defaultRoute);
 
 
 
@@ -56,6 +72,9 @@ app.get('/config', function(req, res) {
 });
 
 app.get('/api/online', function(req, res){ return res.send(200); });
+
+// API - LOGIN ROUTES
+app.post  ('/api/login', controllers.auth.login);
 
 // API - REGION ROUTES
 app.get   ('/api/regions', controllers.regions.list);

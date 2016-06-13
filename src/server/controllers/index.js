@@ -7,5 +7,6 @@ module.exports = {
   regionenvs: require('./regionenvs'),
   regions:    require('./regions'),
   tasks:      require('./tasks'),
+  auth:       require('./auth'),
   skytap:     require('./skytap')
 };
