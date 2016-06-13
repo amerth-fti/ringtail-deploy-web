@@ -88,6 +88,12 @@
       vm.environment.$get(function(environment){
         vm.environment = environment;
 
+        //handle local environments
+        if(!environment.remoteId){
+          if(cb) return cb();
+          return; 
+        }
+
         if(vm.selectedTasks.length && taskArray.indexOf(vm.selectedTasks[0].task) > -1 
           && (vm.environment.runstate != 'running' && vm.environment.runstate != 'busy')) {
           startSkytapEnvironment(cb);
@@ -140,6 +146,8 @@
       angular.copy(vm.tempEnv, vm.environment);
       vm.environment.deployedBranch = constructBranchPath();
       vm.environment.selectedTasks = vm.selectedTasks;
+
+      saveLaunchKeys();
 
       // trigger the redeployment
       vm.environment.$redeploy({ keepRpfwInstalls: vm.keepRpfwInstalls, wipeRpfWorkers: vm.wipeRpfWorkers })
@@ -239,11 +247,28 @@
    
     }
 
-    // function onFormSubmit() {
-    //   var filteredLaunchKeys = vm.launchKeys;  // TODO LOOK FOR THE FILTERED ONES.... don't send them all!
-    //   Config.sendLaunchKeys({envId: vm.tempEnv.envId, launchKeys: filteredLaunchKeys }, function(keys) {
-    //   }); 
-    // }
+    function saveLaunchKeys() {
+      var filteredLaunchKeys = [];
+      
+      if(vm && vm.selectedBranch && vm.selectedBranch.launchKeys && vm.launchKeys){
+        vm.selectedBranch.launchKeys.forEach(function(key){
+          vm.launchKeys.forEach(function(launchKey){
+            if(key == launchKey.FeatureKey){
+              //create a copy of the object w/o a reference to remove the angular junk
+              var tempLaunchKey = JSON.parse(JSON.stringify(launchKey));
+              delete tempLaunchKey.$$hashKey;
+
+              filteredLaunchKeys.push(tempLaunchKey);
+            }
+          });
+        });
+      } else {
+        //no keys, continue on
+        return;
+      }
+
+      Config.sendLaunchKeys({envId: vm.tempEnv.envId, launchKeys: filteredLaunchKeys }, function(keys) {}); 
+    }
 
     function launchKeySelection() {
     }    

@@ -56,6 +56,11 @@
       </div>
     </div>
 
+    <div class="row" ng-show="vm.environment.deployedJobId">
+      <div class="col-md-2"><strong>Last Job:</strong></div>
+      <div class="col-md-10"><a href='/app/jobs/{{vm.environment.deployedJobId}}'>Job #{{vm.environment.deployedJobId}}</a></div> 
+    </div>
+
     <div class="row top-buffer" ng-show="vm.environment.remoteType === 'skytap'">
       <div class="col-md-2"><strong>Skytap Info:</strong></div>
       <div class="col-md-10">
