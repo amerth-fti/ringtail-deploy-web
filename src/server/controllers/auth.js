@@ -6,7 +6,10 @@ exports.login = function login(req, res, next) {
       , user = parseUser(req.body.user)
       , password = req.body.password;
     if(user && password) {
-        var domainUser = user.user + '@' + user.domain;
+        var domainUser = user.user;
+        if(user.domain) {
+            domainUser = domainUser + '@' + user.domain;
+        }
         adClient.authenticate(domainUser, password, function(err, auth) {
             if(err) {
                 if(err && err.name == 'InvalidCredentialsError') {
