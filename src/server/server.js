@@ -62,16 +62,16 @@ function checkLogin(req, res, next) {
 
   var isLoggedin = false;
 
-  if(req.signedCookies && req.signedCookies["auth"]) {
+  if(req.signedCookies && req.signedCookies['auth']) {
     isLoggedin = true;
   }
 
   if(!isLoggedin){
     if(req.xhr) {
       var data = {
-        error: "Login required",
+        error: 'Login required',
         success: false
-      }
+      };
 
       return res.json(data);
     }
