@@ -5,53 +5,77 @@ exports.login = function login(req, res, next) {
     var adClient = new ActiveDirectory(config.ldap.config)
       , user = parseUser(req.body.user)
       , password = req.body.password;
-
-    if(user) {
-        var domainUser = user.user;
-
-        adClient.getGroupMembershipForUser(domainUser, function(err, groups) {
-            //is there an error?
-            if(err){
+    if(user && password) {
+        var domainUser = user.user + "@" + user.domain;
+        adClient.authenticate(domainUser, password, function(err, auth) {
+            if(err) {
+                if(err && err.name == "InvalidCredentialsError") {
+                    return res.send({
+                        success: false,
+                        error: "Invalid Credentials"
+                    });
+                }
                 return res.send({
                     success: false,
-                    error: "error"
+                    error: err
                 });
             }
 
-            //does the user exist?
-            if (!groups) {
+            if(!auth) {
                 return res.send({
                     success: false,
-                    error: "no user found"
+                    error: "Could not authenticate"
                 });
             }
 
-            //does the user have permission?
-            var hasRequiredGroup = false;
+            adClient.getGroupMembershipForUser(user.user, function(err, groups) {
+                //is there an error?
+                if(err){
+                    return res.send({
+                        success: false,
+                        error: err.message
+                    });
+                }
 
-            groups.forEach(function(group){
-                if(config.ldap.groups.indexOf(group.cn) >= 0) {
-                    hasRequiredGroup = true;
+                //does the user exist?
+                if (!groups) {
+                    return res.send({
+                        success: false,
+                        error: "User could not be found."
+                    });
+                }
+
+                //does the user have permission?
+                var hasRequiredGroup = false;
+
+                groups.forEach(function(group){
+                    if(config.ldap.groups.indexOf(group.cn) >= 0) {
+                        hasRequiredGroup = true;
+                    }
+                });
+
+                if(hasRequiredGroup) {
+                    //user has access
+                    res.cookie('auth', domainUser, { maxAge: 900000, signed: true});
+
+                    return res.send({
+                        success: true
+                    });
+                } else {
+                    return res.send({
+                        success: false,
+                        error: "User found, but does not have permissions."
+                    });
                 }
             });
-
-            if(hasRequiredGroup) {
-                return res.send({
-                    success: true
-                });
-            } else {
-                return res.send({
-                    success: false,
-                    error: "user found, but does not have permission"
-                });
-            }
         });
 
     } else {
         //failed to submit a valid user
         return res.send({
             success: false,
-            error: "bad user"
+            error: "Missing User/Password.",
+            user: user
         });
     }
 }

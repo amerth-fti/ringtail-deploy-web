@@ -8,6 +8,8 @@ var path        = require('path')
   , stylus      = require('stylus')
   , nib         = require('nib')
   , join        = require('path').join
+  , session     = require('express-session')
+  , cookieParser = require('cookie-parser')
   , app;
 
 app = express();
@@ -31,7 +33,16 @@ app.use(stylus.middleware({
 
 // CONFIGURE BODY PARSER
 app.use(bodyParser.json({ limit: '1mb' }));
+app.use(cookieParser(config.cookieSecret));
 
+app.use(session({
+   secret : config.cookieSecret,
+   name : 'sessionId',
+  })
+);
+
+app.disable('x-powered-by');
+app.set('trust proxy', 1);
 
 // STATIC FILE ROUTES
 app.use('/assets', serveStatic(__dirname + '/../client/assets'));
@@ -46,23 +57,42 @@ function defaultRoute(req, res) {
 
 function checkLogin(req, res, next) {
   if(!config.ldap || !config.ldap.enabled) {
-    return next()
+    return next('route');
   }
 
-  //need actual logic
   var isLoggedin = false;
 
+  if(req.signedCookies && req.signedCookies["auth"]) {
+    isLoggedin = true;
+  }
+
   if(!isLoggedin){
+    if(req.xhr) {
+      var data = {
+        error: "Login required",
+        success: false
+      }
+
+      return res.json(data);
+    }
     return res.sendFile(path.resolve(__dirname +'/../client/login.html'));
   } else {
-    return next();
+    return next('route');
   }
 }
 
-app.get('/', checkLogin, defaultRoute);
-app.get('/app/*', checkLogin, defaultRoute);
+// API - HEALTH CHECK
+app.get   ('/api/online', function(req, res){ return res.send(200); });
 
+// API - LOGIN ROUTES
+app.post  ('/api/login', controllers.auth.login);
 
+//ALL ROUTES PAST HERE REQUIRE LOGIN
+app.all   ('*', checkLogin);
+
+// APP ROUTES
+app.get   ('/',  defaultRoute);
+app.get   ('/app/*', defaultRoute);
 
 // API - CLIENT SIDE CONFIG
 app.get('/config', function(req, res) {
@@ -70,11 +100,6 @@ app.get('/config', function(req, res) {
     .type('json')
     .send('window.appConfig = ' + JSON.stringify(config.client));
 });
-
-app.get('/api/online', function(req, res){ return res.send(200); });
-
-// API - LOGIN ROUTES
-app.post  ('/api/login', controllers.auth.login);
 
 // API - REGION ROUTES
 app.get   ('/api/regions', controllers.regions.list);
@@ -124,8 +149,6 @@ app.get ('/api/skytap/environments/:configuration_id', controllers.skytap.enviro
 
 // API - TASKS
 app.get ('/api/tasks', controllers.tasks.list);
-
-
 
 // CONVERT TO UNIVERSAL HANDLER
 app.all ('/api/*', function(req, res) {
