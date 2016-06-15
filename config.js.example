@@ -1,6 +1,7 @@
 module.exports = {
   port: 8080,
   host: null,
+  cookieSecret: 'I<3Secur1ty',
   skytap: {
     username: 'SKYTAP_USERNAME',
     token: 'SKYTAP_TOKEN',
@@ -11,6 +12,16 @@ module.exports = {
     enableDeployment: true,
     intialize: {
       "status": "deployed"      
+    },
+    ldap: {
+        enabled: false,
+        config : {
+            url: 'LDAP_SERVER',
+            baseDN: 'BASE_DN',
+            username: 'USER@DOMAIN',
+            password: 'PASSWORD' 
+        },
+        groups: ['GROUP1', 'GROUP2']
     }
   }
 }

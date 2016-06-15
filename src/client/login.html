@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="IE=Edge"/>
+
+    <title>Ringtail Deploy</title>
+    <script type="text/javascript" src="/assets/lib/jquery/dist/jquery.min.js"></script>
+
+    <script>
+        $(document).ready(function(){
+            $('#form-signin').submit(function(event){
+                event.preventDefault();
+                var data = {};
+                var self = this;
+
+                $(self).serializeArray().map(function(x){data[x.name] = x.value;});
+
+                $(self).find("button").attr('disabled','disabled');
+
+                $.ajax({
+                    type: "POST",
+                    url: "/api/login",
+                    data: JSON.stringify(data),
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    success: function(data) {
+                        if(data && data.success == false) {
+                            if (data.error) $(".error").text(data.error);
+                        } else if (data && data.success) {
+                            $(".error").text("");
+                            location.reload(true);
+                        } else {
+                            $(".error").text("something went wrong");
+                        }
+
+                        $(self).find("button").removeAttr('disabled');
+                    },
+                    error: function(error) {
+                        $(".error").text("something went wrong");
+                        $(self).find("button").removeAttr('disabled');
+                    }
+                })
+            });
+        });
+    </script>
+
+    <link rel="Stylesheet" type="text/css" href="/assets/lib/bootstrap/dist/css/bootstrap.css" />  
+    <link rel="Stylesheet" type="text/css" href="/assets/css/app.css" />
+</head>
+<body page='login'>
+    <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+      <div class="container-fluid">
+        <div class="navbar-header">
+          <a class="navbar-brand" href="/">
+            <img src="/assets/img/ringtail.png" alt="Ringtail Deploy" class="logo">
+          </a>
+        </div>
+      </div>
+    </nav>
+    <div class="container">
+        <form class="form-signin" id='form-signin'>
+            <h2 class="form-signin-heading">Login</h2>
+            <label for="inputEmail" class="sr-only">User</label>
+            <input type="text" id="inputuser" name="user" class="form-control" placeholder="Domain\User" required autofocus>
+            <label for="inputPassword" class="sr-only">Password</label>
+            <input type="password" id="inputPassword" name="password" class="form-control" placeholder="Password" required>
+            <button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
+        </form>
+        <div class='error'></div>
+    </div>
+
+    
+</body>
