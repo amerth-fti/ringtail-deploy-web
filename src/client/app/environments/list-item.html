@@ -33,7 +33,12 @@
       <div class="col-md-2"><strong>Branch:</strong></div>
       <div class="col-md-10">{{vm.environment.deployedBranch}}</div>        
     </div>
-
+    
+    <div class="row">
+      <div class="col-md-2"><strong>Update Path:</strong></div>
+      <div class="col-md-10">{{vm.environment.updatePath}}</div>        
+    </div>
+    
     <div class="row">
       <div class="col-md-2"><strong>Build installed:</strong></div>
       <div class="col-md-10">{{vm.environment.deployedOn | fromDateString | date: 'EEE, MMM dd, yyyy, hh:mma (LOCAL)'}}</div>        

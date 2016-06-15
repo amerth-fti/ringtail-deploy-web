@@ -1,11 +1,11 @@
 -- insert
 insert into env (
   envId, envName, envDesc, status, remoteType, remoteId, config,
-  deployedBy, deployedOn, deployedUntil, deployedNotes, deployedBranch, deployedJobId, host
+  deployedBy, deployedOn, deployedUntil, deployedNotes, deployedBranch, deployedJobId, host, updatePath
 )
 values (
   $envId, $envName, $envDesc, $status, $remoteType, $remoteId, $config,
-  $deployedBy, $deployedOn, $deployedUntil, $deployedNotes, $deployedBranch, $deployedJobId, $host
+  $deployedBy, $deployedOn, $deployedUntil, $deployedNotes, $deployedBranch, $deployedJobId, $host, $updatePath
 );
 
 
@@ -14,7 +14,7 @@ update env
 set
   envName = $envName, envDesc = $envDesc, status = $status, remoteType = $remoteType, remoteId = $remoteId, config = $config,
   deployedBy = $deployedBy, deployedOn = $deployedOn, deployedUntil = $deployedUntil, deployedNotes = $deployedNotes, deployedBranch = $deployedBranch, deployedJobId = $deployedJobId,
-  host = $host
+  host = $host, updatePath = $updatePath
 
 where envId = $envId;
 
