@@ -1,6 +1,6 @@
 -- insert
-insert into config (configId, configName, data, roles, envId)
-values ($configId, $configName, $data, $roles, $envId);
+insert into config (configId, configName, data, roles, envId, launchKey)
+values ($configId, $configName, $data, $roles, $envId, $launchKey);
 
 -- update
 update config set

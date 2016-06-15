@@ -23,7 +23,8 @@ schema = {
     { "name": "deployedBranch" },
     { "name": "deployedJobId" },
     { "name": "runstate" },
-    { "name": "machines" }
+    { "name": "machines" },
+    { "name": "updatePath" }
   ]
 };
 /* eslint-enable */
