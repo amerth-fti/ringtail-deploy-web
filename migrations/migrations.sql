@@ -225,3 +225,22 @@ INSERT INTO config (configId, configName, data, roles)
 SELECT configId, configName, data, roles FROM configTemp;
 
 DROP TABLE configtemp;
+
+-- 010-addLaunchKeyConfig
+ALTER TABLE config RENAME TO configtemp;
+
+CREATE TABLE config (
+  configId INTEGER PRIMARY KEY AUTOINCREMENT,
+  configName NVARCHAR(255),
+  data TEXT,
+  launchKey TEXT,
+  roles TEXT,
+  envId INTEGER,
+  FOREIGN KEY (envId) REFERENCES env(envId)
+);
+
+INSERT INTO config (configId, configName, data, roles, envId)
+SELECT configId, configName, data, roles, envId
+FROM configtemp;
+
+DROP TABLE configtemp;
