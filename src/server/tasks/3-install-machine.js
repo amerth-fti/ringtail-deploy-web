@@ -91,13 +91,16 @@ function TaskImpl(options) {
         var configs = {
           'Common|BRANCH_NAME' : branch,
           'RoleResolver|ROLE' : config.roles[0],
-          'JobLogger|ENV_NAME': machine.machineName + ' (machine-' + machineId + ')',
+          'JobLogger|ENV_NAME': machine.machineName,
           'JobLogger|JOB_ID': me.jobId
         };
         _.extend(configs, config.data);
-        // TODO: wrie in new column with illumination keys.
-        //_.extend(configs, config.launchKeys);
+        if(config.launchKeys) {
+          _.extend(configs, config.launchKeys);
+        }
         _.extend(configs, getConfigsFromOptions(options));
+
+        log('sending config object %j', configs);
         return client.setConfigs(configs);
       })
 

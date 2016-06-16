@@ -46,20 +46,10 @@
         </list>
       </div>
     </div>
-    <div class="form-group skytap-selectlist-sm" ng-hide="vm.hideLaunchKeys">
-      <label>Select launch keys:</label>
-      <div class="list-loading" ng-show="vm.loadingLaunchKeys">
-        <img src="/assets/img/bar-loader.gif">
-      </div>
-      <select 
-        class="form-control"         
-        ng-disabled="vm.loadingBuilds || vm.loadingBranches || !vm.selectedBranch.branch"
-        multiple="true"
-        ng-model="vm.selectedBranch.launchKeys"
-        ng-change="vm.launchKeySelection()">
-        <option ng-repeat="launchKey in vm.launchKeys" value="{{launchKey.FeatureKey}}">{{launchKey.FeatureKey}}</option>
-      </select>
-    </div>      
+     <div class="form-group skytap-selectlist-sm" ng-hide="vm.hideLaunchKeys" >
+      <label>Select feature keys:</label>
+      <div id="grid1" ui-grid="vm.featureGrid" ng-click="vm.launchKeySelection" ui-grid-tree-view class="ui-grid" ui-grid-auto-resize ng-disabled="vm.loadingBuilds || vm.loadingBranches || !vm.selectedBranch.branch"></div>
+    </div>  
     <div ng-show="vm.hasRpf || vm.hasSql">      
       <p> 
         <input type="checkbox" id="keepRpfwInstalls" ng-model="vm.keepRpfwInstalls" />

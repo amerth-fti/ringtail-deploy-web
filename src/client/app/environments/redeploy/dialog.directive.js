@@ -19,9 +19,9 @@
     };
   }
 
-  Controller.$inject = [ '$timeout', '$rootScope', '$location', 'Browse', 'EnvironmentStarter', 'Config' ];
+  Controller.$inject = [ '$timeout', '$rootScope', '$location', 'Browse', 'EnvironmentStarter', 'Config', 'uiGridConstants' ];
 
-  function Controller($timeout, $rootScope, $location, Browse, EnvironmentStarter, Config) {
+  function Controller($timeout, $rootScope, $location, Browse, EnvironmentStarter, Config, uiGridConstants) {
     var vm = this;
     vm.modalInstance      = this.modalInstance;
     vm.branches           = null;
@@ -36,7 +36,7 @@
     vm.selectedTasks      = null;
     vm.selectedBranch     = null;
     vm.showAdvanced       = false;
-    vm.hideLaunchKeys     = true;
+    vm.hideLaunchKeys     = false;
     vm.hasRpf             = false;
     vm.keepRpfwInstalls   = null;
     vm.wipeRpfWorkers     = null;
@@ -52,12 +52,33 @@
     vm.fileCount          = 0;
     vm.hideFiles          = true;
     vm.poll               = null;
-    vm.message            = null;
+    vm.message            = null,
+    vm.gridApi            = null;
+    vm.click             = onFeatureKeyCheckClick,
+    vm.featureGrid        =  {
+            enableColumnMenus: false,
+            showHeader: false,
+            enableSorting: true,
+            enableRowSelection: false,
+            enableRowHeaderSelection: false,
+            enableFiltering: false,
+            enableExpandAll: false,
+            showTreeExpandNoChildren: true,
+            treeRowHeaderAlwaysVisible: false,
+            headerClass: "ui-grid-noborder",
+            width: 200,
+            columnDefs: [
+            { name: 'isActive', displayName: 'Active', type: 'boolean', cellTemplate: '<div ng-hide=row.entity.hideCheck><input type="checkbox" ng-model="row.entity.isActive"  ng-click="ui-grid.appScope.click(row.entity.name, row.entity.isActive)" ng-disabled=!row.entity.selectable></div>', enableColumnMenu: false, width:"25" , cellClass: "ui-grid"},
+            { name: 'name',enableHiding: false, enableColumnMenu: false, visible: true, pinnedLeft:true, width:"15%", cellClass: "ui-grid",  },
+            { name: 'description',  enableHiding: false, enableColumnMenu: false, visible: true, width:"*", cellClass: "ui-grid" }
+        ]};
+        
     activate();
 
     //////////
 
     function activate() {
+      vm.featureGrid.appScopeProvider = vm;
       vm.regionId = $rootScope.routeParams.regionId;
       vm.tempEnv = angular.copy(vm.environment);
       vm.selectedBranch = parseBranchPath(vm.tempEnv.deployedBranch);
@@ -203,7 +224,7 @@
         vm.loadingBuilds = true;
         vm.selectedBranch.build = null;
         vm.launchKeys = null;
-        vm.hideLaunchKeys = true;        
+        vm.hideLaunchKeys = false;        
         Browse.builds({regionId: vm.regionId, branch: vm.selectedBranch.branch }, function(builds) {
           vm.loadingBuilds = false;
           vm.loadingFiles = false;
@@ -219,13 +240,13 @@
       if(vm.selectedBranch.build) {
         vm.loadingFiles = true;
         vm.launchKeys = null;
-        vm.hideLaunchKeys = true;
+        vm.hideLaunchKeys = false;
         getLaunchKeysForBuild();
         Browse.files({regionId: vm.regionId, branch: constructBranchPath() }, function(files) {
           vm.loadingFiles = false;
           vm.fileCount = files.length;
           if(files.length > 0) {
-            vm.hideFiles = false;
+            vm.hideFiles = true;  // too much noise.
           }
           else {
             vm.hideFiles = false;
@@ -243,36 +264,237 @@
       Config.launchKeys({envId: vm.tempEnv.envId, branch: constructBranchPath() }, function(keys) {
         vm.launchKeys = keys;
         vm.hideLaunchKeys = keys === null || keys.length === 0;
+        return vm.launchKeys;
+      }).$promise.then(function(launchKeys) {
+        formatFeatureTreeData(launchKeys);
+        return;
       });
-   
     }
 
     function saveLaunchKeys() {
-      var filteredLaunchKeys = [];
+      var filteredLaunchKeys = [],
+        me = vm;
       
-      if(vm && vm.selectedBranch && vm.selectedBranch.launchKeys && vm.launchKeys){
-        vm.selectedBranch.launchKeys.forEach(function(key){
-          vm.launchKeys.forEach(function(launchKey){
-            if(key == launchKey.FeatureKey){
-              //create a copy of the object w/o a reference to remove the angular junk
+      if(vm && vm.selectedBranch && vm.launchKeys) {
+        vm.featureGrid.data.forEach(function(key) {
+          vm.launchKeys.forEach(function(launchKey) {
+            if(key.isActive && key.name == launchKey.FeatureKey){
               var tempLaunchKey = JSON.parse(JSON.stringify(launchKey));
               delete tempLaunchKey.$$hashKey;
-
               filteredLaunchKeys.push(tempLaunchKey);
             }
           });
         });
-      } else {
-        //no keys, continue on
+      } 
+      else {
         return;
       }
 
       Config.sendLaunchKeys({envId: vm.tempEnv.envId, launchKeys: filteredLaunchKeys }, function(keys) {}); 
     }
+    
+    function formatFeatureTreeData(launchKeys){
+     var treeData = [],
+      data = [],
+      writeoutNode = function(childArray, currentLevel, dataArray) {
+        childArray.forEach(function(childNode) {
+          if(childNode.children.length > 0) {
+            childNode.$$treeLevel = currentLevel;
+          }
+          dataArray.push(childNode);
+          writeoutNode(childNode.children, currentLevel + 1, dataArray);
+        })
+      }
+         
+      data = buildFeatureTreeDataObject(launchKeys);
+      writeoutNode(data, 0, treeData);
+      vm.featureGrid.data = treeData;      
+    }
 
-    function launchKeySelection() {
-    }    
+    function buildFeatureTreeDataObject(launchKeys){
+      var keyFilter = null,
+        keyFilter = "Development",
+        keysToProcess = [];
 
+      //var keyFilter_TODO_VARIABLE = vm.environment.updatePath;
+
+      if(keyFilter !== null ){
+        if((keyFilter.toUpperCase() === "DEVELOPMENT") || (keyFilter.toUpperCase() === "OnDemand")){
+          keysToProcess.push(launchKeys.filter(function(el) {
+            return el.KeyType.toUpperCase() === "GLACIAL"; 
+          }));
+          
+          keysToProcess.push(launchKeys.filter(function(el) {
+            return el.KeyType.toUpperCase() === "SLOW"; 
+          }));
+          
+          keysToProcess.push(launchKeys.filter(function(el) {
+            return el.KeyType.toUpperCase() === "FAST"; 
+          }));
+        }
+        
+        if( keyFilter.toUpperCase() === "DEVELOPMENT"){
+          keysToProcess.push(launchKeys.filter(function(el) {
+            return el.KeyType.toUpperCase() === "DEVELOPMENT"; 
+          }));
+        }
+      }
+
+      var rootNode = {
+        "id": "portal",       
+        "name": "Portal",
+        "hideCheck": true,
+        "selectable" : false,
+        "children": []
+      };
+
+      keysToProcess.forEach(function(listOfKeys) {
+        if(listOfKeys.length > 0) { 
+          rootNode.children.push(BuildSubKeyLevelDataObject(listOfKeys));
+        }
+      });
+      
+      return new Array(rootNode);
+    }
+
+    function BuildSubKeyLevelDataObject(listOfKeys) {
+      var rootLevelFeatureItem = listOfKeys.find( function(el){
+          return el.KeyType !== null;
+      });
+      
+      if(rootLevelFeatureItem === null){
+          return;            
+      }
+      
+      var IsKeyItemSelectable = false;
+      
+      if(rootLevelFeatureItem.KeyType.toUpperCase() === "DEVELOPMENT"){
+        IsKeyItemSelectable = true;
+      }
+      
+      // Create the root item group
+      var filterLevelItemRoot = {
+        "id": rootLevelFeatureItem.KeyType,       
+        "name": rootLevelFeatureItem.KeyType,
+        "hideCheck": false,
+        "selectable" : true,
+        "children": []
+      }
+          //"parentId": 1,
+      
+      listOfKeys.forEach(function(keyItemDetail) {
+        var isChecked = false;
+        // TODO
+        //if (IlluminatedFeatures != null && IlluminatedFeatures.Any())
+        //    isChecked = IlluminatedFeatures.Contains(darkLaunchKeyDataObject.FeatureKey);
+        filterLevelItemRoot.children.push({
+          "id": keyItemDetail.KeyType,
+          "name": keyItemDetail.FeatureKey,
+          "selectable" : IsKeyItemSelectable,
+          "hideCheck": false,
+          //"parentId": 2,
+          "isSelected": isChecked,
+          "description": keyItemDetail.Description,
+          "children": []
+        });
+      });
+          
+      return filterLevelItemRoot;
+    }
+
+    function BuildSubKeyLevelDataObject(listOfKeys) {
+      var rootLevelFeatureItem = listOfKeys.find( function(el){
+          return el.KeyType !== null;
+      });
+      
+      if(rootLevelFeatureItem === null){
+          return;            
+      }
+      
+      var IsKeyItemSelectable = false;
+      
+      if(rootLevelFeatureItem.KeyType.toUpperCase() === "DEVELOPMENT"){
+        IsKeyItemSelectable = true;
+      }
+      
+      // Create the root item group
+      var filterLevelItemRoot = {
+        "id": rootLevelFeatureItem.KeyType,       
+        "name": rootLevelFeatureItem.KeyType,
+        "hideCheck": false,
+        "selectable" : true,
+        "children": []
+      }
+          //"parentId": 1,
+      
+      listOfKeys.forEach(function(keyItemDetail) {
+        var isChecked = false;
+        // TODO
+        //if (IlluminatedFeatures != null && IlluminatedFeatures.Any())
+        //    isChecked = IlluminatedFeatures.Contains(darkLaunchKeyDataObject.FeatureKey);
+        filterLevelItemRoot.children.push({
+          "id": keyItemDetail.KeyType,
+          "name": keyItemDetail.FeatureKey,
+          "selectable" : IsKeyItemSelectable,
+          "hideCheck": false,
+          //"parentId": 2,
+          "isSelected": isChecked,
+          "description": keyItemDetail.Description,
+          "children": []
+        });
+      });
+          
+      return filterLevelItemRoot;
+    }
+
+    function launchKeySelection(e) {
+      var filteredLaunchKeys = [],
+        me = vm;
+      
+      if(vm.launchKeys) {
+        vm.featureGrid.data.forEach(function(key) {
+          vm.launchKeys.forEach(function(launchKey) {
+            if(key.isActive && key.name == launchKey.FeatureKey){
+              var tempLaunchKey = JSON.parse(JSON.stringify(launchKey));
+              delete tempLaunchKey.$$hashKey;
+              filteredLaunchKeys.push(tempLaunchKey);
+            }
+          });
+        });
+      } 
+      else {
+        return;
+      }      
+    }
+
+    function onFeatureKeyCheckClick(selectedNodeName, value){
+        
+      vm.featureGrid.data.forEach(function(key) {
+        if(key.name === selectedNodeName){
+          if(key.children !== null){
+            key.children.forEach(function(childNode){
+              if(value){
+                childNode.isActive = true;
+              } else{
+                childNode.isActive = false;
+              }
+            });
+          }
+        }
+      });
+      vm.gridApi.core.notifyDataChange(uiGridConstants.dataChange.ALL);
+    }
+    
+    vm.featureGrid.onRegisterApi = function (gridApi) {
+      vm.gridApi = gridApi;
+
+      vm.gridApi.grid.registerDataChangeCallback(function() {
+       if(vm.gridApi.grid.treeBase.tree instanceof Array){
+         vm.gridApi.treeBase.expandAllRows();
+        }
+      });
+    };
+  
     function hasRole(env, roles) {
       var result = false;
 

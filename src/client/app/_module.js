@@ -9,6 +9,8 @@
     'shared',
     'app.environments',
     'app.regions',
+    'ui.grid', 
+    'ui.grid.treeView'    
   ]);
 
 }());
