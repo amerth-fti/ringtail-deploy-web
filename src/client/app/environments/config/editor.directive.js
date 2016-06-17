@@ -103,13 +103,15 @@
     }
 
     function escapeValue(value) {
-      var result = value ? value.replace(/\"/g, '') : value;
-
+      var result = value;
+      if(value && value.indexOf(' ') > 0) {
+        result = '"""' + value + '"""';
+      }
       return result;
     }
 
     function unescapeValue(value) {
-      var result = value ? value.replace(/\"/g, '') : value;
+      var result = value ? value.replace(/"""/g, '') : value;
       return result;
     }
 
