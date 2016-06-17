@@ -229,6 +229,7 @@
         vm.loadingBuilds = true;
         vm.selectedBranch.build = null;
         vm.launchKeys = null;
+        vm.hideLaunchKeys = true;
         Browse.builds({regionId: vm.regionId, branch: vm.selectedBranch.branch }, function(builds) {
           vm.loadingBuilds = false;
           vm.loadingFiles = false;
@@ -244,6 +245,7 @@
       if(vm.selectedBranch.build) {
         vm.loadingFiles = true;
         vm.launchKeys = null;
+        vm.hideLaunchKeys = true;
         getLaunchKeysForBuild();
         Browse.files({regionId: vm.regionId, branch: constructBranchPath() }, function(files) {
           vm.loadingFiles = false;
