@@ -308,8 +308,8 @@
           }
           dataArray.push(childNode);
           writeoutNode(childNode.children, currentLevel + 1, dataArray);
-        })
-      }
+        });
+      };
          
       data = buildFeatureTreeDataObject(vm.launchKeys);
       writeoutNode(data, 0, treeData);
@@ -348,7 +348,7 @@
           "selectable" : false,
           "children": []
         },
-        groupedKeys = _.groupBy(launchKeys, function(x) { return x.KeyType } ),
+        groupedKeys = _.groupBy(launchKeys, function(x) { return x.KeyType; } ),
         keysToProcess = _.toArray(groupedKeys);
 
       keysToProcess.forEach(function(listOfKeys) {
@@ -382,7 +382,7 @@
         "hideCheck": false,
         "selectable" : true,
         "children": []
-      }
+      };
           //"parentId": 1,
       
       listOfKeys.forEach(function(keyItemDetail) {
