@@ -19,9 +19,9 @@
     };
   }
 
-  Controller.$inject = [ '$timeout', '$rootScope', '$location', 'Browse', 'EnvironmentStarter', 'Config', 'uiGridConstants' ];
+  Controller.$inject = [ '_', '$timeout', '$rootScope', '$location', 'Browse', 'EnvironmentStarter', 'Config', 'uiGridConstants' ];
 
-  function Controller($timeout, $rootScope, $location, Browse, EnvironmentStarter, Config, uiGridConstants) {
+  function Controller(_, $timeout, $rootScope, $location, Browse, EnvironmentStarter, Config, uiGridConstants) {
     var vm = this;
     vm.modalInstance      = this.modalInstance;
     vm.branches           = null;
@@ -122,6 +122,11 @@
           pollWhileBusy(vm.environment, cb);
         }
       });
+
+
+      if(vm.environment.updatePath == null) {
+        vm.hideLaunchKeys = true;
+      }
     }
 
     function startSkytapEnvironment(cb) {
@@ -224,7 +229,6 @@
         vm.loadingBuilds = true;
         vm.selectedBranch.build = null;
         vm.launchKeys = null;
-        vm.hideLaunchKeys = false;        
         Browse.builds({regionId: vm.regionId, branch: vm.selectedBranch.branch }, function(builds) {
           vm.loadingBuilds = false;
           vm.loadingFiles = false;
@@ -240,7 +244,6 @@
       if(vm.selectedBranch.build) {
         vm.loadingFiles = true;
         vm.launchKeys = null;
-        vm.hideLaunchKeys = false;
         getLaunchKeysForBuild();
         Browse.files({regionId: vm.regionId, branch: constructBranchPath() }, function(files) {
           vm.loadingFiles = false;
@@ -262,11 +265,11 @@
 
     function getLaunchKeysForBuild() {
       Config.launchKeys({envId: vm.tempEnv.envId, branch: constructBranchPath() }, function(keys) {
-        vm.launchKeys = keys;
-        vm.hideLaunchKeys = keys === null || keys.length === 0;
+        vm.launchKeys = filterKeysBasedOnEnvironmentDeploymentRing(keys);
+        vm.hideLaunchKeys = vm.launchKeys === null || vm.launchKeys.length === 0;
         return vm.launchKeys;
-      }).$promise.then(function(launchKeys) {
-        formatFeatureTreeData(launchKeys);
+      }).$promise.then(function() {
+        formatFeatureTreeData();
         return;
       });
     }
@@ -293,7 +296,7 @@
       Config.sendLaunchKeys({envId: vm.tempEnv.envId, launchKeys: filteredLaunchKeys }, function(keys) {}); 
     }
     
-    function formatFeatureTreeData(launchKeys){
+    function formatFeatureTreeData(){
      var treeData = [],
       data = [],
       writeoutNode = function(childArray, currentLevel, dataArray) {
@@ -306,103 +309,56 @@
         })
       }
          
-      data = buildFeatureTreeDataObject(launchKeys);
+      data = buildFeatureTreeDataObject(vm.launchKeys);
       writeoutNode(data, 0, treeData);
       vm.featureGrid.data = treeData;      
     }
 
-    function buildFeatureTreeDataObject(launchKeys){
-      var keyFilter = null,
-        keyFilter = "Development",
-        keysToProcess = [];
+    function filterKeysBasedOnEnvironmentDeploymentRing(launchKeys) {
+      var keyFilter = vm.environment.updatePath,
+        filteredKeys = [],
+        rosettaStone = {
+          'DEVELOPMENT' : '0. Development',
+          'ALPHA'       : '1. Portal01'   ,
+          'BETA'        : '2. Demo'       ,
+          'GAMMA'       : '3. OnDemand'   ,
+          'RC'          : '4. SaaS'       ,
+          'FAST'        : '1. Portal01'   ,   // deprecated
+          'SLOW'        : '2. Demo'       ,   // deprecated
+          'GLACIAL'     : '3. OnDemand'   ,   // deprecated
+        };
 
-      //var keyFilter_TODO_VARIABLE = vm.environment.updatePath;
-
-      if(keyFilter !== null ){
-        if((keyFilter.toUpperCase() === "DEVELOPMENT") || (keyFilter.toUpperCase() === "OnDemand")){
-          keysToProcess.push(launchKeys.filter(function(el) {
-            return el.KeyType.toUpperCase() === "GLACIAL"; 
-          }));
-          
-          keysToProcess.push(launchKeys.filter(function(el) {
-            return el.KeyType.toUpperCase() === "SLOW"; 
-          }));
-          
-          keysToProcess.push(launchKeys.filter(function(el) {
-            return el.KeyType.toUpperCase() === "FAST"; 
-          }));
-        }
-        
-        if( keyFilter.toUpperCase() === "DEVELOPMENT"){
-          keysToProcess.push(launchKeys.filter(function(el) {
-            return el.KeyType.toUpperCase() === "DEVELOPMENT"; 
-          }));
-        }
+      if(keyFilter) {
+        filteredKeys = _.filter(launchKeys, function(k) {
+          var mappedKey = rosettaStone[k.KeyType.toUpperCase()];
+          return mappedKey ? mappedKey[0] >= keyFilter[0] : false;
+        });
       }
 
+      return filteredKeys;
+    }
+
+    function buildFeatureTreeDataObject(launchKeys){
       var rootNode = {
-        "id": "portal",       
-        "name": "Portal",
-        "hideCheck": true,
-        "selectable" : false,
-        "children": []
-      };
+          "id": "portal",       
+          "name": "Portal",
+          "hideCheck": true,
+          "selectable" : false,
+          "children": []
+        },
+        groupedKeys = _.groupBy(launchKeys, function(x) { return x.KeyType } ),
+        keysToProcess = _.toArray(groupedKeys);
 
       keysToProcess.forEach(function(listOfKeys) {
         if(listOfKeys.length > 0) { 
-          rootNode.children.push(BuildSubKeyLevelDataObject(listOfKeys));
+          rootNode.children.push(buildSubKeyLevelDataObject(listOfKeys));
         }
       });
       
       return new Array(rootNode);
     }
 
-    function BuildSubKeyLevelDataObject(listOfKeys) {
-      var rootLevelFeatureItem = listOfKeys.find( function(el){
-          return el.KeyType !== null;
-      });
-      
-      if(rootLevelFeatureItem === null){
-          return;            
-      }
-      
-      var IsKeyItemSelectable = false;
-      
-      if(rootLevelFeatureItem.KeyType.toUpperCase() === "DEVELOPMENT"){
-        IsKeyItemSelectable = true;
-      }
-      
-      // Create the root item group
-      var filterLevelItemRoot = {
-        "id": rootLevelFeatureItem.KeyType,       
-        "name": rootLevelFeatureItem.KeyType,
-        "hideCheck": false,
-        "selectable" : true,
-        "children": []
-      }
-          //"parentId": 1,
-      
-      listOfKeys.forEach(function(keyItemDetail) {
-        var isChecked = false;
-        // TODO
-        //if (IlluminatedFeatures != null && IlluminatedFeatures.Any())
-        //    isChecked = IlluminatedFeatures.Contains(darkLaunchKeyDataObject.FeatureKey);
-        filterLevelItemRoot.children.push({
-          "id": keyItemDetail.KeyType,
-          "name": keyItemDetail.FeatureKey,
-          "selectable" : IsKeyItemSelectable,
-          "hideCheck": false,
-          //"parentId": 2,
-          "isSelected": isChecked,
-          "description": keyItemDetail.Description,
-          "children": []
-        });
-      });
-          
-      return filterLevelItemRoot;
-    }
-
-    function BuildSubKeyLevelDataObject(listOfKeys) {
+    function buildSubKeyLevelDataObject(listOfKeys) {
       var rootLevelFeatureItem = listOfKeys.find( function(el){
           return el.KeyType !== null;
       });

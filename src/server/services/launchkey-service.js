@@ -76,7 +76,7 @@ exports.sendLaunchKeys = function sendLaunchKeys(data, next) {
 };
 
 exports.getLitKeys = function getLitKeys(data, next) {
-var branch = data.branch,
+  var branch = data.branch,
     me = this,
     envId = data.envId,
     machineId,
