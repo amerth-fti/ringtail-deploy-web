@@ -10,6 +10,7 @@ var path        = require('path')
   , join        = require('path').join
   , session     = require('express-session')
   , cookieParser = require('cookie-parser')
+  , migrate     = require('migrate')
   , app;
 
 app = express();
@@ -197,16 +198,24 @@ function convertToClient(results) {
 }
 
 
-if(config.host) {
-  app.listen(config.port, config.host, function() {
-    debug('Listening on %s:%d ', (config.host ? config.host : '*'), config.port);
-  });
-} else {
-  app.listen(config.port, function() {
-    debug('Listening on %s:%d ', (config.host ? config.host : '*'), config.port);
-  });
-}
-
+var set = migrate.load('migrations/.migrate', 'migrations');
+set.up(function (err) {
+  if (err) {
+    console.error("failed to migrate db");
+    throw err;
+  }
+  console.log("DB Tasks Completed");
+  
+  if(config.host) {
+    app.listen(config.port, config.host, function() {
+      debug('Listening on %s:%d ', (config.host ? config.host : '*'), config.port);
+    });
+  } else {
+    app.listen(config.port, function() {
+      debug('Listening on %s:%d ', (config.host ? config.host : '*'), config.port);
+    });
+  }
+});
 
 // OVERWRITE DEFAULT DEBUG
 var debugapp = require('debug');
