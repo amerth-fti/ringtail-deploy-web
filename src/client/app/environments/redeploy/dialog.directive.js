@@ -342,11 +342,11 @@
 
     function buildFeatureTreeDataObject(launchKeys){
       var rootNode = {
-          "id": "portal",       
-          "name": "Portal",
-          "hideCheck": true,
-          "selectable" : false,
-          "children": []
+          'id': 'portal',       
+          'name': 'Portal',
+          'hideCheck': true,
+          'selectable' : false,
+          'children': []
         },
         groupedKeys = _.groupBy(launchKeys, function(x) { return x.KeyType; } ),
         keysToProcess = _.toArray(groupedKeys);
@@ -377,11 +377,11 @@
       
       // Create the root item group
       var filterLevelItemRoot = {
-        "id": rootLevelFeatureItem.KeyType,       
-        "name": rootLevelFeatureItem.KeyType,
-        "hideCheck": false,
-        "selectable" : true,
-        "children": []
+        'id': rootLevelFeatureItem.KeyType,       
+        'name': rootLevelFeatureItem.KeyType,
+        'hideCheck': false,
+        'selectable' : true,
+        'children': []
       };
           //"parentId": 1,
       
@@ -391,14 +391,14 @@
         //if (IlluminatedFeatures != null && IlluminatedFeatures.Any())
         //    isChecked = IlluminatedFeatures.Contains(darkLaunchKeyDataObject.FeatureKey);
         filterLevelItemRoot.children.push({
-          "id": keyItemDetail.KeyType,
-          "name": keyItemDetail.FeatureKey,
-          "selectable" : IsKeyItemSelectable,
-          "hideCheck": false,
-          //"parentId": 2,
-          "isSelected": isChecked,
-          "description": keyItemDetail.Description,
-          "children": []
+          'id': keyItemDetail.KeyType,
+          'name': keyItemDetail.FeatureKey,
+          'selectable' : IsKeyItemSelectable,
+          'hideCheck': false,
+          //'parentId': 2,
+          'isSelected': isChecked,
+          'description': keyItemDetail.Description,
+          'children': []
         });
       });
           
