@@ -94,7 +94,19 @@ function TaskImpl(options) {
           'JobLogger|ENV_NAME': machine.machineName,
           'JobLogger|JOB_ID': me.jobId
         };
-        _.extend(configs, config.data);
+
+        //kind of a bit hacky, but handles quoting to server
+        var configData = config.data;
+        var configKeys = Object.keys(configData);
+        configKeys.forEach(function(key){
+          var tempkey = configData[key].replace(/\"/g,"").trim();
+          if(tempkey.indexOf(" ") > 0) {
+            configData[key] = "\"\"\"" + tempkey + "\"\"\"";
+          }
+        });
+
+        debugger;
+        _.extend(configs, configData);
         if(config.launchKeys) {
           _.extend(configs, config.launchKeys);
         }
