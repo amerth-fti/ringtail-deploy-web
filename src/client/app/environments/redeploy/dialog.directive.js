@@ -49,7 +49,7 @@
     vm.regionId           = null;
     vm.filesInvalid       = false;
     vm.isDeployed         = true;
-    vm.fileCount          = 0;
+    vm.filesOk            = false;
     vm.hideFiles          = true;
     vm.poll               = null;
     vm.message            = null,
@@ -233,7 +233,7 @@
         Browse.builds({regionId: vm.regionId, branch: vm.selectedBranch.branch }, function(builds) {
           vm.loadingBuilds = false;
           vm.loadingFiles = false;
-          vm.fileCount = 0;
+          vm.filesOk = false;
           vm.builds = builds.sort(function(a, b) {
             return a.localeCompare(b);
           });
@@ -249,9 +249,9 @@
         getLaunchKeysForBuild();
         Browse.files({regionId: vm.regionId, branch: constructBranchPath() }, function(files) {
           vm.loadingFiles = false;
-          vm.fileCount = files.length;
+          vm.filesOk = files.length == 0 || files[0] !== 'OK';
           if(files.length > 0) {
-            vm.hideFiles = true;  // too much noise.
+            vm.hideFiles = false;  // too much noise.
           }
           else {
             vm.hideFiles = false;
@@ -342,11 +342,11 @@
 
     function buildFeatureTreeDataObject(launchKeys){
       var rootNode = {
-          "id": "portal",       
-          "name": "Portal",
-          "hideCheck": true,
-          "selectable" : false,
-          "children": []
+          'id': 'portal',       
+          'name': 'Portal',
+          'hideCheck': true,
+          'selectable' : false,
+          'children': []
         },
         groupedKeys = _.groupBy(launchKeys, function(x) { return x.KeyType; } ),
         keysToProcess = _.toArray(groupedKeys);
@@ -377,11 +377,11 @@
       
       // Create the root item group
       var filterLevelItemRoot = {
-        "id": rootLevelFeatureItem.KeyType,       
-        "name": rootLevelFeatureItem.KeyType,
-        "hideCheck": false,
-        "selectable" : true,
-        "children": []
+        'id': rootLevelFeatureItem.KeyType,       
+        'name': rootLevelFeatureItem.KeyType,
+        'hideCheck': false,
+        'selectable' : true,
+        'children': []
       };
           //"parentId": 1,
       
@@ -391,14 +391,14 @@
         //if (IlluminatedFeatures != null && IlluminatedFeatures.Any())
         //    isChecked = IlluminatedFeatures.Contains(darkLaunchKeyDataObject.FeatureKey);
         filterLevelItemRoot.children.push({
-          "id": keyItemDetail.KeyType,
-          "name": keyItemDetail.FeatureKey,
-          "selectable" : IsKeyItemSelectable,
-          "hideCheck": false,
-          //"parentId": 2,
-          "isSelected": isChecked,
-          "description": keyItemDetail.Description,
-          "children": []
+          'id': keyItemDetail.KeyType,
+          'name': keyItemDetail.FeatureKey,
+          'selectable' : IsKeyItemSelectable,
+          'hideCheck': false,
+          //'parentId': 2,
+          'isSelected': isChecked,
+          'description': keyItemDetail.Description,
+          'children': []
         });
       });
           
