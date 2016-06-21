@@ -65,12 +65,12 @@
             enableExpandAll: false,
             showTreeExpandNoChildren: true,
             treeRowHeaderAlwaysVisible: false,
-            headerClass: "ui-grid-noborder",
+            headerClass: 'ui-grid-noborder',
             width: 200,
             columnDefs: [
-            { name: 'isActive', displayName: 'Active', type: 'boolean', cellTemplate: '<div ng-hide=row.entity.hideCheck><input type="checkbox" ng-model="row.entity.isActive"  ng-click="ui-grid.appScope.click(row.entity.name, row.entity.isActive)" ng-disabled=!row.entity.selectable></div>', enableColumnMenu: false, width:"25" , cellClass: "ui-grid"},
-            { name: 'name',enableHiding: false, enableColumnMenu: false, visible: true, pinnedLeft:true, width:"15%", cellClass: "ui-grid",  },
-            { name: 'description',  enableHiding: false, enableColumnMenu: false, visible: true, width:"*", cellClass: "ui-grid" }
+            { name: 'isActive', displayName: 'Active', type: 'boolean', cellTemplate: '<div ng-hide=row.entity.hideCheck><input type="checkbox" ng-model="row.entity.isActive"  ng-click="ui-grid.appScope.click(row.entity.name, row.entity.isActive)" ng-disabled=!row.entity.selectable></div>', enableColumnMenu: false, width:'25' , cellClass: 'ui-grid'},
+            { name: 'name',enableHiding: false, enableColumnMenu: false, visible: true, pinnedLeft:true, width:'15%', cellClass: 'ui-grid',  },
+            { name: 'description',  enableHiding: false, enableColumnMenu: false, visible: true, width:'*', cellClass: 'ui-grid' }
         ]};
         
     activate();
@@ -342,11 +342,11 @@
 
     function buildFeatureTreeDataObject(launchKeys){
       var rootNode = {
-          "id": "portal",       
-          "name": "Portal",
-          "hideCheck": true,
-          "selectable" : false,
-          "children": []
+          'id': 'portal',       
+          'name': 'Portal',
+          'hideCheck': true,
+          'selectable' : false,
+          'children': []
         },
         groupedKeys = _.groupBy(launchKeys, function(x) { return x.KeyType; } ),
         keysToProcess = _.toArray(groupedKeys);
@@ -371,19 +371,18 @@
       
       var IsKeyItemSelectable = false;
       
-      if(rootLevelFeatureItem.KeyType.toUpperCase() === "DEVELOPMENT"){
+      if(rootLevelFeatureItem.KeyType.toUpperCase() === 'DEVELOPMENT'){
         IsKeyItemSelectable = true;
       }
       
       // Create the root item group
       var filterLevelItemRoot = {
-        "id": rootLevelFeatureItem.KeyType,       
-        "name": rootLevelFeatureItem.KeyType,
-        "hideCheck": false,
-        "selectable" : true,
-        "children": []
+        'id': rootLevelFeatureItem.KeyType,       
+        'name': rootLevelFeatureItem.KeyType,
+        'hideCheck': false,
+        'selectable' : true,
+        'children': []
       };
-          //"parentId": 1,
       
       listOfKeys.forEach(function(keyItemDetail) {
         var isChecked = false;
@@ -391,14 +390,13 @@
         //if (IlluminatedFeatures != null && IlluminatedFeatures.Any())
         //    isChecked = IlluminatedFeatures.Contains(darkLaunchKeyDataObject.FeatureKey);
         filterLevelItemRoot.children.push({
-          "id": keyItemDetail.KeyType,
-          "name": keyItemDetail.FeatureKey,
-          "selectable" : IsKeyItemSelectable,
-          "hideCheck": false,
-          //"parentId": 2,
-          "isSelected": isChecked,
-          "description": keyItemDetail.Description,
-          "children": []
+          'id': keyItemDetail.KeyType,
+          'name': keyItemDetail.FeatureKey,
+          'selectable' : IsKeyItemSelectable,
+          'hideCheck': false,
+          'isSelected': isChecked,
+          'description': keyItemDetail.Description,
+          'children': []
         });
       });
           

@@ -99,9 +99,12 @@ function TaskImpl(options) {
         var configData = config.data;
         var configKeys = Object.keys(configData);
         configKeys.forEach(function(key){
-          var tempkey = configData[key].replace(/\"/g,"").trim();
-          if(tempkey.indexOf(" ") > 0) {
-            configData[key] = "\"\"\"" + tempkey + "\"\"\"";
+          var tempkey = configData[key] || '';
+          if(tempkey && tempkey.replace) {
+            tempkey.replace(/\"/g, '').trim();
+            if(tempkey.indexOf(' ') > 0) {
+              configData[key] = '"""' + tempkey + '"""';
+            }
           }
         });
 
