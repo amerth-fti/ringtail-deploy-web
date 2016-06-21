@@ -105,7 +105,6 @@ function TaskImpl(options) {
           }
         });
 
-        debugger;
         _.extend(configs, configData);
         if(config.launchKeys) {
           _.extend(configs, config.launchKeys);
