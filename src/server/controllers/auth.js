@@ -59,7 +59,9 @@ exports.login = function login(req, res, next) {
 
                 if(hasRequiredGroup) {
                     //user has access
-                    res.cookie('auth', domainUser, { maxAge: 900000, signed: true});
+                    var hour = 3600000;
+
+                    res.cookie('auth', domainUser, { maxAge: hour * 2, signed: true, rolling: true});
 
                     return res.json({
                         success: true
