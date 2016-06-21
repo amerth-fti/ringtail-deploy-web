@@ -106,6 +106,43 @@ FTPBrowser.prototype.files = function files(branch, next) {
   branch = branch.replace('\\', '/');
   params.branch = this.ftpRootPath.replace(/\/$/, '') + '/' + branch;
   ftp(params, function (error, result) {
+    if (error) {
+      deferred.reject(error);
+    }
+    else {
+      deferred.resolve(result);
+    }
+  });
+  return deferred.promise.nodeify(next);
+};
+
+/**
+ * Validates that the manifest matches what it says it should.
+ * @param {string} data - the data object
+ * @param {function} [next] - node callback
+ * @return {promise}
+ */
+FTPBrowser.prototype.validateManifest = function validateManifest(data, next) {
+  var deferred = Q.defer()
+   , ACTION = {
+        DIRECTORY: { value: 'DIRECTORY' },
+        FILE: { value: 'FILE' }
+      }
+  , currentAction = ACTION.VALIDATE
+  , params = {
+        ftpHost: this.ftpHost,
+        ftpUser: this.ftpUser,
+        ftpPassword: this.ftpPassword,
+        ftpProxyHost: this.ftpProxyHost,
+        ftpProxyPort: '',
+        action: currentAction.value,
+        branch: this.ftpRootPath.replace(/\/$/, '') + '/' + data.branch
+      };
+
+  data.branch = branch.replace('\\', '/');
+  params.branch = this.ftpRootPath.replace(/\/$/, '') + '/' + data.branch;
+
+  ftp(params, function (error, result) {
     if (error) deferred.reject(error);
     else deferred.resolve(result);
   });
