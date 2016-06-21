@@ -32,12 +32,11 @@
       </select>
     </div>
     <div class="form-group skytap-selectlist-sm" ng-hide="vm.hideFiles">
-      <label>Installers found in selected location:</label>
+      <label>Health check of chosen location:</label>
       <div class="list-loading" ng-show="vm.loadingFiles">
         <img src="/assets/img/bar-loader.gif">
       </div>
-      <span class="glyphicon" ng-class="{ 'glyphicon-fire color-danger': vm.fileCount === 0}"></span>      
-      
+      <span class="glyphicon" ng-class="{ 'glyphicon-fire color-danger': vm.filesOk, 'glyphicon-ok color-safe': !vm.filesOk}"></span>      
       <div class="list-group">      
         <list
           ng-readonly="true"      

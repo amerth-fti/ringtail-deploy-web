@@ -39,6 +39,7 @@ app.use(cookieParser(config.cookieSecret));
 app.use(session({
    secret : config.cookieSecret,
    name : 'sessionId',
+   rolling: true
   })
 );
 
@@ -64,6 +65,11 @@ function checkLogin(req, res, next) {
   var isLoggedin = false;
 
   if(req.signedCookies && req.signedCookies['auth']) {
+    var authCookie = req.signedCookies['auth'];
+    var hour = 3600000;
+
+    res.cookie('auth', authCookie, { maxAge: hour * 2, signed: true, rolling: true});
+
     isLoggedin = true;
   }
 

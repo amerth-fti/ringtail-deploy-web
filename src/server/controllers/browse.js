@@ -1,4 +1,5 @@
 var debug           = require('debug')('deployer-branches')
+  , _               = require('underscore')
   , Q               = require('q')
   , regionService   = require('../services/region-service')
   , browserFactory  = require('../services/browser-factory')  
@@ -60,7 +61,15 @@ exports.files = function files(req, res, next) {
     .then(function(browser) {
       return browser.files(branch);      
     })
-    .then(function(files) {      
+    .then(function(files) {
+      var manifestOk = files.indexOf('Manifest.txt') !== -1; 
+      
+      if(!manifestOk) {
+        //files = null;
+      } else {
+
+      }
+      
       res.send(files);
     })
     .fail(function(err) {
