@@ -105,18 +105,32 @@ exports.getLitKeys = function getLitKeys(data, next) {
                   db,
                   password,
                   server,
-                  user;
+                  user,
+                  configKeyParts,
+                  configSource;
 
-              configs.forEach(function(config){
-                 if(config && config.data && config.data['Ringtail8|IS_SQLSERVER_DATABASE']){
-                   db = config.data['Ringtail8|IS_SQLSERVER_DATABASE'];
-                   password = config.data['Ringtail8|IS_SQLSERVER_PASSWORD'];
-                   server = config.data['Ringtail8|IS_SQLSERVER_SERVER'];
-                   user = config.data['Ringtail8|IS_SQLSERVER_USERNAME'];
+                configs.forEach(function (config){
+                    if (config && config.data) {
+                        Object.getOwnPropertyNames(config.data).some(function (val, idx, array) {
+                            configKeyParts = val.split('|');
+                            if (configKeyParts && configKeyParts.length == 2) {
+                                if (configKeyParts[1] === "IS_SQLSERVER_DATABASE") {
+                                    configSource = configKeyParts[0];
+                                    return true;
+                                }
+                            }
+                        });
 
-                   return connectionString = 'Data Source = ' + server + ';Initial Catalog = ' + db + ';User id = ' + user + ';Password = ' + password + ';';
-                 }
-              });
+                        if (!!configSource) {
+                            db = config.data[configSource + '|IS_SQLSERVER_DATABASE'];
+                            password = config.data[configSource + '|IS_SQLSERVER_PASSWORD'];
+                            server = config.data[configSource + '|IS_SQLSERVER_SERVER'];
+                            user = config.data[configSource + '|IS_SQLSERVER_USERNAME'];
+                            
+                            return connectionString = 'Data Source = ' + server + ';Initial Catalog = ' + db + ';User id = ' + user + ';Password = ' + password + ';';
+                        }
+                    }
+                });
             });
         })
         .then(function(result) {
