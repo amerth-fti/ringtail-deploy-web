@@ -372,8 +372,8 @@
         'name': rootLevelFeatureItem.KeyType,
         'hideCheck': false,
         'selectable' : true,
-        "isSelected": rootItemChecked,
-        "children": []
+        'isSelected': rootItemChecked,
+        'children': []
       };
       
       listOfKeys.forEach(function(keyItemDetail) {
@@ -383,15 +383,15 @@
         }
         
         filterLevelItemRoot.children.push({
-            "id": keyItemDetail.KeyType,
-            "name": keyItemDetail.FeatureKey,
-            "selectable" : IsKeyItemSelectable,
-            "hideCheck": false,
-            "isSetInDb": isChecked, // used to store the original state
-            "isSelected": isChecked,
-            "isActive" : isChecked,
-            "description": keyItemDetail.Description,
-            "children": []
+            'id': keyItemDetail.KeyType,
+            'name': keyItemDetail.FeatureKey,
+            'selectable' : IsKeyItemSelectable,
+            'hideCheck': false,
+            'isSetInDb': isChecked, // used to store the original state
+            'isSelected': isChecked,
+            'isActive' : isChecked,
+            'description': keyItemDetail.Description,
+            'children': []
           });
         });
             
