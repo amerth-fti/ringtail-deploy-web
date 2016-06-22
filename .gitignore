@@ -43,3 +43,4 @@ build
 .migrate
 
 src/client/assets/css/*.css
+.vscode
