@@ -101,13 +101,12 @@ function TaskImpl(options) {
         configKeys.forEach(function(key){
           var tempkey = configData[key] || '';
           if(tempkey && tempkey.replace) {
-            tempkey.replace(/\"/g, '').trim();
+            tempkey = tempkey.replace(/\"/g, '').trim();
             if(tempkey.indexOf(' ') > 0) {
               configData[key] = '"""' + tempkey + '"""';
             }
           }
         });
-
         _.extend(configs, configData);
         if(config.launchKeys) {
           _.extend(configs, config.launchKeys);
