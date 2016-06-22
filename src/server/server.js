@@ -207,10 +207,10 @@ function convertToClient(results) {
 var set = migrate.load('migrations/.migrate', 'migrations');
 set.up(function (err) {
   if (err) {
-    console.error("failed to migrate db");
+    console.error('failed to migrate db');
     throw err;
   }
-  console.log("DB Tasks Completed");
+  console.log('DB Tasks Completed');
   
   if(config.host) {
     app.listen(config.port, config.host, function() {

@@ -9,49 +9,49 @@
     </h4>  
 
     <div class="row">
-      <div class="col-md-2"><strong>Environment Info:</strong></div>
-      <div class="col-md-10" ng-bind-html="vm.environment.envDesc | newlines | anchors | trust"></div>
+      <div class="col-md-3"><strong>Environment Info:</strong></div>
+      <div class="col-md-9" ng-bind-html="vm.environment.envDesc | newlines | anchors | trust"></div>
     </div>
 
 
     <div class="row top-buffer">
-      <div class="col-md-2"><strong>Requested by:</strong></div>
-      <div class="col-md-10">{{vm.environment.deployedBy}}</div>
+      <div class="col-md-3"><strong>Requested by:</strong></div>
+      <div class="col-md-9">{{vm.environment.deployedBy}}</div>
     </div>
 
     <div class="row">
-      <div class="col-md-2"><strong>Requested until:</strong></div>
-      <div class="col-md-10">{{vm.environment.deployedUntil | fromDateString | date: 'EEE, MMM dd, yyyy, hh:mma (LOCAL)' }}</div>
+      <div class="col-md-3"><strong>Requested until:</strong></div>
+      <div class="col-md-9">{{vm.environment.deployedUntil | fromDateString | date: 'EEE, MMM dd, yyyy, hh:mma (LOCAL)' }}</div>
     </div>
 
     <div class="row">
-      <div class="col-md-2"><strong>Request notes:</strong></div>
-      <div class="col-md-10" ng-bind-html="vm.environment.deployedNotes | newlines | anchors | trust"></div>
+      <div class="col-md-3"><strong>Request notes:</strong></div>
+      <div class="col-md-9" ng-bind-html="vm.environment.deployedNotes | newlines | anchors | trust"></div>
     </div>
 
     <div class="row top-buffer">
-      <div class="col-md-2"><strong>Branch:</strong></div>
-      <div class="col-md-10">{{vm.environment.deployedBranch}}</div>        
+      <div class="col-md-3"><strong>Branch:</strong></div>
+      <div class="col-md-9">{{vm.environment.deployedBranch}}</div>        
     </div>
     
     <div class="row">
-      <div class="col-md-2"><strong>Deployment Ring:</strong></div>
-      <div class="col-md-10">{{vm.environment.updatePath}}</div>        
+      <div class="col-md-3"><strong>Deployment Ring:</strong></div>
+      <div class="col-md-9">{{vm.environment.updatePath}}</div>        
     </div>
     
     <div class="row">
-      <div class="col-md-2"><strong>Build installed:</strong></div>
-      <div class="col-md-10">{{vm.environment.deployedOn | fromDateString | date: 'EEE, MMM dd, yyyy, hh:mma (LOCAL)'}}</div>        
+      <div class="col-md-3"><strong>Build installed:</strong></div>
+      <div class="col-md-9">{{vm.environment.deployedOn | fromDateString | date: 'EEE, MMM dd, yyyy, hh:mma (LOCAL)'}}</div>        
     </div>
 
     <div class="row">
-      <div class="col-md-2"><strong>Build notes:</strong>        
+      <div class="col-md-3"><strong>Build notes:</strong>        
         <span 
           class="small toggle-icon glyphicon" 
           ng-click="vm.showBuildNotes = !vm.showBuildNotes;"
           ng-class="{ 'glyphicon-collapse-down': !vm.showBuildNotes, 'glyphicon-collapse-up': vm.showBuildNotes }"></span>        
       </div>
-      <div class="col-md-10" ng-show="vm.showBuildNotes">              
+      <div class="col-md-9" ng-show="vm.showBuildNotes">              
         <div ng-repeat="machine in vm.environment.machines">
           <div ng-show="machine.installNotes">
             {{machine.machineName}}
@@ -61,14 +61,14 @@
       </div>
     </div>
 
-    <div class="row" ng-show="vm.environment.deployedJobId">
-      <div class="col-md-2"><strong>Last Job:</strong></div>
-      <div class="col-md-10"><a href='/app/jobs/{{vm.environment.deployedJobId}}'>Job #{{vm.environment.deployedJobId}}</a></div> 
+    <div class="row" ng-show="vm.environment.deployedJobId && false">
+      <div class="col-md-3"><strong>Last Job:</strong></div>
+      <div class="col-md-9"><a href='/app/jobs/{{vm.environment.deployedJobId}}'>Job #{{vm.environment.deployedJobId}}</a></div> 
     </div>
 
     <div class="row top-buffer" ng-show="vm.environment.remoteType === 'skytap'">
-      <div class="col-md-2"><strong>Skytap Info:</strong></div>
-      <div class="col-md-10">
+      <div class="col-md-3"><strong>Skytap Info:</strong></div>
+      <div class="col-md-9">
         <a href="https://cloud.skytap.com/configurations/{{vm.environment.remoteId}}" target="_blank">Environment {{vm.environment.remoteId}}</a>
         <span 
           class="color-warning glyphicon glyphicon-exclamation-sign"
