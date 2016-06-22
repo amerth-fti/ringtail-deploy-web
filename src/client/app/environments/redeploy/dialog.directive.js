@@ -55,8 +55,8 @@
     vm.poll               = null;
     vm.message            = null,
     vm.gridApi            = null;
-    vm.click             = onFeatureKeyCheckClick;
-    vm.featureGrid        =  initFeatureGrid();
+    vm.click              = onFeatureKeyCheckClick;
+    vm.featureGrid        = initFeatureGrid();
         
     activate();
 
