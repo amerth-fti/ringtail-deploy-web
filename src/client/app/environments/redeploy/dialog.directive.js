@@ -373,6 +373,7 @@
         'hideCheck': false,
         'selectable' : true,
         "isSelected": rootItemChecked,
+        "children": []
       };
       
       listOfKeys.forEach(function(keyItemDetail) {
