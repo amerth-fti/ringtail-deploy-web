@@ -50,6 +50,18 @@ SmbBrowser.prototype.files = function files(branch, next) {
   return SmbBrowser.listFiles(branchPath).nodeify(next);
 };
 
+/**
+ * Retrieves the list of builds for a branch as a list of strings
+ *
+ * @param {string} branch - the branch to retrieve builds for
+ * @param {function} [next] - node callback
+ * @return {promise}
+ */
+SmbBrowser.prototype.readContents = function readContents(branch, next) {
+  var branchPath = path.join(this.smbPath, branch);
+  return SmbBrowser.readContents(branchPath).nodeify(next);
+};
+
 
 /**
  * Lists the directories in the path provided
@@ -89,18 +101,43 @@ SmbBrowser.listFiles = function listFiles(dir, next) {
   return this.filteredListContents(cfg, next);
 };
 
+/**
+ * Lists the contents of a file
+ * 
+ * @param {string} dir - the root path to check
+ * @param {function} [next] - node callback
+ * @return {promise} resolves to an array of directory names
+ */
+SmbBrowser.readContents = function readContents(file, next) {
+  var me = this;
+  return Q
+    .nfcall(fs.readFile, file, 'utf8', next)
+    .then(function(contents) {
+      me.readManifestFile(contents);
+      return contents;
+    })
+    .nodeify(next);
+};
+
+SmbBrowser.readManifestFile = function readManifestFile(contents) {
+  return _.map(contents.split('\n'), function(row) {
+    var name = row.split(':');
+
+    console.log(name[0].replace(/['"]+/g, ''));
+  });
+}
+
 SmbBrowser.filteredListContents = function filteredListContents(cfg, next) {
   var dir = cfg.dir,
     filterFn = cfg.filterFn;
 
   return Q
-    .nfcall(fs.readdir, dir)    
-    .then(function(files) {        
+    .nfcall(fs.readdir, dir)
+    .then(function(files) {
       return Q.all(files.map(function(file) {
-        var fullPath = path.join(dir, file);    
+        var fullPath = path.join(dir, file);
         return Q.nfcall(fs.stat, fullPath).then(function(stat) {
           var x = filterFn(stat, file);
-          debug('in here %s', x);
           return x;
         });
       }));
