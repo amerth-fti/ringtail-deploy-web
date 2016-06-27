@@ -403,25 +403,25 @@
       return filterLevelItemRoot;
     }
 
-    function launchKeySelection(e) {
-      var filteredLaunchKeys = [],
-        me = vm;
+    // function launchKeySelection(e) {
+    //   var filteredLaunchKeys = [],
+    //     me = vm;
       
-      if(vm.launchKeys) {
-        vm.featureGrid.data.forEach(function(key) {
-          vm.launchKeys.forEach(function(launchKey) {
-            if(key.isActive && key.name == launchKey.FeatureKey){
-              var tempLaunchKey = JSON.parse(JSON.stringify(launchKey));
-              delete tempLaunchKey.$$hashKey;
-              filteredLaunchKeys.push(tempLaunchKey);
-            }
-          });
-        });
-      } 
-      else {
-        return;
-      }      
-    }
+    //   if(vm.launchKeys) {
+    //     vm.featureGrid.data.forEach(function(key) {
+    //       vm.launchKeys.forEach(function(launchKey) {
+    //         if(key.isActive && key.name == launchKey.FeatureKey){
+    //           var tempLaunchKey = JSON.parse(JSON.stringify(launchKey));
+    //           delete tempLaunchKey.$$hashKey;
+    //           filteredLaunchKeys.push(tempLaunchKey);
+    //         }
+    //       });
+    //     });
+    //   } 
+    //   else {
+    //     return;
+    //   }      
+    // }
 
     function onFeatureKeyCheckClick(selectedNodeName, value){
         
