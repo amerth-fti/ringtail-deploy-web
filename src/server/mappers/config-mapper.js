@@ -18,6 +18,7 @@ module.exports = ConfigMapper;
 ConfigMapper.prototype.parse = function parse(record) {
   var result = new Config(record);
   result.data = result.data ? JSON.parse(result.data) : null;
+  result.launchKey = result.launchKey ? JSON.parse(result.launchKey) : null;
   result.roles = result.roles ? JSON.parse(result.roles) : null;
   return result;
 };

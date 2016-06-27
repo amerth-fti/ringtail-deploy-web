@@ -108,12 +108,14 @@ function TaskImpl(options) {
           }
         });
         _.extend(configs, configData);
-        if(config.launchKeys) {
-          _.extend(configs, config.launchKeys);
+
+        if(config.launchKey) {
+         _.extend(configs, config.launchKey);
         }
         _.extend(configs, getConfigsFromOptions(options));
 
         log('sending config object %j', configs);
+        //log('installation complete');
         return client.setConfigs(configs);
       })
 
