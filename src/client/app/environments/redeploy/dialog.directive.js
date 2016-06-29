@@ -28,6 +28,7 @@
     vm.builds             = null;
     vm.files              = ['Select a branch and build'];
     vm.launchKeys         = null;
+    vm.litKeys            = null;
     vm.duration           = 120;
     vm.loadingBranches    = false;
     vm.loadingBuilds      = false;
@@ -54,24 +55,8 @@
     vm.poll               = null;
     vm.message            = null,
     vm.gridApi            = null;
-    vm.click             = onFeatureKeyCheckClick,
-    vm.featureGrid        =  {
-            enableColumnMenus: false,
-            showHeader: false,
-            enableSorting: true,
-            enableRowSelection: false,
-            enableRowHeaderSelection: false,
-            enableFiltering: false,
-            enableExpandAll: false,
-            showTreeExpandNoChildren: true,
-            treeRowHeaderAlwaysVisible: false,
-            headerClass: 'ui-grid-noborder',
-            width: 200,
-            columnDefs: [
-            { name: 'isActive', displayName: 'Active', type: 'boolean', cellTemplate: '<div ng-hide=row.entity.hideCheck><input type="checkbox" ng-model="row.entity.isActive"  ng-click="ui-grid.appScope.click(row.entity.name, row.entity.isActive)" ng-disabled=!row.entity.selectable></div>', enableColumnMenu: false, width:'25' , cellClass: 'ui-grid'},
-            { name: 'name',enableHiding: false, enableColumnMenu: false, visible: true, pinnedLeft:true, width:'15%', cellClass: 'ui-grid',  },
-            { name: 'description',  enableHiding: false, enableColumnMenu: false, visible: true, width:'*', cellClass: 'ui-grid' }
-        ]};
+    vm.click              = onFeatureKeyCheckClick;
+    vm.featureGrid        = initFeatureGrid();
         
     activate();
 
@@ -271,8 +256,13 @@
         vm.hideLaunchKeys = vm.launchKeys === null || vm.launchKeys.length === 0;
         return vm.launchKeys;
       }).$promise.then(function() {
-        formatFeatureTreeData();
-        return;
+        Config.litKeys({envId: vm.tempEnv.envId, branch: constructBranchPath() }, function(keys) {
+           vm.litKeys = keys;
+           return;
+        }).$promise.then(function() {
+          formatFeatureTreeData();
+          return;
+        });
       });
     }
 
@@ -343,7 +333,7 @@
     function buildFeatureTreeDataObject(launchKeys){
       var rootNode = {
           'id': 'portal',       
-          'name': 'Portal',
+          'name': 'Portal Database',
           'hideCheck': true,
           'selectable' : false,
           'children': []
@@ -369,7 +359,8 @@
           return;            
       }
       
-      var IsKeyItemSelectable = false;
+      var IsKeyItemSelectable = false,
+          rootItemChecked = false;
       
       if(rootLevelFeatureItem.KeyType.toUpperCase() === 'DEVELOPMENT'){
         IsKeyItemSelectable = true;
@@ -381,26 +372,49 @@
         'name': rootLevelFeatureItem.KeyType,
         'hideCheck': false,
         'selectable' : true,
+        'isSelected': rootItemChecked,
         'children': []
       };
       
       listOfKeys.forEach(function(keyItemDetail) {
         var isChecked = false;
-        // TODO
-        //if (IlluminatedFeatures != null && IlluminatedFeatures.Any())
-        //    isChecked = IlluminatedFeatures.Contains(darkLaunchKeyDataObject.FeatureKey);
+        if (vm.litKeys.indexOf(keyItemDetail.FeatureKey) != -1) {
+                    isChecked = true;
+        }
+        
         filterLevelItemRoot.children.push({
-          'id': keyItemDetail.KeyType,
-          'name': keyItemDetail.FeatureKey,
-          'selectable' : IsKeyItemSelectable,
-          'hideCheck': false,
-          'isSelected': isChecked,
-          'description': keyItemDetail.Description,
-          'children': []
+            'id': keyItemDetail.KeyType,
+            'name': keyItemDetail.FeatureKey,
+            'selectable' : IsKeyItemSelectable,
+            'hideCheck': false,
+            'isSetInDb': isChecked, // used to store the original state
+            'isSelected': isChecked,
+            'isActive' : isChecked,
+            'description': keyItemDetail.Description,
+            'children': []
+          });
         });
-      });
-          
-      return filterLevelItemRoot;
+            
+        filterLevelItemRoot.children.forEach(function (child) {
+          if (child.isSelected != true) {
+            rootItemChecked = false;
+            return;
+          }
+          rootItemChecked = true;
+        });
+            
+        // Check the parent root node if necessary
+        if (rootItemChecked) {
+            filterLevelItemRoot.isActive = true;
+            filterLevelItemRoot.selectable = false;
+            filterLevelItemRoot.isSelected = true;
+            if (rootLevelFeatureItem.KeyType.toUpperCase() === "DEVELOPMENT") {
+                filterLevelItemRoot.children.forEach(function (child) {
+                    child.selectable = false;
+                });
+            }
+        }
+        return filterLevelItemRoot;
     }
 
     // function launchKeySelection(e) {
@@ -431,8 +445,10 @@
             key.children.forEach(function(childNode){
               if(value){
                 childNode.isActive = true;
-              } else{
-                childNode.isActive = false;
+                } else {
+                  if (!childNode.isSetInDb) {
+                    childNode.isActive = false;
+                }
               }
             });
           }
@@ -450,6 +466,26 @@
         }
       });
     };
+    
+    function initFeatureGrid(){
+      return {
+            enableColumnMenus: false,
+            showHeader: false,
+            enableSorting: true,
+            enableRowSelection: false,
+            enableRowHeaderSelection: false,
+            enableFiltering: false,
+            enableExpandAll: false,
+            showTreeExpandNoChildren: true,
+            treeRowHeaderAlwaysVisible: false,
+            headerClass: "ui-grid-noborder",
+            width: 200,
+            columnDefs: [
+            { name: 'isActive', displayName: 'Active', type: 'boolean', cellTemplate: '<div ng-hide=row.entity.hideCheck><input type="checkbox" ng-model="row.entity.isActive"  ng-click="ui-grid.appScope.click(row.entity.name, row.entity.isActive)" ng-disabled=!row.entity.selectable></div>', enableColumnMenu: false, width:"25" , cellClass: "ui-grid"},
+            { name: 'name',enableHiding: false, enableColumnMenu: false, visible: true, pinnedLeft:true, width:"25%", cellClass: "ui-grid",  },
+            { name: 'description',  enableHiding: false, enableColumnMenu: false, visible: true, width:"*", cellClass: "ui-grid" }
+        ]};
+    }
   
     function hasRole(env, roles) {
       var result = false;
