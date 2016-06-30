@@ -30,7 +30,7 @@ exports.litKeys = function litKeys(req, res, next) {
     branch = req.params.branch,
     data = {envId: envId, branch: branch};
     launchKeySvc.getLitKeys(data, function(err, keys) {
-      var result = {litKeys: keys};
+      var result = keys;
       res.result  = result;
       res.err     = err;
       next();   
