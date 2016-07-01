@@ -62,6 +62,41 @@ SmbBrowser.prototype.readContents = function readContents(branch, next) {
   return SmbBrowser.readContents(branchPath).nodeify(next);
 };
 
+/**
+ * Retrieves the list of builds for a branch as a list of strings
+ *
+ * @param {string} branch - the branch to retrieve builds for
+ * @param {function} [next] - node callback
+ * @return {promise}
+ */
+SmbBrowser.prototype.compare = function compare(branch, next) {
+  var branchPath = path.join(this.smbPath, branch);
+  return SmbBrowser.getNameSizeMap(branchPath).nodeify(next);
+};
+
+/**
+ * Retrieves the list of builds for a branch as a list of strings
+ *
+ * @param {string} branch - the branch to retrieve builds for
+ * @param {function} [next] - node callback
+ * @return {promise}
+ */
+SmbBrowser.prototype.reconcileManifestWithDisk = function reconcileManifestWithDisk(branch, next) {
+  var branchPath = path.join(this.smbPath, branch),
+    manifest,
+    onDisk;
+
+  return Q.fcall(SmbBrowser.getNameSizeMap, branchPath)
+    .then(function(result) {
+      onDisk = result;
+      return SmbBrowser.readContents(branchPath + '/manifest.txt')
+    })
+    .then(function(result) {
+      manifest = result;
+      return SmbBrowser.compareManifestToMap(manifest, onDisk);
+    })
+    .nodeify(next);
+};
 
 /**
  * Lists the directories in the path provided
@@ -113,19 +148,51 @@ SmbBrowser.readContents = function readContents(file, next) {
   return Q
     .nfcall(fs.readFile, file, 'utf8', next)
     .then(function(contents) {
-      me.readManifestFile(contents);
-      return contents;
+      var x =  me.readManifestFile(contents);
+      return x;
     })
     .nodeify(next);
 };
 
 SmbBrowser.readManifestFile = function readManifestFile(contents) {
   return _.map(contents.split('\n'), function(row) {
-    var name = row.split(':');
-
-    console.log(name[0].replace(/['"]+/g, ''));
+    var cleaned = row.replace(/['"]+/g, '').replace(/['\r']+/g, ''),
+      splitEntry = cleaned.split(':'),
+      obj = { name: splitEntry[0], size: splitEntry[1]};
+    return obj;
   });
 }
+
+SmbBrowser.compareManifestToMap = function compareManifestToMap(manifestContents, onDiskMap) {
+  return _.map(manifestContents, function(item) {
+    var match = _.filter(onDiskMap, function (fileInfo) {
+      return fileInfo.name === item.name;
+    }),
+      fileSizeOk = match.length === 1 ? item.size == match[0].size : false;
+    return {name: item.name, exists: match.length === 1, sizeOk: fileSizeOk};
+  });
+};
+
+SmbBrowser.getNameSizeMap = function getNameSizeMap(dir, next) {
+  var dir = dir;
+
+  return Q
+    .nfcall(fs.readdir, dir)
+    .then(function(files) {
+      return Q.all(files.map(function(file) {
+        var fullPath = path.join(dir, file);
+        return Q.nfcall(fs.stat, fullPath).then(function(stat) {
+          return {name: file, size: stat.size};
+        });
+      }));
+    })
+    .then(function(dirs) {
+      return dirs.filter(function(dir) { 
+        return !!dir;
+      });
+    })
+    .nodeify(next);
+};
 
 SmbBrowser.filteredListContents = function filteredListContents(cfg, next) {
   var dir = cfg.dir,

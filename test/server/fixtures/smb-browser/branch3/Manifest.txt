@@ -1,6 +1,6 @@
 "Name":"Length"
 "Contains changeset C251583 and lower.txt":"112317"
-"Manifest.txt":"70"
+"Manifest.txt":"928"
 "ringtail-deploy-feature-utility.exe":"49664"
 "ringtail-static-feature-data.csv":"255"
 "RingtailDatabaseUtility_Main DB Utility_20160622.13.exe":"52108968"
