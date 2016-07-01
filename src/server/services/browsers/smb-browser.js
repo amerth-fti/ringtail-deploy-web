@@ -89,7 +89,7 @@ SmbBrowser.prototype.reconcileManifestWithDisk = function reconcileManifestWithD
   return Q.fcall(SmbBrowser.getNameSizeMap, branchPath)
     .then(function(result) {
       onDisk = result;
-      return SmbBrowser.readContents(branchPath + '/manifest.txt')
+      return SmbBrowser.readContents(branchPath + '/manifest.txt');
     })
     .then(function(result) {
       manifest = result;
@@ -161,7 +161,7 @@ SmbBrowser.readManifestFile = function readManifestFile(contents) {
       obj = { name: splitEntry[0], size: splitEntry[1]};
     return obj;
   });
-}
+};
 
 SmbBrowser.compareManifestToMap = function compareManifestToMap(manifestContents, onDiskMap) {
   return _.map(manifestContents, function(item) {
