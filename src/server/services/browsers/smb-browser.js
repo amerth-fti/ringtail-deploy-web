@@ -50,6 +50,53 @@ SmbBrowser.prototype.files = function files(branch, next) {
   return SmbBrowser.listFiles(branchPath).nodeify(next);
 };
 
+/**
+ * Retrieves the list of builds for a branch as a list of strings
+ *
+ * @param {string} branch - the branch to retrieve builds for
+ * @param {function} [next] - node callback
+ * @return {promise}
+ */
+SmbBrowser.prototype.readContents = function readContents(branch, next) {
+  var branchPath = path.join(this.smbPath, branch);
+  return SmbBrowser.readContents(branchPath).nodeify(next);
+};
+
+/**
+ * Retrieves the list of builds for a branch as a list of strings
+ *
+ * @param {string} branch - the branch to retrieve builds for
+ * @param {function} [next] - node callback
+ * @return {promise}
+ */
+SmbBrowser.prototype.compare = function compare(branch, next) {
+  var branchPath = path.join(this.smbPath, branch);
+  return SmbBrowser.getNameSizeMap(branchPath).nodeify(next);
+};
+
+/**
+ * Retrieves the list of builds for a branch as a list of strings
+ *
+ * @param {string} branch - the branch to retrieve builds for
+ * @param {function} [next] - node callback
+ * @return {promise}
+ */
+SmbBrowser.prototype.reconcileManifestWithDisk = function reconcileManifestWithDisk(branch, next) {
+  var branchPath = path.join(this.smbPath, branch),
+    manifest,
+    onDisk;
+
+  return Q.fcall(SmbBrowser.getNameSizeMap, branchPath)
+    .then(function(result) {
+      onDisk = result;
+      return SmbBrowser.readContents(branchPath + '/manifest.txt');
+    })
+    .then(function(result) {
+      manifest = result;
+      return SmbBrowser.compareManifestToMap(manifest, onDisk);
+    })
+    .nodeify(next);
+};
 
 /**
  * Lists the directories in the path provided
@@ -89,18 +136,75 @@ SmbBrowser.listFiles = function listFiles(dir, next) {
   return this.filteredListContents(cfg, next);
 };
 
+/**
+ * Lists the contents of a file
+ * 
+ * @param {string} dir - the root path to check
+ * @param {function} [next] - node callback
+ * @return {promise} resolves to an array of directory names
+ */
+SmbBrowser.readContents = function readContents(file, next) {
+  var me = this;
+  return Q
+    .nfcall(fs.readFile, file, 'utf8', next)
+    .then(function(contents) {
+      var x =  me.readManifestFile(contents);
+      return x;
+    })
+    .nodeify(next);
+};
+
+SmbBrowser.readManifestFile = function readManifestFile(contents) {
+  return _.map(contents.split('\n'), function(row) {
+    var cleaned = row.replace(/['"]+/g, '').replace(/['\r']+/g, ''),
+      splitEntry = cleaned.split(':'),
+      obj = { name: splitEntry[0], size: splitEntry[1]};
+    return obj;
+  });
+};
+
+SmbBrowser.compareManifestToMap = function compareManifestToMap(manifestContents, onDiskMap) {
+  return _.map(manifestContents, function(item) {
+    var match = _.filter(onDiskMap, function (fileInfo) {
+      return fileInfo.name === item.name;
+    }),
+      fileSizeOk = match.length === 1 ? item.size == match[0].size : false;
+    return {name: item.name, exists: match.length === 1, sizeOk: fileSizeOk};
+  });
+};
+
+SmbBrowser.getNameSizeMap = function getNameSizeMap(dir, next) {
+  var dir = dir;
+
+  return Q
+    .nfcall(fs.readdir, dir)
+    .then(function(files) {
+      return Q.all(files.map(function(file) {
+        var fullPath = path.join(dir, file);
+        return Q.nfcall(fs.stat, fullPath).then(function(stat) {
+          return {name: file, size: stat.size};
+        });
+      }));
+    })
+    .then(function(dirs) {
+      return dirs.filter(function(dir) { 
+        return !!dir;
+      });
+    })
+    .nodeify(next);
+};
+
 SmbBrowser.filteredListContents = function filteredListContents(cfg, next) {
   var dir = cfg.dir,
     filterFn = cfg.filterFn;
 
   return Q
-    .nfcall(fs.readdir, dir)    
-    .then(function(files) {        
+    .nfcall(fs.readdir, dir)
+    .then(function(files) {
       return Q.all(files.map(function(file) {
-        var fullPath = path.join(dir, file);    
+        var fullPath = path.join(dir, file);
         return Q.nfcall(fs.stat, fullPath).then(function(stat) {
           var x = filterFn(stat, file);
-          debug('in here %s', x);
           return x;
         });
       }));
