@@ -149,13 +149,13 @@ describe('SmbBrowser', function() {
     });
   });
 
-describe('.readFolderSizes', function() {  
-    it('should return an Array with callback passing', function(done) {      
-      var sut = new SmbBrowser(config);
-      sut.reconcileManifestWithDisk('branch3', function(err, result) {
-        expect(result).to.be.instanceOf(Array);
-        done();
-      });
-    });
-  });  
+  // describe('.reconcileManifest', function() {  
+  //   it('should return an Array with callback passing', function(done) {      
+  //     var sut = new SmbBrowser(config);
+  //     sut.reconcileManifestWithDisk('branch3', function(err, result) {
+  //       expect(result).to.be.instanceOf(Array);
+  //       done();
+  //     });
+  //   });
+  // });  
 });  
