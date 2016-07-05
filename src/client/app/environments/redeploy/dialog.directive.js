@@ -57,6 +57,7 @@
     vm.gridApi            = null;
     vm.click              = onFeatureKeyCheckClick;
     vm.featureGrid        = initFeatureGrid();
+    vm.taskArray          = ['3-install-many'];
         
     activate();
 
@@ -89,8 +90,6 @@
     }
 
     function checkEnvironmentStatus(cb) {
-      var taskArray = ['3-install-many'];
-
       vm.environment.$get(function(environment){
         vm.environment = environment;
 
@@ -100,9 +99,13 @@
           return; 
         }
 
-        if(vm.selectedTasks.length && taskArray.indexOf(vm.selectedTasks[0].task) > -1 
+        if(vm.selectedTasks.length && vm.taskArray.indexOf(vm.selectedTasks[0].task) > -1 
           && (vm.environment.runstate != 'running' && vm.environment.runstate != 'busy')) {
           startSkytapEnvironment(cb);
+          
+        } else if(vm.taskArray.indexOf(vm.selectedTasks[0].task) < 0) {
+          if(cb) return cb();
+          return; 
         } else {
           pollWhileBusy(vm.environment, cb);
         }
