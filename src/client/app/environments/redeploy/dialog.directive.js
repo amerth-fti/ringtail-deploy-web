@@ -382,7 +382,7 @@
       listOfKeys.forEach(function(keyItemDetail) {
         var isChecked = false;
         if (vm.litKeys.indexOf(keyItemDetail.FeatureKey) != -1) {
-          isChecked = true;
+                    isChecked = true;
         }
         
         filterLevelItemRoot.children.push({
@@ -397,11 +397,15 @@
             'children': []
           });
         });
-
-        rootItemChecked = _.filter(filterLevelItemRoot.children, function(child) {
-          return child.isSelected === false;
-        }).length === 0;
-
+            
+        filterLevelItemRoot.children.forEach(function (child) {
+          if (child.isSelected != true) {
+            rootItemChecked = false;
+            return;
+          }
+          rootItemChecked = true;
+        });
+            
         // Check the parent root node if necessary
         if (rootItemChecked) {
             filterLevelItemRoot.isActive = true;
