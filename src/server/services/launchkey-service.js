@@ -117,7 +117,7 @@ exports.getLitKeys = function getLitKeys(data, next) {
                         Object.getOwnPropertyNames(config.data).some(function (val, idx, array) {
                             configKeyParts = val.split('|');
                             if (configKeyParts && configKeyParts.length == 2) {
-                                if (configKeyParts[1] === "IS_SQLSERVER_DATABASE") {
+                                if (configKeyParts[1] === 'IS_SQLSERVER_DATABASE') {
                                     configSource = configKeyParts[0];
                                     return true;
                                 }

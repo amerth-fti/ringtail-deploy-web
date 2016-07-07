@@ -3,8 +3,16 @@ var debug   = require('debug')('deployer-jobrunner')
   , _       = require('underscore')
   , Q       = require('q')
   , jobs   = {}
-  , jobId  = 0;
+  , jobId  = 0
+  , JobMapper = require('./mappers/jobs-mapper')
+  , dbPath = __dirname + '/../../data/deployer.db'
+  , jobMapper = new JobMapper(dbPath);
 
+
+//set job id to latest in db
+jobMapper.maxJobId(function(err, id){
+  jobId = id || 0;  
+});
 
 /** 
  * Gets all jobs by returning an array of jobs
@@ -21,8 +29,18 @@ exports.getJobs = function getjobs() {
  * 
  * @return {job} job instance
  */
-exports.getJob = function getjob(jobId) {
-  return jobs[jobId];
+exports.getJob = function getjob(jobId, callback) {
+  if(jobId in jobs) {
+    return callback(null, jobs[jobId]);  
+  }
+
+  jobMapper.getById(jobId, function(err, job){
+    if(!job) job = {};
+    
+    jobs[jobId] = job.log;
+
+    return callback(null, job.log);
+  });  
 };
 
 
@@ -35,7 +53,7 @@ exports.getJob = function getjob(jobId) {
  * @return {Number} returns the jobId that was generated
  */
 exports.add = function queue(job) {
-  
+
   // increment job id 
   job.id = (jobId += 1);
   job.rundata.jobid = job.id;
