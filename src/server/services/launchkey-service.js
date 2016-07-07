@@ -54,7 +54,6 @@ exports.sendLaunchKeys = function sendLaunchKeys(data, next) {
     formattedLaunchKeys = {},
     launchJson;
 
-  debug('sending launch keys %j', launchKeys);
   _.each(launchKeys, function(key) {
     // ringtail-deploy-service.DataCamel reverse converts this, and if you change this you will break it, 
     // so if you need to change this, change the consumer too please.
@@ -73,8 +72,7 @@ exports.sendLaunchKeys = function sendLaunchKeys(data, next) {
         debug('sending launch keys %j', config.launchKey);
         configMapper.update(config);
       });
-      var result = {configs: configs};
-      return result;
+      return {configs: configs};
     }).nodeify(next);
 };
 

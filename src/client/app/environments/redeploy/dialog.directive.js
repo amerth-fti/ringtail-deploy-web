@@ -161,20 +161,20 @@
       vm.environment.deployedBranch = constructBranchPath();
       vm.environment.selectedTasks = vm.selectedTasks;
 
-      saveLaunchKeys();
-
-      // trigger the redeployment
-      vm.environment.$redeploy({ keepRpfwInstalls: vm.keepRpfwInstalls, wipeRpfWorkers: vm.wipeRpfWorkers })
-      // shut the dialog since we had success
-      .then(function(environment) {
-        vm.modalInstance.close(environment);
-        return environment;
-      })
-      // transition to the job details
-      .then(function(environment) {
-        var path = '/app/jobs/' + environment.deployedJobId;
-        $location.path(path);
-      });
+      saveLaunchKeys().$promise.then(function() {
+        // trigger the redeployment
+        vm.environment.$redeploy({ keepRpfwInstalls: vm.keepRpfwInstalls, wipeRpfWorkers: vm.wipeRpfWorkers })
+        // shut the dialog since we had success
+        .then(function(environment) {
+          vm.modalInstance.close(environment);
+          return environment;
+        })
+        // transition to the job details
+        .then(function(environment) {
+          var path = '/app/jobs/' + environment.deployedJobId;
+          $location.path(path);
+        });          
+      });          
     }
 
     function toggleAdvanced() {
@@ -288,7 +288,7 @@
         return;
       }
 
-      Config.sendLaunchKeys({envId: vm.tempEnv.envId, launchKeys: filteredLaunchKeys }, function(keys) {}); 
+      return Config.sendLaunchKeys({envId: vm.tempEnv.envId, launchKeys: filteredLaunchKeys });
     }
     
     function formatFeatureTreeData(){
