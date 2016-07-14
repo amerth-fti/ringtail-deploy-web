@@ -285,7 +285,7 @@
         });
       } 
       else {
-        return;
+        filteredLaunchKeys = [];
       }
 
       return Config.sendLaunchKeys({envId: vm.tempEnv.envId, launchKeys: filteredLaunchKeys });
