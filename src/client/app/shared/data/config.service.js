@@ -17,6 +17,7 @@
           sendLaunchKeys: { method: 'PUT',  url: 'api/envs/sendLaunchKeys'},
           update   : { method: 'PUT',  url: 'api/configs/:configId' },
           litKeys: { method: 'GET',  url: 'api/envs/:envId/branches/:branch/litKeys', isArray: true },
+          version: { method: 'GET',  url: 'api/envs/:envId/version', isArray: false }          
       }
     );
   }

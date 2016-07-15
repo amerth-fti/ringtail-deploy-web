@@ -125,6 +125,7 @@ SmbBrowser.listDirs = function listDirs(dir, next) {
  * @return {promise} resolves to an array of directory names
  */
 SmbBrowser.listFiles = function listFiles(dir, next) {
+  console.log("LISTFILES");
   var foldersOnly = function(stat, file) {
     return stat.isDirectory() ? null : file;
   },
@@ -144,6 +145,7 @@ SmbBrowser.listFiles = function listFiles(dir, next) {
  * @return {promise} resolves to an array of directory names
  */
 SmbBrowser.readContents = function readContents(file, next) {
+  console.log("READCONTENTS");
   var me = this;
   return Q
     .nfcall(fs.readFile, file, 'utf8', next)
@@ -155,15 +157,21 @@ SmbBrowser.readContents = function readContents(file, next) {
 };
 
 SmbBrowser.readManifestFile = function readManifestFile(contents) {
+  console.log("READ");
+  
   return _.map(contents.split('\n'), function(row) {
     var cleaned = row.replace(/['"]+/g, '').replace(/['\r']+/g, ''),
-      splitEntry = cleaned.split(':'),
-      obj = { name: splitEntry[0], size: splitEntry[1]};
+      splitEntry = cleaned.split(':');
+
+    var version = splitEntry[2] || "99.99.99.99"
+
+    var obj = { name: splitEntry[0], size: splitEntry[1], version: version};
     return obj;
   });
 };
 
 SmbBrowser.compareManifestToMap = function compareManifestToMap(manifestContents, onDiskMap) {
+  console.log("COMPARE");
   return _.map(manifestContents, function(item) {
     var match = _.filter(onDiskMap, function (fileInfo) {
       return fileInfo.name === item.name;
@@ -195,6 +203,7 @@ SmbBrowser.getNameSizeMap = function getNameSizeMap(dir, next) {
 };
 
 SmbBrowser.filteredListContents = function filteredListContents(cfg, next) {
+  console.log("FILTER");
   var dir = cfg.dir,
     filterFn = cfg.filterFn;
 
@@ -202,14 +211,18 @@ SmbBrowser.filteredListContents = function filteredListContents(cfg, next) {
     .nfcall(fs.readdir, dir)
     .then(function(files) {
       return Q.all(files.map(function(file) {
+        console.log("FILE", file);
+        
         var fullPath = path.join(dir, file);
         return Q.nfcall(fs.stat, fullPath).then(function(stat) {
+          console.log("STAT", stat);
           var x = filterFn(stat, file);
           return x;
         });
       }));
     })
     .then(function(dirs) {
+      console.log("DIRS", dirs)
       return dirs.filter(function(dir) { 
         return !!dir;
       });
