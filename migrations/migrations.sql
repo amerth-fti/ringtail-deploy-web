@@ -271,3 +271,12 @@ SELECT envId, envName, envDesc, remoteType, remoteId, status, config, deployedBy
 
 DROP table envtemp;
 
+-- 012-addJobTable
+CREATE TABLE jobs (
+  jobId INTEGER NOT NULL,
+  log TEXT
+)
+
+-- 013-clearDeployedJobs
+UPDATE env
+SET   deployedJobId = NULL

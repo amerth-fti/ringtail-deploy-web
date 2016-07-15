@@ -407,7 +407,7 @@
             filterLevelItemRoot.isActive = true;
             filterLevelItemRoot.selectable = false;
             filterLevelItemRoot.isSelected = true;
-            if (rootLevelFeatureItem.KeyType.toUpperCase() === "DEVELOPMENT") {
+            if (rootLevelFeatureItem.KeyType.toUpperCase() === 'DEVELOPMENT') {
                 filterLevelItemRoot.children.forEach(function (child) {
                     child.selectable = false;
                 });
@@ -477,12 +477,12 @@
             enableExpandAll: false,
             showTreeExpandNoChildren: true,
             treeRowHeaderAlwaysVisible: false,
-            headerClass: "ui-grid-noborder",
+            headerClass: 'ui-grid-noborder',
             width: 200,
             columnDefs: [
-            { name: 'isActive', displayName: 'Active', type: 'boolean', cellTemplate: '<div ng-hide=row.entity.hideCheck><input type="checkbox" ng-model="row.entity.isActive"  ng-click="ui-grid.appScope.click(row.entity.name, row.entity.isActive)" ng-disabled=!row.entity.selectable></div>', enableColumnMenu: false, width:"25" , cellClass: "ui-grid"},
-            { name: 'name',enableHiding: false, enableColumnMenu: false, visible: true, pinnedLeft:true, width:"25%", cellClass: "ui-grid",  },
-            { name: 'description',  enableHiding: false, enableColumnMenu: false, visible: true, width:"*", cellClass: "ui-grid" }
+            { name: 'isActive', displayName: 'Active', type: 'boolean', cellTemplate: '<div ng-hide=row.entity.hideCheck><input type="checkbox" ng-model="row.entity.isActive"  ng-click="ui-grid.appScope.click(row.entity.name, row.entity.isActive)" ng-disabled=!row.entity.selectable></div>', enableColumnMenu: false, width:'25' , cellClass: 'ui-grid'},
+            { name: 'name',enableHiding: false, enableColumnMenu: false, visible: true, pinnedLeft:true, width:'25%', cellClass: 'ui-grid',  },
+            { name: 'description',  enableHiding: false, enableColumnMenu: false, visible: true, width:'*', cellClass: 'ui-grid' }
         ]};
     }
   

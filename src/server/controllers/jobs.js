@@ -4,15 +4,13 @@ var debug       = require('debug')('deployer-projects')
   , jobrunner  = require('../jobrunner');
 
 
-
-
 exports.list = function list(req, res) {
   res.send(jobrunner.getJobs());
 };
 
-
-
 exports.get = function get(req, res) {
   var jobId = req.param('jobId');
-  res.send(jobrunner.getJob(jobId));
+  jobrunner.getJob(jobId, function(err, data){
+    res.send(data);
+  });
 };
