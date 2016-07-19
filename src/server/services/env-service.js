@@ -2,6 +2,7 @@ var debug           = require('debug')('deployer-envservice')
   , Q               = require('q')
   , Skytap          = require('node-skytap')
   , EnvMapper       = require('../mappers/env-mapper')
+  , JobMapper       = require('../mappers/jobs-mapper') 
   , MachineMapper   = require('../mappers/machine-mapper')
   , Env             = require('../models/env')
   , config          = require('../../../config')
@@ -9,6 +10,7 @@ var debug           = require('debug')('deployer-envservice')
   , machineService  = require('./machine-service')
   , skytap          = Skytap.init(config.skytap)
   , envMapper       = new EnvMapper(dbPath)
+  , jobMapper       = new JobMapper(dbPath)
   , machineMapper   = new MachineMapper(dbPath)
   , RingtailClient  = require('ringtail-deploy-client')
   , ConfigMapper    = require('../mappers/config-mapper')
@@ -157,6 +159,15 @@ exports.update = function update(data, next) {
     .then(joinEnvMachines)
     .then(joinEnvSkytap)
     .nodeify(next);
+};
+
+exports.log = function log(job, next) {
+  var data = {
+    jobId: job.id,
+    log: JSON.stringify(job)
+  };
+
+  return jobMapper.insert(data).nodeify(next);
 };
 
 exports.remove = function remove(envId, next) {

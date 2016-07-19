@@ -76,6 +76,11 @@ Job.prototype.start = function start() {
       job.error = err;
       env.status = 'failed';
       return envService.update(env);
+    })
+
+    // all done
+    .fin(function(){
+      return envService.log(job);
     });
 
   });

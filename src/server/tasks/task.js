@@ -47,10 +47,6 @@ util.inherits(Task, events.EventEmitter);
 module.exports = Task;
 
 
-
-
-
-
 Task.prototype.start = function start(scope) {
   this.started = new Date();
   this.status = 'Running';
