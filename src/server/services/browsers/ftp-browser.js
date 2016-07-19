@@ -110,11 +110,9 @@ FTPBrowser.prototype.files = function files(branch, next) {
   params.branch = this.ftpRootPath.replace(/\/$/, '') + '/' + branch;
   ftp(params, function (error, result) {
     if (error) {
-      console.log("AIRRRR");
       deferred.reject(error);
     }
     else {
-      console.log("result", result);
       deferred.resolve(result);
     }
   });
