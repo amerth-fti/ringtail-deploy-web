@@ -242,10 +242,6 @@ private static bool AllowBranchVersion(string current, string manifest) {
             var intCurrentVal = Int32.Parse(cArray[i]);
             var intManifestVal = Int32.Parse(mArray[i]);
 
-            Console.WriteLine("-----------------------------------");
-            Console.WriteLine(intCurrentVal);
-            Console.WriteLine(intManifestVal);
-
             if(intCurrentVal == intManifestVal) {
                 continue;
             }
@@ -291,10 +287,7 @@ private static bool AllowBranchVersion(string current, string manifest) {
                 if (y.Contains(x.FileName))
                 {
                     fileExists = true;
-                    Console.WriteLine("-------------------------");
-                    Console.WriteLine(x.FileName);
-                    Console.WriteLine(x.FileSize.ToString());
-                    Console.WriteLine(y);
+
                     if (y.Contains(x.FileSize.ToString()))
                     {
                         fileSizeMatch = true;
@@ -523,8 +516,7 @@ private static bool AllowBranchVersion(string current, string manifest) {
                     string version = "99.99.99.9999";
 
                     bool success = long.TryParse(splitLine[1], out length);
-                    Console.WriteLine("Length");
-                    Console.WriteLine(splitLine.Length);
+
                     if(splitLine.Length > 2){
                         version = splitLine[2];
                     }

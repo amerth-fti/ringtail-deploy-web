@@ -90,7 +90,7 @@ exports.version = function version(envId, next) {
              
               if(matchingRole.length > 0) {
                 if(!serviceip)  serviceip = machine.intIP;
-                return callback(null, serviceip)
+                return callback(null, serviceip);
               } else {
                 return callback(null, null);
               }
@@ -111,7 +111,7 @@ exports.version = function version(envId, next) {
               });
             }
             return {
-              version: version || "0.0.0.0"
+              version: version || '0.0.0.0'
             };
           }).fail(function(err) {
             
@@ -119,7 +119,7 @@ exports.version = function version(envId, next) {
           .nodeify(next);
       });
     });
-}
+};
 
 exports.create = function create(data, next) {
   var env = new Env(data);

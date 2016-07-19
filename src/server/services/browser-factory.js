@@ -19,7 +19,7 @@ exports.fromRegion = function(region, currentVersion) {
     , result = null
     ;
 
-  config.currentVersion = currentVersion || "99.99.99.99";
+  config.currentVersion = currentVersion || '99.99.99.99';
 
   if(config.type === 'http') {
     result = new HttpBrowser(config);

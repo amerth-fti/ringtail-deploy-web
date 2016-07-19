@@ -240,7 +240,7 @@
         vm.launchKeys = null;
         vm.hideLaunchKeys = true;
         getLaunchKeysForBuild();
-        var version = vm.version || "0.0.0.0"; //need to pass something even if there is nothing
+        var version = vm.version || '0.0.0.0'; //need to pass something even if there is nothing
         Browse.files({regionId: vm.regionId, branch: constructBranchPath(), version: version }, function(files) {
           vm.loadingFiles = false;
           vm.filesOk = files.length == 0 || files[0] !== 'OK';

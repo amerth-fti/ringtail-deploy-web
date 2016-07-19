@@ -50,30 +50,39 @@ SmbBrowser.prototype.files = function files(branch, next) {
   var deferred = Q.defer();
 
   this.reconcileManifestWithDisk(branch, function(err, results) {
-    if(err) deferred.reject(err); 
-
     var data = [];
+    
+    if(err) {
+      if(/manifest/i.test(err)){
+        return deferred.resolve(['manifest.txt is missing']);
+      } else {
+        return deferred.reject(err);
+        
+      }
+    } 
+
+    if(!results) results = [];
 
     results.forEach(function(result){
       var item;
-      if(result.name == "Name" || result.name.trim().length == 0) {
+      if(result.name == 'Name' || result.name.trim().length == 0) {
         return;
       }
 
       //it seems counter-intuitive to check the manifest size if someone has intentionally changed the manifest
       if(!result.sizeOk && !(/[.]txt/i.test(result.name))){
-        item = "The file size is incorrect for " + result.name;
+        item = 'The file size is incorrect for ' + result.name;
         if(item.length > 75) 
         {
-            item = item.substring(0, 75) + " ...";
+            item = item.substring(0, 75) + ' ...';
         }
 
         data.push(item);
       } else if (!result.exists) {
-        item = "Cannot find " + result.name;
+        item = 'Cannot find ' + result.name;
         if(item.length > 75) 
         {
-            item = item.substring(0, 75) + " ...";
+            item = item.substring(0, 75) + ' ...';
         }
 
         data.push(item);
@@ -81,7 +90,7 @@ SmbBrowser.prototype.files = function files(branch, next) {
     });
     
     if(!data.length){
-      data.push("OK");
+      data.push('OK');
     }
 
     return deferred.resolve(data);
@@ -199,7 +208,7 @@ SmbBrowser.readManifestFile = function readManifestFile(contents) {
     var cleaned = row.replace(/['"]+/g, '').replace(/['\r']+/g, ''),
       splitEntry = cleaned.split(':');
 
-    var version = splitEntry[2] || "99.99.99.99"
+    var version = splitEntry[2] || '99.99.99.99';
 
     var obj = { name: splitEntry[0], size: splitEntry[1], version: version};
     return obj;
