@@ -8,7 +8,7 @@
     </tab-heading>
     <p></p>     
 
-    <div class="panel panel-default" ng-show="tab.task.runlogArray">
+    <div class="panel panel-default" ng-show="tab.task.runlog">
       <div class="panel-heading">Most Recent Run Log</div>
       <ul class="list-group">
         <li class="list-group-item lastlog" ng-repeat="entry in tab.task.runlog" ng-if="$last" ng-bind-html="entry">

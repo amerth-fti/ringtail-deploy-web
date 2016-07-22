@@ -31,8 +31,6 @@ var arrayifyDetails = function(rundetails) {
     if(buffer) { 
       detailsArray.push(buffer);
     }
-
-
   }
   catch(err) {
     console.error(err);
