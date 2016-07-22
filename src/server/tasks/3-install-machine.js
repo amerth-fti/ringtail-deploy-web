@@ -114,8 +114,7 @@ function TaskImpl(options) {
         }
         _.extend(configs, getConfigsFromOptions(options));
 
-        log('sending config object %j', configs);
-        //log('installation complete');
+        log('sending config object');
         return client.setConfigs(configs);
       })
 
