@@ -6,7 +6,26 @@
       </span>
       {{tab.title}}
     </tab-heading>
-    <p></p>        
+    <p></p>     
+
+    <div class="panel panel-default" ng-show="tab.task.runlog">
+      <div class="panel-heading">Most Recent Run Log</div>
+      <ul class="list-group">
+        <li class="list-group-item lastlog" ng-repeat="entry in tab.task.runlog" ng-if="$last" ng-bind-html="entry">
+          <strong>{{entry.date | date:'mediumTime' }}:</strong> {{entry.data}}
+        </li>
+      </ul>
+    </div>   
+
+    <div class="panel panel-default" ng-show="tab.task.runlogArray">
+      <div class="panel-heading">Most Recent Run Detail</div>
+      <ul class="list-group">
+        <li class="list-group-item lastlog" ng-repeat="entry in tab.task.runlogArray" ng-if="$last" ng-bind-html="entry | trust">
+          {{entry}}
+        </li>
+      </ul>
+    </div>  
+
     <div class="panel panel-default">
       <div class="panel-heading">Run Log</div>
       <ul class="list-group">
@@ -15,6 +34,7 @@
         </li>
       </ul>    
     </div>
+
     <div class="panel panel-default" ng-show="tab.task.rundetails">
       <div class="panel-heading">Run Details</div>      
       <div class="panel-body task-rundetails" ng-bind-html="tab.task.rundetails | nbsp | trust">
