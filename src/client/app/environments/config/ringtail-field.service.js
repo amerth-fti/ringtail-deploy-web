@@ -136,6 +136,9 @@
     "RingtailProcessingFramework|SERVICEPASSWORD": "SERVICEPASSWORD",
     "RingtailProcessingFramework|RPFWORKERPATH": "RPFWORKERPATH",
 
+    "RingtailSearchServer|SERVICEUSERNAME": "SEARCH_SERVICEUSERNAME",
+    "RingtailSearchServer|SERVICEPASSWORD": "SEARCH_SERVICEPASSWORD",
+
     "NativeFileServiceSetup|SERVICEUSER": "NATIVE_FILE_SERVICEUSER",
     "NativeFileServiceSetup|SERVICEPASSWORD": "NATIVE_FILE_SERVICEPASSWORD",
     "NativeFileServiceSetup|NATIVEFILESERVICESERVERS": "NATIVE_FILE_SERVERS"
@@ -503,6 +506,16 @@
       "title": "Ringtail Process Framework Service 'Log on as' Password",
       "description": "The password for the user account that the RPF Service will Log on as"
     },
+    {
+      "key": "SEARCH_SERVICEUSERNAME",
+      "title": "Ringtail Search Service 'Log on as' User",
+      "description": "The user account that the Search Service will Log on as (e.g. DomainName\\UserName)"
+    },
+    {
+      "key": "SEARCH_SERVICEPASSWORD",
+      "title": "Ringtail Search Service 'Log on as' Password",
+      "description": "The password for the user account that the Search Service will Log on as"
+    },    
     {
       "key": "NATIVE_FILE_SERVICEUSER",
       "title": "Native File Viewer Service Account",

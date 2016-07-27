@@ -99,8 +99,10 @@
         vm.environment = environment;
 
         //handle local environments
-        if(!environment.remoteId){
-          if(cb) return cb();
+        if(!environment.remoteId) {
+          if(cb) {
+            return cb();
+          }
           return; 
         }
 
@@ -108,14 +110,17 @@
           && (vm.environment.runstate != 'running' && vm.environment.runstate != 'busy')) {
           startSkytapEnvironment(cb);
           
-        } else if(vm.taskArray.indexOf(vm.selectedTasks[0].task) < 0) {
-          if(cb) return cb();
+        } 
+        else if(vm.taskArray.indexOf(vm.selectedTasks[0].task) < 0) {
+          if(cb) {
+            return cb();
+          }
           return; 
-        } else {
+        } 
+        else {
           pollWhileBusy(vm.environment, cb);
         }
       });
-
 
       if(vm.environment.updatePath == null) {
         vm.hideLaunchKeys = true;
@@ -127,7 +132,9 @@
       vm.environment.$start();
       vm.environment.runstate = 'busy';
 
-      if(!cb) vm.message = 'Environment Busy';
+      if(!cb) {
+        vm.message = 'Environment Busy';
+      }
       pollWhileBusy(vm.environment, cb);
     }
 
@@ -138,7 +145,9 @@
             if(environment.runstate == 'running' && environment.status != 'deploying') {
               vm.message = null;
               vm.isDeployed = true;
-              if(cb) cb();  
+              if(cb) {
+                cb();
+              }
               return;
             };
 
@@ -212,8 +221,7 @@
 
     function constructBranchPath() {
       var branch = vm.selectedBranch.branch
-        , build  = vm.selectedBranch.build
-        ;
+        , build  = vm.selectedBranch.build;
       return branch + (build ? '\\' + build : '');
     }
 
@@ -282,7 +290,7 @@
       if(vm && vm.selectedBranch && vm.launchKeys) {
         vm.featureGrid.data.forEach(function(key) {
           vm.launchKeys.forEach(function(launchKey) {
-            if(key.isActive && key.name == launchKey.FeatureKey){
+            if(key.isActive && key.name == launchKey.FeatureKey) {
               var tempLaunchKey = JSON.parse(JSON.stringify(launchKey));
               delete tempLaunchKey.$$hashKey;
               filteredLaunchKeys.push(tempLaunchKey);
@@ -294,7 +302,7 @@
         filteredLaunchKeys = [];
       }
 
-      return Config.sendLaunchKeys({envId: vm.tempEnv.envId, launchKeys: filteredLaunchKeys });
+      return Config.sendLaunchKeys({envId: vm.tempEnv.envId, launchKeys: filteredLaunchKeys});
     }
     
     function formatFeatureTreeData(){
@@ -339,7 +347,7 @@
       return filteredKeys;
     }
 
-    function buildFeatureTreeDataObject(launchKeys){
+    function buildFeatureTreeDataObject(launchKeys) {
       var rootNode = {
           'id': 'portal',       
           'name': 'Portal Database',
@@ -365,11 +373,11 @@
       });
       
       if(rootLevelFeatureItem === null){
-          return;            
+        return;            
       }
       
       var IsKeyItemSelectable = false,
-          rootItemChecked = false;
+        rootItemChecked = false;
       
       if(rootLevelFeatureItem.KeyType.toUpperCase() === 'DEVELOPMENT'){
         IsKeyItemSelectable = true;
@@ -414,45 +422,23 @@
             filterLevelItemRoot.selectable = false;
             filterLevelItemRoot.isSelected = true;
             if (rootLevelFeatureItem.KeyType.toUpperCase() === 'DEVELOPMENT') {
-                filterLevelItemRoot.children.forEach(function (child) {
-                    child.selectable = false;
-                });
+              _.each(filterLevelItemRoot.children, function(child) {child.selectable = false;});
             }
         }
         return filterLevelItemRoot;
     }
 
-    // function launchKeySelection(e) {
-    //   var filteredLaunchKeys = [],
-    //     me = vm;
-      
-    //   if(vm.launchKeys) {
-    //     vm.featureGrid.data.forEach(function(key) {
-    //       vm.launchKeys.forEach(function(launchKey) {
-    //         if(key.isActive && key.name == launchKey.FeatureKey){
-    //           var tempLaunchKey = JSON.parse(JSON.stringify(launchKey));
-    //           delete tempLaunchKey.$$hashKey;
-    //           filteredLaunchKeys.push(tempLaunchKey);
-    //         }
-    //       });
-    //     });
-    //   } 
-    //   else {
-    //     return;
-    //   }      
-    // }
-
-    function onFeatureKeyCheckClick(selectedNodeName, value){
-        
+    function onFeatureKeyCheckClick(selectedNodeName, value) {
       vm.featureGrid.data.forEach(function(key) {
-        if(key.name === selectedNodeName){
-          if(key.children !== null){
-            key.children.forEach(function(childNode){
-              if(value){
+        if(key.name === selectedNodeName) {
+          if(key.children !== null) {
+            key.children.forEach(function(childNode) {
+              if(value) {
                 childNode.isActive = true;
-                } else {
-                  if (!childNode.isSetInDb) {
-                    childNode.isActive = false;
+              } 
+              else {
+                if (!childNode.isSetInDb) {
+                  childNode.isActive = false;
                 }
               }
             });
@@ -466,7 +452,7 @@
       vm.gridApi = gridApi;
 
       vm.gridApi.grid.registerDataChangeCallback(function() {
-       if(vm.gridApi.grid.treeBase.tree instanceof Array){
+       if(vm.gridApi.grid.treeBase.tree instanceof Array) {
          vm.gridApi.treeBase.expandAllRows();
         }
       });
@@ -474,22 +460,22 @@
     
     function initFeatureGrid(){
       return {
-            enableColumnMenus: false,
-            showHeader: false,
-            enableSorting: true,
-            enableRowSelection: false,
-            enableRowHeaderSelection: false,
-            enableFiltering: false,
-            enableExpandAll: false,
-            showTreeExpandNoChildren: true,
-            treeRowHeaderAlwaysVisible: false,
-            headerClass: 'ui-grid-noborder',
-            width: 200,
-            columnDefs: [
-            { name: 'isActive', displayName: 'Active', type: 'boolean', cellTemplate: '<div ng-hide=row.entity.hideCheck><input type="checkbox" ng-model="row.entity.isActive"  ng-click="ui-grid.appScope.click(row.entity.name, row.entity.isActive)" ng-disabled=!row.entity.selectable></div>', enableColumnMenu: false, width:'25' , cellClass: 'ui-grid'},
-            { name: 'name',enableHiding: false, enableColumnMenu: false, visible: true, pinnedLeft:true, width:'25%', cellClass: 'ui-grid',  },
-            { name: 'description',  enableHiding: false, enableColumnMenu: false, visible: true, width:'*', cellClass: 'ui-grid' }
-        ]};
+        enableColumnMenus: false,
+        showHeader: false,
+        enableSorting: true,
+        enableRowSelection: false,
+        enableRowHeaderSelection: false,
+        enableFiltering: false,
+        enableExpandAll: false,
+        showTreeExpandNoChildren: true,
+        treeRowHeaderAlwaysVisible: false,
+        headerClass: 'ui-grid-noborder',
+        width: 200,
+        columnDefs: [
+        { name: 'isActive', displayName: 'Active', type: 'boolean', cellTemplate: '<div ng-hide=row.entity.hideCheck><input type="checkbox" ng-model="row.entity.isActive"  ng-click="ui-grid.appScope.click(row.entity.name, row.entity.isActive)" ng-disabled=!row.entity.selectable></div>', enableColumnMenu: false, width:'25' , cellClass: 'ui-grid'},
+        { name: 'name',enableHiding: false, enableColumnMenu: false, visible: true, pinnedLeft:true, width:'25%', cellClass: 'ui-grid',  },
+        { name: 'description', enableHiding: false, enableColumnMenu: false, visible: true, width:'*', cellClass: 'ui-grid' }
+      ]};
     }
   
     function hasRole(env, roles) {

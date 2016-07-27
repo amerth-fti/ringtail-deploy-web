@@ -18,6 +18,7 @@
       'RPF-COORDINATOR',
       'RPF-SUPERVISOR',
       'DATABASE',
+      'SEARCHSERVER',
       'SKYTAP-ALLINONE',
       'SKYTAP-AGENT',
       'SKYTAP-DB',
