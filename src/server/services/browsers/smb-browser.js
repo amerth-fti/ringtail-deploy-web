@@ -47,7 +47,56 @@ SmbBrowser.prototype.builds = function builds(branch, next) {
  */
 SmbBrowser.prototype.files = function files(branch, next) {
   var branchPath = path.join(this.smbPath, branch);
-  return SmbBrowser.listFiles(branchPath).nodeify(next);
+  var deferred = Q.defer();
+
+  this.reconcileManifestWithDisk(branch, function(err, results) {
+    var data = [];
+    
+    if(err) {
+      if(/manifest/i.test(err)){
+        return deferred.resolve(['manifest.txt is missing']);
+      } else {
+        return deferred.reject(err);
+        
+      }
+    } 
+
+    if(!results) results = [];
+
+    results.forEach(function(result){
+      var item;
+      if(result.name == 'Name' || result.name.trim().length == 0) {
+        return;
+      }
+
+      //it seems counter-intuitive to check the manifest size if someone has intentionally changed the manifest
+      if(!result.sizeOk && !(/[.]txt/i.test(result.name))){
+        item = 'The file size is incorrect for ' + result.name;
+        if(item.length > 75) 
+        {
+            item = item.substring(0, 75) + ' ...';
+        }
+
+        data.push(item);
+      } else if (!result.exists) {
+        item = 'Cannot find ' + result.name;
+        if(item.length > 75) 
+        {
+            item = item.substring(0, 75) + ' ...';
+        }
+
+        data.push(item);
+      }
+    });
+    
+    if(!data.length){
+      data.push('OK');
+    }
+
+    return deferred.resolve(data);
+
+  });
+  return deferred.promise.nodeify(next);
 };
 
 /**
@@ -157,8 +206,11 @@ SmbBrowser.readContents = function readContents(file, next) {
 SmbBrowser.readManifestFile = function readManifestFile(contents) {
   return _.map(contents.split('\n'), function(row) {
     var cleaned = row.replace(/['"]+/g, '').replace(/['\r']+/g, ''),
-      splitEntry = cleaned.split(':'),
-      obj = { name: splitEntry[0], size: splitEntry[1]};
+      splitEntry = cleaned.split(':');
+
+    var version = splitEntry[2] || '99.99.99.99';
+
+    var obj = { name: splitEntry[0], size: splitEntry[1], version: version};
     return obj;
   });
 };
@@ -202,6 +254,7 @@ SmbBrowser.filteredListContents = function filteredListContents(cfg, next) {
     .nfcall(fs.readdir, dir)
     .then(function(files) {
       return Q.all(files.map(function(file) {
+        
         var fullPath = path.join(dir, file);
         return Q.nfcall(fs.stat, fullPath).then(function(stat) {
           var x = filterFn(stat, file);

@@ -27,6 +27,17 @@ exports.get = function get(req, res, next) {
     });
 };
 
+exports.version = function get(req, res, next) {
+  debug('getting environment');
+  var envId = req.params.envId;
+  envService
+    .version(envId, function(err, result) {
+      res.result  = result;
+      res.err     = err;
+      next();
+    });
+};
+
 
 exports.create = function create(req, res, next) {
   debug('creating environment');

@@ -61,9 +61,10 @@ describe('SmbBrowser', function() {
       var sut = new SmbBrowser(config);
       sut.builds('branch1', function(err, result) {
         expect(result).to.be.instanceOf(Array);
-        expect(result.length).to.equal(2);
+        expect(result.length).to.equal(3);
         expect(result[0]).to.equal('20150401.1');
         expect(result[1]).to.equal('20150401.2');
+        expect(result[2]).to.equal('20150401.3');
         done();
       });      
     });
@@ -72,9 +73,10 @@ describe('SmbBrowser', function() {
       sut.builds('branch1')
         .then(function(result) {
           expect(result).to.be.instanceOf(Array);
-          expect(result.length).to.equal(2);
+          expect(result.length).to.equal(3);
           expect(result[0]).to.equal('20150401.1');
           expect(result[1]).to.equal('20150401.2');
+          expect(result[2]).to.equal('20150401.3');        
           done();
         })
         .done();
@@ -87,7 +89,7 @@ describe('SmbBrowser', function() {
       sut.files('branch1/20150401.1', function(err, result) {
         expect(result).to.be.instanceOf(Array);
         expect(result.length).to.equal(1);
-        expect(result[0]).to.equal('file1.txt');
+        expect(result[0]).to.equal('OK');
         done();
       });
     });
@@ -97,7 +99,7 @@ describe('SmbBrowser', function() {
         .then(function(result) {
           expect(result).to.be.instanceOf(Array);
           expect(result.length).to.equal(1);
-          expect(result[0]).to.equal('file1.txt');
+          expect(result[0]).to.equal('OK');
           done();
         })
         .done();
@@ -110,7 +112,7 @@ describe('SmbBrowser', function() {
       sut.files('branch2', function(err, result) {
         expect(result).to.be.instanceOf(Array);
         expect(result.length).to.equal(1);
-        expect(result[0]).to.equal('file1.txt');
+        expect(result[0]).to.equal('OK');
         done();
       });
     });
@@ -120,10 +122,22 @@ describe('SmbBrowser', function() {
         .then(function(result) {
           expect(result).to.be.instanceOf(Array);
           expect(result.length).to.equal(1);
-          expect(result[0]).to.equal('file1.txt');
+          expect(result[0]).to.equal('OK');
           done();
         })
         .done();
+    });
+  });
+
+  describe('.files', function() {
+    it('should error from missing manifest', function(done) {
+      var sut = new SmbBrowser(config);
+      sut.files('branch1/20150401.3', function(err, result) {
+        expect(result).to.be.instanceOf(Array);
+        expect(result.length).to.equal(1);
+        expect(result[0]).to.equal('manifest.txt is missing');
+        done();
+      });
     });
   });
 

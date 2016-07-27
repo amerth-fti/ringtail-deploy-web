@@ -67,8 +67,9 @@ public class Options
     public string FtpProxyPort { get; set; }
     public string FtpProxyHost { get; set; }
     public string Branch { get; set; }
+    public string CurrentVersion { get; set; }
 
-    public Options(string ftpHost, string ftpUser, string ftpPassword, string ftpProxyHost, string ftpProxyPort, string branch)
+    public Options(string ftpHost, string ftpUser, string ftpPassword, string ftpProxyHost, string ftpProxyPort, string branch, string currentVersion)
     {
         FtpHost = ftpHost;
         FtpUser = ftpUser;
@@ -76,6 +77,7 @@ public class Options
         FtpProxyHost = ftpProxyHost;
         FtpProxyPort = ftpProxyPort;
         Branch = branch;
+        CurrentVersion = currentVersion;
     }
 }
 
@@ -104,7 +106,6 @@ public static class Helper
             List<string> remoteList = ValidateRemoteLocation(input, WebRequestMethods.Ftp.ListDirectoryDetails);
             var jsonSerialiser = new JavaScriptSerializer();
             var result = jsonSerialiser.Serialize(remoteList);
-            //Console.WriteLine(result);
             return result;
         }
         catch(Exception ex)
@@ -119,10 +120,10 @@ public static class Helper
     private static Options GenerateOptionsFromDynamic(dynamic input)
     {
         Options options = new Options((string)input.ftpHost, (string)input.ftpUser, (string)input.ftpPassword,
-            (string)input.ftpProxyHost, (string)input.ftpProxyPort, (string)input.branch);
+            (string)input.ftpProxyHost, (string)input.ftpProxyPort, (string)input.branch, (string) input.currentVersion);
 
         //Options options = new Options((string)input.FtpHost, (string)input.FtpUser, (string)input.FtpPassword,
-        //    (string)input.FtpProxyHost, (string)input.FtpProxyPort, (string)input.Branch);
+        //    (string)input.FtpProxyHost, (string)input.FtpProxyPort, (string)input.Branch, (string)input.CurrentVersion);
 
         return options;
     }
@@ -181,18 +182,14 @@ public static class Helper
                             if (request != null)
                             {
                                 var tmpResult = new List<string>();
-                                okOverall = VerifyManifest(request, result, out tmpResult);
+                                okOverall = VerifyManifest(request, result, options, out tmpResult);
                                 result = tmpResult;
-
-                                if(result.Count == 0)
-                                {
-                                    okOverall = true;
-                                }
                             }
 
                         }
                         catch(Exception ex)
                         {
+                            Console.WriteLine(ex.ToString());
                             result = new List<string>();
                             result.Add("There is no manifest file in this location.");
                             okOverall = false;
@@ -221,9 +218,42 @@ public static class Helper
         return result;
     }
 
-    private static bool VerifyManifest(FtpWebRequest request, List<string> listing, out List<string> validationResult)
+    private static bool AllowBranchVersion(string current, string manifest) 
     {
-        var okOverall = false;
+        var cArray = current.Split('.');
+        var mArray = manifest.Split('.');
+
+        //mismatch, allow it
+        if(cArray.Length != mArray.Length) 
+        {
+            return true;
+        }
+
+        for(var i = 0; i < cArray.Length; i++ )
+        {
+            var intCurrentVal = Int32.Parse(cArray[i]);
+            var intManifestVal = Int32.Parse(mArray[i]);
+
+            if(intCurrentVal == intManifestVal) 
+            {
+                continue;
+            }
+
+            else if(intCurrentVal > intManifestVal) 
+            {
+                return false;
+            }
+
+            return true;
+        }
+
+        //i don't know what happened, but allow it
+        return true;
+    }
+
+    private static bool VerifyManifest(FtpWebRequest request, List<string> listing, Options options, out List<string> validationResult)
+    {
+        var okOverall = true;
         var manifestContents = GetManifestFileContents(request);
         validationResult = new List<string>();
 
@@ -233,6 +263,21 @@ public static class Helper
             {
                 continue;
             }
+            
+            bool ringtailVersionOk = true;
+            if(options.CurrentVersion != null && options.CurrentVersion != "0.0.0.0")
+            {
+                if(x.FileName.IndexOf("Ringtail_Main Ringtail8") >= 0)
+                {
+                    var allowIt = AllowBranchVersion(options.CurrentVersion, x.Version);
+                    if(!allowIt) 
+                    { 
+                        validationResult.Add("This is an earlier version than what is already installed.");
+                        ringtailVersionOk = false;
+                    }
+                }
+            }
+
             bool fileExists = false;
             bool fileSizeMatch = false;
             foreach (var y in listing)
@@ -240,6 +285,7 @@ public static class Helper
                 if (y.Contains(x.FileName))
                 {
                     fileExists = true;
+
                     if (y.Contains(x.FileSize.ToString()))
                     {
                         fileSizeMatch = true;
@@ -265,7 +311,7 @@ public static class Helper
                 }
                 validationResult.Add(item);
             }
-            okOverall = okOverall ? fileExists && fileSizeMatch : false;
+            okOverall = okOverall ? fileExists && fileSizeMatch && ringtailVersionOk : false;
         }
 
         return okOverall;
@@ -457,11 +503,21 @@ public static class Helper
                 while (!string.IsNullOrEmpty(_line))
                 {
                     var line = _line.Replace("\"", "");
+                    var splitLine = line.Split(':');
                     FileItem fi = new FileItem();
-                    fi.FileName = line.Split(':')[0];
+                    fi.FileName = splitLine[0];
                     long length = 0;
+                    string version = "99.99.99.9999";
 
-                    bool success = long.TryParse(line.Split(':')[1], out length);
+                    bool success = long.TryParse(splitLine[1], out length);
+
+                    if(splitLine.Length > 2)
+                    {
+                        version = splitLine[2];
+                    }
+
+                    fi.Version = version;
+                    
                     if(success)
                     {
                         fi.FileSize = length;
@@ -564,11 +620,12 @@ public class FileItem
     }
 
     public string FileName { get; set; }
+    public string Version { get; set; }
     public long FileSize { get; set; }
 
 
     public override string ToString()
     {
-        return String.Format("{0} | {1}", FileName, FileSize);
+        return String.Format("{0} | {1} | {2}", FileName, FileSize, Version);
     }
 }

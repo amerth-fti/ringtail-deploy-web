@@ -12,6 +12,11 @@ var debug           = require('debug')('deployer-envservice')
   , envMapper       = new EnvMapper(dbPath)
   , jobMapper       = new JobMapper(dbPath)
   , machineMapper   = new MachineMapper(dbPath)
+  , RingtailClient  = require('ringtail-deploy-client')
+  , ConfigMapper    = require('../mappers/config-mapper')
+  , configMapper    = new ConfigMapper(dbPath)  
+  , _               = require('underscore')
+  , async           = require('async')
   , findById
   ;
 
@@ -67,6 +72,53 @@ exports.findById = findById = function get(envId, next) {
     .then(joinEnvMachines)
     .then(joinEnvSkytap)
     .nodeify(next);
+};
+
+exports.version = function version(envId, next) {
+  var serviceip;
+
+  machineMapper
+    .findByEnv(envId)
+    .then(function(machines) {
+      async.eachSeries(machines, function(machine, callback){
+        configMapper
+            .findById(machine.configId)
+            .then(function(conf){
+              var roles = conf.roles;
+              var possibleRoles = ['SKYTAP-ALLINONE', 'WEBAGENT', 'DEV-FULL', 'WEB', 'SKYTAP-WEB'];
+              var matchingRole = _.intersection(roles, possibleRoles);
+             
+              if(matchingRole.length > 0) {
+                if(!serviceip)  serviceip = machine.intIP;
+                return callback(null, serviceip);
+              } else {
+                return callback(null, null);
+              }
+          });
+      }, function done(){
+        var client = new RingtailClient({ serviceHost: serviceip });
+        var version;
+
+        client
+          .installed()
+          .then(function(result){
+            if(result && result.length > 0) {
+              result.forEach(function(row){
+                var versionMatches = row.match(/Ringtail Version: ([0-9\.].*)/i);
+                if(versionMatches && !version) {
+                  version = versionMatches[1];
+                }
+              });
+            }
+            return {
+              version: version || '0.0.0.0'
+            };
+          }).fail(function(err) {
+            
+          })
+          .nodeify(next);
+      });
+    });
 };
 
 exports.create = function create(data, next) {

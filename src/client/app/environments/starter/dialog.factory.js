@@ -31,7 +31,7 @@
   function EnvironmentStartController($modalInstance, environment) {
     var vm          = this;
     vm.environment  = null;
-    vm.duration     = 15;
+    vm.duration     = 120;
     vm.cancel       = cancel;
     vm.start        = start;
 

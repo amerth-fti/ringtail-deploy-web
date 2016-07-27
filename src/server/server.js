@@ -11,6 +11,7 @@ var path        = require('path')
   , session     = require('express-session')
   , cookieParser = require('cookie-parser')
   , migrate     = require('migrate')
+  , logger      = require('morgan')
   , app;
 
 app = express();
@@ -50,7 +51,7 @@ app.set('trust proxy', 1);
 app.use('/assets', serveStatic(__dirname + '/../client/assets'));
 app.use('/assets/lib', serveStatic(__dirname + '/../client/assets/bower_components'));
 app.use('/app', serveStatic(__dirname + '/../client/app'));
-
+// app.use(logger('dev'));
 
 // DEFAULT ROUTE
 function defaultRoute(req, res) {
@@ -116,7 +117,7 @@ app.put   ('/api/regions/:regionId', controllers.regions.update);
 app.delete('/api/regions/:regionId', controllers.regions.del);
 app.get   ('/api/regions/:regionId/branches', controllers.browse.branches);
 app.get   ('/api/regions/:regionId/branches/:branch/builds', controllers.browse.builds);
-app.get   ('/api/regions/:regionId/branches/:branch/files', controllers.browse.files);
+app.get   ('/api/regions/:regionId/branches/:branch/version/:version/files', controllers.browse.files);
 
 // API - CONFIG ROUTES
 app.post  ('/api/configs', controllers.configs.create);
@@ -140,6 +141,7 @@ app.put   ('/api/envs/:envId/pause', controllers.envs.pause);
 app.put   ('/api/envs/:envId/redeploy', controllers.envs.redeploy);
 app.put   ('/api/envs/:envId/reset', controllers.envs.reset);
 app.get   ('/api/envs/:envId/configs', controllers.configs.findByEnv);
+app.get   ('/api/envs/:envId/version', controllers.envs.version);
 app.get   ('/api/envs/:envId/branches/:branch/launchKeys', controllers.configs.launchKeys);
 app.get   ('/api/envs/:envId/branches/:branch/litKeys', controllers.configs.litKeys);
 app.put   ('/api/envs/sendLaunchKeys', controllers.configs.sendLaunchKeys);
@@ -233,6 +235,6 @@ debugapp.log = function() {
   var text = util.format.apply(this, arguments);
 
   // log to console and file
-  console.log(text);
+  // console.log(text);
   fs.appendFileSync('access.log', text + '\n');
 };

@@ -9,10 +9,8 @@
     <div class="form-group">
       <label>Run this environment for:</label>
       <select class="form-control" ng-model="vm.duration">
-        <option value="15">15 minutes</option>
-        <option value="30">30 minutes</option>
-        <option value="60">1 hour</option>
         <option value="120">2 hours</option>
+        <option value="240">4 hours</option>        
       </select>
     </div>
     <deployinfo environment="vm.environment"></deployinfo>    
