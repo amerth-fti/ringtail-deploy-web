@@ -139,6 +139,13 @@
       ]
     },
     {
+      "roles": ["SEARCHSERVER", "SKYTAP-ALLINONE"],
+      "configs": [
+        "RingtailSearchServer|SERVICEUSERNAME",
+        "RingtailSearchServer|SERVICEPASSWORD",
+      ]
+    },    
+    {
       "roles": ["SKYTAP-DB", "DATABASE", "DEV-FULL", "SKYTAP-ALLINONE"],
       "configs": [
         "RingtailDatabaseUtility|IS_SQLSERVER_SERVER",
