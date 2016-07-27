@@ -50,26 +50,19 @@ exports.builds = function builds(req, res, next) {
 exports.files = function files(req, res, next) {
   var id      = req.params.regionId
     , branch  = req.params.branch
+    , version = req.params.version
     ;
 
   Q.fcall(function() { 
       return regionService.findById(id);
     })
     .then(function(region) {  
-      return browserFactory.fromRegion(region);
+      return browserFactory.fromRegion(region, version);
     })
     .then(function(browser) {
       return browser.files(branch);      
     })
-    .then(function(files) {
-      var manifestOk = files.indexOf('Manifest.txt') !== -1; 
-      
-      if(!manifestOk) {
-        //files = null;
-      } else {
-
-      }
-      
+    .then(function(files) {     
       res.send(files);
     })
     .fail(function(err) {

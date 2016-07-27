@@ -58,6 +58,13 @@ public class Startup
     }
 }
 
+public enum ReturnValues
+{
+    OK = 1,
+    VersionMismatch = 2,
+    FileSizeMismatch = 3
+}
+
 // Utility class just to keep arguments clean
 public class Options
 {
@@ -104,7 +111,6 @@ public static class Helper
             List<string> remoteList = ValidateRemoteLocation(input, WebRequestMethods.Ftp.ListDirectoryDetails);
             var jsonSerialiser = new JavaScriptSerializer();
             var result = jsonSerialiser.Serialize(remoteList);
-            //Console.WriteLine(result);
             return result;
         }
         catch(Exception ex)
@@ -181,7 +187,8 @@ public static class Helper
                             if (request != null)
                             {
                                 var tmpResult = new List<string>();
-                                okOverall = VerifyManifest(request, result, out tmpResult);
+                                var verifyResult = VerifyManifest(request, result, input, out tmpResult);
+
                                 result = tmpResult;
 
                                 if(result.Count == 0)
@@ -193,6 +200,7 @@ public static class Helper
                         }
                         catch(Exception ex)
                         {
+                            Console.WriteLine(ex.ToString());
                             result = new List<string>();
                             result.Add("There is no manifest file in this location.");
                             okOverall = false;
@@ -221,7 +229,35 @@ public static class Helper
         return result;
     }
 
-    private static bool VerifyManifest(FtpWebRequest request, List<string> listing, out List<string> validationResult)
+private static bool AllowBranchVersion(string current, string manifest) {
+        var cArray = current.Split('.');
+        var mArray = manifest.Split('.');
+
+        //mismatch, allow it
+        if(cArray.Length != mArray.Length) {
+            return true;
+        }
+
+        for(var i = 0; i < cArray.Length; i++ ){
+            var intCurrentVal = Int32.Parse(cArray[i]);
+            var intManifestVal = Int32.Parse(mArray[i]);
+
+            if(intCurrentVal == intManifestVal) {
+                continue;
+            }
+
+            else if(intCurrentVal > intManifestVal) {
+                return false;
+            }
+
+            return true;
+        }
+
+        //i don't know what happened, but allow it
+        return true;
+    }
+
+    private static ReturnValues VerifyManifest(FtpWebRequest request, List<string> listing, dynamic input, out List<string> validationResult)
     {
         var okOverall = false;
         var manifestContents = GetManifestFileContents(request);
@@ -233,6 +269,17 @@ public static class Helper
             {
                 continue;
             }
+            
+            if(input.currentVersion != null && input.currentVersion != "0.0.0.0"){
+                if(x.FileName.IndexOf("Ringtail_Main Ringtail8") >= 0){
+                    var allowIt = AllowBranchVersion(input.currentVersion, x.Version);
+                    if(!allowIt) { 
+                        validationResult.Add("Ringtail version too old.");
+                        return ReturnValues.VersionMismatch;
+                    }
+                }
+            }
+
             bool fileExists = false;
             bool fileSizeMatch = false;
             foreach (var y in listing)
@@ -240,6 +287,7 @@ public static class Helper
                 if (y.Contains(x.FileName))
                 {
                     fileExists = true;
+
                     if (y.Contains(x.FileSize.ToString()))
                     {
                         fileSizeMatch = true;
@@ -268,7 +316,11 @@ public static class Helper
             okOverall = okOverall ? fileExists && fileSizeMatch : false;
         }
 
-        return okOverall;
+        if(okOverall) {
+            return ReturnValues.OK;
+        }
+
+        return ReturnValues.FileSizeMismatch;
     }
 
     public static FtpWebRequest FtpConnectionRequest(Options options)
@@ -457,11 +509,20 @@ public static class Helper
                 while (!string.IsNullOrEmpty(_line))
                 {
                     var line = _line.Replace("\"", "");
+                    var splitLine = line.Split(':');
                     FileItem fi = new FileItem();
-                    fi.FileName = line.Split(':')[0];
+                    fi.FileName = splitLine[0];
                     long length = 0;
+                    string version = "99.99.99.9999";
 
-                    bool success = long.TryParse(line.Split(':')[1], out length);
+                    bool success = long.TryParse(splitLine[1], out length);
+
+                    if(splitLine.Length > 2){
+                        version = splitLine[2];
+                    }
+
+                    fi.Version = version;
+                    
                     if(success)
                     {
                         fi.FileSize = length;
@@ -564,11 +625,12 @@ public class FileItem
     }
 
     public string FileName { get; set; }
+    public string Version { get; set; }
     public long FileSize { get; set; }
 
 
     public override string ToString()
     {
-        return String.Format("{0} | {1}", FileName, FileSize);
+        return String.Format("{0} | {1} | {2}", FileName, FileSize, Version);
     }
 }

@@ -58,6 +58,7 @@
     vm.click              = onFeatureKeyCheckClick;
     vm.featureGrid        = initFeatureGrid();
     vm.taskArray          = ['3-install-many'];
+    vm.version            = null;
         
     activate();
 
@@ -70,6 +71,10 @@
       vm.selectedBranch = parseBranchPath(vm.tempEnv.deployedBranch);
 
       vm.loadingBranches = true;
+      Config.version({envId: vm.tempEnv.envId}, function(result) {
+          vm.version = result.version;
+          return;
+      });
       Browse.branches({ regionId: vm.regionId }, function(branches) {
         vm.loadingBranches = false;
         vm.branches = branches.sort(function(a, b) {
@@ -235,7 +240,8 @@
         vm.launchKeys = null;
         vm.hideLaunchKeys = true;
         getLaunchKeysForBuild();
-        Browse.files({regionId: vm.regionId, branch: constructBranchPath() }, function(files) {
+        var version = vm.version || '0.0.0.0'; //need to pass something even if there is nothing
+        Browse.files({regionId: vm.regionId, branch: constructBranchPath(), version: version }, function(files) {
           vm.loadingFiles = false;
           vm.filesOk = files.length == 0 || files[0] !== 'OK';
           if(files.length > 0) {

@@ -17,6 +17,7 @@
   "repository": "fti-technology/ringtail-deploy-web",
   "dependencies": {
     "activedirectory": "^0.7.2",
+    "async": "^2.0.0",
     "body-parser": "^1.15.0",
     "chalk": "^1.1.1",
     "cheerio": "^0.20.0",
@@ -29,6 +30,7 @@
     "hops-model": "^0.3.0",
     "hops-sqlite": "^0.1.0",
     "migrate": "^0.2.2",
+    "morgan": "^1.7.0",
     "nib": "^1.1.0",
     "node-skytap": "^0.7.0",
     "q": "^1.4.1",

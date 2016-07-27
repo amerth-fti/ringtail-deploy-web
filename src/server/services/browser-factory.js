@@ -14,10 +14,12 @@ var EmptyBrowser  = require('./browsers/empty-browser')
  * default to EmptyBrowser if it can't build the appropriate
  * browser
  */
-exports.fromRegion = function(region) {
+exports.fromRegion = function(region, currentVersion) {
   var config = region.browseConfig || {}
     , result = null
     ;
+
+  config.currentVersion = currentVersion || '99.99.99.99';
 
   if(config.type === 'http') {
     result = new HttpBrowser(config);

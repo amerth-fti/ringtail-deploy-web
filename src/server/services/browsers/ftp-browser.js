@@ -32,7 +32,8 @@ FTPBrowser.prototype.branches = function branches(next) {
       ftpProxyHost: this.ftpProxyHost,
       ftpProxyPort: '',
       action: currentAction.value,
-      branch: this.ftpRootPath
+      branch: this.ftpRootPath,
+      currentVersion: this.currentVersion
    };
 
   debug('looking for branches via ftp');
@@ -66,7 +67,8 @@ FTPBrowser.prototype.builds = function builds(branch, next) {
         ftpProxyHost: this.ftpProxyHost,
         ftpProxyPort: '',
         action: currentAction.value,
-        branch: ''
+        branch: '',
+      currentVersion: this.currentVersion
       };
 
   
@@ -100,7 +102,8 @@ FTPBrowser.prototype.files = function files(branch, next) {
         ftpProxyHost: this.ftpProxyHost,
         ftpProxyPort: '',
         action: currentAction.value,
-        branch: this.ftpRootPath.replace(/\/$/, '') + '/' + branch
+        branch: this.ftpRootPath.replace(/\/$/, '') + '/' + branch,
+        currentVersion: this.currentVersion
       };
 
   branch = branch.replace('\\', '/');
