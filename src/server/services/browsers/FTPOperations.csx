@@ -58,13 +58,6 @@ public class Startup
     }
 }
 
-public enum ReturnValues
-{
-    OK = 1,
-    VersionMismatch = 2,
-    FileSizeMismatch = 3
-}
-
 // Utility class just to keep arguments clean
 public class Options
 {
@@ -74,8 +67,9 @@ public class Options
     public string FtpProxyPort { get; set; }
     public string FtpProxyHost { get; set; }
     public string Branch { get; set; }
+    public string CurrentVersion { get; set; }
 
-    public Options(string ftpHost, string ftpUser, string ftpPassword, string ftpProxyHost, string ftpProxyPort, string branch)
+    public Options(string ftpHost, string ftpUser, string ftpPassword, string ftpProxyHost, string ftpProxyPort, string branch, string currentVersion)
     {
         FtpHost = ftpHost;
         FtpUser = ftpUser;
@@ -83,6 +77,7 @@ public class Options
         FtpProxyHost = ftpProxyHost;
         FtpProxyPort = ftpProxyPort;
         Branch = branch;
+        CurrentVersion = currentVersion;
     }
 }
 
@@ -125,10 +120,10 @@ public static class Helper
     private static Options GenerateOptionsFromDynamic(dynamic input)
     {
         Options options = new Options((string)input.ftpHost, (string)input.ftpUser, (string)input.ftpPassword,
-            (string)input.ftpProxyHost, (string)input.ftpProxyPort, (string)input.branch);
+            (string)input.ftpProxyHost, (string)input.ftpProxyPort, (string)input.branch, (string) input.currentVersion);
 
         //Options options = new Options((string)input.FtpHost, (string)input.FtpUser, (string)input.FtpPassword,
-        //    (string)input.FtpProxyHost, (string)input.FtpProxyPort, (string)input.Branch);
+        //    (string)input.FtpProxyHost, (string)input.FtpProxyPort, (string)input.Branch, (string)input.CurrentVersion);
 
         return options;
     }
@@ -187,14 +182,8 @@ public static class Helper
                             if (request != null)
                             {
                                 var tmpResult = new List<string>();
-                                var verifyResult = VerifyManifest(request, result, input, out tmpResult);
-
+                                okOverall = VerifyManifest(request, result, options, out tmpResult);
                                 result = tmpResult;
-
-                                if(result.Count == 0)
-                                {
-                                    okOverall = true;
-                                }
                             }
 
                         }
@@ -229,24 +218,29 @@ public static class Helper
         return result;
     }
 
-private static bool AllowBranchVersion(string current, string manifest) {
+    private static bool AllowBranchVersion(string current, string manifest) 
+    {
         var cArray = current.Split('.');
         var mArray = manifest.Split('.');
 
         //mismatch, allow it
-        if(cArray.Length != mArray.Length) {
+        if(cArray.Length != mArray.Length) 
+        {
             return true;
         }
 
-        for(var i = 0; i < cArray.Length; i++ ){
+        for(var i = 0; i < cArray.Length; i++ )
+        {
             var intCurrentVal = Int32.Parse(cArray[i]);
             var intManifestVal = Int32.Parse(mArray[i]);
 
-            if(intCurrentVal == intManifestVal) {
+            if(intCurrentVal == intManifestVal) 
+            {
                 continue;
             }
 
-            else if(intCurrentVal > intManifestVal) {
+            else if(intCurrentVal > intManifestVal) 
+            {
                 return false;
             }
 
@@ -257,9 +251,9 @@ private static bool AllowBranchVersion(string current, string manifest) {
         return true;
     }
 
-    private static ReturnValues VerifyManifest(FtpWebRequest request, List<string> listing, dynamic input, out List<string> validationResult)
+    private static bool VerifyManifest(FtpWebRequest request, List<string> listing, Options options, out List<string> validationResult)
     {
-        var okOverall = false;
+        var okOverall = true;
         var manifestContents = GetManifestFileContents(request);
         validationResult = new List<string>();
 
@@ -270,12 +264,16 @@ private static bool AllowBranchVersion(string current, string manifest) {
                 continue;
             }
             
-            if(input.currentVersion != null && input.currentVersion != "0.0.0.0"){
-                if(x.FileName.IndexOf("Ringtail_Main Ringtail8") >= 0){
-                    var allowIt = AllowBranchVersion(input.currentVersion, x.Version);
-                    if(!allowIt) { 
-                        validationResult.Add("Ringtail version too old.");
-                        return ReturnValues.VersionMismatch;
+            bool ringtailVersionOk = true;
+            if(options.CurrentVersion != null && options.CurrentVersion != "0.0.0.0")
+            {
+                if(x.FileName.IndexOf("Ringtail_Main Ringtail8") >= 0)
+                {
+                    var allowIt = AllowBranchVersion(options.CurrentVersion, x.Version);
+                    if(!allowIt) 
+                    { 
+                        validationResult.Add("This is an earlier version than what is already installed.");
+                        ringtailVersionOk = false;
                     }
                 }
             }
@@ -313,14 +311,10 @@ private static bool AllowBranchVersion(string current, string manifest) {
                 }
                 validationResult.Add(item);
             }
-            okOverall = okOverall ? fileExists && fileSizeMatch : false;
+            okOverall = okOverall ? fileExists && fileSizeMatch && ringtailVersionOk : false;
         }
 
-        if(okOverall) {
-            return ReturnValues.OK;
-        }
-
-        return ReturnValues.FileSizeMismatch;
+        return okOverall;
     }
 
     public static FtpWebRequest FtpConnectionRequest(Options options)
@@ -517,7 +511,8 @@ private static bool AllowBranchVersion(string current, string manifest) {
 
                     bool success = long.TryParse(splitLine[1], out length);
 
-                    if(splitLine.Length > 2){
+                    if(splitLine.Length > 2)
+                    {
                         version = splitLine[2];
                     }
 

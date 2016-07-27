@@ -51,7 +51,7 @@ app.set('trust proxy', 1);
 app.use('/assets', serveStatic(__dirname + '/../client/assets'));
 app.use('/assets/lib', serveStatic(__dirname + '/../client/assets/bower_components'));
 app.use('/app', serveStatic(__dirname + '/../client/app'));
-app.use(logger('dev'));
+// app.use(logger('dev'));
 
 // DEFAULT ROUTE
 function defaultRoute(req, res) {
