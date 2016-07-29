@@ -98,37 +98,33 @@ describe('3-install-machine', function() {
     it('loads the machine', function(done) {
       task
         .execute(scope, log)
-        .then(function() {
-          expect(stubGetMachine.calledOnce).to.be.true;
-        })
-        .done(done);
+        .then(() => expect(stubGetMachine.calledOnce).to.be.true)
+        .then(() => done())
+        .catch(done);
     });
 
     it('loads the config', function(done) {
       task
         .execute(scope, log)
-        .then(function() {
-          expect(stubGetConfig.calledOnce).to.be.true;
-        })
-        .done(done);
+        .then(() => expect(stubGetConfig.calledOnce).to.be.true)
+        .then(() => done())
+        .catch(done);
     });
 
     it('service client uses correct machine host', function(done) {
       task
         .execute(scope, log)
-        .then(function() {
-          expect(task.serviceClient.serviceHost).to.equal(machine.intIP);
-        })
-        .done(done);
+        .then(() => expect(task.serviceClient.serviceHost).to.equal(machine.intIP))
+        .then(() => done())
+        .catch(done);
     });
 
     it('waits for the installer service', function(done) {
       task
         .execute(scope, log)
-        .then(function() {
-          expect(stubWaitForService.callCount).to.equal(2);
-        })
-        .done(done);
+        .then(() => expect(stubWaitForService.callCount).to.equal(2))
+        .then(() => done())
+        .catch(done);
     });
 
     it('triggers an update of the install service', function(done) {
@@ -138,7 +134,8 @@ describe('3-install-machine', function() {
           expect(stubInstall.called).to.be.true;
           expect(stubWaitForInstall.calledOnce).to.be.true;
         })
-        .done(done);
+        .then(() => done())
+        .catch(done);
     });
 
     it('configures the service configs', function(done) {
@@ -151,7 +148,8 @@ describe('3-install-machine', function() {
               expect(args[key]).to.equal(config.data[key]);
           }
         })
-        .done(done);
+        .then(() => done())
+        .catch(done);
     });
 
     it('configures the branch name', function(done) {
@@ -161,54 +159,52 @@ describe('3-install-machine', function() {
           var args = stubSetConfigs.getCall(0).args[0];
           expect(args['Common|BRANCH_NAME']).to.equal('NEW_BRANCH');
         })
-        .done(done);
+        .then(() => done())
+        .catch(done);
     });
 
     it('starts the installation', function(done) {
       task
         .execute(scope, log)
-        .then(function() {
-          expect(stubInstall.calledOnce).to.be.true;
-        })
-        .done(done);
+        .then(() => expect(stubInstall.calledOnce).to.be.true)
+        .then(() => done())
+        .catch(done);
     });
 
     it('waits for installation to complete', function(done) {
       task
         .execute(scope, log)
-        .then(function() {
-          expect(stubWaitForInstall.calledOnce).to.be.true;
-        })
-        .done(done);
+        .then(() => expect(stubWaitForInstall.calledOnce).to.be.true)
+        .then(() => done())
+        .catch(done);
     });
 
     it('updates the machine installNotes', function(done) {
       task
         .execute(scope, log)
-        .then(function() {
-          expect(stubInstalled.calledOnce).to.be.true;
-        })
-        .done(done);
+        .then(() => expect(stubInstalled.calledOnce).to.be.true)
+        .then(() => done())
+        .catch(done);
     });
 
     it('sets the install notes for the machine', function(done) {
       task
         .execute(scope, log)
-        .then(function() {
+        .then(() => {
           expect(machine.installNotes.length).to.equal(2);
           expect(machine.installNotes[0]).to.equal('one');
           expect(machine.installNotes[1]).to.equal('two');
         })
-        .done(done);
+        .then(() => done())
+        .catch(done);
     });
 
     it('saves the machine info', function(done) {
       task
         .execute(scope, log)
-        .then(function() {
-          expect(machineSvc.update.calledOnce).to.be.true;
-        })
-        .done(done);
+        .then(() => expect(machineSvc.update.calledOnce).to.be.true)
+        .then(() => done())
+        .catch(done);
     });
 
 
@@ -219,11 +215,9 @@ describe('3-install-machine', function() {
       it('sets the UNINSTALL_EXLUSIONS config', function(done) {
         task
           .execute(scope, log)
-          .then(function() {
-            expect(stubSetConfigs.getCall(0).args[0]['Common|UNINSTALL_EXCLUSIONS']).to.equal('Framework Workers');
-            done();
-          })
-          .done();
+          .then(() => expect(stubSetConfigs.getCall(0).args[0]['Common|UNINSTALL_EXCLUSIONS']).to.equal('Framework Workers'))
+          .then(() => done())
+          .catch(done);
       });
     });
 
@@ -235,11 +229,9 @@ describe('3-install-machine', function() {
       it('unsets the UNINSTALL_EXLUSIONS config', function(done) {
         task
           .execute(scope, log)
-          .then(function() {
-            expect(stubSetConfigs.getCall(0).args[0]['Common|UNINSTALL_EXCLUSIONS']).to.equal('');
-            done();
-          })
-          .done();
+          .then(() => expect(stubSetConfigs.getCall(0).args[0]['Common|UNINSTALL_EXCLUSIONS']).to.equal(''))
+          .then(() => done())
+          .catch(done);
       });
     });
 
@@ -250,11 +242,9 @@ describe('3-install-machine', function() {
       it('sets the FILE_DELETIONS config', function(done) {
         task
           .execute(scope, log)
-          .then(function() {
-            expect(stubSetConfigs.getCall(0).args[0]['Common|FILE_DELETIONS']).to.equal('C:\\Program Files\\FTI Technology\\Ringtail Processing Framework\\RPF_Supervisor');
-            done();
-          })
-          .done();
+          .then(() => expect(stubSetConfigs.getCall(0).args[0]['Common|FILE_DELETIONS']).to.equal('C:\\Program Files\\FTI Technology\\Ringtail Processing Framework\\RPF_Supervisor'))
+          .then(() => done())
+          .catch(done);
       });
     });
 
@@ -266,11 +256,10 @@ describe('3-install-machine', function() {
       it('unsets the FILE_DELETIONS config', function(done) {
         task
           .execute(scope, log)
-          .then(function() {
-            expect(stubSetConfigs.getCall(0).args[0]['Common|FILE_DELETIONS']).to.equal('');
-            done();
-          })
-          .done();
+          .then(() => expect(stubSetConfigs.getCall(0).args[0]['Common|FILE_DELETIONS']).to.equal(''))
+          .then(() => done())
+          .catch(done);
+
       });
     });
 

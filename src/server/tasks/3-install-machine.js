@@ -18,7 +18,7 @@ function TaskImpl(options) {
   this.validators.required.push('branch');
   this.serviceClient = null;  // used by unit test to capture the client
 
-  this.execute = function execute(scope, log) {
+  this.execute = async function execute(scope, log) {
 
     var options         = scope.options
       , machineId       = this.machineId
@@ -26,130 +26,88 @@ function TaskImpl(options) {
       , pollInterval    = this.pollInterval
       , installInterval = this.installInterval
       , branch          = this.getData(scope, 'branch')
-      , machine
-      , config
-      , serviceIP
-      , client
       , me = this
       ;
 
-    return Q.fcall(function() {
       log('start installation');
 
-      // Load the machine
-      return Q.fcall(function() {
-        log('loading machine ' + machineId);
-        return machineSvc
-          .get(machineId)
-          .then(function(result) {
-            machine   = result;
-            serviceIP = result.intIP;
-          });
-      })
+    // Load the machine
+    log('loading machine ' + machineId);
+    let machine = await machineSvc.get(machineId);
+    let serviceIP = machine.intIP;
 
-      // load the config for the machine
-      .then(function() {
-        log('loading config ' + configId);
-        return configSvc
-          .get(configId)
-          .then(function(result) {
-            config = result;
-          });
-      })
+    // load the config for the machine
+    log('loading config ' + configId);
+    let config = await configSvc.get(configId);
 
-      // Create the Ringtail Install Service client
-      .then(function() {
-        client = me.serviceClient = new RingtailClient({ serviceHost: serviceIP });
-        log('will use: %s', client.installUrl);
-        log('will use: %s', client.statusUrl);
-        log('will use: %s', client.updateUrl);
-        log('will use: %s', client.configUrl);
-        log('will use: %s', client.installedUrl);
-      })
+    // Create the Ringtail Install Service client
+    let client = me.serviceClient = new RingtailClient({ serviceHost: serviceIP });
+    log('will use: %s', client.installUrl);
+    log('will use: %s', client.statusUrl);
+    log('will use: %s', client.updateUrl);
+    log('will use: %s', client.configUrl);
+    log('will use: %s', client.installedUrl);
 
-      // wait for the service to be available
-      .then(function() {
-        log('waiting for service to start');
-        return client.waitForService();
-      })
+    // wait for the service to be available
+    log('waiting for service to start');
+    await client.waitForService();
 
-      // upgrade install service
-      .then(function() {
-        log('updating install service to latest version');
-        return client.update();
-      })
+    // upgrade install service
+    log('updating install service to latest version');
+    await client.update();
 
-      // wait for service to return
-      .then(function() {
-        log('waiting for service to return');
-        return client.waitForService();
-      })
+    // wait for service to return
+    log('waiting for service to return');
+    await client.waitForService();
 
-      // configure install service
-      .then(function() {
-        log('configuring install service');
-        var configs = {
-          'Common|BRANCH_NAME' : branch,
-          'RoleResolver|ROLE' : config.roles[0],
-          'JobLogger|ENV_NAME': machine.machineName,
-          'JobLogger|JOB_ID': me.jobId
-        };
+    // configure install service
+    log('configuring install service');
+    let configs = {
+      'Common|BRANCH_NAME' : branch,
+      'RoleResolver|ROLE' : config.roles[0],
+      'JobLogger|ENV_NAME': machine.machineName,
+      'JobLogger|JOB_ID': me.jobId
+    };
 
-        //kind of a bit hacky, but handles quoting to server
-        var configData = config.data;
-        var configKeys = Object.keys(configData);
-        configKeys.forEach(function(key){
-          var tempkey = configData[key] || '';
-          if(tempkey && tempkey.replace) {
-            tempkey = tempkey.replace(/\"/g, '').trim();
-            if(tempkey.indexOf(' ') > 0) {
-              configData[key] = '"""' + tempkey + '"""';
-            }
-          }
-        });
-        _.extend(configs, configData);
-
-        if(config.launchKey) {
-         _.extend(configs, config.launchKey);
+    //kind of a bit hacky, but handles quoting to server
+    let configData = config.data;
+    let configKeys = Object.keys(configData);
+    configKeys.forEach(function(key){
+      let tempkey = configData[key] || '';
+      if(tempkey && tempkey.replace) {
+        tempkey = tempkey.replace(/\"/g, '').trim();
+        if(tempkey.indexOf(' ') > 0) {
+          configData[key] = '"""' + tempkey + '"""';
         }
-        _.extend(configs, getConfigsFromOptions(options));
+      }
+    });
+    _.extend(configs, configData);
 
-        log('sending config object');
-        return client.setConfigs(configs);
-      })
+    if(config.launchKey) {
+     _.extend(configs, config.launchKey);
+    }
+    _.extend(configs, getConfigsFromOptions(options));
 
-      // start installation
-      .then(function() {
-        log('starting installation');
-        return client.install();
-      })
+    log('sending config object');
+    await client.setConfigs(configs);
 
-      // wait for installation to complete
-      .then(function() {
-        log('waiting for install to complete, refer to Run Details');
-        return client.waitForInstall(function(status) {
-          me.rundetails = status;
-        });
-      })
+    // start installation
+    log('starting installation');
+    await client.install();
 
-      // update machine install notes
-      .then(function() {
-        log('retrieving install info for %s', serviceIP);
-        return client
-          .installed()
-          .then(function(builds) {
-            machine.installNotes = builds;
-            return machineSvc.update(machine);
-          });
-      })
-
-      // signal completion for installation
-      .then(function() {
-        log('installation complete');
-      });
-
+    // wait for installation to complete
+    log('waiting for install to complete, refer to Run Details');
+    await client.waitForInstall(function(status) {
+      me.rundetails = status;
     });
 
+    // update machine install notes
+    log('retrieving install info for %s', serviceIP);
+    machine.installNotes = await client.installed();
+    await machineSvc.update(machine);
+
+    // signal completion for installation
+    log('installation complete');
   };
 }
 

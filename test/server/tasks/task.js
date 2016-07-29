@@ -38,12 +38,12 @@ describe('Task', function() {
         expect(task.derp).to.equal('derp');
       });
     });
-    
+
 
   });
 
   describe('#validate', function() {
-    
+
     describe('when validating required configuration data', function() {
 
       beforeEach(function() {
@@ -64,7 +64,7 @@ describe('Task', function() {
       });
 
     });
-  
+
   });
 
 
@@ -72,16 +72,16 @@ describe('Task', function() {
     var scope;
 
     beforeEach(function() {
-      task = new Task();  
-      scope = {};   
+      task = new Task();
+      scope = {};
     });
 
 
     describe('when value is on scope object', function() {
-      
+
       it('resolves simple types from scope', function() {
         task.data.resolveMe = 'scope.someValue';
-        scope.someValue = 'Simple resolution';        
+        scope.someValue = 'Simple resolution';
 
         var result = task.getData(scope, 'resolveMe');
         expect(result).to.equal('Simple resolution');
@@ -173,7 +173,7 @@ describe('Task', function() {
       });
 
     });
-        
+
   });
 
 
@@ -181,7 +181,7 @@ describe('Task', function() {
     var scope
       , mock;
 
-    beforeEach(function(){      
+    beforeEach(function(){
       task = new Task();
       task.execute = function() {};
       scope = {};
@@ -191,7 +191,7 @@ describe('Task', function() {
         .expects('execute')
         .returns(new Q('I am the result'))
         .once()
-        .withArgs(scope, task.log);        
+        .withArgs(scope, task.log);
     });
 
     it('sets \'started\' property', function() {
@@ -209,25 +209,23 @@ describe('Task', function() {
         done();
       });
       task.start(scope);
-    });  
+    });
 
-    it('calls execute only once', function(done) {      
+    it('calls execute only once', function(done) {
       task
         .start(scope)
-        .then(function() {
-          mock.verify();
-        })
-        .done(done);      
-    });  
+        .then(() => mock.verify())
+        .then(() => done());
+    });
 
     it('stores execute results on scope', function(done) {
       task.storeIn = 'resultProp';
       task
         .start(scope)
-        .then(function() {          
+        .then(function() {
           expect(scope.resultProp).to.equal('I am the result');
         })
-        .done(done);
+        .then(done);
     });
 
 
@@ -238,7 +236,7 @@ describe('Task', function() {
           .then(function() {
             expect(task.endTime).to.be.a('date');
           })
-          .done(done);
+          .then(done);
       });
 
       it('sets the status to \'Succeeded\'', function(done) {
@@ -247,7 +245,7 @@ describe('Task', function() {
           .then(function() {
             expect(task.status).to.equal('Succeeded');
           })
-          .done(done);
+          .then(done);
       });
 
       it('emits a \'success\' event', function(done) {
@@ -276,10 +274,10 @@ describe('Task', function() {
               assert.fail();
             },
             function(err) {
-              expect(task.endTime).to.be.a('date');            
+              expect(task.endTime).to.be.a('date');
               expect(err.name).to.equal('I failed');
             })
-          .done(done);
+          .then(done);
       });
 
       it('sets the status to \'Failed\'', function(done) {
@@ -288,11 +286,11 @@ describe('Task', function() {
           .then(
             function() {
               assert.fail();
-            }, 
+            },
             function() {
               expect(task.status).to.equal('Failed');
             })
-          .done(done);
+          .then(done);
       });
 
       it('emits a \'fail\' event', function(done) {
@@ -306,7 +304,7 @@ describe('Task', function() {
       });
 
     });
-      
+
   });
 
   describe('#log', function() {
@@ -319,7 +317,7 @@ describe('Task', function() {
       task.log('hello');
       expect(task.runlog.length).to.equal(1);
       expect(task.runlog[0].date).to.be.a('date');
-      expect(task.runlog[0].data).to.equal('hello');      
+      expect(task.runlog[0].data).to.equal('hello');
     });
 
     it('formats text using standard util.format', function() {

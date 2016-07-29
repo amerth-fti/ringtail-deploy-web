@@ -26,62 +26,53 @@ Job.prototype.start = function start() {
 
   /* jshint es5:false */
   /* jshint newcap:false */
-  var chain = Q(0)
-    , job = this
-    , env = this.env;
+  let job = this;
+  let env = this.env;
 
   // initialize the job data
   this.status = 'Pending';
   this.started = new Date();
 
   // start job on next tick
-  process.nextTick(function() {
+  process.nextTick(async function() {
     job.status = 'Running';
 
-    // mark environment as starting
-    chain.then(function() {
+    try
+    {
+      // mark environment as starting
       env.status = 'deploying';
       env.deployedJobId = job.id;
-      return envService.update(env);
-    });
+      await envService.update(env);
 
-    // create task chain
-    job.tasks.forEach(function(task) {
-      task.on('log', debug);
-      task.jobId = job.id;
+      // create task chain
+      for(let task of job.tasks) {
+        task.on('log', debug);
+        task.jobId = job.id;
+        await task.start(job.rundata);
+      }
 
-      chain = chain.then(function () {
-        return task.start(job.rundata);
-      });
-    });
-
-    // mark as complete
-    chain.then(function() {
+      // mark as complete
       job.status = 'Succeeded';
       job.stopped = new Date();
-    });
 
-    // mark environment as deployed
-    chain.then(function() {
+      // mark environment as deployed
       env.deployedOn = new Date().toUTCString();
       env.status = 'deployed';
-      return envService.update(env);
-    })
+      await envService.update(env);
 
-    // mark as failed
-    .fail(function(err) {
+    }
+    catch(err) {
+      // mark as failed
       debug(err);
       job.stopped = new Date();
       job.status = 'Failed';
       job.error = err;
       env.status = 'failed';
-      return envService.update(env);
-    })
-
-    // all done
-    .fin(function(){
-      return envService.log(job);
-    });
+      await envService.update(env);
+    }
+    finally {
+      await envService.log(job);
+    }
 
   });
 };
