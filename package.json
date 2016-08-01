@@ -24,7 +24,7 @@
     "cheerio": "^0.20.0",
     "cookie-parser": "^1.4.3",
     "debug": "^2.2.0",
-    "edge": "^5.0.0",
+    "edge": "git://github.com/adampaulberg/edge",
     "eslint": "^2.1.0",
     "express": "^4.13.4",
     "express-session": "^1.13.0",
