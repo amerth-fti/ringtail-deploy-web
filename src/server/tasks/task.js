@@ -47,32 +47,31 @@ util.inherits(Task, events.EventEmitter);
 module.exports = Task;
 
 
-Task.prototype.start = function start(scope) {
+Task.prototype.start = async function start(scope) {
   this.started = new Date();
   this.status = 'Running';
   this.emit('start', this);
   var self = this;
 
-  return Q.fcall(function() {
-    return self.execute(scope, self.log);
-  })
-  .then(function(result) {
+  try
+  {
+    let result = await self.execute(scope, self.log);
+
     if(self.storeIn) {
       self.log('stroring scope variable "%s"', self.storeIn);
       scope[self.storeIn] = result;
-    } else {
+    }
+    else {
       self.log('no scope storage');
     }
 
-  })
-  .then(function() {
     self.log('task complete');
     self.endTime = new Date();
     self.status = 'Succeeded';
     self.emit('success');
     self.emit('end');
-  })
-  .fail(function(err) {
+  }
+  catch(err) {
     self.log(err);
     self.endTime = new Date();
     self.status = 'Failed';
@@ -81,8 +80,7 @@ Task.prototype.start = function start(scope) {
     self.emit('fail', err);
     self.emit('end');
     throw err;
-  });
-
+  }
 };
 
 Task.prototype.execute = function() {

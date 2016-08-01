@@ -1,10 +1,10 @@
-﻿var _ = require('underscore')
-  , debug = require('debug')('deployer-browsers-ftp-browser')
-  , Q = require('q')
-  , edge = require('edge')
-  , path = require('path')
-  , ftp = edge.func(path.join(__dirname, 'FTPOperations.csx'))
-  ;
+﻿let _ = require('underscore');
+let Q = require('q');
+let debug = require('debug')('deployer-browsers-ftp-browser');
+let path = require('path');
+let edge = require('edge');
+let ftp = edge.func(path.join(__dirname, 'FTPOperations.csx'));
+
 
 function FTPBrowser(config) {
   _.extend(this, config);
@@ -37,7 +37,7 @@ FTPBrowser.prototype.branches = function branches(next) {
    };
 
   debug('looking for branches via ftp');
-  
+
   ftp(params, function (error, result) {
     if (error) deferred.reject(error);
     else deferred.resolve(result);
