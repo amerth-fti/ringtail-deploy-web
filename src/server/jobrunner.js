@@ -61,6 +61,13 @@ var parseRunDetails = function(job) {
   return job;
 };
 
+/** 
+ * 
+ */
+ exports.convertdetailstoarray = function convertdetailstoarray(rundetails) {
+  return arrayifyDetails(rundetails);
+ };
+
 //set job id to latest in db
 jobMapper.maxJobId(function(err, id){
   jobId = id || 0;  
@@ -74,6 +81,7 @@ jobMapper.maxJobId(function(err, id){
 exports.getJobs = function getjobs() {  
   return _.values(jobs); 
 };
+
 
 
 /** 
