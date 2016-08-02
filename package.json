@@ -13,7 +13,7 @@
     "lint": "eslint .",
     "test:client": "karma start karma.conf.js",
     "test:server": "babel-node node_modules/.bin/_mocha --recursive test/server",
-    "testw:server": "babel-node node_modules/.bin/_mocha --recursive test/server -w"
+    "test:watch": "node_modules/.bin/_mocha -w --recursive test/server --compilers js:babel-register"
   },
   "main": "src/server/server.js",
   "repository": "fti-technology/ringtail-deploy-web",
