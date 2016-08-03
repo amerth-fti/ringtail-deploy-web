@@ -55,10 +55,18 @@ Task.prototype.start = async function start(scope) {
 
   try
   {
-    let result = await self.execute(scope, self.log);
+    let result;
+    
+    try {
+      result = await self.execute(scope, self.log);
+    } catch(err) {
+      self.log('attempting retry of task');
+
+      result = await self.execute(scope, self.log);
+    } 
 
     if(self.storeIn) {
-      self.log('stroring scope variable "%s"', self.storeIn);
+      self.log('storing scope variable "%s"', self.storeIn);
       scope[self.storeIn] = result;
     }
     else {
