@@ -23,7 +23,6 @@ module.exports = Job;
 
 
 Job.prototype.start = function start() {
-
   /* jshint es5:false */
   /* jshint newcap:false */
   let job = this;
@@ -66,9 +65,10 @@ Job.prototype.start = function start() {
       debug(err);
       job.stopped = new Date();
       job.status = 'Failed';
-      job.error = err;
+      job.error = err + '';
       env.status = 'failed';
       await envService.update(env);
+
     }
     finally {
       await envService.log(job);

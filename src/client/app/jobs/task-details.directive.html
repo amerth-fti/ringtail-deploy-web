@@ -11,8 +11,8 @@
     <div class="panel panel-default" ng-show="tab.task.runlog">
       <div class="panel-heading">Most Recent Run Log</div>
       <ul class="list-group">
-        <li class="list-group-item lastlog" ng-repeat="entry in tab.task.runlog" ng-if="$last" ng-bind-html="entry">
-          <strong>{{entry.date | date:'mediumTime' }}:</strong> {{entry.data}}
+        <li class="list-group-item lastlog" ng-repeat="entry in tab.task.runlog" ng-if="$last" >
+          <strong>{{entry.date | date:'mediumTime' }}:</strong> <span ng-bind-html="entry.data | trust"></span>
         </li>
       </ul>
     </div>   
@@ -30,7 +30,7 @@
       <div class="panel-heading">Run Log</div>
       <ul class="list-group">
         <li class="list-group-item" ng-repeat="entry in tab.task.runlog">
-          <strong>{{entry.date | date:'mediumTime' }}:</strong> {{entry.data}}
+          <strong>{{entry.date | date:'mediumTime' }}:</strong> <span ng-bind-html="entry.data | trust"></span>
         </li>
       </ul>    
     </div>
