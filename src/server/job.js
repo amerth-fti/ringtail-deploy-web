@@ -61,13 +61,11 @@ Job.prototype.start = function start() {
 
     }
     catch(err) {
-      task.log("failed deploy " + task.name);
-      
       // mark as failed
       debug(err);
       job.stopped = new Date();
       job.status = 'Failed';
-      job.error = err + "";
+      job.error = err + '';
       env.status = 'failed';
       await envService.update(env);
 
