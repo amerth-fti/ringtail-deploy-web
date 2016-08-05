@@ -1,7 +1,7 @@
 module.exports = {
   port: 8080,
   host: null,
-  cookieSecret: 'I<3Secur1ty',
+  cookieSecret: 'I<3Secur1ty', //if using ringtail auth, should match login server value
   skytap: {
     username: 'SKYTAP_USERNAME',
     token: 'SKYTAP_TOKEN',
@@ -22,6 +22,12 @@ module.exports = {
             password: 'PASSWORD' 
         },
         groups: ['GROUP1', 'GROUP2']
+    },
+    ringtail: {
+        enabled: false, //when enabled, overrides any other type of auth
+        url: 'http://login.ringtail.io',
+        secret: 'ChangeMe', //should match secret key of login server
+        cookieName: 'ringtail-user-details' //should match cookie name of login server
     }
   }
 }

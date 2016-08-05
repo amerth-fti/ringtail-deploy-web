@@ -1,24 +1,24 @@
-var path        = require('path')
-  , debug       = require('debug')('deployer')
-  , express     = require('express')
-  , serveStatic = require('serve-static')
-  , bodyParser  = require('body-parser')
-  , controllers = require('./controllers')
-  , config      = require('../../config')
-  , stylus      = require('stylus')
-  , nib         = require('nib')
-  , join        = require('path').join
-  , session     = require('express-session')
-  , cookieParser = require('cookie-parser')
-  , migrate     = require('migrate')
-  , logger      = require('morgan')
-  , app;
+let bodyParser  = require('body-parser');
+let config      = require('../../config');
+let controllers = require('./controllers');
+let cookieParser = require('cookie-parser');
+let debug       = require('debug')('deployer');
+let express     = require('express');
+let join        = require('path').join;
+let logger      = require('morgan');
+let migrate     = require('migrate');
+let nib         = require('nib');
+let path        = require('path');
+let serveStatic = require('serve-static');
+let session     = require('express-session');
+let stylus      = require('stylus');
+let URL         = require('url');
 
-app = express();
+let app  = express();
 
 //STYLUS MIDDLEWARE
-var stylusDir = join(__dirname, '/../client/assets/stylus');
-var cssDir = join(__dirname, '/../client/');
+let stylusDir = join(__dirname, '/../client/assets/stylus');
+let cssDir = join(__dirname, '/../client/');
 
 function compile(str, path){
   return stylus(str)
@@ -59,15 +59,18 @@ function defaultRoute(req, res) {
 }
 
 function checkLogin(req, res, next) {
-  if(!config.ldap || !config.ldap.enabled) {
+  if( (!config.ldap || !config.ldap.enabled) &&
+    (!config.ringtail || !config.ringtail.enabled) ) {
     return next('route');
   }
 
-  var isLoggedin = false;
-
-  if(req.signedCookies && req.signedCookies['auth']) {
-    var authCookie = req.signedCookies['auth'];
-    var hour = 3600000;
+  let isLoggedin = false;
+  if(req.signedCookies && req.signedCookies[config.ringtail.cookieName]){
+    isLoggedin = true;
+  }
+  else if(req.signedCookies && req.signedCookies['auth']) {
+    let authCookie = req.signedCookies['auth'];
+    let hour = 3600000;
 
     res.cookie('auth', authCookie, { maxAge: hour * 2, signed: true, rolling: true});
 
@@ -76,21 +79,34 @@ function checkLogin(req, res, next) {
 
   if(!isLoggedin){
     if(req.xhr) {
-      var data = {
+      let data = {
         error: 'Login required',
         success: false
       };
 
       return res.json(data);
+    } else if(config.ringtail.enabled) {
+      let parsedUrl = URL.parse(req.url);
+      let hostname = req.headers.host;
+      let protocol = req.connection.encrypted ? 'https://' : 'http://';
+      let pathname = parsedUrl.pathname || '';
+      let search = parsedUrl.search || '';
+
+      let returnUrl = protocol + hostname + pathname + search;
+      let redirectUrl = config.ringtail.url + returnUrl;
+
+      return res.redirect(redirectUrl);
     }
+
     return res.sendFile(path.resolve(__dirname +'/../client/login.html'));
   } else {
+    
     return next('route');
   }
 }
 
 // API - HEALTH CHECK
-app.get   ('/api/online', function(req, res){ return res.send(200); });
+app.get   ('/api/online', function(req, res) { return res.send(200); });
 
 // API - LOGIN ROUTES
 app.post  ('/api/login', controllers.auth.login);
@@ -172,7 +188,7 @@ app.all ('/api/*', function(req, res) {
       res.set('X-Paging-LastPage', Math.ceil(res.result.total / res.result.pagesize));
     }
 
-    var client = convertToClient(res.result);
+    let client = convertToClient(res.result);
     res.status(200).send(client);
   } else if (res.err) {
     console.error(res.err);
@@ -183,7 +199,7 @@ app.all ('/api/*', function(req, res) {
 });
 
 function convertToClient(results) {
-  var util = require('util');
+  let util = require('util');
   if(results && results.toClient) {
     results = results.toClient();
   }
@@ -196,7 +212,7 @@ function convertToClient(results) {
     });
   }
   else if (results instanceof Object) {
-    for(var prop in results) {
+    for(let prop in results) {
       if(results[prop] instanceof Object) {
         results[prop] = convertToClient(results[prop]);
       }
@@ -206,7 +222,7 @@ function convertToClient(results) {
 }
 
 
-var set = migrate.load('migrations/.migrate', 'migrations');
+let set = migrate.load('data/.migrate', 'migrations');
 set.up(function (err) {
   if (err) {
     console.error('failed to migrate db');
@@ -226,13 +242,13 @@ set.up(function (err) {
 });
 
 // OVERWRITE DEFAULT DEBUG
-var debugapp = require('debug');
-var util = require('util');
-var fs = require('fs');
+let debugapp = require('debug');
+let util = require('util');
+let fs = require('fs');
 
 debugapp.log = function() {
   // taken from node.js inside debug library
-  var text = util.format.apply(this, arguments);
+  let text = util.format.apply(this, arguments);
 
   // log to console and file
   console.log(text);
