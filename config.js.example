@@ -25,8 +25,7 @@ module.exports = {
     },
     ringtail: {
         enabled: false, //when enabled, overrides any other type of auth
-        url: 'http://login.ringtail.io',
-        secret: 'ChangeMe', //should match secret key of login server
+        url: 'http://login.ringtail.io?return=',
         cookieName: 'ringtail-user-details' //should match cookie name of login server
     }
   }
