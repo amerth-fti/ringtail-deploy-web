@@ -30,16 +30,8 @@ bower install
 * Copy the config.json.example file to config.json and modify it with the correct credentials
 
 * Migrate the Sqlite Database
-```bash
--- In Bash:
-$(npm bin)/migrate up
+Do not manually run the migrate script. It is now part of the server start up. The ```.migrate``` file is now stored in the ```data``` folder.
 
--- Windows Command Prompt
-"node_modules/.bin/migrate" up
-```
-
-* Start the server
-```bash
 -- For development
 npm run watch
 
