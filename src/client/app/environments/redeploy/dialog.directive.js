@@ -70,7 +70,6 @@
       'GLACIAL'     : '3. OnDemand'   ,   // deprecated
     },
     vm.orderedDisp        = ['RC', 'GAMMA', 'BETA', 'ALPHA', 'DEVELOPMENT'];
-
         
     activate();
 
@@ -337,7 +336,7 @@
 
     function filterKeysBasedOnEnvironmentDeploymentRing(launchKeys) {
       var keyFilter = vm.environment.updatePath,
-        filteredKeys = []        
+        filteredKeys = [];        
       if(keyFilter) {
         filteredKeys = _.filter(launchKeys, function(k) {
           var mappedKey = vm.rosettaStone[k.KeyType.toUpperCase()];
