@@ -32,6 +32,9 @@ bower install
 * Migrate the Sqlite Database
 Do not manually run the migrate script. It is now part of the server start up. The ```.migrate``` file is now stored in the ```data``` folder.
 
+
+* Start the server
+```bash
 -- For development
 npm run watch
 
