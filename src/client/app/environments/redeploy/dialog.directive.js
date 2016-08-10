@@ -58,7 +58,18 @@
     vm.click              = onFeatureKeyCheckClick;
     vm.featureGrid        = initFeatureGrid();
     vm.taskArray          = ['3-install-many'];
-    vm.version            = null;
+    vm.version            = null,
+    vm.rosettaStone       = {
+      'DEVELOPMENT' : '0. Development',
+      'ALPHA'       : '1. Portal01'   ,
+      'BETA'        : '2. Demo'       ,
+      'GAMMA'       : '3. OnDemand'   ,
+      'RC'          : '4. SaaS'       ,
+      'FAST'        : '1. Portal01'   ,   // deprecated
+      'SLOW'        : '2. Demo'       ,   // deprecated
+      'GLACIAL'     : '3. OnDemand'   ,   // deprecated
+    },
+    vm.orderedDisp        = ['RC', 'GAMMA', 'BETA', 'ALPHA', 'DEVELOPMENT'];
         
     activate();
 
@@ -325,21 +336,10 @@
 
     function filterKeysBasedOnEnvironmentDeploymentRing(launchKeys) {
       var keyFilter = vm.environment.updatePath,
-        filteredKeys = [],
-        rosettaStone = {
-          'DEVELOPMENT' : '0. Development',
-          'ALPHA'       : '1. Portal01'   ,
-          'BETA'        : '2. Demo'       ,
-          'GAMMA'       : '3. OnDemand'   ,
-          'RC'          : '4. SaaS'       ,
-          'FAST'        : '1. Portal01'   ,   // deprecated
-          'SLOW'        : '2. Demo'       ,   // deprecated
-          'GLACIAL'     : '3. OnDemand'   ,   // deprecated
-        };
-
+        filteredKeys = [];        
       if(keyFilter) {
         filteredKeys = _.filter(launchKeys, function(k) {
-          var mappedKey = rosettaStone[k.KeyType.toUpperCase()];
+          var mappedKey = vm.rosettaStone[k.KeyType.toUpperCase()];
           return mappedKey ? mappedKey[0] >= keyFilter[0] : false;
         });
       }
@@ -349,21 +349,23 @@
 
     function buildFeatureTreeDataObject(launchKeys) {
       var rootNode = {
-          'id': 'portal',       
-          'name': 'Portal Database',
-          'hideCheck': true,
-          'selectable' : false,
-          'children': []
-        },
-        groupedKeys = _.groupBy(launchKeys, function(x) { return x.KeyType; } ),
-        keysToProcess = _.toArray(groupedKeys);
-
-      keysToProcess.forEach(function(listOfKeys) {
-        if(listOfKeys.length > 0) { 
-          rootNode.children.push(buildSubKeyLevelDataObject(listOfKeys));
-        }
-      });
+        'id': 'portal',       
+        'name': 'Portal Database',
+        'hideCheck': true,
+        'selectable' : false,
+        'children': []
+      },
+      groupedKeys = _.groupBy(launchKeys, function(x) { return x.KeyType; } );
       
+      // Sort for display order 
+      vm.orderedDisp.forEach(function(element) {
+        var targetGroup = groupedKeys[element];
+        if(targetGroup !== null && targetGroup !== undefined){
+          if(targetGroup.length > 0) {
+            rootNode.children.push(buildSubKeyLevelDataObject(targetGroup));
+          }
+        }
+      }, this);
       return new Array(rootNode);
     }
 
@@ -386,7 +388,7 @@
       // Create the root item group
       var filterLevelItemRoot = {
         'id': rootLevelFeatureItem.KeyType,       
-        'name': rootLevelFeatureItem.KeyType,
+        'name': vm.rosettaStone[rootLevelFeatureItem.KeyType],
         'hideCheck': false,
         'selectable' : true,
         'isSelected': rootItemChecked,
@@ -457,7 +459,7 @@
         }
       });
     };
-    
+
     function initFeatureGrid(){
       return {
         enableColumnMenus: false,
@@ -473,7 +475,7 @@
         width: 200,
         columnDefs: [
         { name: 'isActive', displayName: 'Active', type: 'boolean', cellTemplate: '<div ng-hide=row.entity.hideCheck><input type="checkbox" ng-model="row.entity.isActive"  ng-click="ui-grid.appScope.click(row.entity.name, row.entity.isActive)" ng-disabled=!row.entity.selectable></div>', enableColumnMenu: false, width:'25' , cellClass: 'ui-grid'},
-        { name: 'name',enableHiding: false, enableColumnMenu: false, visible: true, pinnedLeft:true, width:'25%', cellClass: 'ui-grid',  },
+        { name: 'name',enableHiding: false, enableColumnMenu: false, visible: true, pinnedLeft:true, width:'25%', cellClass: 'ui-grid' },
         { name: 'description', enableHiding: false, enableColumnMenu: false, visible: true, width:'*', cellClass: 'ui-grid' }
       ]};
     }
