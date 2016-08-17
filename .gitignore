@@ -44,3 +44,6 @@ build
 
 src/client/assets/css/*.css
 .vscode
+
+domain.key
+domain.cer

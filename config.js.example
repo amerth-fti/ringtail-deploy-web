@@ -27,6 +27,11 @@ module.exports = {
         enabled: false, //when enabled, overrides any other type of auth
         url: 'http://login.ringtail.io?return=',
         cookieName: 'ringtail-user-details' //should match cookie name of login server
+    },
+    certificate: {
+        //certificates go in the certs folder
+        key: 'privatekey.key',
+        cert: 'certificate.crt'
     }
   }
 }

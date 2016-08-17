@@ -4,7 +4,9 @@ let controllers = require('./controllers');
 let cookieParser = require('cookie-parser');
 let debug       = require('debug')('deployer');
 let express     = require('express');
+let fs          = require('fs');
 let join        = require('path').join;
+let jwt         = require('jsonwebtoken');
 let logger      = require('morgan');
 let migrate     = require('migrate');
 let nib         = require('nib');
@@ -15,6 +17,17 @@ let stylus      = require('stylus');
 let URL         = require('url');
 
 let app  = express();
+
+let key, cert;
+let hour = 3600000;
+
+//JWT CERTS
+try {
+  key = fs.readFileSync(join(__dirname, '../../certs/') + config.certificate.key);
+  cert = fs.readFileSync(join(__dirname, '../../certs/') + config.certificate.cert);
+} catch(err) {
+  throw('certificates could not be found')
+}
 
 //STYLUS MIDDLEWARE
 let stylusDir = join(__dirname, '/../client/assets/stylus');
@@ -34,6 +47,7 @@ app.use(stylus.middleware({
 }));
 
 // CONFIGURE BODY PARSER
+app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json({ limit: '1mb' }));
 app.use(cookieParser(config.cookieSecret));
 
@@ -59,18 +73,26 @@ function defaultRoute(req, res) {
 }
 
 function checkLogin(req, res, next) {
+  let isLoggedin = false;
+  
   if( (!config.ldap || !config.ldap.enabled) &&
     (!config.ringtail || !config.ringtail.enabled) ) {
     return next('route');
   }
 
-  let isLoggedin = false;
-  if(req.signedCookies && req.signedCookies[config.ringtail.cookieName]){
+  if(req.method == 'POST' && req.body.token) {
+    let token = req.body.token;
+    let decoded = jwt.verify(token, cert);
+
+    res.cookie('auth', decoded, { maxAge: hour * 2, signed: true, rolling: true});
+
+    return res.redirect(req.url);
+  }
+  else if(req.signedCookies && req.signedCookies[config.ringtail.cookieName]){
     isLoggedin = true;
   }
   else if(req.signedCookies && req.signedCookies['auth']) {
     let authCookie = req.signedCookies['auth'];
-    let hour = 3600000;
 
     res.cookie('auth', authCookie, { maxAge: hour * 2, signed: true, rolling: true});
 
@@ -244,7 +266,6 @@ set.up(function (err) {
 // OVERWRITE DEFAULT DEBUG
 let debugapp = require('debug');
 let util = require('util');
-let fs = require('fs');
 
 debugapp.log = function() {
   // taken from node.js inside debug library
