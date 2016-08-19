@@ -67,6 +67,19 @@ app.use('/assets/lib', serveStatic(__dirname + '/../client/assets/bower_componen
 app.use('/app', serveStatic(__dirname + '/../client/app'));
 // app.use(logger('dev'));
 
+function getRedirectUrl(req) {
+    let parsedUrl = URL.parse(req.url);
+    let hostname = req.headers.host;
+    let protocol = req.connection.encrypted ? 'https://' : 'http://';
+    let pathname = parsedUrl.pathname || '';
+    let search = parsedUrl.search || '';
+
+    let returnUrl = protocol + hostname + pathname + search;
+    let redirectUrl = config.ringtail.url + returnUrl;
+
+    return redirectUrl;  
+}
+
 // DEFAULT ROUTE
 function defaultRoute(req, res) {
   res.sendFile(path.resolve(__dirname +'/../client/index.html'));
@@ -108,14 +121,7 @@ function checkLogin(req, res, next) {
 
       return res.json(data);
     } else if(config.ringtail.enabled) {
-      let parsedUrl = URL.parse(req.url);
-      let hostname = req.headers.host;
-      let protocol = req.connection.encrypted ? 'https://' : 'http://';
-      let pathname = parsedUrl.pathname || '';
-      let search = parsedUrl.search || '';
-
-      let returnUrl = protocol + hostname + pathname + search;
-      let redirectUrl = config.ringtail.url + returnUrl;
+      let redirectUrl = getRedirectUrl(req);
 
       return res.redirect(redirectUrl);
     }
@@ -128,10 +134,30 @@ function checkLogin(req, res, next) {
 }
 
 // API - HEALTH CHECK
-app.get   ('/api/online', function(req, res) { return res.send(200); });
+app.get   ('/api/online', (req, res) => { return res.send(200); });
 
 // API - LOGIN ROUTES
 app.post  ('/api/login', controllers.auth.login);
+app.get   ('/api/session', (req, res) => {
+  //if login not enabled, just say we're logged in
+  if( (!config.ldap || !config.ldap.enabled) &&
+    (!config.ringtail || !config.ringtail.enabled) ) {
+    return res.send({
+      loggedIn: true
+    });
+  }
+
+  else if(req.signedCookies 
+    && (req.signedCookies[config.ringtail.cookieName] || req.signedCookies['auth'])){
+    return res.send({
+      loggedIn: true
+    });
+  }
+
+  return res.send({
+    loggedIn: false
+  });
+});
 
 //ALL ROUTES PAST HERE REQUIRE LOGIN
 app.all   ('*', checkLogin);
