@@ -26,7 +26,7 @@ try {
   key = fs.readFileSync(join(__dirname, '../../certs/') + config.certificate.key);
   cert = fs.readFileSync(join(__dirname, '../../certs/') + config.certificate.cert);
 } catch(err) {
-  throw('certificates could not be found')
+  throw('certificates could not be found');
 }
 
 //STYLUS MIDDLEWARE
