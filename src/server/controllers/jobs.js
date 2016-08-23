@@ -1,17 +1,17 @@
-var debug       = require('debug')('deployer-projects')  
-  , Q           = require('q')
-  , _           = require('underscore')
-  , jobrunner   = require('../jobrunner')
-  , cheerio     = require('cheerio');
+let debug       = require('debug')('deployer-projects');
+let Q           = require('q');
+let _           = require('underscore');
+let jobrunner   = require('../jobrunner');
+let cheerio     = require('cheerio');
 
-
-exports.list = function list(req, res) {
+exports.list = (req, res) => {
   res.send(jobrunner.getJobs());
 };
 
-exports.get = function get(req, res) {
+exports.get = (req, res) => {
   let jobId = req.param('jobId');
-  jobrunner.getJob(jobId, function(err, data){
+
+  jobrunner.getJob(jobId, (err, data) => {
     res.send(data);
   });
 };
