@@ -55,23 +55,23 @@ exports.downloadLog = function downloadLog(req, res) {
             formattedlog += 'STATUS: ' + t.status + '\n\n';
             
             if(t.runlog) {
-              formattedlog += "############ERROR BLOCK############\n";
+              formattedlog += '############ERROR BLOCK############\n';
               for(subtask of t.runlog) {
                 formattedlog += subtask.date + ' - ';
                 let data = subtask.data;
 
                 if(/\<p\>/i.test(data)) {
                   let $ = cheerio.load(data);                
-                  data = "";
+                  data = '';
 
-                  $("p").each((i, elem) => {
-                    data += $(elem).html() + "\n";
+                  $('p').each((i, elem) => {
+                    data += $(elem).html() + '\n';
                   });
                 }
                 
                 formattedlog += data + '\n\n';
               }
-              formattedlog += "############END ERROR BLOCK############\n";
+              formattedlog += '############END ERROR BLOCK############\n';
               
             }
           }
