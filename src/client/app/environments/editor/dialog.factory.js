@@ -28,9 +28,9 @@
     }
   }
 
-  EnvironmentEditorController.$inject = [ '$modalInstance', '$routeParams', 'Environment', 'environment', 'Wizard', 'Region', 'Config', '$scope', 'validationMessage' ];
+  EnvironmentEditorController.$inject = [ '$modalInstance', '$routeParams', 'Environment', 'environment', 'Wizard', 'Region', 'Config', '$scope', 'ValidationMessage' ];
 
-  function EnvironmentEditorController($modalInstance, $routeParams, Environment, environment, Wizard, Region, Config, $scope, validationMessage) {
+  function EnvironmentEditorController($modalInstance, $routeParams, Environment, environment, Wizard, Region, Config, $scope, ValidationMessage) {
     var vm          = this;
     vm.environment  = null;
     vm.configs      = [];
@@ -75,7 +75,7 @@
     }
 
     function update(skipValidation = false) {
-      validationMessage.clearMessage();
+      ValidationMessage.clearMessage();
       if(environment) {
         angular.copy(vm.environment, environment);
         if(!skipValidation && validateConfigs(environment).length > 0){
@@ -111,7 +111,7 @@
             message: errorMessage,
             stage: 'machines'
           };
-          validationMessage.setMessage(dataDetails.stage, dataDetails.message, dataDetails.invalidmachines);
+          ValidationMessage.setMessage(dataDetails.stage, dataDetails.message, dataDetails.invalidmachines);
         }
 
         return inValidMachines;

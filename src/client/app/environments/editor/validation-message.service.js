@@ -3,7 +3,7 @@
 
   angular
     .module('app.environments.editor')
-    .service('validationMessage', function($q){
+    .service('ValidationMessage', function($q){
       var self = this,
       defer = $q.defer();
       this.message = null;

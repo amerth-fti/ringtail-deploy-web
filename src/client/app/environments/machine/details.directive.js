@@ -20,9 +20,9 @@
     };
   }
 
-  Controller.$inject = [ '$scope','validationMessage' ];
+  Controller.$inject = [ '$scope','ValidationMessage' ];
 
-  function Controller($scope, validationMessage) {
+  function Controller($scope, ValidationMessage) {
     var vm         = this;
     vm.configs     = this.configs;
     vm.machine     = this.machine;
@@ -39,7 +39,7 @@
     function activate() {
       $scope.$parent.$watch('vm.configs', configsChanged, true);
       $scope.$watch('vm.machine', machineChanged, true);
-      validationMessage.observeMessage().then(null, null, function(message){
+      ValidationMessage.observeMessage().then(null, null, function(message){
         handleMachineConfigError(message);
       });
     }

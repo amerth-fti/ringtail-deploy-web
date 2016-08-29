@@ -22,8 +22,8 @@
     };
   }
 
-  ValidationController.$inject = ['validationMessage', '$scope'];
-  function ValidationController( validationMessage, $scope){
+  ValidationController.$inject = ['ValidationMessage', '$scope'];
+  function ValidationController( ValidationMessage, $scope){
     var vm            = this;
     vm.next           = next;
     vm.environment    = this.environment;
@@ -39,7 +39,7 @@
 
     function activate() {
       
-      validationMessage.observeMessage().then(null, null, function(message){
+      ValidationMessage.observeMessage().then(null, null, function(message){
         vm.wizard.stage = 'validation';
 
         vm.errorMessage = message.errorMessage;
