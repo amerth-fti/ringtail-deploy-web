@@ -20,9 +20,9 @@
     };
   }
 
-  Controller.$inject = [ '$scope' ];
+  Controller.$inject = [ '$scope','validationMessage' ];
 
-  function Controller($scope) {
+  function Controller($scope, validationMessage) {
     var vm         = this;
     vm.configs     = this.configs;
     vm.machine     = this.machine;
@@ -30,6 +30,7 @@
     vm.config      = null;
     vm.configName  = null;
     vm.configIndex = null;
+    vm.hasError    = false;
 
     activate();
 
@@ -38,6 +39,19 @@
     function activate() {
       $scope.$parent.$watch('vm.configs', configsChanged, true);
       $scope.$watch('vm.machine', machineChanged, true);
+      validationMessage.observeMessage().then(null, null, function(message){
+        handleMachineConfigError(message);
+      });
+    }
+
+    function handleMachineConfigError(message){
+      if(message.errorStage && message.errorStage === 'machines'){
+        message.errorDetails.forEach(function(error) {
+          if(error.machineId === vm.machine.machineId){
+            vm.hasError = true;
+          }
+        });
+      }
     }
 
     function configsChanged(configs) {

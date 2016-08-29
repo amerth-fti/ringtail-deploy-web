@@ -44,3 +44,4 @@ build
 
 src/client/assets/css/*.css
 .vscode
+.vs/*
