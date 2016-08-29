@@ -1,7 +1,10 @@
 <h2>{{vm.region.regionName}}
   <span class="small btn-add glyphicon glyphicon-plus-sign" ng-click="vm.newEnvironment()"></span>
-	<a href="/app/regions/{{vm.regionId}}/edit">
+	<a href="/app/regions/{{vm.regionId}}/edit" class='no-decoration'>
 		<span class="configure glyphicon glyphicon-cog" />
+	</a>
+	<a href="/app/regions/{{vm.regionId}}/environment-edit" class='no-decoration'>
+		<span class="trash glyphicon glyphicon-tasks" />
 	</a>
 </h2>
 

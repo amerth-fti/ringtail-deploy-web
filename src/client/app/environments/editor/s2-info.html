@@ -4,16 +4,18 @@
     <div class="col-sm-12">
       <form>
         <div class="form-group">
-          <label for="envName">Name</label>
-          <input type="text" class="form-control" id="envName" placeholder="Name" ng-model="vm.environment.envName" />
+          <label for="envName">Name<span class='require'>*</span></label>
+          <input type="text" class="form-control" id="envName" placeholder="Name" ng-model="vm.environment.envName" required/>
+          <div class='error name'></div>          
         </div>
         <div class="form-group">
           <label for="envDesc">Description</label>
           <textarea type="text" class="form-control" rows="5" id="envDesc" placeholder="Description" ng-model="vm.environment.envDesc" />
         </div>
         <div class="form-group">
-          <label for="host">Ringtail Host Name (eg: demo.ftitools.com)</label>
-          <input type="text" class="form-control" placeholder="Host" ng-model="vm.environment.host" />
+          <label for="host">Ringtail Host Name (eg: demo.ftitools.com)<span class='require'>*</span></label>
+          <input type="text" class="form-control" placeholder="Host" ng-model="vm.environment.host" required/>
+          <div class='error host'></div>
         </div>
         <div class="form-group">
           <label for="host">Deployment Ring</label>
@@ -33,6 +35,7 @@
 <div class="modal-footer">
   <button type="button" class="btn btn-default" ng-click="vm.prev()" ng-show="vm.wizard.mode === 'new'">Previous</button>
   <button type="button" class="btn btn-primary" ng-click="vm.next()" ng-show="vm.wizard.mode === 'new'">Next</button>
+  <button type="button" class="btn btn-danger" ng-click="vm.trash()" ng-show="vm.wizard.mode === 'edit'">Delete</button>
   <button type="button" class="btn btn-primary" ng-click="vm.update()" ng-show="vm.wizard.mode === 'edit'">Update</button>
   <button type="button" class="btn btn-warning" ng-click="vm.cancel()">Cancel</button>
 </div>

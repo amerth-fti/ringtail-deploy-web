@@ -24,6 +24,11 @@
       controller: 'RegionEditRouteController',
       controllerAs: 'vm'
     })
+    .when('/app/regions/:regionId/environment-edit', {
+      templateUrl: '/app/regions/environment-edit-route.html',
+      controller: 'RegionEnvironmentEditController',
+      controllerAs: 'vm'
+    })
     .otherwise({
       redirectTo: '/app/regions'
     });  

@@ -17,7 +17,7 @@
         pause   : { method: 'PUT', url: 'api/envs/:envId/pause' },
         redeploy: { method: 'PUT', url: 'api/envs/:envId/redeploy' },
         reset   : { method: 'PUT', url: 'api/envs/:envId/reset' },
-
+        remove  : { method: 'DELETE', url: 'api/envs/:envId' },
         region  : { method: 'GET', url: 'api/regions/:regionId/envs', isArray: true }
       }
     );

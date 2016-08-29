@@ -12,6 +12,7 @@
         cancel: '=',
         environment: '=',
         update: '=',
+        trash: '=',
         wizard: '='
       },
       templateUrl: '/app/environments/editor/s2-info.html',
@@ -36,6 +37,18 @@
     }
 
     function next() {
+      if(vm.environment.envName.trim().length == 0){
+        $('.error.name').html('name required');
+        return;        
+      }
+
+      if(vm.environment.host.trim().length == 0){
+        $('.error.host').html('host required');
+        return;        
+      }
+
+      $('.form-group .error').html('');
+
       vm.wizard.stage = 'configs';
     }
 
