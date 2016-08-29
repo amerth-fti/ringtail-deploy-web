@@ -74,7 +74,7 @@
     }
 
     function remove() {
-      var checkedEnvironments = $("[name='chkEnvs']:checked");
+      var checkedEnvironments = $('[name="chkEnvs"]:checked');
       environmentCount = checkedEnvironments.length;
 
       checkedEnvironments.each(function(){
