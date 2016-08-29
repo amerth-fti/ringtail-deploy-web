@@ -37,17 +37,18 @@
     }
 
     function next() {
-      if(vm.environment.envName.trim().length == 0){
+      if(!vm.environment.envName || vm.environment.envName.trim().length == 0){
         $('.error.name').html('name required');
         return;        
       }
 
-      if(vm.environment.host.trim().length == 0){
+      $('.form-group .error.name').html('');
+      if(!vm.environment.host || vm.environment.host.trim().length == 0){
         $('.error.host').html('host required');
         return;        
       }
 
-      $('.form-group .error').html('');
+      $('.form-group .error.host').html('');
 
       vm.wizard.stage = 'configs';
     }
