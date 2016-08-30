@@ -21,5 +21,8 @@
     "semi": [2, "always"]  ,                  // force semi-colons
     "no-console": 0,                          // allow use of console
     "no-unused-expressions": 0                // allow chai expect('').is.not.null;
+  },
+  "globals": {
+    "$": false
   }
 }
