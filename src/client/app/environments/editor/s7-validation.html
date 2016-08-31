@@ -1,0 +1,20 @@
+
+<div class="model-body pad-left pad-right pad-top">
+  <div class="row">
+    <div class="col-sm-12">
+      <div style="margin-bottom: 2em;">Extended environment validation errors will be displayed here upon update.</div>
+      <span ng-if="vm.errorStage === 'machines'">
+        <ul class="list-group">
+          <li class="list-group-item list-group-item-warning"><strong>Warning!:</strong> {{vm.errorMessage}}, hit update to continue or navigate to the {{vm.errorStage}} tab to address the issue.</li>
+          <li style="margin-left:20px;" class="list-group-item" ng-repeat="machine in vm.errorDetails"><a href="" class="alert-link" ng-click="vm.goToStage()">{{machine.machineName}}</a></li>
+        </ul>
+          <div style="margin-top: 1em;">
+      </span>
+    </div>
+  </div>
+</div>
+
+<div class="modal-footer">
+  <button type="button" class="btn btn-primary" ng-click="vm.update(true)">Update</button>
+  <button type="button" class="btn btn-warning" ng-click="vm.cancel()">Cancel</button>
+</div>
