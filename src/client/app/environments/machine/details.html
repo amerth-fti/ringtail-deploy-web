@@ -1,7 +1,7 @@
 
 <div class="machine-details" ng-class="{editable: vm.editable}">
   <div class="machine-config config-{{vm.configIndex}}">
-    <h4 class="machine-name">{{ vm.machine.machineName }}</h4>
+    <h4 class="machine-name"><i style="margin-right: 0.5em; color: #a94442;" ng-class="{ 'glyphicon-machine glyphicon glyphicon-exclamation-sign': vm.hasError === true }"></i>{{ vm.machine.machineName }}</h4>
     <span class="machine-ip">{{ vm.machine.intIP }}</span>
   </div>
 </div>
