@@ -27,7 +27,7 @@ exports.downloadLog = function downloadLog(req, res) {
     try {
       content = JSON.stringify(content, null, 4);
 
-      for(task of data.tasks) {
+      for(let task of data.tasks) {
         formattedlog += 'JOB ID: ' + task.id + '\n';
         formattedlog += 'TASK NAME: ' + task.name + '\n';
         formattedlog += 'STARTED: ' + task.started + '\n';
@@ -42,13 +42,13 @@ exports.downloadLog = function downloadLog(req, res) {
         if(task.runlog) {
           formattedlog += 'RUNLOG:\n';
           
-          for(log of task.runlog) {
+          for(let log of task.runlog) {
             formattedlog += log.date + ' - ' + log.data + '\n\n';
           }
         }
 
         if(task.tasks) {
-          for(t of task.tasks) {
+          for(let t of task.tasks) {
             formattedlog += 'TASK NAME: ' + t.name + '\n';
             formattedlog += 'STARTED: ' + t.started + '\n';
             formattedlog += 'ENDED: ' + t.endTime + '\n';
@@ -56,7 +56,7 @@ exports.downloadLog = function downloadLog(req, res) {
             
             if(t.runlog) {
               formattedlog += '############ERROR BLOCK############\n';
-              for(subtask of t.runlog) {
+              for(let subtask of t.runlog) {
                 formattedlog += subtask.date + ' - ';
                 let data = subtask.data;
 
