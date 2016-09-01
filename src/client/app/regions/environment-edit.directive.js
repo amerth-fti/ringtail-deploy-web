@@ -74,13 +74,18 @@
     }
 
     function remove() {
-      var checkedEnvironments = $('[name="chkEnvs"]:checked');
-      environmentCount = checkedEnvironments.length;
+      var chkEnvs = document.getElementsByName('chkEnvs');
+      var chkArray = [];
 
-      checkedEnvironments.each(function(){
-        var chk = $(this);
-        var envId = chk.data('id');
+      chkEnvs.forEach(function(chk){
+        if(chk.checked) {
+          chkArray.push(chk.dataset.id);
+        }
+      });
 
+      environmentCount = chkArray.length;
+
+      chkArray.forEach(function(envId){
         vm.environments.forEach(function(environment){
           if(envId == environment.envId) {
             environment.$remove(isComplete);

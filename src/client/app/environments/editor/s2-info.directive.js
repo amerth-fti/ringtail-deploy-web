@@ -38,17 +38,19 @@
 
     function next() {
       if(!vm.environment.envName || vm.environment.envName.trim().length == 0){
-        $('.error.name').html('name required');
+        debugger;
+        vm.environment.errorName = 'name required';
         return;        
+      } else {
+        vm.environment.errorName = '';
       }
 
-      $('.form-group .error.name').html('');
       if(!vm.environment.host || vm.environment.host.trim().length == 0){
-        $('.error.host').html('host required');
+        vm.environment.errorHost = 'host required';
         return;        
+      } else {
+        vm.environment.errorHost = '';
       }
-
-      $('.form-group .error.host').html('');
 
       vm.wizard.stage = 'configs';
     }

@@ -6,7 +6,7 @@
         <div class="form-group">
           <label for="envName">Name<span class='require'>*</span></label>
           <input type="text" class="form-control" id="envName" placeholder="Name" ng-model="vm.environment.envName" required/>
-          <div class='error name'></div>          
+          <div class='error name'>{{vm.environment.errorName}}</div>          
         </div>
         <div class="form-group">
           <label for="envDesc">Description</label>
@@ -15,7 +15,7 @@
         <div class="form-group">
           <label for="host">Ringtail Host Name (eg: demo.ftitools.com)<span class='require'>*</span></label>
           <input type="text" class="form-control" placeholder="Host" ng-model="vm.environment.host" required/>
-          <div class='error host'></div>
+          <div class='error host'>{{vm.environment.errorHost}}</div>
         </div>
         <div class="form-group">
           <label for="host">Deployment Ring</label>
