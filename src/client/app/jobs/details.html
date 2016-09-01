@@ -1,6 +1,7 @@
 
 <div class="job-details-header">
   <h2>{{vm.job.name}}</h2>
+  <h4>Deployment Branch: {{vm.job.rundata.me.deployedBranch}}</h4>  
   <h4>Status: {{vm.job.status}} ({{vm.job.elapsed | elapsed}})</h4>
 </div>
 

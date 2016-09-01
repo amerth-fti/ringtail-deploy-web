@@ -28,9 +28,9 @@
     }
   }
 
-  EnvironmentEditorController.$inject = [ '$modalInstance', '$routeParams', 'Environment', 'environment', 'Wizard', 'Region', 'Config', '$scope' ];
+  EnvironmentEditorController.$inject = [ '$modalInstance', '$routeParams', 'Environment', 'environment', 'Wizard', 'Region', 'Config', '$scope', 'ValidationMessage' ];
 
-  function EnvironmentEditorController($modalInstance, $routeParams, Environment, environment, Wizard, Region, Config, $scope) {
+  function EnvironmentEditorController($modalInstance, $routeParams, Environment, environment, Wizard, Region, Config, $scope, ValidationMessage) {
     var vm          = this;
     vm.environment  = null;
     vm.configs      = [];
@@ -40,6 +40,7 @@
 
     activate();
 
+    
     //////////
 
     function activate() {
@@ -54,6 +55,7 @@
         create().then(configs);
       }
       vm.wizard = new Wizard(mode);
+      vm.wizard.error = null;
     }
 
     function cancel() {
@@ -72,15 +74,47 @@
         });
     }
 
-    function update() {
+    function update(skipValidation = false) {
+      ValidationMessage.clearMessage();
       if(environment) {
         angular.copy(vm.environment, environment);
+        if(!skipValidation && validateConfigs(environment).length > 0){
+          return;
+        }
       }
       return vm.environment
         .$update()
         .then(function(environment){
           $modalInstance.close(environment);
         });
+    }
+
+    function validateConfigs(environment){
+      var inValidMachines = [],
+      postErrorMessage = false,
+      errorMessage = 'The listed machine does not have its config set';
+
+      environment.machines.forEach(function(machineDetail) {
+          if(machineDetail.configId == null){
+            inValidMachines.push(machineDetail);
+            postErrorMessage = true;
+          }
+        }, this);
+
+        if(postErrorMessage === true){
+          if(inValidMachines.length > 1){
+            errorMessage = 'The listed machines do not have their config set';
+          }
+
+          var dataDetails = {
+            invalidmachines: inValidMachines,
+            message: errorMessage,
+            stage: 'machines'
+          };
+          ValidationMessage.setMessage(dataDetails.stage, dataDetails.message, dataDetails.invalidmachines);
+        }
+
+        return inValidMachines;
     }
 
     function configs() {
