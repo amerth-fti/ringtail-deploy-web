@@ -1,3 +1,5 @@
+require('babel-register');
+
 var path        = require('path')
   , debug       = require('debug')('deployer')
   , express     = require('express')
@@ -206,7 +208,10 @@ function convertToClient(results) {
 }
 
 
-var set = migrate.load('migrations/.migrate', 'migrations');
+let migrationPath = join(__dirname, '../../migrations');
+let migrationFilePath = join(migrationPath, '/.migrate');
+
+let set = migrate.load(migrationFilePath, migrationPath);
 set.up(function (err) {
   if (err) {
     console.error('failed to migrate db');
