@@ -55,7 +55,7 @@ exports.downloadLog = function downloadLog(req, res) {
             formattedlog += 'STATUS: ' + t.status + '\n\n';
             
             if(t.runlog) {
-              formattedlog += '############ERROR BLOCK############\n';
+              formattedlog += '############RUN LOG BLOCK############\n';
               for(let subtask of t.runlog) {
                 formattedlog += subtask.date + ' - ';
                 let data = subtask.data;
@@ -71,7 +71,7 @@ exports.downloadLog = function downloadLog(req, res) {
                 
                 formattedlog += data + '\n\n';
               }
-              formattedlog += '############END ERROR BLOCK############\n';
+              formattedlog += '############RUN LOG BLOCK############\n';
               
             }
           }
