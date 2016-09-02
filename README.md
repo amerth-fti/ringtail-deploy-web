@@ -29,7 +29,9 @@ bower install
 
 * Copy the config.json.example file to config.json and modify it with the correct credentials
 
-* upon startup, the db migration will take place if necessary.
+* Migrate the Sqlite Database
+Do not manually run the migrate script. It is now part of the server start up. The ```.migrate``` file is now stored in the ```data``` folder.
+
 
 * Start the server
 ```bash

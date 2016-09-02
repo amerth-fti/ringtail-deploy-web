@@ -6,16 +6,23 @@
     .module('app')
     .controller('MainController', MainController);
 
-    MainController.$inject = [ '$rootScope', 'Region' ];
+    MainController.$inject = [ '$rootScope', 'Region', 'SkydemoSession'];
       
-    function MainController($rootScope, Region) {      
+    function MainController($rootScope, Region, SkydemoSession) {      
       var vm            = this;      
       vm.regions        = null;        
       vm.selectedRegion = null;      
 
       activate();
 
-      //////////
+      //check user logged in status
+      setInterval(function(){
+        SkydemoSession.query({ }, function(result) {
+          if(!result || !result.loggedIn) {
+            window.location.reload(true);
+          }           
+        });
+      }, 5000);
 
       function activate() {
         vm.regions = Region.query(); 
