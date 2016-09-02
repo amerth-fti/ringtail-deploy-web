@@ -39,6 +39,16 @@ $good-green-color = #2ECC40;
   }
 }
 
+.form-group {
+  .required {
+    color: red;
+  }
+
+  .error {
+    color: red;
+  }
+}
+
 .color-warning {
   color: $info-color;
 }
@@ -68,15 +78,6 @@ $good-green-color = #2ECC40;
   color: #777;
 }
 
-.configure {
-  cursor: pointer;
-  color: $info-color;
-  
-  &:hover {
-    color: #ec971f;
-  }
-}
-
 //elements
 button {
   border-width: 1px !important;
@@ -85,6 +86,26 @@ button {
 region-details{
   .configure{
     font-size: 22px;
+    cursor: pointer;
+    color: $info-color;
+    
+    &:hover {
+      color: #ec971f;
+    }
+  }
+
+  .no-decoration {
+    text-decoration: none;
+  }
+
+  .trash {
+    font-size: 22px;
+    cursor: pointer;
+    color: $danger-color;
+    
+    &:hover {
+      color: darken($danger-color, 10);
+    }
   }
 }
 
@@ -249,6 +270,10 @@ env-redeploy {
   .environment {
     padding: 0;
     overflow: hidden;
+
+    &.remove-item {
+      margin-bottom: 5px;
+    }
     
     .environment-info {
       margin-left: 10px;
