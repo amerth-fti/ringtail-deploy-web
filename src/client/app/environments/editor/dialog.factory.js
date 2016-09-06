@@ -60,9 +60,12 @@
 
     function cancel() {
       if(vm.wizard.mode === 'new') {
-        vm.environment.$remove();
+        vm.environment.$remove(function(){
+          $modalInstance.dismiss();    
+        });
+      } else {
+       $modalInstance.dismiss();    
       }
-      $modalInstance.dismiss();
     }
 
     function create() {
