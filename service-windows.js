@@ -14,8 +14,8 @@ try {
 let path = join(__dirname, '/src/server/server.js');
 
 let svc = new Service({
-  name:'SkyDemo Deployer',
-  description: 'SkyDemo service for deploying Ringtail.',
+  name:'RingtailDeployWeb',
+  description: 'Ringtail Deploy Web Service for deploying Ringtail.',
   script: path
 });
 
@@ -24,7 +24,7 @@ let isAlreadyInstaller = svc.exists;
 
 let arg = process.argv;
 
-console.log('\nSkyDemo Windows Service Creator');
+console.log('\RingtailDeployWeb Windows Service Creator');
 
 if(arg.length <= 2) {
     help();
@@ -71,9 +71,9 @@ switch(switchVal) {
 }
 
 function help(){
-    console.log('--remove   removes SkyDemo from  the windows services');
-    console.log('--add      adds and starts SkyDemo to the windows services');
-    console.log('--start    starts SkyDemo service');
-    console.log('--stop     stops the SkyDemo service');
+    console.log('--remove   removes RingtailDeployWeb');
+    console.log('--add      adds and starts RingtailDeployWeb');
+    console.log('--start    starts RingtailDeployWeb');
+    console.log('--stop     stops the RingtailDeployWeb');
     console.log('\nRun as: node service-windows --add');
 }
