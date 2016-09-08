@@ -1,3 +1,5 @@
+require('babel-register');
+
 let bodyParser  = require('body-parser');
 let config      = require('../../config');
 let controllers = require('./controllers');
@@ -271,7 +273,10 @@ function convertToClient(results) {
 }
 
 
-let set = migrate.load('data/.migrate', 'migrations');
+let migrationPath = join(__dirname, '../../migrations');
+let migrationFilePath = join(migrationPath, '/.migrate');
+
+let set = migrate.load(migrationFilePath, migrationPath);
 set.up(function (err) {
   if (err) {
     console.error('failed to migrate db');

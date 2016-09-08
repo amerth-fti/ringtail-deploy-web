@@ -48,9 +48,17 @@ debug=deployer* node src/server/server
 set DEBUG=deployer* & node src/server/server
 ```
 
-
 ##Deployment Tasks
 Refer to the [Deploy Task Definitions Guide](TASKDEFS.md) for information on creating and working with deployment tasks.
+
+##Running As A Windows Service
+Prerequisites 
+- Likely, you will need node-gyp ```npm install node-gyp -g``` 
+- Install http://landinghub.visualstudio.com/visual-cpp-build-tools
+- ```npm install node-windows -g```
+- ```npm link node-windows``` inside your code directory. This is the only stop that you should have to do again in the future. If you delete your node_modules directory, you will have to run this again.
+ 
+From there you should be able to run ```node service-windows``` to see a list of options. 
 
 ##Using Docker
 Refer to the [Docker Guide](DOCKERGUIDE.md) for information on creating and working with docker.

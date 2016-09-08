@@ -44,4 +44,6 @@ build
 
 src/client/assets/css/*.css
 .vscode
+daemon
+certs
 .vs/*
