@@ -37,7 +37,6 @@
     "morgan": "^1.7.0",
     "nib": "^1.1.0",
     "node-skytap": "^0.7.0",
-    "os-service": "^1.3.0",
     "q": "^1.4.1",
     "request": "^2.69.0",
     "ringtail-deploy-client": "git://github.com/fti-technology/ringtail-deploy-client",
