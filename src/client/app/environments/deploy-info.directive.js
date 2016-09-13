@@ -18,9 +18,9 @@
     };
   }
 
-  DeployInfoController.$inject = [ '$scope', 'dateHelpers' ];
+  DeployInfoController.$inject = [ '$scope', 'dateHelpers', 'SkydemoSession' ];
 
-  function DeployInfoController($scope, dateHelpers) {
+  function DeployInfoController($scope, dateHelpers, SkydemoSession) {
     var vm = this;    
     vm.format           = 'dd-MMMM-yyyy';
     vm.mindate          = new Date();
@@ -28,6 +28,7 @@
     vm.openCalendar     = openCalendar;
     vm.dateTimeChanged  = dateTimeChanged;
     vm.environment      = this.environment;
+    vm.lockUser         = false;
     
     activate();
 
@@ -37,6 +38,11 @@
       vm.environment.deployedBy       = null;
       vm.environment.deployedUntil    = null;
       vm.environment.deployedNotes    = null;
+
+      SkydemoSession.getUser({}, function(result){
+        vm.environment.deployedBy  = result.user;
+        vm.lockUser = true;
+      });
 
       $scope.$parent.$watch('vm.duration', durationChanged);      
       durationChanged(15);
