@@ -22,7 +22,7 @@
 
       function checkLogin() {
         SkydemoSession.query({ }, function(result) {
-          if(result && typeof result.loggedIn != "undefined" && !result.loggedIn) {
+          if(result && typeof result.loggedIn != 'undefined' && !result.loggedIn) {
             window.location.reload(true);
           } 
           else if(result) {
