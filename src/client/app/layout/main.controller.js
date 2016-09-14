@@ -6,9 +6,9 @@
     .module('app')
     .controller('MainController', MainController);
 
-    MainController.$inject = [ '$rootScope', 'Region', 'SkydemoSession'];
+    MainController.$inject = [ '$rootScope', 'Region', 'DeployerSession'];
       
-    function MainController($rootScope, Region, SkydemoSession) {      
+    function MainController($rootScope, Region, DeployerSession) {      
       var vm            = this;      
       vm.regions        = null;        
       vm.selectedRegion = null;    
@@ -21,7 +21,7 @@
       checkLogin();      
 
       function checkLogin() {
-        SkydemoSession.query({ }, function(result) {
+        DeployerSession.query({ }, function(result) {
           if(result && typeof result.loggedIn != 'undefined' && !result.loggedIn) {
             window.location.reload(true);
           } 

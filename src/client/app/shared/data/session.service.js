@@ -3,11 +3,11 @@
 
   angular
     .module('shared.data')
-    .service('SkydemoSession', SkydemoSession);
+    .service('DeployerSession', DeployerSession);
 
-  SkydemoSession.$inject = [ '$resource' ];
+  DeployerSession.$inject = [ '$resource' ];
  
-  function SkydemoSession($resource) {
+  function DeployerSession($resource) {
     var user = null;
 
     return $resource(
