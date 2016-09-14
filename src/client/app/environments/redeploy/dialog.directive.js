@@ -19,9 +19,9 @@
     };
   }
 
-  Controller.$inject = [ '_', '$timeout','$interval', '$rootScope', '$location', 'Browse', 'EnvironmentStarter', 'Config', 'uiGridConstants' ];
+  Controller.$inject = [ '_', '$timeout', '$rootScope', '$location', 'Browse', 'EnvironmentStarter', 'Config', 'uiGridConstants' ];
 
-  function Controller(_, $timeout, $interval, $rootScope, $location, Browse, EnvironmentStarter, Config, uiGridConstants) {
+  function Controller(_, $timeout, $rootScope, $location, Browse, EnvironmentStarter, Config, uiGridConstants) {
     var vm = this;
     vm.modalInstance      = this.modalInstance;
     vm.branches           = null;
