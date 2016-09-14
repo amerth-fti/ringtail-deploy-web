@@ -18,9 +18,9 @@
     };
   }
 
-  DeployInfoController.$inject = [ '$scope', 'dateHelpers' ];
+  DeployInfoController.$inject = [ '$scope', 'dateHelpers', 'DeployerSession' ];
 
-  function DeployInfoController($scope, dateHelpers) {
+  function DeployInfoController($scope, dateHelpers, DeployerSession) {
     var vm = this;    
     vm.format           = 'dd-MMMM-yyyy';
     vm.mindate          = new Date();
@@ -28,6 +28,7 @@
     vm.openCalendar     = openCalendar;
     vm.dateTimeChanged  = dateTimeChanged;
     vm.environment      = this.environment;
+    vm.hideUser         = false;
     
     activate();
 
@@ -37,6 +38,15 @@
       vm.environment.deployedBy       = null;
       vm.environment.deployedUntil    = null;
       vm.environment.deployedNotes    = null;
+
+      DeployerSession.getUser({}, function(result){
+        vm.environment.deployedBy  = result.user;
+        if(result.user) {
+          vm.hideUser = true;
+        } else {
+          vm.hideUser = false;
+        }
+      });
 
       $scope.$parent.$watch('vm.duration', durationChanged);      
       durationChanged(15);

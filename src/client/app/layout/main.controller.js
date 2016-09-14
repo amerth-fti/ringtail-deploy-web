@@ -6,23 +6,34 @@
     .module('app')
     .controller('MainController', MainController);
 
-    MainController.$inject = [ '$rootScope', 'Region', 'SkydemoSession'];
+    MainController.$inject = [ '$rootScope', 'Region', 'DeployerSession'];
       
-    function MainController($rootScope, Region, SkydemoSession) {      
+    function MainController($rootScope, Region, DeployerSession) {      
       var vm            = this;      
       vm.regions        = null;        
-      vm.selectedRegion = null;      
+      vm.selectedRegion = null;    
+      vm.user           = 'anonymous';  
 
       activate();
 
       //check user logged in status
-      setInterval(function(){
-        SkydemoSession.query({ }, function(result) {
-          if(!result || !result.loggedIn) {
+      window.checklogin = setInterval(checkLogin, 5000);
+      checkLogin();      
+
+      function checkLogin() {
+        DeployerSession.query({ }, function(result) {
+          if(result && typeof result.loggedIn != 'undefined' && !result.loggedIn) {
             window.location.reload(true);
-          }           
+          } 
+          else if(result) {
+            vm.user = result && result.user || null;  
+            
+            if(result.disabledCheck) {
+              window.clearInterval(window.checklogin);
+            }
+          }
         });
-      }, 5000);
+      }
 
       function activate() {
         vm.regions = Region.query(); 
