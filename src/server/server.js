@@ -145,14 +145,24 @@ app.get   ('/api/session', (req, res) => {
   if( (!config.ldap || !config.ldap.enabled) &&
     (!config.ringtail || !config.ringtail.enabled) ) {
     return res.send({
-      loggedIn: true
+      loggedIn: true,
+      disabledCheck: true
     });
   }
-
-  else if(req.signedCookies 
-    && (req.signedCookies[config.ringtail.cookieName] || req.signedCookies['auth'])){
+  else if(req.signedCookies && req.signedCookies['auth']) {
+    let user = req.signedCookies['auth'].user || null;
+    
     return res.send({
-      loggedIn: true
+      loggedIn: true,
+      user: user
+    });
+  }
+  else if(req.signedCookies && req.signedCookies[config.ringtail.cookieName] ){
+    let user = req.signedCookies[config.ringtail.cookieName].user || null;
+    
+    return res.send({
+      loggedIn: true,
+      user: user
     });
   }
 
