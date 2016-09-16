@@ -1,4 +1,5 @@
 require('babel-register');
+require('babel-polyfill');
 
 let bodyParser  = require('body-parser');
 let config      = require('../../config');
