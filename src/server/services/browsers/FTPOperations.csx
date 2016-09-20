@@ -27,7 +27,6 @@ public class Startup
     /// <returns></returns>
     public async Task<object> Invoke(dynamic input)
     {
-        Debugger.Launch();
         var typeOfOperation = (string)input.action;
         if (string.IsNullOrEmpty(typeOfOperation))
         {
