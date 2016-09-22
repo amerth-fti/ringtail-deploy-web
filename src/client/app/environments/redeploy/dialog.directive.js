@@ -237,6 +237,8 @@
     }
 
     function branchChanged() {
+      // Timeout to try to fix ...
+
       if(vm.selectedBranch.branch) {
         vm.loadingBuilds = true;
         vm.selectedBranch.build = null;
@@ -258,7 +260,6 @@
         vm.loadingFiles = true;
         vm.launchKeys = null;
         vm.hideLaunchKeys = true;
-        getLaunchKeysForBuild();
         var version = vm.version || '0.0.0.0'; //need to pass something even if there is nothing
         Browse.files({regionId: vm.regionId, branch: constructBranchPath(), version: version }, function(files) {
           vm.loadingFiles = false;
@@ -274,7 +275,10 @@
           vm.files = files.sort(function(a, b) {
             return a.localeCompare(b);
           });
+        }).$promise.then(function(){
+          getLaunchKeysForBuild();
         });
+
       }
     }
 
@@ -331,7 +335,11 @@
          
       data = buildFeatureTreeDataObject(vm.launchKeys);
       writeoutNode(data, 0, treeData);
-      vm.featureGrid.data = treeData;      
+      vm.featureGrid.data = treeData;
+      // Force window to handle resize to render properly
+       $timeout( function() {
+           vm.gridApi.core.handleWindowResize();
+       });    
     }
 
     function filterKeysBasedOnEnvironmentDeploymentRing(launchKeys) {
