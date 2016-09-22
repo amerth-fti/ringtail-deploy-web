@@ -69,6 +69,10 @@
     }
 
     function create() {
+      ValidationMessage.clearMessage();
+      if(validateConfigs(environment).length > 0) {
+        return;
+      }
       return vm.environment
         .$save()
         .then(function(environment) {
