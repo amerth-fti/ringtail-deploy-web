@@ -14,11 +14,23 @@ fi
 ENV http_proxy=$PROXY_URL
 ENV https_proxy=$PROXY_URL
 ENV NVM_NODEJS_ORG_MIRROR=http://nodejs.org/dist
-ENV NODE_VERSION=5.11.1
+ENV NODE_VERSION=6.5.0
 ENV NVM_DIR=/root/.nvm
 
 #CREATE DIRS
 RUN mkdir /home/deployweb
+
+RUN echo "oracle-java8-installer shared/accepted-oracle-license-v1-1 select true" | /usr/bin/debconf-set-selections
+
+#MONO REQUIREMENTS
+RUN apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 3FA7E0328081BFF6A14DA29AA6A19B38D3D831EF
+RUN echo "deb http://download.mono-project.com/repo/debian wheezy/snapshots/4.2.4 main" | tee /etc/apt/sources.list.d/mono-xamarin.list
+RUN echo "deb http://download.mono-project.com/repo/debian wheezy-apache24-compat main" | tee -a /etc/apt/sources.list.d/mono-xamarin.list
+RUN echo "deb http://download.mono-project.com/repo/debian wheezy-libjpeg62-compat main" | tee -a /etc/apt/sources.list.d/mono-xamarin.list
+
+RUN echo "deb http://ppa.launchpad.net/webupd8team/java/ubuntu xenial main" | tee /etc/apt/sources.list.d/webupd8team-java.list
+RUN echo "deb-src http://ppa.launchpad.net/webupd8team/java/ubuntu xenial main" | tee -a /etc/apt/sources.list.d/webupd8team-java.list
+RUN apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys EEA14886
 
 #UPDATE SYSTEM AND INSTALL REQUIRED PACKAGES
 RUN apt-get update && apt-get upgrade -y
@@ -29,7 +41,12 @@ RUN apt-get install -y \
 	build-essential \
 	nano \
 	python2.7 \
-	python
+	python \
+	libunwind8 \
+	gettext \
+	oracle-java8-installer \
+	oracle-java8-set-default \
+	mono-complete
 
 ENV PYTHON=/usr/bin/python2.7
 
@@ -58,6 +75,7 @@ else \
 	&& echo "----NPM PROXY SET----"; \
 fi
 
+RUN npm install node-gyp -g
 RUN npm install bower -g
 
 #GET CODE
@@ -84,7 +102,6 @@ RUN bower install --allow-root
 
 #DON'T RUN MIGRATE UNTIL DOCKER RUN AND VOLUME MOUNTED
 RUN touch start.sh && chmod +x start.sh
-RUN echo "$(npm bin)/migrate up --state-file data/.migrate" >> start.sh
 RUN echo "DEBUG=deployer* npm start" >> start.sh
 
 #EXPOSE PORTS
