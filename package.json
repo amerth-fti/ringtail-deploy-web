@@ -6,7 +6,7 @@
   "license": "MIT",
   "engine": "node >= 0.6.2",
   "scripts": {
-    "start": "node src/server/server.js",
+    "start": "node --debug=5858 src/server/server.js",
     "watch": "nodemon --exec babel-node -- src/server/server",
     "test": "npm run lint && npm run test:server",
     "test:file": "babel-node node_modules/.bin/_mocha",
