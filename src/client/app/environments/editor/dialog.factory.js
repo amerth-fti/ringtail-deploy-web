@@ -70,9 +70,6 @@
 
     function create() {
       ValidationMessage.clearMessage();
-      if(validateConfigs(environment).length > 0) {
-        return;
-      }
       return vm.environment
         .$save()
         .then(function(environment) {
@@ -85,10 +82,13 @@
       ValidationMessage.clearMessage();
       if(environment) {
         angular.copy(vm.environment, environment);
-        if(!skipValidation && validateConfigs(environment).length > 0){
-          return;
-        }
       }
+
+      // Handle newly created environment validation and existing environment updates
+      if(!skipValidation && validateConfigs(vm.environment).length > 0){
+        return;
+      }
+      
       return vm.environment
         .$update()
         .then(function(environment){
