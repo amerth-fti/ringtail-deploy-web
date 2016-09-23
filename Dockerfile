@@ -106,6 +106,7 @@ RUN echo "DEBUG=deployer* npm start" >> start.sh
 
 #EXPOSE PORTS
 EXPOSE 8080
+EXPOSE 5858
 
 #START APP
 CMD [ "sh", "start.sh" ]
