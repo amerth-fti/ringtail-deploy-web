@@ -29,7 +29,7 @@ function TaskImpl(options) {
       , me = this
       ;
 
-      log('start installation');
+    log('starting deployment');
 
     // Load the machine
     log('loading machine ' + machineId);
@@ -42,64 +42,88 @@ function TaskImpl(options) {
 
     // Create the Ringtail Install Service client
     let client = me.serviceClient = new RingtailClient({ serviceHost: serviceIP });
-    log('will use: %s', client.installUrl);
+    //log('will use: %s', client.installUrl);
     log('will use: %s', client.statusUrl);
-    log('will use: %s', client.updateUrl);
-    log('will use: %s', client.configUrl);
-    log('will use: %s', client.installedUrl);
+    // log('will use: %s', client.updateUrl);
+    // log('will use: %s', client.configUrl);
+    // log('will use: %s', client.installedUrl);
 
     // wait for the service to be available
     log('waiting for service to start');
     await client.waitForService();
 
-    // upgrade install service
-    log('updating install service to latest version');
-    await client.update();
+    // // upgrade install service
+    // log('updating install service to latest version');
+    // await client.update();
 
-    // wait for service to return
-    log('waiting for service to return');
-    await client.waitForService();
+    // // wait for service to return
+    // log('waiting for service to return');
+    // await client.waitForService();
 
-    // configure install service
-    log('configuring install service');
-    let configs = {
-      'Common|BRANCH_NAME' : branch,
-      'RoleResolver|ROLE' : config.roles[0],
-      'JobLogger|ENV_NAME': machine.machineName,
-      'JobLogger|JOB_ID': me.jobId
-    };
+    // // configure install service
+    // log('configuring install service');
+    // let configs = {
+    //   'Common|BRANCH_NAME' : branch,
+    //   'RoleResolver|ROLE' : config.roles[0],
+    //   'JobLogger|ENV_NAME': machine.machineName,
+    //   'JobLogger|JOB_ID': me.jobId
+    // };
 
-    //kind of a bit hacky, but handles quoting to server
-    let configData = config.data;
-    let configKeys = Object.keys(configData);
-    configKeys.forEach(function(key){
-      let tempkey = configData[key] || '';
-      if(tempkey && tempkey.replace) {
-        tempkey = tempkey.replace(/\"/g, '').trim();
-        if(tempkey.indexOf(' ') > 0) {
-          configData[key] = '"""' + tempkey + '"""';
-        }
-      }
-    });
-    _.extend(configs, configData);
+    // //kind of a bit hacky, but handles quoting to server
+    // let configData = config.data;
+    // let configKeys = Object.keys(configData);
+    // configKeys.forEach(function(key){
+    //   let tempkey = configData[key] || '';
+    //   if(tempkey && tempkey.replace) {
+    //     tempkey = tempkey.replace(/\"/g, '').trim();
+    //     if(tempkey.indexOf(' ') > 0) {
+    //       configData[key] = '"""' + tempkey + '"""';
+    //     }
+    //   }
+    // });
+    // _.extend(configs, configData);
 
-    if(config.launchKey) {
-     _.extend(configs, config.launchKey);
-    }
-    _.extend(configs, getConfigsFromOptions(options));
+    // if(config.launchKey) {
+    //  _.extend(configs, config.launchKey);
+    // }
+    // _.extend(configs, getConfigsFromOptions(options));
 
-    log('sending config object');
-    await client.setConfigs(configs);
+    // log('sending config object');
+    // await client.setConfigs(configs);
 
     // start installation
-    log('starting installation');
+    //log('starting installation');
     await client.install();
 
     // wait for installation to complete
     log('waiting for install to complete, refer to Run Details');
+    let retry = false;
     await client.waitForInstall(function(status) {
       me.rundetails = status;
+      retry = status.indexOf('UPGRADE RETRY') >= 0 && status.indexOf('UPGRADE SUCCESSFUL') === -1 && status.indexOf('UPGRADE FAILURE') === -1;
     });
+
+    let maxRetry = 10;
+    let currentRetry = 1;
+
+    while(retry && currentRetry <= maxRetry) {
+      log('there was a task failre.  retrying from that step onwards.  ' + currentRetry + ' of ' + maxRetry);
+      await client.retry();
+
+      await client.waitForInstall(function(status) {
+        me.rundetails = status;
+      });
+
+      retry = me.rundetails.indexOf('UPGRADE RETRY') >= 0 && me.rundetails.indexOf('UPGRADE SUCCESSFUL') === -1 && me.rundetails.indexOf('UPGRADE FAILURE') === -1;
+      currentRetry++;        
+    }
+
+    if(retry && currentRetry >= maxRetry) {
+      if(!(me.rundetails.indexOf('UPGRADE SUCCESSFUL') >= 0)) {
+        throw new Error('ran out of retries');
+      }
+    }
+  
 
     // update machine install notes
     log('retrieving install info for %s', serviceIP);
