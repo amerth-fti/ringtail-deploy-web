@@ -52,47 +52,47 @@ function TaskImpl(options) {
     log('waiting for service to start');
     await client.waitForService();
 
-    // // upgrade install service
-    // log('updating install service to latest version');
-    // await client.update();
+    // upgrade install service
+    log('updating install service to latest version');
+    await client.update();
 
-    // // wait for service to return
-    // log('waiting for service to return');
-    // await client.waitForService();
+    // wait for service to return
+    log('waiting for service to return');
+    await client.waitForService();
 
-    // // configure install service
-    // log('configuring install service');
-    // let configs = {
-    //   'Common|BRANCH_NAME' : branch,
-    //   'RoleResolver|ROLE' : config.roles[0],
-    //   'JobLogger|ENV_NAME': machine.machineName,
-    //   'JobLogger|JOB_ID': me.jobId
-    // };
+    // configure install service
+    log('configuring install service');
+    let configs = {
+      'Common|BRANCH_NAME' : branch,
+      'RoleResolver|ROLE' : config.roles[0],
+      'JobLogger|ENV_NAME': machine.machineName,
+      'JobLogger|JOB_ID': me.jobId
+    };
 
-    // //kind of a bit hacky, but handles quoting to server
-    // let configData = config.data;
-    // let configKeys = Object.keys(configData);
-    // configKeys.forEach(function(key){
-    //   let tempkey = configData[key] || '';
-    //   if(tempkey && tempkey.replace) {
-    //     tempkey = tempkey.replace(/\"/g, '').trim();
-    //     if(tempkey.indexOf(' ') > 0) {
-    //       configData[key] = '"""' + tempkey + '"""';
-    //     }
-    //   }
-    // });
-    // _.extend(configs, configData);
+    //kind of a bit hacky, but handles quoting to server
+    let configData = config.data;
+    let configKeys = Object.keys(configData);
+    configKeys.forEach(function(key){
+      let tempkey = configData[key] || '';
+      if(tempkey && tempkey.replace) {
+        tempkey = tempkey.replace(/\"/g, '').trim();
+        if(tempkey.indexOf(' ') > 0) {
+          configData[key] = '"""' + tempkey + '"""';
+        }
+      }
+    });
+    _.extend(configs, configData);
 
-    // if(config.launchKey) {
-    //  _.extend(configs, config.launchKey);
-    // }
-    // _.extend(configs, getConfigsFromOptions(options));
+    if(config.launchKey) {
+     _.extend(configs, config.launchKey);
+    }
+    _.extend(configs, getConfigsFromOptions(options));
 
-    // log('sending config object');
-    // await client.setConfigs(configs);
+    log('sending config object');
+    await client.setConfigs(configs);
 
-    // start installation
-    //log('starting installation');
+    //start installation
+    log('starting installation');
     await client.install();
 
     // wait for installation to complete
