@@ -139,7 +139,7 @@
       ]
     },
     {
-      "roles": ["SEARCHSERVER", "SKYTAP-ALLINONE"],
+      "roles": ["SEARCHSERVER", "SKYTAP-AGENT", "AGENT", "SKYTAP-ALLINONE"],
       "configs": [
         "Ringtail-Svc-ContentSearch|SERVICEUSERNAME",
         "Ringtail-Svc-ContentSearch|SERVICEPASSWORD",
