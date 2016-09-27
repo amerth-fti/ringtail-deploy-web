@@ -110,18 +110,20 @@ function TaskImpl(options) {
     if(retry) {
       while(retry && currentRetry <= maxRetry) {
         log('there was a task failre that requested a retry.  retrying from that step onwards.  ' + currentRetry + ' of ' + maxRetry);
+
         await client.retry();
 
         await client.waitForInstall(function(status) {
           me.rundetails = status;
         });
 
-        retry = isTaskEnded(me.runDetails);
+        retry = isTaskEnded(me.rundetails);
         currentRetry++;        
       }
 
       if(retry && currentRetry >= maxRetry) {
         if(!(me.rundetails.indexOf('UPGRADE SUCCESSFUL') >= 0)) {
+          log('you can resume later this way: %s', client.retryUrl);
           throw new Error('after ' + maxRetry + ' retries this job is still failing.');
         }
       }
@@ -137,7 +139,7 @@ function TaskImpl(options) {
   };
 }
 
-function isTaskEnded(runDetails) {
+function isTaskEnded(rundetails) {
   return rundetails.indexOf('UPGRADE RETRY') >= 0 && rundetails.indexOf('UPGRADE SUCCESSFUL') === -1 && rundetails.indexOf('UPGRADE FAILURE') === -1;
 }
 
