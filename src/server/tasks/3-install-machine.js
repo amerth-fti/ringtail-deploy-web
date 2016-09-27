@@ -5,6 +5,7 @@ var util    = require('util')
   , Task    = require('./task')
   , machineSvc = require('../services/machine-service')
   , configSvc  = require('../services/config-service')
+  , sysConfig  = require('../../../config')
   , RingtailClient = require('ringtail-deploy-client')
   ;
 
@@ -100,30 +101,31 @@ function TaskImpl(options) {
     let retry = false;
     await client.waitForInstall(function(status) {
       me.rundetails = status;
-      retry = status.indexOf('UPGRADE RETRY') >= 0 && status.indexOf('UPGRADE SUCCESSFUL') === -1 && status.indexOf('UPGRADE FAILURE') === -1;
+      retry = isTaskEnded(me.rundetails);
     });
 
-    let maxRetry = 10;
+    // retry loop on failure.
+    let maxRetry = sysConfig.retryMax !== null ? sysConfig.retryMax : 3;
     let currentRetry = 1;
+    if(retry) {
+      while(retry && currentRetry <= maxRetry) {
+        log('there was a task failre that requested a retry.  retrying from that step onwards.  ' + currentRetry + ' of ' + maxRetry);
+        await client.retry();
 
-    while(retry && currentRetry <= maxRetry) {
-      log('there was a task failre.  retrying from that step onwards.  ' + currentRetry + ' of ' + maxRetry);
-      await client.retry();
+        await client.waitForInstall(function(status) {
+          me.rundetails = status;
+        });
 
-      await client.waitForInstall(function(status) {
-        me.rundetails = status;
-      });
+        retry = isTaskEnded(me.runDetails);
+        currentRetry++;        
+      }
 
-      retry = me.rundetails.indexOf('UPGRADE RETRY') >= 0 && me.rundetails.indexOf('UPGRADE SUCCESSFUL') === -1 && me.rundetails.indexOf('UPGRADE FAILURE') === -1;
-      currentRetry++;        
-    }
-
-    if(retry && currentRetry >= maxRetry) {
-      if(!(me.rundetails.indexOf('UPGRADE SUCCESSFUL') >= 0)) {
-        throw new Error('ran out of retries');
+      if(retry && currentRetry >= maxRetry) {
+        if(!(me.rundetails.indexOf('UPGRADE SUCCESSFUL') >= 0)) {
+          throw new Error('after ' + maxRetry + ' retries this job is still failing.');
+        }
       }
     }
-  
 
     // update machine install notes
     log('retrieving install info for %s', serviceIP);
@@ -133,6 +135,10 @@ function TaskImpl(options) {
     // signal completion for installation
     log('installation complete');
   };
+}
+
+function isTaskEnded(runDetails) {
+  return rundetails.indexOf('UPGRADE RETRY') >= 0 && rundetails.indexOf('UPGRADE SUCCESSFUL') === -1 && rundetails.indexOf('UPGRADE FAILURE') === -1;
 }
 
 /**
