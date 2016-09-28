@@ -17,8 +17,8 @@ exports.list = function list(req, res, next) {
 
 
 exports.get = function get(req, res, next) {
-  debug('getting environment');
   var envId = req.params.envId;
+  debug('getting environment - findById %s', req.params.envId);
   envService
     .findById(envId, function(err, result) {
       res.result  = result;
@@ -28,8 +28,8 @@ exports.get = function get(req, res, next) {
 };
 
 exports.version = function get(req, res, next) {
-  debug('getting environment');
   var envId = req.params.envId;
+  debug('getting environment - version %s', req.params.envId);
   envService
     .version(envId, function(err, result) {
       res.result  = result;
@@ -62,8 +62,8 @@ exports.update = function update(req, res, next) {
 };
 
 exports.remove = function remove(req, res, next) {
-  debug('removing environment');
   var envId = req.params.envId;
+  debug('removing environment %s', req.params.envId);
   envService
     .remove(envId, function(err) {
       res.result = {};
@@ -110,6 +110,23 @@ exports.redeploy = function redeploy(req, res, next) {
       res.err = err;
       next();
     });
+};
+
+exports.quickdeploy = async function quickdeploy(req, res, next) {
+  var data = {};
+  data.envId = req.param('envId');
+  data.branch = req.param('branch');
+  debug('quickdeploy - env: ' + data.envId + ' branch: %s', data.branch);
+  let response = {};
+  try {
+    response = await redeployService.quickRedeploy(data);
+    response.success = true;
+  } 
+  catch (err) {
+    response = { message: err };
+    response.success = false;
+  }
+  return res.json(response);
 };
 
 
