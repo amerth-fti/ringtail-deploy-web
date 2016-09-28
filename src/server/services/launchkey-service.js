@@ -23,7 +23,7 @@ exports.requestLaunchKeys = function requestLaunchKeys(data, next) {
     client,
     keys;
 
-  debug('requesting launch keys');
+  debug('requesting available launch keys');
 
   return machineMapper
     .findByEnv(envId)
@@ -61,7 +61,7 @@ exports.sendLaunchKeys = function sendLaunchKeys(data, next) {
     formattedLaunchKeys[configKey] = key.Description;
   });
 
-  debug('formatted launch keys %j', formattedLaunchKeys);
+  debug('formatted launch keys for env ' + envId + ' %j', formattedLaunchKeys);
 
   return configMapper
     .findByEnv(envId)
@@ -87,7 +87,7 @@ exports.getLitKeys = function getLitKeys(data, next) {
     keys,
     connectionString;
 
-  debug('requesting launch keys');
+  debug('requesting lit keys');
 
   return machineMapper
     .findByEnv(envId)

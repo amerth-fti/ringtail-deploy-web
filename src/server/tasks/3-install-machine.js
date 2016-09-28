@@ -1,4 +1,5 @@
 var util    = require('util')
+  , debug   = require('debug')('deployer-3-install-machine')
   , Q       = require('q')
   , _       = require('underscore')
   , request = require('request')
@@ -33,24 +34,24 @@ function TaskImpl(options) {
     log('starting deployment');
 
     // Load the machine
-    log('loading machine ' + machineId);
+    debug('loading machine ' + machineId);
     let machine = await machineSvc.get(machineId);
     let serviceIP = machine.intIP;
 
     // load the config for the machine
-    log('loading config ' + configId);
+    debug('loading config ' + configId);
     let config = await configSvc.get(configId);
 
     // Create the Ringtail Install Service client
     let client = me.serviceClient = new RingtailClient({ serviceHost: serviceIP });
     //log('will use: %s', client.installUrl);
-    log('will use: %s', client.statusUrl);
-    // log('will use: %s', client.updateUrl);
-    // log('will use: %s', client.configUrl);
-    // log('will use: %s', client.installedUrl);
+    //log('will use: %s', client.statusUrl);
+    //log('will use: %s', client.updateUrl);
+    //log('will use: %s', client.configUrl);
+    //log('will use: %s', client.installedUrl);
 
     // wait for the service to be available
-    log('waiting for service to start');
+    log('waiting until the service is responsive ' + client.statusUrl);
     await client.waitForService();
 
     // upgrade install service
@@ -58,11 +59,11 @@ function TaskImpl(options) {
     await client.update();
 
     // wait for service to return
-    log('waiting for service to return');
+    log('waiting for the service update to complete');
     await client.waitForService();
 
     // configure install service
-    log('configuring install service');
+    debug('configuring install service' + machineId);
     let configs = {
       'Common|BRANCH_NAME' : branch,
       'RoleResolver|ROLE' : config.roles[0],
@@ -85,11 +86,11 @@ function TaskImpl(options) {
     _.extend(configs, configData);
 
     if(config.launchKey) {
-     _.extend(configs, config.launchKey);
+      _.extend(configs, config.launchKey);
     }
     _.extend(configs, getConfigsFromOptions(options));
 
-    log('sending config object');
+    debug('sending config object ' + machineId);
     await client.setConfigs(configs);
 
     //start installation
@@ -130,7 +131,7 @@ function TaskImpl(options) {
     }
 
     // update machine install notes
-    log('retrieving install info for %s', serviceIP);
+    debug('retrieving install info for ' + serviceIP);
     machine.installNotes = await client.installed();
     await machineSvc.update(machine);
 
