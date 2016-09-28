@@ -55,22 +55,12 @@ Task.prototype.start = async function start(scope) {
 
   try
   {
-    let result;
-    
-    try {
-      result = await self.execute(scope, self.log);
-    } catch(err) {
-      self.log('attempting retry of task');
+    let result = await self.execute(scope, self.log);
 
-      result = await self.execute(scope, self.log);
-    } 
 
     if(self.storeIn) {
       self.log('storing scope variable "%s"', self.storeIn);
       scope[self.storeIn] = result;
-    }
-    else {
-      self.log('no scope storage');
     }
 
     self.log('task complete');
@@ -80,7 +70,7 @@ Task.prototype.start = async function start(scope) {
     self.emit('end');
   }
   catch(err) {
-    self.log(err);
+    self.log('Error');
     self.endTime = new Date();
     self.status = 'Failed';
     self.err = err;

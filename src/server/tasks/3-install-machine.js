@@ -5,6 +5,7 @@ var util    = require('util')
   , Task    = require('./task')
   , machineSvc = require('../services/machine-service')
   , configSvc  = require('../services/config-service')
+  , sysConfig  = require('../../../config')
   , RingtailClient = require('ringtail-deploy-client')
   ;
 
@@ -29,7 +30,7 @@ function TaskImpl(options) {
       , me = this
       ;
 
-      log('start installation');
+    log('starting deployment');
 
     // Load the machine
     log('loading machine ' + machineId);
@@ -42,11 +43,11 @@ function TaskImpl(options) {
 
     // Create the Ringtail Install Service client
     let client = me.serviceClient = new RingtailClient({ serviceHost: serviceIP });
-    log('will use: %s', client.installUrl);
+    //log('will use: %s', client.installUrl);
     log('will use: %s', client.statusUrl);
-    log('will use: %s', client.updateUrl);
-    log('will use: %s', client.configUrl);
-    log('will use: %s', client.installedUrl);
+    // log('will use: %s', client.updateUrl);
+    // log('will use: %s', client.configUrl);
+    // log('will use: %s', client.installedUrl);
 
     // wait for the service to be available
     log('waiting for service to start');
@@ -91,15 +92,42 @@ function TaskImpl(options) {
     log('sending config object');
     await client.setConfigs(configs);
 
-    // start installation
+    //start installation
     log('starting installation');
     await client.install();
 
     // wait for installation to complete
     log('waiting for install to complete, refer to Run Details');
+    let retry = false;
     await client.waitForInstall(function(status) {
       me.rundetails = status;
+      retry = isTaskEnded(me.rundetails);
     });
+
+    // retry loop on failure.
+    let maxRetry = sysConfig.retryMax !== null ? sysConfig.retryMax : 3;
+    let currentRetry = 1;
+    if(retry) {
+      while(retry && currentRetry <= maxRetry) {
+        log('there was a task failre that requested a retry.  retrying from that step onwards.  ' + currentRetry + ' of ' + maxRetry);
+
+        await client.retry();
+
+        await client.waitForInstall(function(status) {
+          me.rundetails = status;
+        });
+
+        retry = isTaskEnded(me.rundetails);
+        currentRetry++;        
+      }
+
+      if(retry && currentRetry >= maxRetry) {
+        if(!(me.rundetails.indexOf('UPGRADE SUCCESSFUL') >= 0)) {
+          log('you can resume later this way: %s', client.retryUrl);
+          throw new Error('after ' + maxRetry + ' retries this job is still failing.');
+        }
+      }
+    }
 
     // update machine install notes
     log('retrieving install info for %s', serviceIP);
@@ -109,6 +137,10 @@ function TaskImpl(options) {
     // signal completion for installation
     log('installation complete');
   };
+}
+
+function isTaskEnded(rundetails) {
+  return rundetails.indexOf('UPGRADE RETRY') >= 0 && rundetails.indexOf('UPGRADE SUCCESSFUL') === -1 && rundetails.indexOf('UPGRADE FAILURE') === -1;
 }
 
 /**
