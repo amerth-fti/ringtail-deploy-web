@@ -51,3 +51,9 @@ select count(*) total
 from env e
 join regionenv re on re.envId = e.envId
 where re.regionId = $regionId;
+
+-- findRegionByEnvId
+select re.regionId as regionId
+from regionenv re
+where re.envId = $envId
+

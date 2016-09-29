@@ -46,6 +46,29 @@ exports.requestLaunchKeys = function requestLaunchKeys(data, next) {
     });
 };
 
+exports.requestLaunchKeysAwait = async function requestLaunchKeysAwait(data, next) {
+  var branch = data.branch,
+    me = this,
+    envId = data.envId,
+    machineId = data.machineId,
+    serviceIP,
+    machine,
+    client,
+    keys;
+
+  debug('requesting launch keys');
+
+  let result = await machineMapper.findByEnv(envId);
+  machineId = result[0].machineId;
+  result = await machineService.get(machineId);
+  machine   = result;
+  serviceIP = result.intIP;
+  client = me.serviceClient = new RingtailClient({ serviceHost: serviceIP });
+
+  let launchKeys = await client.getLaunchKeys(branch);
+  return launchKeys;
+};
+
 
 exports.sendLaunchKeys = function sendLaunchKeys(data, next) {
   var me = this,
@@ -53,6 +76,8 @@ exports.sendLaunchKeys = function sendLaunchKeys(data, next) {
     launchKeys = data.launchKeys,
     formattedLaunchKeys = {},
     launchJson;
+
+  debug('recieved launch keys %j', data.launchKeys);
 
   _.each(launchKeys, function(key) {
     // ringtail-deploy-service.DataCamel reverse converts this, and if you change this you will break it, 

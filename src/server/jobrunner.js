@@ -61,9 +61,11 @@ var parseRunDetails = function(job) {
   return job;
 };
 
-/** 
- * 
- */
+ /** 
+  * Helper for turning run details into an array, split by html tags and special delimiters.
+  *       * 
+  * @return [] run details
+  */
  exports.convertdetailstoarray = function convertdetailstoarray(rundetails) {
   return arrayifyDetails(rundetails);
  };

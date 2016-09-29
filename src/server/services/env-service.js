@@ -74,6 +74,11 @@ exports.findById = findById = function get(envId, next) {
     .nodeify(next);
 };
 
+exports.findRegionByEnvId = function findRegionByEnvId(envId, next) {
+  return envMapper.findRegionByEnvId(envId)
+    .nodeify(next);
+};
+
 exports.version = function version(envId, next) {
   var serviceip;
 

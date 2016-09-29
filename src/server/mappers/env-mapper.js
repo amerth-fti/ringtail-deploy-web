@@ -3,6 +3,7 @@ var util          = require('util')
   , statements    = require('statements')
   , SqliteMapper  = require('hops-sqlite')
   , Env           = require('../models/env')
+  , debug         = require('debug')('deployer-envMapper')
   , envSql        = statements.read(__dirname + '/env.sql')
   ;
 
@@ -143,6 +144,22 @@ EnvMapper.prototype.findByRegionCount = function findByRegionCount(regionId, nex
     .nodeify(next);
 };
 
+EnvMapper.prototype.findRegionByEnvId = function findRegionByEnvId(envId, next) {
+  var sql = envSql.findRegionByEnvId
+    , params
+    ;
+
+  params = {
+    $envId: envId
+  };
+
+  return this
+    .get(sql, params)
+    .then(function(row) {
+      return row.regionId;
+    })
+    .nodeify(next);
+};
 
 EnvMapper.prototype.findById = function findById(envId, next) {
   var sql = envSql.findById
