@@ -1,7 +1,10 @@
 var debug             = require('debug')('deployer-redeployservice')
   , Q                 = require('q')
   , _                 = require('underscore')
+  , globalConfig      = require('../../../config')
   , envService        = require('../services/env-service')
+  , browserFactory    = require('../services/browser-factory')
+  , regionService     = require('../services/region-service')
   , launchkeyService  = require('../services/launchkey-service')
   , Env               = require('../models/env')
   , taskfactory       = require('../taskfactory')
@@ -56,8 +59,38 @@ exports.quickRedeploy = async function redeploy(data, next) {
   let validKeys = [];
 
   try {
+    let regionId = await envService.findRegionByEnvId(env.envId);
+    let region = await regionService.findById(regionId);
+    let browser = browserFactory.fromRegion(region, '0.0.0.0');
+    debug('browser %j', browser);
+    let files = [];
+    if(browser !== null) {
+
+      // validate the files on protocols that support file checking.   otherwise, Chuck and Pray.
+      if(browser.type === 'ftp' || browser.type === 'smb') {  
+        let getFiles = await browser.files(data.branch);
+        getFile = JSON.parse(getFiles);
+      
+        if(getFile[0] === 'OK') {
+          debug('got files okay');
+        } else {
+          throw getFile;
+        }
+      }
+
+      // getFiles = await browser.branches();
+      // debug('branches %j', getFiles);
+
+      //getFiles = await browser.builds('Main');
+      //debug('buidls %j', getFiles);
+    }
+  } catch(err) {
+    debug('got an error checking on file location %s', err);
+    throw err;
+  }
+
+  try {
     let allKeys = await launchkeyService.requestLaunchKeysAwait({envId: data.envId, branch: data.branch});
-    debug('quickdeploy got env: %j', env);
 
     if(env.updatePath !== null) {
       validKeys = _.filter(JSON.parse(allKeys), function(key) {
@@ -81,13 +114,15 @@ exports.quickRedeploy = async function redeploy(data, next) {
       });
     }
   } catch(err) {
-    debug('got error getting launch keys ', err);
+    debug('got error getting launch keys %s', err);
+    throw err;
   }
 
   try {
     let sendKeys = await launchkeyService.sendLaunchKeys({envId: env.envId, launchKeys: validKeys});
   } catch(err) {
-    debug('got error sending launch key', err);
+    debug('got error sending launch key %s', err);
+    throw err;
   }
 
   try {
@@ -102,12 +137,14 @@ exports.quickRedeploy = async function redeploy(data, next) {
     });
 
 
-    let localJobId = await jobrunner.add(job);
+    let jobId = await jobrunner.add(job);
+    let url = globalConfig.host === null ? 'localhost:' + globalConfig.port : globalConfig.host + ':' + globalConfig.port;
+    let jobUrl = 'http://' + url + '/app/jobs/' + jobId;
     await job.start();
-    return { jobId: localJobId };
+    return { jobId: jobId, jobUrl: jobUrl  };
   } 
   catch(err) {
-    debug('got error ', err);
+    debug('got error %s', err);
     throw err;
   }
 };

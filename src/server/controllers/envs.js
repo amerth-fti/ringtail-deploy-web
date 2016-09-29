@@ -123,6 +123,7 @@ exports.quickdeploy = async function quickdeploy(req, res, next) {
     response.success = true;
   } 
   catch (err) {
+    debug('quickdeploy - error: %s', err);
     response = { message: err };
     response.success = false;
   }
