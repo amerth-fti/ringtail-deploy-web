@@ -92,10 +92,12 @@ fi
 RUN sed -i "s,SKYTAP_USERNAME,$SKYTAP_USER,g" config.js \
 	&& sed -i "s,SKYTAP_TOKEN,$SKYTAP_TOKEN,g" config.js \
 	&& npm install --only=production \
-	&& bower install --allow-root
+	&& bower install --allow-root \
+	&& touch start.sh && chmod +x start.sh \
+	&& echo "DEBUG=deployer* npm start" >> start.sh
 
 #EXPOSE PORTS
 EXPOSE 8080 5858
 
 #START APP
-CMD [ "DEBUG=deployer*", "npm", "run", "start" ]
+CMD [  "sh", "start.sh" ]
