@@ -100,4 +100,4 @@ RUN sed -i "s,SKYTAP_USERNAME,$SKYTAP_USER,g" config.js \
 EXPOSE 8080 5858
 
 #START APP
-CMD [ "sh", "start.sh" ]
+CMD [  "sh", "start.sh" ]
