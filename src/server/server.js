@@ -24,6 +24,7 @@ let app  = express();
 let key, cert;
 let hour = 3600000;
 
+
 //JWT CERTS
 try {
   key = fs.readFileSync(join(__dirname, '../../certs/') + config.certificate.key);
