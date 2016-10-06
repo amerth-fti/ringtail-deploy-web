@@ -24,6 +24,16 @@ let app  = express();
 let key, cert;
 let hour = 3600000;
 
+// SET ENVIRONMENT VARIABLES
+if(process.env.proxy) {
+  let proxyVal = process.env.proxy;
+  if(proxyVal == 'none') proxyVal = '';
+
+  process.env['http_proxy'] = proxyVal; 
+  process.env['https_proxy'] = proxyVal; 
+  process.env['HTTP_PROXY'] = proxyVal;
+  process.env['HTTPS_PROXY'] = proxyVal;
+}
 
 //JWT CERTS
 try {

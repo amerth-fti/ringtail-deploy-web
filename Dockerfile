@@ -81,20 +81,14 @@ RUN mkdir data
 
 #SETUP CONFIG
 RUN cp config.js.example config.js
-RUN if [ -z ${PROXY_URL+x} ]; then echo "####NO PROXY URL SET####" \
-	&& sed -i "s/'SKYTAP_TOKEN',/'SKYTAP_TOKEN'/g" config.js \
-	&& sed -i "s/proxy.*[']//g" config.js; \
-else \
-	sed -i "s,OPTIONAL_PROXY_SETTING,$PROXY_URL,g" config.js \
-	&& echo "----SKYTAP PROXY SET----"; \
-fi
 
-RUN sed -i "s,SKYTAP_USERNAME,$SKYTAP_USER,g" config.js \
-	&& sed -i "s,SKYTAP_TOKEN,$SKYTAP_TOKEN,g" config.js \
-	&& npm install --only=production \
+RUN npm install --only=production \
 	&& bower install --allow-root \
 	&& touch start.sh && chmod +x start.sh \
 	&& echo "DEBUG=deployer* npm start" >> start.sh
+
+ENV http_proxy=""
+ENV https_proxy=""
 
 #EXPOSE PORTS
 EXPOSE 8080 5858
