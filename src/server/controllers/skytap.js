@@ -9,6 +9,8 @@ if(process.env.skytapUser && process.env.skytapToken) {
 
   if(process.env.skytapProxy) {
     config.skytap.proxy = process.env.skytapProxy;
+  } else {
+    config.skytap.proxy = '';
   }
 }
 
