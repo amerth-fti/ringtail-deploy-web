@@ -107,8 +107,8 @@ function checkLogin(req, res, next) {
     return next('route');
   }
 
-  if(req.method == 'POST' && req.body.token) {
-    let token = req.body.token;
+  if(req.method == 'POST' && (req.body.token || req.body.bearer)) {
+    let token = req.body.bearer || req.body.token;
     let decoded = jwt.verify(token, cert);
 
     res.cookie('auth', decoded, { maxAge: hour * 2, signed: true, rolling: true});
