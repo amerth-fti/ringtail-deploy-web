@@ -42,3 +42,12 @@ This will run a detached process, mounted to the data volume, which will automat
 ```sh
 sudo docker run --restart=always -v deploywebdata:/home/deployweb/ringtail-deploy-web/data -d -p 80:8080 -t deploy-web 
 ```
+
+##Docker Deployer Config Options
+To override the option ```-e variable="value"```
+
+```skytapUser```, ```skytapToken```, ```skytapProxy``` - sets skytap options 
+
+```ringtailLoginEnabled```, ```certificate```, ```certificateKey``` - ringtail.com login settings
+
+If you enable ringtail.com login, you'll need to mount a directory which includes the certificates ```-v D:/path/to/certs/home/deployweb/ringtail-deploy-web/certs```.
