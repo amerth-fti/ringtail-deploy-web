@@ -162,7 +162,7 @@ app.get   ('/api/session', (req, res) => {
     });
   }
   else if(req.signedCookies && req.signedCookies['auth']) {
-    let user = req.signedCookies['auth'].user || null;
+    let user = req.signedCookies['auth'].sub || req.signedCookies['auth'].user ||null;
     
     return res.send({
       loggedIn: true,
