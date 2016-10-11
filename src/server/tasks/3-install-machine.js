@@ -100,32 +100,41 @@ function TaskImpl(options) {
     // wait for installation to complete
     log('waiting for install to complete, refer to Run Details');
     let retry = false;
-    await client.waitForInstall(function(status) {
-      me.rundetails = status;
-      retry = isTaskEnded(me.rundetails);
-    });
+    try {
+      await client.waitForInstall(function(status) {
+        me.rundetails = status;
+        retry = isTaskEnded(me.rundetails);
+      });
+    } catch(err) {
+
+    }
 
     // retry loop on failure.
-    let maxRetry = sysConfig.retryMax !== null ? sysConfig.retryMax : 3;
+    let maxRetry = sysConfig.retryMax == null ? 0 : sysConfig.retryMax;
     let currentRetry = 1;
-    if(retry) {
+    let error = '';
+    if(retry === true) {
       while(retry && currentRetry <= maxRetry) {
-        log('there was a task failre that requested a retry.  retrying from that step onwards.  ' + currentRetry + ' of ' + maxRetry);
 
+        log('there was a task failure that requested a retry.  retrying from that step onwards.  ' + currentRetry + ' of ' + maxRetry);
         await client.retry();
 
-        await client.waitForInstall(function(status) {
-          me.rundetails = status;
-        });
-
-        retry = isTaskEnded(me.rundetails);
+        try {
+          await client.waitForInstall(function(status) {
+            me.rundetails = status;
+            retry = isTaskEnded(me.rundetails);
+          });
+        } catch(err) {
+          error = err;
+        }
+        
         currentRetry++;        
       }
 
       if(retry && currentRetry >= maxRetry) {
         if(!(me.rundetails.indexOf('UPGRADE SUCCESSFUL') >= 0)) {
-          log('you can resume later this way: %s', client.retryUrl);
-          throw new Error('after ' + maxRetry + ' retries this job is still failing.');
+          log('out of retry attempts on this machine.  You can resume later this way: %s', client.retryUrl);
+          throw error;
         }
       }
     }
@@ -141,7 +150,11 @@ function TaskImpl(options) {
 }
 
 function isTaskEnded(rundetails) {
-  return rundetails.indexOf('UPGRADE RETRY') >= 0 && rundetails.indexOf('UPGRADE SUCCESSFUL') === -1 && rundetails.indexOf('UPGRADE FAILURE') === -1;
+  let failed = rundetails.indexOf('UPGRADE FAILED') >= 0,
+    successful = rundetails.indexOf('UPGRADE SUCCESSFUL') >= 0,
+    retry = rundetails.indexOf('UPGRADE RETRY') >= 0;
+
+  return (retry || failed) && !successful;
 }
 
 /**
