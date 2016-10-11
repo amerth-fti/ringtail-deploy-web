@@ -47,10 +47,6 @@ debug=deployer* node src/server/server
 -- Directly in Windows Command Prompt
 set DEBUG=deployer* & node src/server/server
 ```
-##Skytap Config Override
-```bash
-npm run start --skytapUser=something@someting.com --skytapToken=asdf8sdf6sadf76sdafsdf --skytapProxy=http://proxy.local:8080
-```
 
 ##Deployment Tasks
 Refer to the [Deploy Task Definitions Guide](TASKDEFS.md) for information on creating and working with deployment tasks.

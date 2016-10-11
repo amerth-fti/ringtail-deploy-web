@@ -3,17 +3,6 @@ let debug           = require('debug')('deployer-skytap')
   , Skytap          = require('node-skytap')
   , config          = require('../../../config');
 
-if(process.env.skytapUser && process.env.skytapToken) {
-  config.skytap.username = process.env.skytapUser;
-  config.skytap.token = process.env.skytapToken;
-
-  if(process.env.skytapProxy) {
-    config.skytap.proxy = process.env.skytapProxy;
-  } else {
-    config.skytap.proxy = '';
-  }
-}
-
 let skytap = Skytap.init(config.skytap);
 
 exports.environments = function environments(req, res, next) {
