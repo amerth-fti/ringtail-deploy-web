@@ -10,7 +10,7 @@
     return { 
       restrict: 'E',
       scope: {
-        task: '='
+        task: '=',
       },
       templateUrl: '/app/jobs/task-details.directive.html',
       controller: 'TaskDetailsController',
@@ -25,25 +25,38 @@
     vm.selectedTab  = 0;
     vm.tabs         = [];
     vm.selectTab    = selectTab;
+    vm.showLaunchKeys = true;
+    vm.newLaunchKeys = [];
     
     activate();
     
     //////////
     
     function activate() {
+      $scope.$parent.$watch('vm.job.env', onEnvUpdate);      
       $scope.$parent.$watch('vm.currentTask', onTaskUpdate);
     }
 
+    function onEnvUpdate(rootEnv) {
+      if(rootEnv && rootEnv.newLaunchKeys) {
+        vm.newLaunchKeys = rootEnv.newLaunchKeys;
+      }
+    }
 
     function onTaskUpdate(rootTask) {
       if(rootTask) {        
         vm.tabs = [];
+      
+        if(rootTask && rootTask.taskdefs && rootTask.taskdefs[0] && rootTask.taskdefs[0].task != "3-install-machine") {
+          vm.showLaunchKeys = false; 
+        }
 
         vm.tabs.push({
           title: rootTask.name,
           task: rootTask,
           active: vm.selectedTab === 0,
-          disabled: false
+          disabled: false,
+          newLaunchKeys: vm.newLaunchKeys
         });
 
         if(rootTask.tasks) {

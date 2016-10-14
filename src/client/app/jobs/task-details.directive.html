@@ -27,5 +27,12 @@
       <div class="panel-body task-rundetails" ng-bind-html="tab.task.rundetails | nbsp | trust">
       </div>
     </div>
+
+    <div class="panel panel-default" ng-show="tab.newLaunchKeys.length && vm.showLaunchKeys">
+      <div class="panel-heading">New Launch Keys</div>
+      <div ng-repeat="key in tab.newLaunchKeys | orderBy:'FeatureKey'" class="panel-launch-keys">
+          <strong>{{key.FeatureKey}}:</strong> {{key.Description}}
+      </div>    
+    </div>
   </tab>      
 </tabset>

@@ -37,7 +37,7 @@
     vm.selectedTasks      = null;
     vm.selectedBranch     = null;
     vm.showAdvanced       = false;
-    vm.hideLaunchKeys     = false;
+    vm.hideLaunchKeys     = true;
     vm.hasRpf             = false;
     vm.keepRpfwInstalls   = null;
     vm.wipeRpfWorkers     = null;
@@ -59,6 +59,7 @@
     vm.featureGrid        = initFeatureGrid();
     vm.taskArray          = ['3-install-many'];
     vm.version            = null,
+    vm.newLaunchKeys      = [];
     vm.rosettaStone       = {
       'DEVELOPMENT' : '0. Development',
       'ALPHA'       : '1. Portal01'   ,
@@ -133,7 +134,7 @@
         }
       });
 
-      if(vm.environment.updatePath == null) {
+      if(vm.environment.updatePath !== "0") {
         vm.hideLaunchKeys = true;
       }
     }
@@ -187,6 +188,8 @@
       vm.environment.selectedTasks = vm.selectedTasks;
 
       saveLaunchKeys().$promise.then(function() {
+        vm.environment.newLaunchKeys = vm.newLaunchKeys;
+        
         // trigger the redeployment
         vm.environment.$redeploy({ keepRpfwInstalls: vm.keepRpfwInstalls, wipeRpfWorkers: vm.wipeRpfWorkers })
         // shut the dialog since we had success
@@ -286,6 +289,12 @@
       Config.launchKeys({envId: vm.tempEnv.envId, branch: constructBranchPath() }, function(keys) {
         vm.launchKeys = filterKeysBasedOnEnvironmentDeploymentRing(keys);
         vm.hideLaunchKeys = vm.launchKeys === null || vm.launchKeys.length === 0;
+
+        if(!vm.hideLaunchKeys && vm.environment.updatePath && vm.environment.updatePath !== "0") {
+          vm.hideLaunchKeys = true;
+        }
+
+
         return vm.launchKeys;
       }).$promise.then(function() {
         Config.litKeys({envId: vm.tempEnv.envId, branch: constructBranchPath() }, function(keys) {
@@ -301,14 +310,21 @@
     function saveLaunchKeys() {
       var filteredLaunchKeys = [],
         me = vm;
+
+      me.newLaunchKeys = [];
       
       if(vm && vm.selectedBranch && vm.launchKeys) {
         vm.featureGrid.data.forEach(function(key) {
           vm.launchKeys.forEach(function(launchKey) {
-            if(key.isActive && key.name == launchKey.FeatureKey) {
+            if((key.isActive || !key.selectable)  && key.name == launchKey.FeatureKey) {
               var tempLaunchKey = JSON.parse(JSON.stringify(launchKey));
               delete tempLaunchKey.$$hashKey;
+              tempLaunchKey.isSetInDb = key.isSetInDb;
               filteredLaunchKeys.push(tempLaunchKey);
+
+              if(!key.isSetInDb) {
+                me.newLaunchKeys.push(tempLaunchKey);
+              }
             }
           });
         });
@@ -364,7 +380,7 @@
         'children': []
       },
       groupedKeys = _.groupBy(launchKeys, function(x) { return x.KeyType; } );
-      
+
       // Sort for display order 
       vm.orderedDisp.forEach(function(element) {
         var targetGroup = groupedKeys[element];
@@ -400,12 +416,17 @@
         'hideCheck': false,
         'selectable' : true,
         'isSelected': rootItemChecked,
-        'children': []
+        'children': [],
       };
       
       listOfKeys.forEach(function(keyItemDetail) {
         var isChecked = false;
+        var isSetInDb = false;
+
         if (vm.litKeys.indexOf(keyItemDetail.FeatureKey) != -1) {
+          isSetInDb = true;
+          isChecked = true;
+        } else if(vm.environment.updatePath && vm.environment.updatePath !== "0") {
           isChecked = true;
         }
         
@@ -414,7 +435,7 @@
             'name': keyItemDetail.FeatureKey,
             'selectable' : IsKeyItemSelectable,
             'hideCheck': false,
-            'isSetInDb': isChecked, // used to store the original state
+            'isSetInDb': isSetInDb, // used to store the original state
             'isSelected': isChecked,
             'isActive' : isChecked,
             'description': keyItemDetail.Description,

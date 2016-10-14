@@ -98,18 +98,19 @@ exports.pause = function pause(req, res, next) {
 };
 
 
-exports.redeploy = function redeploy(req, res, next) {
+exports.redeploy = async function redeploy(req, res, next) {
   debug('redeploy');
   var data = req.body
     , opts = parseQueryString(req.query)
     ;
-
-  redeployService
-    .redeploy(data, opts, function(err, result) {
-      res.result = result;
-      res.err = err;
-      next();
-    });
+  
+  try {
+    res.result = await redeployService.redeploy(data, opts);
+  } catch(err) {
+    res.err = err;
+  }
+  
+  return next();
 };
 
 exports.quickdeploy = async function quickdeploy(req, res, next) {
