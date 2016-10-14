@@ -10,7 +10,7 @@
     return { 
       restrict: 'E',
       scope: {
-        task: '=',
+        task: '='
       },
       templateUrl: '/app/jobs/task-details.directive.html',
       controller: 'TaskDetailsController',
