@@ -39,9 +39,13 @@ exports.requestLaunchKeys = function requestLaunchKeys(data, next) {
           client = me.serviceClient = new RingtailClient({ serviceHost: serviceIP });
         })
         .then(function(result) {
-          client
-            .getLaunchKeys(branch)
-            .nodeify(next);
+          try {
+            client
+              .getLaunchKeys(branch)
+              .nodeify(next);
+          } catch(e) {
+            console.error("requestLaunchKeys: no launch keys");
+          }
         });
     });
 };

@@ -24,7 +24,8 @@ schema = {
     { "name": "deployedJobId" },
     { "name": "runstate" },
     { "name": "machines" },
-    { "name": "updatePath" }
+    { "name": "updatePath" },
+    { "name": "newLaunchKeys" }
   ]
 };
 /* eslint-enable */
