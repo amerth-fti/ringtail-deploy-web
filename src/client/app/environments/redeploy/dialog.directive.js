@@ -316,7 +316,7 @@
       if(vm && vm.selectedBranch && vm.launchKeys) {
         vm.featureGrid.data.forEach(function(key) {
           vm.launchKeys.forEach(function(launchKey) {
-            if((key.isActive || !key.selectable)  && key.name == launchKey.FeatureKey) {
+            if((key.isActive || (!key.selectable && vm.environment.updatePath !== "0")) && key.name == launchKey.FeatureKey) {
               var tempLaunchKey = JSON.parse(JSON.stringify(launchKey));
               delete tempLaunchKey.$$hashKey;
               tempLaunchKey.isSetInDb = key.isSetInDb;
