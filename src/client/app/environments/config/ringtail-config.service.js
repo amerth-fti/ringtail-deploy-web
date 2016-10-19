@@ -67,7 +67,8 @@
         "Ringtail8|RLMIISWEBAPPLICATIONNAME",
         "Ringtail8|RLMIISVIRTUALDIRECTORYPHYSICALPATH",
         "Ringtail8|RINGTAILCLASSICWEBSITENAME",
-        "Ringtail8|RINGTAILCLASSICWEBSITEMAPPING"
+        "Ringtail8|RINGTAILCLASSICWEBSITEMAPPING",
+        "Common|UNINSTALL_EXCLUSIONS"
       ]
     },
     {
@@ -85,7 +86,8 @@
         "RingtailLegalApplicationServer|RINGTAILSTSCERTIFICATETHUMBPRINT",
         "RingtailLegalApplicationServer|RINGTAILSTSCERTIFICATENAME",
         "RingtailLegalApplicationServer|WEBSERSSLUSAGE",
-        "RingtailLegalApplicationServer|WEBBROWSERPROTOCOL"
+        "RingtailLegalApplicationServer|WEBBROWSERPROTOCOL",
+        "Common|UNINSTALL_EXCLUSIONS"
       ],
     },
     {
@@ -105,7 +107,8 @@
         "RingtailConfigurator|DB_PORT",
         "RingtailConfigurator|AGENT_VIRTUAL_NAME",
         "RingtailConfigurator|APP_POOL",
-        "RingtailConfigurator|AGENT_APP_POOL"
+        "RingtailConfigurator|AGENT_APP_POOL",
+        "Common|UNINSTALL_EXCLUSIONS"
       ]
     },
     {
@@ -113,13 +116,15 @@
       "configs": [
         "NativeFileServiceSetup|SERVICEUSER",
         "NativeFileServiceSetup|SERVICEPASSWORD",
-        "NativeFileServiceSetup|NATIVEFILESERVICESERVERS"
+        "NativeFileServiceSetup|NATIVEFILESERVICESERVERS",
+        "Common|UNINSTALL_EXCLUSIONS"
       ]
     },
     {
       "roles": ["SKYTAP-RPF-COORDINATOR", "RPF-COORDINATOR", "SKYTAP-ALLINONE", "DEV-FULL"],
       "configs": [
-        "RingtailProcessingFrameworkWorkers|RPFWORKERPATH"
+        "RingtailProcessingFrameworkWorkers|RPFWORKERPATH",
+        "Common|UNINSTALL_EXCLUSIONS"
       ]
     },
     {
@@ -135,7 +140,8 @@
         "RingtailProcessingFramework|RT_COORDINATOR_URL",
         "RingtailProcessingFramework|SERVICEUSERNAME",
         "RingtailProcessingFramework|SERVICEPASSWORD",
-        "RingtailProcessingFramework|RPFWORKERPATH"
+        "RingtailProcessingFramework|RPFWORKERPATH",
+        "Common|UNINSTALL_EXCLUSIONS"
       ]
     },
     {
@@ -143,6 +149,7 @@
       "configs": [
         "Ringtail-Svc-ContentSearch|SERVICEUSERNAME",
         "Ringtail-Svc-ContentSearch|SERVICEPASSWORD",
+        "Common|UNINSTALL_EXCLUSIONS"
       ]
     },    
     {
@@ -151,7 +158,8 @@
         "RingtailDatabaseUtility|IS_SQLSERVER_SERVER",
         "RingtailDatabaseUtility|IS_SQLSERVER_USERNAME",
         "RingtailDatabaseUtility|IS_SQLSERVER_PASSWORD",
-        "RingtailDatabaseUtility|IS_SQLSERVER_DATABASE"
+        "RingtailDatabaseUtility|IS_SQLSERVER_DATABASE",
+        "Common|UNINSTALL_EXCLUSIONS"
       ]
     },
     {
@@ -161,7 +169,8 @@
         "DatabaseUpgrader|IS_SQLSERVER_USERNAME",
         "DatabaseUpgrader|IS_SQLSERVER_PASSWORD",
         "DatabaseUpgrader|DATACAMEL_ACTION",
-        "DatabaseUpgrader|DATACAMEL_DATABASES"
+        "DatabaseUpgrader|DATACAMEL_DATABASES",
+        "Common|UNINSTALL_EXCLUSIONS"
       ]
     }
   ];

@@ -76,7 +76,8 @@ function TaskImpl(options) {
     let configKeys = Object.keys(configData);
     configKeys.forEach(function(key){
       let tempkey = configData[key] || '';
-      if(tempkey && tempkey.replace) {
+      //uninstall exclusions should not be escape quoted
+      if(tempkey && tempkey.replace && key.indexOf('UNINSTALL_EXCLUSIONS') < 0) {
         tempkey = tempkey.replace(/\"/g, '').trim();
         if(tempkey.indexOf(' ') > 0) {
           configData[key] = '"""' + tempkey + '"""';
@@ -165,12 +166,6 @@ function isTaskEnded(rundetails) {
 function getConfigsFromOptions(opts) {
   var result = {};
   if(opts) {
-    if(opts.keepRpfwInstalls) {
-      result['Common|UNINSTALL_EXCLUSIONS'] = 'Framework Workers';
-    } else {
-      result['Common|UNINSTALL_EXCLUSIONS'] = '';
-    }
-
     if(opts.wipeRpfWorkers) {
       result['Common|FILE_DELETIONS'] = 'C:\\Program Files\\FTI Technology\\Ringtail Processing Framework\\RPF_Supervisor';
     } else {
