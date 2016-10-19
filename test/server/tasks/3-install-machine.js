@@ -207,20 +207,6 @@ describe('3-install-machine', function() {
         .catch(done);
     });
 
-
-    describe('when .keepRpfwInstalls option is true', function() {
-      beforeEach(function() {
-        scope.options = { keepRpfwInstalls: true };
-      });
-      it('sets the UNINSTALL_EXLUSIONS config', function(done) {
-        task
-          .execute(scope, log)
-          .then(() => expect(stubSetConfigs.getCall(0).args[0]['Common|UNINSTALL_EXCLUSIONS']).to.equal('Framework Workers'))
-          .then(() => done())
-          .catch(done);
-      });
-    });
-
     describe('when .wipeRpfWorkers option is false', function() {
       beforeEach(function() {
         scope.options = { wipeRpfWorkers: false };
