@@ -11,7 +11,7 @@
         class="form-control"
         ng-model="field.value"
         ng-change="vm.updateField(field)"
-        ng-if="!field.options"
+        ng-if="!field.options && !field.multioptions"
       ></input>      
       <select
         class="form-control"
@@ -19,6 +19,14 @@
         ng-options="option as option for option in field.options"
         ng-change="vm.updateField(field)"
         ng-if="field.options"
+      ></select>
+
+      <select
+        class="form-control"
+        ng-model="field.value"
+        ng-options="option as option for option in field.multioptions"
+        ng-if="field.multioptions"
+        multiple
       ></select>
     </p>
   </div>

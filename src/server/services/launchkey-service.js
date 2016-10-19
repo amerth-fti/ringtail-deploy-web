@@ -44,7 +44,7 @@ exports.requestLaunchKeys = function requestLaunchKeys(data, next) {
               .getLaunchKeys(branch)
               .nodeify(next);
           } catch(e) {
-            console.error("requestLaunchKeys: no launch keys");
+            console.error('requestLaunchKeys: no launch keys');
           }
         });
     });

@@ -134,7 +134,7 @@
         }
       });
 
-      if(vm.environment.updatePath !== "0") {
+      if(vm.environment.updatePath !== '0') {
         vm.hideLaunchKeys = true;
       }
     }
@@ -290,7 +290,7 @@
         vm.launchKeys = filterKeysBasedOnEnvironmentDeploymentRing(keys);
         vm.hideLaunchKeys = vm.launchKeys === null || vm.launchKeys.length === 0;
 
-        if(!vm.hideLaunchKeys && vm.environment.updatePath && vm.environment.updatePath !== "0") {
+        if(!vm.hideLaunchKeys && vm.environment.updatePath && vm.environment.updatePath !== '0') {
           vm.hideLaunchKeys = true;
         }
 
@@ -316,7 +316,7 @@
       if(vm && vm.selectedBranch && vm.launchKeys) {
         vm.featureGrid.data.forEach(function(key) {
           vm.launchKeys.forEach(function(launchKey) {
-            if((key.isActive || (!key.selectable && vm.environment.updatePath !== "0")) && key.name == launchKey.FeatureKey) {
+            if((key.isActive || (!key.selectable && vm.environment.updatePath !== '0')) && key.name == launchKey.FeatureKey) {
               var tempLaunchKey = JSON.parse(JSON.stringify(launchKey));
               delete tempLaunchKey.$$hashKey;
               tempLaunchKey.isSetInDb = key.isSetInDb;
@@ -426,7 +426,7 @@
         if (vm.litKeys.indexOf(keyItemDetail.FeatureKey) != -1) {
           isSetInDb = true;
           isChecked = true;
-        } else if(vm.environment.updatePath && vm.environment.updatePath !== "0") {
+        } else if(vm.environment.updatePath && vm.environment.updatePath !== '0') {
           isChecked = true;
         }
         

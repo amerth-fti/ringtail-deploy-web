@@ -35,7 +35,11 @@
 
       // set whether field is valid
       field.validate = function() {
-        field.valid = !!field.value;
+        if(field.ignoreValidation) {
+          field.valid = true;
+        } else { 
+          field.valid = !!field.value;
+        }
       };
       field.validate();
 
@@ -141,7 +145,9 @@
 
     "NativeFileServiceSetup|SERVICEUSER": "NATIVE_FILE_SERVICEUSER",
     "NativeFileServiceSetup|SERVICEPASSWORD": "NATIVE_FILE_SERVICEPASSWORD",
-    "NativeFileServiceSetup|NATIVEFILESERVICESERVERS": "NATIVE_FILE_SERVERS"
+    "NativeFileServiceSetup|NATIVEFILESERVICESERVERS": "NATIVE_FILE_SERVERS",
+
+    "Common|UNINSTALL_EXCLUSIONS": "UNINSTALL_EXCLUSIONS"
   };
 
 
@@ -529,7 +535,26 @@
     {
       "key": "NATIVE_FILE_SERVERS",
       "title": "Native File Viewer Server",
-      "description": "Ther server used by native file viewer"
+      "description": "The server used by native file viewer"
+    },
+    {
+      "key": "UNINSTALL_EXCLUSIONS",
+      "title": "Uninstall Exclusions",
+      "description": "Applications which should not be uninstalled. (hold ctrl to select multiple)",
+      "multioptions": [
+          "Ringtail SQLComponent (x64)"
+        , "Ringtail Database Utility"
+        , "Ringtail Processing Framework"
+        , "Ringtail Processing Framework Workers"
+        // , "Ringtail NIST Reference"
+        // , "Ringtail Help"
+        // , "Ringtail Basis Library"
+        // , "Ringtail Agent Server"
+        // , "Ringtail"        
+        // , "Ringtail Application Server"
+      ],
+      "default" : "",
+      "ignoreValidation": true
     }
   ];
   /* eslint-enable */

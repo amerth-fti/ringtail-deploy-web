@@ -79,7 +79,10 @@
           ;
 
         field.configKey = [ configKey ];
-        field.value = currentValue || commonValue || field.default;
+        field.value = currentValue || commonValue || field.default || '';
+        if(field.multioptions) {
+          field.value = field.value.split(',');
+        }
         return field;
       });
 
@@ -124,8 +127,15 @@
       ignore = field.value === field.ignoreWhen;
 
       // escape value
-      value = field.value;
-      value = escapeValue(value);
+      value = field.value || '';
+
+      if(field.multioptions) {
+        if(Array.isArray(value)) {
+          value = value.join(',');        
+        }
+      } else {
+        value = escapeValue(value);
+      }
 
       //write values for all field mappings
       field.configKey.forEach(function(configKey) {

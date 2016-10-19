@@ -47,7 +47,7 @@
       if(rootTask) {        
         vm.tabs = [];
       
-        if(rootTask && rootTask.taskdefs && rootTask.taskdefs[0] && rootTask.taskdefs[0].task != "3-install-machine") {
+        if(rootTask && rootTask.taskdefs && rootTask.taskdefs[0] && rootTask.taskdefs[0].task != '3-install-machine') {
           vm.showLaunchKeys = false; 
         }
 
