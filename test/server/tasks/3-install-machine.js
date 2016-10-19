@@ -221,34 +221,6 @@ describe('3-install-machine', function() {
       });
     });
 
-
-    describe('when .keepRpfwInstalls option is false', function() {
-      beforeEach(function() {
-        scope.options = { keepRpfwInstalls: false };
-      });
-      it('unsets the UNINSTALL_EXLUSIONS config', function(done) {
-        task
-          .execute(scope, log)
-          .then(() => expect(stubSetConfigs.getCall(0).args[0]['Common|UNINSTALL_EXCLUSIONS']).to.equal(''))
-          .then(() => done())
-          .catch(done);
-      });
-    });
-
-    describe('when .wipeRpfWorkers option is true', function() {
-      beforeEach(function() {
-        scope.options = { wipeRpfWorkers: true };
-      });
-      it('sets the FILE_DELETIONS config', function(done) {
-        task
-          .execute(scope, log)
-          .then(() => expect(stubSetConfigs.getCall(0).args[0]['Common|FILE_DELETIONS']).to.equal('C:\\Program Files\\FTI Technology\\Ringtail Processing Framework\\RPF_Supervisor'))
-          .then(() => done())
-          .catch(done);
-      });
-    });
-
-
     describe('when .wipeRpfWorkers option is false', function() {
       beforeEach(function() {
         scope.options = { wipeRpfWorkers: false };
