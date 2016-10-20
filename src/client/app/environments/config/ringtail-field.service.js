@@ -128,6 +128,16 @@
 
     "RingtailProcessingFrameworkWorkers|RPFWORKERPATH": "RPFWORKERPATH",
 
+    "Ringtail-Portal|PortalDBServer": "IS_SQLSERVER_SERVER_PORTAL",
+    "Ringtail-Portal|PortalDBName": "IS_SQLSERVER_DATABASE_PORTAL",
+    "Ringtail-Portal|PortalDBUser": "IS_SQLSERVER_USERNAME_PORTAL",
+    "Ringtail-Portal|PortalDBPassword": "IS_SQLSERVER_PASSWORD_PORTAL",
+    "Ringtail-Portal|RpfDBServer": "IS_SQLSERVER_SERVER_RPF",
+    "Ringtail-Portal|RpfDBName": "IS_SQLSERVER_DATABASE_RPF",
+    "Ringtail-Portal|RpfDBUser": "IS_SQLSERVER_USERNAME_RPF",
+    "Ringtail-Portal|RpfDBPassword": "IS_SQLSERVER_PASSWORD_RPF",
+    "Ringtail-Portal|RpfDBPort": "CONFIGURATOR_DB_PORT",
+
     "RingtailProcessingFramework|ADDLOCAL": "RPFINSTALL",
     "RingtailProcessingFramework|IS_SQLSERVER_SERVER": "IS_SQLSERVER_SERVER_RPF",
     "RingtailProcessingFramework|IS_SQLSERVER_USERNAME": "IS_SQLSERVER_USERNAME_RPF",
