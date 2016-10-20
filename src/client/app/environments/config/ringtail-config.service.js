@@ -91,6 +91,20 @@
       ],
     },
     {
+      "roles": ["SKYTAP-WEB", "WEB", "SVC", "SVC-PORTAL", "SKYTAP-ALLINONE"],
+      "configs": [
+        "Ringtail-Portal|PortalDBServer",
+        "Ringtail-Portal|PortalDBName",
+        "Ringtail-Portal|PortalDBUser",
+        "Ringtail-Portal|PortalDBPassword",
+        "Ringtail-Portal|RpfDBServer",
+        "Ringtail-Portal|RpfDBName",
+        "Ringtail-Portal|RpfDBUser",
+        "Ringtail-Portal|RpfDBPassword",
+        "Ringtail-Portal|RpfDBPort"
+      ]
+    },    
+    {
       "roles": ["SKYTAP-AGENT", "SKYTAP-WEBAGENT", "SKYTAP-WEB", "AGENT", "AGT_NATIVE", "WEBAGENT", "WEB", "NOHELP_WEB", "SKYTAP-ALLINONE", "DEV-FULL"],
       "configs": [
         "RingtailConfigurator|CONFIGURATORPORT",
