@@ -93,15 +93,15 @@
     {
       "roles": ["SKYTAP-WEB", "WEB", "SVC", "SVC-PORTAL", "SKYTAP-ALLINONE"],
       "configs": [
-        "Ringtail-Portal|PortalDBServer",
-        "Ringtail-Portal|PortalDBName",
-        "Ringtail-Portal|PortalDBUser",
-        "Ringtail-Portal|PortalDBPassword",
-        "Ringtail-Portal|RpfDBServer",
-        "Ringtail-Portal|RpfDBName",
-        "Ringtail-Portal|RpfDBUser",
-        "Ringtail-Portal|RpfDBPassword",
-        "Ringtail-Portal|RpfDBPort"
+        "Ringtail-Svc-Portal|PortalDBServer",
+        "Ringtail-Svc-Portal|PortalDBName",
+        "Ringtail-Svc-Portal|PortalDBUser",
+        "Ringtail-Svc-Portal|PortalDBPassword",
+        "Ringtail-Svc-Portal|RpfDBServer",
+        "Ringtail-Svc-Portal|RpfDBName",
+        "Ringtail-Svc-Portal|RpfDBUser",
+        "Ringtail-Svc-Portal|RpfDBPassword",
+        "Ringtail-Svc-Portal|RpfDBPort"
       ]
     },    
     {
