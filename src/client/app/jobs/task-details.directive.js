@@ -71,6 +71,7 @@
 
             if(isWarning) {
               task.status = 'Warn';
+              if(rootTask.status === 'Succeeded') { // don't want to make failures look like warnings.
                 rootTask.status = 'Warn';
               }
             }
