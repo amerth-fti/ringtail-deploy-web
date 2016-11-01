@@ -1,4 +1,3 @@
-
 var debug   = require('debug')('deployer-jobrunner')
   , _       = require('underscore')
   , Q       = require('q')
@@ -84,7 +83,16 @@ exports.getJobs = function getjobs() {
   return _.values(jobs); 
 };
 
-
+/** 
+ * Gets all jobs by returning an array of jobs
+ * 
+ * @return {Array} array of jobs
+ */
+exports.getJobsSummary = function getJobsSummary() {  
+  var jobs = jobMapper.list(null, function(err, jobs){
+    return callback(null, jobs);
+  });
+};
 
 /** 
  * Gets a job by the job identifier

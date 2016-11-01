@@ -15,3 +15,7 @@ from jobs
 select *
 from   jobs
 where  jobId = $jobId
+
+-- list
+select *
+from   jobs
