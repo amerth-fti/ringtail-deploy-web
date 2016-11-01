@@ -84,17 +84,6 @@ exports.getJobs = function getjobs() {
 };
 
 /** 
- * Gets all jobs by returning an array of jobs
- * 
- * @return {Array} array of jobs
- */
-exports.getJobsSummary = function getJobsSummary() {  
-  var jobs = jobMapper.list(null, function(err, jobs){
-    return callback(null, jobs);
-  });
-};
-
-/** 
  * Gets a job by the job identifier
  * 
  * @return {job} job instance
