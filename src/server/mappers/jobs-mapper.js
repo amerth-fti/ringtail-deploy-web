@@ -1,4 +1,5 @@
 var util          = require('util')
+  , debug          = require('debug')('deployer-jobmapper')
   , Q             = require('q')
   , statements    = require('statements')
   , SqliteMapper  = require('hops-sqlite')
@@ -57,6 +58,16 @@ JobMapper.prototype.getById = function getById(jobId, next) {
     .nodeify(next);
 };
 
+JobMapper.prototype.list = function list(jobId, next) {
+    var sql = jobSql.list
+    , params = {}
+    ;
+  return this
+    .all(sql)
+    .then(this.parseArray.bind(this))
+    .nodeify(next);
+};
+
 JobMapper.prototype.maxJobId = function(next){
   var sql = jobSql.maxid
     , params = {};
@@ -67,4 +78,14 @@ JobMapper.prototype.maxJobId = function(next){
       return row.jobId;
     })
     .nodeify(next);
+};
+
+JobMapper.prototype.parse = function parse(record) {
+  var result = new Job(record);  
+  result.log = result.log ? JSON.parse(result.log) : null;
+  return result;
+};
+
+JobMapper.prototype.parseArray = function parseArray(array) {
+  return array.map(this.parse);
 };

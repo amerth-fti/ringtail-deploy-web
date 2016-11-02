@@ -1,4 +1,3 @@
-
 var debug   = require('debug')('deployer-jobrunner')
   , _       = require('underscore')
   , Q       = require('q')
@@ -83,8 +82,6 @@ jobMapper.maxJobId(function(err, id){
 exports.getJobs = function getjobs() {  
   return _.values(jobs); 
 };
-
-
 
 /** 
  * Gets a job by the job identifier

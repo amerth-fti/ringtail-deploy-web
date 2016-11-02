@@ -240,6 +240,8 @@ app.put   ('/api/envs/sendLaunchKeys', controllers.configs.sendLaunchKeys);
 app.get ('/api/jobs', controllers.jobs.list);
 app.get ('/api/jobs/:jobId', controllers.jobs.get);
 app.get ('/api/job/:jobId/log', controllers.jobs.downloadLog);
+app.get ('/api/jobs/:last/summary', controllers.jobs.summaryList);
+
 
 
 // API - SKYTAP PROXY ROUTES

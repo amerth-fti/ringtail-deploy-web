@@ -3,9 +3,41 @@ let Q           = require('q');
 let _           = require('underscore');
 let jobrunner   = require('../jobrunner');
 let cheerio     = require('cheerio');
+let jobservice  = require('../services/job-service');
 
 exports.list = (req, res) => {
-  res.send(jobrunner.getJobs());
+  let jobs = jobrunner.getJobs();
+  debug('jobs - ' + jobs.length);
+  res.send(jobs);
+};
+
+exports.summaryList = function summaryList(req, res, next) {
+  let timeframe = req.params.last;
+
+  if(!timeframe || timeframe == 0) {
+    timeframe = 365;
+  }
+  jobservice.list(null, function(err, result) {
+    let friendlyResult = _.map(result, function(job) {
+      return {id: job.log.id, status: job.log.status, started: job.log.started, stopped: job.log.stopped};
+    });
+
+    let jobsSince = new Date();
+    jobsSince = jobsSince.setDate(jobsSince.getDate() - timeframe);
+
+    let recent = _.filter(friendlyResult, function(item) {
+      return Date.parse(item.started) > jobsSince;
+    });
+    let successRates = _.countBy(recent, 'status');         // count by status, so we can see how many jobs succeed.
+    let jobsOverTime = _.countBy(recent, function(job) {    // count by days, so we can see how many jobs run per day.
+      let date = new Date(Date.parse(job.started));
+      return (date.getMonth() + 1) + '-' + date.getDate();
+    });
+
+    res.result = {successRates: successRates, jobsOverTime: jobsOverTime};
+    res.err = err;
+    next();
+  });
 };
 
 exports.get = (req, res) => {
