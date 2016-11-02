@@ -19,7 +19,7 @@ exports.summaryList = function summaryList(req, res, next) {
   }
   jobservice.list(null, function(err, result) {
     let friendlyResult = _.map(result, function(job) {
-      return {id: job.log.id, status: job.log.status, started: job.log.started, stopped: job.log.stopped};
+      return {id: job.log.id, status: job.log.status, started: job.log.started, stopped: job.log.stopped, name: job.log.name};
     });
 
     let jobsSince = new Date();
@@ -28,13 +28,18 @@ exports.summaryList = function summaryList(req, res, next) {
     let recent = _.filter(friendlyResult, function(item) {
       return Date.parse(item.started) > jobsSince;
     });
+
+    let outcomesByEnv = _.mapObject(_.groupBy(recent, 'name'), function(val) {
+      return _.countBy(val, 'status' );
+    });
+
     let successRates = _.countBy(recent, 'status');         // count by status, so we can see how many jobs succeed.
     let jobsOverTime = _.countBy(recent, function(job) {    // count by days, so we can see how many jobs run per day.
       let date = new Date(Date.parse(job.started));
       return (date.getMonth() + 1) + '-' + date.getDate();
     });
 
-    res.result = {successRates: successRates, jobsOverTime: jobsOverTime};
+    res.result = {successRates: successRates, jobsOverTime: jobsOverTime, outcomesByEnv: outcomesByEnv};
     res.err = err;
     next();
   });
