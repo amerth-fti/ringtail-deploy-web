@@ -92,7 +92,7 @@ function TaskImpl(options) {
 
     debug('checking machine prerequisites ' + serviceIP);    
     log('checking machine prerequisites');
-    let prereqs = await client.prerequisits();
+    let prereqs = await client.prerequisites();
 
     try{
       prereqs = JSON.parse(prereqs);
@@ -104,14 +104,14 @@ function TaskImpl(options) {
         throw prereqs.errors;
       } else if(prereqs && prereqs.Message) {
         if(prereqs.Message.indexOf('No HTTP') === -1) {
-          log(prereqs.Message)
+          log(prereqs.Message);
           throw prereqs.Message;
         } else {
-          log('prerequisites check not available in API')
+          log('prerequisites check not available in API');
         }
         
       } else {
-        throw "Generic Error";
+        throw 'Generic Error';
       }
     }
 
