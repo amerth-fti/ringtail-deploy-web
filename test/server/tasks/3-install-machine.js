@@ -23,6 +23,7 @@ describe('3-install-machine', function() {
       , env
       , machine
       , config
+      , success
       , stubGetMachine
       , stubGetConfig
       , stubWaitForService
@@ -31,6 +32,7 @@ describe('3-install-machine', function() {
       , stubInstall
       , stubWaitForInstall
       , stubInstalled
+      , stubPrerequisites
       ;
 
     options = {
@@ -60,12 +62,19 @@ describe('3-install-machine', function() {
       },
       roles: ['AGENT']
     };
+    success = {
+      success: true
+    }
 
     function returnInstalled() {
       /* jshint es5:false */
       /* jshint ignore:start */
       return Q([ 'one', 'two' ]);
       /* jshint ignore:end */
+    }
+
+    function returnSuccess() {
+      return Q(success);
     }
 
     beforeEach(function() {
@@ -79,6 +88,7 @@ describe('3-install-machine', function() {
       stubInstall         = sinon.stub(RingtailClient.prototype, 'install');
       stubWaitForInstall  = sinon.stub(RingtailClient.prototype, 'waitForInstall');
       stubInstalled       = sinon.stub(RingtailClient.prototype, 'installed', returnInstalled);
+      stubPrerequisites   = sinon.stub(RingtailClient.prototype, 'prerequisites', returnSuccess);
 
       sinon.stub(machineSvc, 'update');
     });
@@ -92,6 +102,7 @@ describe('3-install-machine', function() {
       stubInstall.restore();
       stubWaitForInstall.restore();
       stubInstalled.restore();
+      stubPrerequisites.restore();
       machineSvc.update.restore();
     });
 
