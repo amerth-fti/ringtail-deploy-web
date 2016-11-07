@@ -43,12 +43,7 @@ function TaskImpl(options) {
     let config = await configSvc.get(configId);
 
     // Create the Ringtail Install Service client
-    let client = me.serviceClient = new RingtailClient({ serviceHost: serviceIP });
-    //log('will use: %s', client.installUrl);
-    //log('will use: %s', client.statusUrl);
-    //log('will use: %s', client.updateUrl);
-    //log('will use: %s', client.configUrl);
-    //log('will use: %s', client.installedUrl);
+    let client = me.serviceClient = new RingtailClient({ serviceHost: serviceIP, timeout:70000 });
 
     // wait for the service to be available
     log('waiting until the service is responsive ' + client.statusUrl);
@@ -92,7 +87,33 @@ function TaskImpl(options) {
     _.extend(configs, getConfigsFromOptions(options));
 
     debug('sending config object ' + machineId);
+    log('sending configuration');
     await client.setConfigs(configs);
+
+    debug('checking machine prerequisites ' + serviceIP);    
+    log('checking machine prerequisites');
+    let prereqs = await client.prerequisits();
+
+    try{
+      prereqs = JSON.parse(prereqs);
+    } catch(e) {}
+
+    if(prereqs && !prereqs.success) {
+      if(prereqs.errors && prereqs.errors.length) {
+        log(prereqs.errors);
+        throw prereqs.errors;
+      } else if(prereqs && prereqs.Message) {
+        if(prereqs.Message.indexOf('No HTTP') === -1) {
+          log(prereqs.Message)
+          throw prereqs.Message;
+        } else {
+          log('prerequisites check not available in API')
+        }
+        
+      } else {
+        throw "Generic Error";
+      }
+    }
 
     //start installation
     log('starting installation');
