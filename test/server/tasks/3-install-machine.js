@@ -64,7 +64,7 @@ describe('3-install-machine', function() {
     };
     success = {
       success: true
-    }
+    };
 
     function returnInstalled() {
       /* jshint es5:false */
