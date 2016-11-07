@@ -43,7 +43,7 @@ function TaskImpl(options) {
     let config = await configSvc.get(configId);
 
     // Create the Ringtail Install Service client
-    let client = me.serviceClient = new RingtailClient({ serviceHost: serviceIP, timeout:70000 });
+    let client = me.serviceClient = new RingtailClient({ serviceHost: serviceIP });
 
     // wait for the service to be available
     log('waiting until the service is responsive ' + client.statusUrl);
