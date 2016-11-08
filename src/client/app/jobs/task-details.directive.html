@@ -28,7 +28,7 @@
       </div>
     </div>
 
-    <div class="panel panel-default" ng-show="vm.showLaunchKeys">
+    <div class="panel panel-default" ng-show="vm.showLaunchKeys && $index == 0">
       <div class="panel-heading">New Launch Keys</div>
       <div class="panel-launch-keys" ng-show="!tab.newLaunchKeys.length">This environment already has all the keys it needs.</div>
       <div ng-repeat="key in tab.newLaunchKeys | orderBy:'FeatureKey'" class="panel-launch-keys">
