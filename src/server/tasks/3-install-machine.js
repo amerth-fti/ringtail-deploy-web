@@ -31,6 +31,7 @@ function TaskImpl(options) {
       , me = this
       ;
 
+    let error = '';
     log('starting deployment');
 
     // Load the machine
@@ -128,13 +129,12 @@ function TaskImpl(options) {
         retry = isTaskEnded(me.rundetails);
       });
     } catch(err) {
-
+      error = err;
     }
 
     // retry loop on failure.
     let maxRetry = sysConfig.retryMax == null ? 0 : sysConfig.retryMax;
     let currentRetry = 1;
-    let error = '';
     if(retry === true) {
       while(retry && currentRetry <= maxRetry) {
 
@@ -145,6 +145,10 @@ function TaskImpl(options) {
           await client.waitForInstall(function(status) {
             me.rundetails = status;
             retry = isTaskEnded(me.rundetails);
+
+            if(!retry) {
+              error = '';
+            }
           });
         } catch(err) {
           error = err;
@@ -155,7 +159,7 @@ function TaskImpl(options) {
 
       if(retry && currentRetry >= maxRetry) {
         if(!(me.rundetails.indexOf('UPGRADE SUCCESSFUL') >= 0)) {
-          log('out of retry attempts on this machine.  You can resume later this way: %s', client.retryUrl);
+          log('There was an error, refer to the run details.  You can resume later this way: %s', client.retryUrl);
           throw error;
         }
       }
@@ -167,6 +171,11 @@ function TaskImpl(options) {
         log(message);
       });
       me.Warning = 'Warning';
+    }
+
+    if(error) {
+      log('There was an error, refer to the run details.');
+      throw(error);
     }
 
     // update machine install notes
@@ -196,7 +205,7 @@ function TaskImpl(options) {
   }
 
   function isTaskEnded(rundetails) {
-    let failed = rundetails.indexOf('UPGRADE FAILED') >= 0,
+    let failed = rundetails.indexOf('UPGRADE FAILED') >= 0 || rundetails.indexOf('UPGRADE ABORTED') >= 0,
       successful = rundetails.indexOf('UPGRADE SUCCESSFUL') >= 0,
       retry = rundetails.indexOf('UPGRADE RETRY') >= 0;
 
