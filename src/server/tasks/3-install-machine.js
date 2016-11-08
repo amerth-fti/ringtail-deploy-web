@@ -107,7 +107,7 @@ function TaskImpl(options) {
           log(prereqs.Message);
           throw prereqs.Message;
         } else {
-          log('prerequisites check not available in API');
+          debug('prerequisites check not available in API');
         }
         
       } else {
