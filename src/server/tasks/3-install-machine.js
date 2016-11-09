@@ -50,6 +50,13 @@ function TaskImpl(options) {
     log('waiting until the service is responsive ' + client.statusUrl);
     await client.waitForService();
 
+    if(this.region && this.region.serviceConfig && this.region.serviceConfig.updatePath) {
+      // point the installer service to the desired regional path.
+      let path = this.region.serviceConfig.updatePath;
+      log('setting the install update location to ' + path);
+      await client.setUpdatePath(path);
+    }
+
     // upgrade install service
     log('updating install service to latest version');
     await client.update();

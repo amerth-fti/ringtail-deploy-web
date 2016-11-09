@@ -2,10 +2,12 @@ var mocha   = require('mocha')
   , sinon   = require('sinon')
   , chai    = require('chai')
   , expect  = chai.expect
-
-  , Q               = require('q')
-  , Env         = require('../../../src/server/models/env')
-  , Task        = require('../../../src/server/tasks/3-install-many')
+  , Q       = require('q')
+  , Env     = require('../../../src/server/models/env')
+  , Region  = require('../../../src/server/models/region')
+  , Task    = require('../../../src/server/tasks/3-install-many')
+  , EnvSvc  = require('../../../src/server/services/env-service')    
+  , RegSvc  = require('../../../src/server/services/region-service')  
   ;
 
 describe('3-install-many', function() {
@@ -26,6 +28,16 @@ describe('3-install-many', function() {
           { machineId: 3, configId: null, machineName: 'Machine 3' }
         ]
       });
+      region = new Region({
+        regionId: 1001
+      });      
+
+      EnvSvc.findRegionByEnvId = function(x) {
+        return region.regionId;
+      }
+      RegSvc.findById = function(x) {
+        return region;
+      }
       scope = {
         'me': env
       };
@@ -91,6 +103,16 @@ describe('3-install-many', function() {
           .then(done)
           .catch(done);
       });
+      it('includes the regionId in the taskdefs', function(done) {
+        task
+          .execute(scope, log)
+          .then(function() {
+            expect(task.taskdefs[0].options.region.regionId).to.equal(region.regionId);
+            expect(task.taskdefs[1].options.region.regionId).to.equal(region.regionId);
+          })
+          .then(done)
+          .catch(done);
+      });      
       it('includes the configId in the taskdefs', function(done) {
         task
           .execute(scope, log)
