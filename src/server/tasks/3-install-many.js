@@ -1,8 +1,9 @@
-var util    = require('util')
-  , Q       = require('q')
-  , _       = require('underscore')
-  , Parallel    = require('./parallel')
-  , machineSvc  = require('../services/machine-service')
+var util            = require('util')
+  , debug           = require('debug')('deployer-3-install-many')
+  , _               = require('underscore')
+  , Parallel        = require('./parallel')
+  , envService      = require('../services/env-service')
+  , regionService   = require('../services/region-service')  
   ;
 
 function TaskImpl(options) {
@@ -14,48 +15,52 @@ function TaskImpl(options) {
   me.parentExecute = me.execute;
 
   // override the execute method
-  me.execute = function execute(scope, log) {
-    return Q.fcall(function() {
-      var installs = options.installs
-        , env      = scope.me
-        , installOptsArray
-        ;
+  me.execute = async function execute(scope, log) {
+    let installs = options.installs
+      , env      = scope.me
+      , installOptsArray
+      ;
 
-      // create install definitions for all of the machines
-      // that have configId values set. This is used to
-      // run the installation for all machines as opposed to
-      // specific machines.
-      if(installs === 'all') {
-        installOptsArray = env.machines.map(function(machine) {
-          if(machine.configId) {
-            return {
-              name: machine.machineName,
-              machineId: machine.machineId,
-              configId: machine.configId,
-              data: {
-                branch: 'scope.me.deployedBranch'
-              }
-            };
-          }
-        });
-        installOptsArray = _.filter(installOptsArray, function(installOpts) {
-          return !!installOpts;
-        });
-      }
-      else
-        throw new Error('Install type of ' + installs + ' is not supported');
+    let regionId = await envService.findRegionByEnvId(env.envId);
+    let region = await regionService.findById(regionId);
 
-      // build the taskdefs for each install pair
-      me.taskdefs = installOptsArray.map(function(installOpts) {
-        return {
-          task: '3-install-machine',
-          options: installOpts
-        };
+    // create install definitions for all of the machines
+    // that have configId values set. This is used to
+    // run the installation for all machines as opposed to
+    // specific machines.
+    if(installs === 'all') {
+      installOptsArray = env.machines.map(function(machine) {
+        if(machine.configId) {
+          return {
+            name: machine.machineName,
+            machineId: machine.machineId,
+            envId: env.envId,
+            region: region,
+            configId: machine.configId,
+            data: {
+              branch: 'scope.me.deployedBranch'
+            }
+          };
+        }
       });
+      installOptsArray = _.filter(installOptsArray, function(installOpts) {
+        return !!installOpts;
+      });
+    }
+    else
+      throw new Error('Install type of ' + installs + ' is not supported');
 
-      // call the parent parellel version of execute
-      return me.parentExecute(scope, log);
+    // build the taskdefs for each install pair
+    me.taskdefs = installOptsArray.map(function(installOpts) {
+      return {
+        task: '3-install-machine',
+        options: installOpts
+      };
     });
+
+    // call the parent parellel version of execute
+    let response = await me.parentExecute(scope, log);
+    return response;
   };
 }
 
