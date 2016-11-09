@@ -17,6 +17,7 @@ describe('3-install-many', function() {
       , log
       , scope
       , env
+      , region
       ;
 
     beforeEach(function() {
@@ -34,10 +35,10 @@ describe('3-install-many', function() {
 
       EnvSvc.findRegionByEnvId = function(x) {
         return region.regionId;
-      }
+      };
       RegSvc.findById = function(x) {
         return region;
-      }
+      };
       scope = {
         'me': env
       };
