@@ -55,6 +55,7 @@
     vm.poll               = null;
     vm.message            = null,
     vm.gridApi            = null;
+    vm.keysLoaded         = false;
     vm.click              = onFeatureKeyCheckClick;
     vm.featureGrid        = initFeatureGrid();
     vm.taskArray          = ['3-install-many'];
@@ -246,6 +247,7 @@
         vm.loadingBuilds = true;
         vm.selectedBranch.build = null;
         vm.launchKeys = null;
+        vm.keysLoaded = false;
         vm.hideLaunchKeys = true;
         Browse.builds({regionId: vm.regionId, branch: vm.selectedBranch.branch }, function(builds) {
           vm.loadingBuilds = false;
@@ -263,6 +265,7 @@
         vm.loadingFiles = true;
         vm.launchKeys = null;
         vm.hideLaunchKeys = true;
+        vm.keysLoaded = false;        
         var version = vm.version || '0.0.0.0'; //need to pass something even if there is nothing
         Browse.files({regionId: vm.regionId, branch: constructBranchPath(), version: version }, function(files) {
           vm.loadingFiles = false;
@@ -294,6 +297,9 @@
           vm.hideLaunchKeys = true;
         }
 
+        if(vm.hideLaunchKeys) { 
+          vm.keysLoaded = true;        
+        }
 
         return vm.launchKeys;
       }).$promise.then(function() {
@@ -302,6 +308,7 @@
            return;
         }).$promise.then(function() {
           formatFeatureTreeData();
+          vm.keysLoaded = true;                  
           return;
         });
       });
