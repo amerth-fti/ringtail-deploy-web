@@ -180,7 +180,8 @@
     {
       "key": "IS_SQLSERVER_PASSWORD_PORTAL",
       "title": "Portal Database Server Password",
-      "description": "The SQL Server password used to connect to the SQL server."
+      "description": "The SQL Server password used to connect to the SQL server.",
+      "password": true
     },
     {
       "key": "IS_SQLSERVER_DATABASE_PORTAL",
@@ -201,7 +202,8 @@
     {
       "key": "IS_SQLSERVER_PASSWORD_RPF",
       "title": "Ringtail Processing Framework Database Password",
-      "description": "The SQL Server password used to connect to the SQL server."
+      "description": "The SQL Server password used to connect to the SQL server.",
+      "password": true
     },
     {
       "key": "IS_SQLSERVER_DATABASE_RPF",
@@ -444,7 +446,8 @@
     {
       "key": "CONFIGURATOR_NT_PASS",
       "title": "Configurator NT Password",
-      "description": "The user's password that has access to the Ringtail Configurator"
+      "description": "The user's password that has access to the Ringtail Configurator",
+      "password": true
     },
     {
       "key": "CONFIGURATOR_CONFIG_USERNAME",
@@ -455,7 +458,8 @@
     {
       "key": "CONFIGURATOR_CONFIG_PASSWORD",
       "title": "Ringtail Database User Password",
-      "description": "The password for the Ringtail Database User"
+      "description": "The password for the Ringtail Database User",
+      "password": true
     },
     {
       "key": "CONFIGURATOR_AGENT_VIRTUAL_NAME",
@@ -520,7 +524,8 @@
     {
       "key": "SERVICEPASSWORD",
       "title": "Ringtail Process Framework Service 'Log on as' Password",
-      "description": "The password for the user account that the RPF Service will Log on as"
+      "description": "The password for the user account that the RPF Service will Log on as",
+      "password": true
     },
     {
       "key": "SEARCH_SERVICEUSERNAME",
@@ -530,7 +535,8 @@
     {
       "key": "SEARCH_SERVICEPASSWORD",
       "title": "Ringtail Search Service 'Log on as' Password",
-      "description": "The password for the user account that the Search Service will Log on as"
+      "description": "The password for the user account that the Search Service will Log on as",
+      "password": true
     },    
     {
       "key": "NATIVE_FILE_SERVICEUSER",
@@ -540,7 +546,8 @@
     {
       "key": "NATIVE_FILE_SERVICEPASSWORD",
       "title": "Native File Viewer Service Account Password",
-      "description": "The service account password used for the native file viewer"
+      "description": "The service account password used for the native file viewer",
+      "password": true
     },
     {
       "key": "NATIVE_FILE_SERVERS",
