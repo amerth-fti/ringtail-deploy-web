@@ -217,6 +217,8 @@ app.get   ('/api/regions/:regionId/envs', controllers.regionenvs.list);
 app.post  ('/api/regions/:regionId/envs/:envId', controllers.regionenvs.add);
 app.delete('/api/regions/:regionId/envs/:envId', controllers.regionenvs.remove);
 
+// API - MACHINE ENVIRONMENT ROUTES
+app.get  ('/api/machine/:machineId/ip/:ip', controllers.machine.updateIP);
 
 // API - ENVIRONMENT ROUTES
 app.get   ('/api/envs', controllers.envs.list);
