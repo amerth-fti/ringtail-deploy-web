@@ -20,4 +20,4 @@ exports.updateIP = async function(req, res, next) {
     }
 
     next();
-}
+};
