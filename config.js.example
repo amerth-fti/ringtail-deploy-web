@@ -33,7 +33,8 @@ let config = {
         //certificates go in the certs folder
         key: 'privatekey.key',
         cert: 'certificate.crt'
-    }
+    },
+    serviceName: 'RingtailDeployWeb'
 };
 
 if(process.env.skytapUser && process.env.skytapToken) {

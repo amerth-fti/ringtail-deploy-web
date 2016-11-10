@@ -1,5 +1,6 @@
 let Service;
 let join = require('path').join;
+let config = require('config.js');
 
 try {
     Service = require('node-windows').Service;
@@ -14,7 +15,7 @@ try {
 let path = join(__dirname, '/src/server/server.js');
 
 let svc = new Service({
-  name:'RingtailDeployWeb',
+  name: config.serviceName  || 'RingtailDeployWeb',
   description: 'Ringtail Deploy Web Service for deploying Ringtail.',
   script: path
 });
