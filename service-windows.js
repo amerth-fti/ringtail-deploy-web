@@ -1,6 +1,6 @@
 let Service;
 let join = require('path').join;
-let config = require('config.js');
+let config = require('./config.js');
 
 try {
     Service = require('node-windows').Service;
