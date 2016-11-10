@@ -27,7 +27,7 @@
         <label>{{field.title}}</label>
         <p class="help-block">{{field.description}}</p>
         <input
-          type="text"
+          type="{{ field.password ? 'password' : 'text'}}" 
           class="form-control"
           ng-model="field.value"
           ng-change="vm.updateField(field)"
