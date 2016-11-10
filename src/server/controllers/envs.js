@@ -161,7 +161,7 @@ exports.updateRemoteId = async function(req, res, next) {
     }
 
     next();    
-}
+};
 
 
 /*
