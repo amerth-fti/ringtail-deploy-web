@@ -8,5 +8,6 @@ module.exports = {
   regions:    require('./regions'),
   tasks:      require('./tasks'),
   auth:       require('./auth'),
-  skytap:     require('./skytap')
+  skytap:     require('./skytap'),
+  machine:     require('./machine')  
 };

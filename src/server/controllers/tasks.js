@@ -1,4 +1,4 @@
-var debug   = require('debug')('deployer-tasks')
+let debug   = require('debug')('deployer-tasks')
   , taskSvc = require('../services/task-service')
   ;        
 

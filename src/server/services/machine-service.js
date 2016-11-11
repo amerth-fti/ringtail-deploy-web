@@ -1,4 +1,4 @@
-var debug         = require('debug')('deployer-machine-service')
+let debug         = require('debug')('deployer-machine-service')
   , Q             = require('q')
   , MachineMapper = require('../mappers/machine-mapper')
   , Machine       = require('../models/machine')
@@ -10,10 +10,9 @@ var debug         = require('debug')('deployer-machine-service')
   ;
 
 
-
 exports.create = create = function create(data, next) {
   debug('creating machine %j', data);
-  var machine = new Machine(data);
+  let machine = new Machine(data);
 
   return machine
     .validate()
@@ -30,7 +29,7 @@ exports.create = create = function create(data, next) {
 
 exports.update = update = function update(data, next) {
   debug('updating machine %s', data.machineId);
-  var machine = new Machine(data);
+  let machine = new Machine(data);
 
   return machine
     .validate()
@@ -58,7 +57,7 @@ exports.del = del = function del(machineId, next) {
 };
 
 exports.createMany = function createMany(envId, data, next) {
-  var promises = [];
+  let promises = [];
 
   if(data) {
     data.forEach(function(datum) {
@@ -74,7 +73,7 @@ exports.createMany = function createMany(envId, data, next) {
 
 exports.sync = function sync(envId, oldMachines, newData, next) {
   debug('sync machines');
-  var upserts = []
+  let upserts = []
     , deletes = [];
 
   if(!newData) return [];

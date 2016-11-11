@@ -144,6 +144,25 @@ exports.reset = function reset(req, res, next) {
     });
 };
 
+exports.updateRemoteId = async function(req, res, next) {
+    let envId = req.params.envId;
+    let remoteId = req.params.remoteId;
+
+    try {
+        let env = await envService.findById(envId);
+        env.remoteId = remoteId;
+        await envService.update(env);
+
+        res.result = {success: true};
+
+    } catch (err) {
+        res.result = {success: false};
+        res.err = err;
+    }
+
+    next();    
+};
+
 
 /*
  * Default functionality returns strings for the

@@ -217,6 +217,8 @@ app.get   ('/api/regions/:regionId/envs', controllers.regionenvs.list);
 app.post  ('/api/regions/:regionId/envs/:envId', controllers.regionenvs.add);
 app.delete('/api/regions/:regionId/envs/:envId', controllers.regionenvs.remove);
 
+// API - MACHINE ENVIRONMENT ROUTES
+app.get  ('/api/machine/:machineId/ip/:ip', controllers.machine.updateIP);
 
 // API - ENVIRONMENT ROUTES
 app.get   ('/api/envs', controllers.envs.list);
@@ -233,7 +235,9 @@ app.get   ('/api/envs/:envId/configs', controllers.configs.findByEnv);
 app.get   ('/api/envs/:envId/version', controllers.envs.version);
 app.get   ('/api/envs/:envId/branches/:branch/launchKeys', controllers.configs.launchKeys);
 app.get   ('/api/envs/:envId/branches/:branch/litKeys', controllers.configs.litKeys);
+app.get   ('/api/envs/:envId/remoteId/:remoteId', controllers.envs.updateRemoteId);
 app.put   ('/api/envs/sendLaunchKeys', controllers.configs.sendLaunchKeys);
+
 
 
 // API - TASK ROUTES
