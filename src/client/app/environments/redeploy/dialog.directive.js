@@ -19,9 +19,9 @@
     };
   }
 
-  Controller.$inject = [ '_', '$timeout', '$rootScope', '$location', 'Browse', 'EnvironmentStarter', 'Config', 'uiGridConstants' ];
+  Controller.$inject = [ '_', '$timeout', '$rootScope', '$location', 'Browse', 'EnvironmentStarter', 'Config', 'uiGridConstants', 'Region' ];
 
-  function Controller(_, $timeout, $rootScope, $location, Browse, EnvironmentStarter, Config, uiGridConstants) {
+  function Controller(_, $timeout, $rootScope, $location, Browse, EnvironmentStarter, Config, uiGridConstants, Region) {
     var vm = this;
     vm.modalInstance      = this.modalInstance;
     vm.branches           = null;
@@ -60,6 +60,7 @@
     vm.featureGrid        = initFeatureGrid();
     vm.taskArray          = ['3-install-many'];
     vm.version            = null,
+    vm.region             = null,
     vm.newLaunchKeys      = [];
     vm.rosettaStone       = {
       'DEVELOPMENT' : '0. Development',
@@ -82,6 +83,16 @@
       vm.regionId = $rootScope.routeParams.regionId;
       vm.tempEnv = angular.copy(vm.environment);
       vm.selectedBranch = parseBranchPath(vm.tempEnv.deployedBranch);
+
+      Region.get({regionId: vm.regionId}, function(result) {
+        if(result) {
+          vm.region = result;
+
+          if(result && result && result.browseConfig && result.browseConfig.type === 'static') {
+            vm.keysLoaded = true;
+          }
+        }
+      });
 
       vm.loadingBranches = true;
       Config.version({envId: vm.tempEnv.envId}, function(result) {
@@ -247,7 +258,11 @@
         vm.loadingBuilds = true;
         vm.selectedBranch.build = null;
         vm.launchKeys = null;
-        vm.keysLoaded = false;
+        if(result && result && result.browseConfig && result.browseConfig.type === 'static') {
+          vm.keysLoaded = true;
+        } else {
+          vm.keysLoaded = false;
+        }
         vm.hideLaunchKeys = true;
         Browse.builds({regionId: vm.regionId, branch: vm.selectedBranch.branch }, function(builds) {
           vm.loadingBuilds = false;
@@ -297,7 +312,7 @@
           vm.hideLaunchKeys = true;
         }
 
-        if(vm.hideLaunchKeys) { 
+        if(vm.hideLaunchKeys || (vm.region && vm.region.browseConfig && vm.region.browseConfig.type === 'static')) { 
           vm.keysLoaded = true;        
         }
 
