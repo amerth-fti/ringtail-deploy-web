@@ -88,9 +88,11 @@
         if(result) {
           vm.region = result;
 
-          if(result && result && result.browseConfig && result.browseConfig.type === 'static') {
-            vm.keysLoaded = true;
+          var browseType = result && result.browseConfig && result.browseConfig.type || null;
+          if(browseType === 'static' || browseType === 'http') { 
+            vm.keysLoaded = true;        
           }
+
         }
       });
 
@@ -258,8 +260,9 @@
         vm.loadingBuilds = true;
         vm.selectedBranch.build = null;
         vm.launchKeys = null;
-        if(vm.region && vm.region.browseConfig && vm.region.browseConfig.type === 'static') {
-          vm.keysLoaded = true;
+        var browseType = vm.region && vm.region.browseConfig && vm.region.browseConfig.type || null;
+        if(browseType === 'static' || browseType === 'http') { 
+          vm.keysLoaded = true;        
         } else {
           vm.keysLoaded = false;
         }
@@ -280,7 +283,12 @@
         vm.loadingFiles = true;
         vm.launchKeys = null;
         vm.hideLaunchKeys = true;
-        vm.keysLoaded = false;        
+        var browseType = vm.region && vm.region.browseConfig && vm.region.browseConfig.type || null;
+        if(browseType === 'static' || browseType === 'http') { 
+          vm.keysLoaded = true;        
+        } else {
+          vm.keysLoaded = false;
+        }        
         var version = vm.version || '0.0.0.0'; //need to pass something even if there is nothing
         Browse.files({regionId: vm.regionId, branch: constructBranchPath(), version: version }, function(files) {
           vm.loadingFiles = false;
@@ -312,7 +320,8 @@
           vm.hideLaunchKeys = true;
         }
 
-        if(vm.hideLaunchKeys || (vm.region && vm.region.browseConfig && vm.region.browseConfig.type === 'static')) { 
+        var browseType = vm.region && vm.region.browseConfig && vm.region.browseConfig.type || null;
+        if(browseType === 'static' || browseType === 'http') { 
           vm.keysLoaded = true;        
         }
 
