@@ -258,7 +258,7 @@
         vm.loadingBuilds = true;
         vm.selectedBranch.build = null;
         vm.launchKeys = null;
-        if(result && result && result.browseConfig && result.browseConfig.type === 'static') {
+        if(vm.region && vm.region.browseConfig && vm.region.browseConfig.type === 'static') {
           vm.keysLoaded = true;
         } else {
           vm.keysLoaded = false;
