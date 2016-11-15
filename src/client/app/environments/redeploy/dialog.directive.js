@@ -89,10 +89,9 @@
           vm.region = result;
 
           var browseType = result && result.browseConfig && result.browseConfig.type || null;
-          if(browseType === 'static' || browseType === 'http') { 
-            vm.keysLoaded = true;        
-          }
-
+          //if(browseType === 'static' || browseType === 'http') {    // temporarily disabling this check as it prevents LTS environments from being upgraded, which is worse than dropping launch keys.
+            vm.keysLoaded = true;    
+          //}
         }
       });
 

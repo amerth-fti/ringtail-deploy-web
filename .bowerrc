@@ -1,4 +1,6 @@
 {
   "directory": "src/client/assets/bower_components",
-  "interactive": false
+  "interactive": false,
+  "proxy":"http://proxy.tech.local:8080",
+  "https-proxy":"http://proxy.tech.local:8080"
 }
