@@ -260,11 +260,11 @@
         vm.selectedBranch.build = null;
         vm.launchKeys = null;
         var browseType = vm.region && vm.region.browseConfig && vm.region.browseConfig.type || null;
-        if(browseType === 'static' || browseType === 'http') { 
-          vm.keysLoaded = true;        
-        } else {
-          vm.keysLoaded = false;
-        }
+        //if(browseType === 'static' || browseType === 'http') { 
+        //  vm.keysLoaded = true;        
+        //} else {
+        //  vm.keysLoaded = false;
+        //}
         vm.hideLaunchKeys = true;
         Browse.builds({regionId: vm.regionId, branch: vm.selectedBranch.branch }, function(builds) {
           vm.loadingBuilds = false;
@@ -283,11 +283,11 @@
         vm.launchKeys = null;
         vm.hideLaunchKeys = true;
         var browseType = vm.region && vm.region.browseConfig && vm.region.browseConfig.type || null;
-        if(browseType === 'static' || browseType === 'http') { 
-          vm.keysLoaded = true;        
-        } else {
-          vm.keysLoaded = false;
-        }        
+        //if(browseType === 'static' || browseType === 'http') { 
+        //  vm.keysLoaded = true;        
+        //} else {
+        //  vm.keysLoaded = false;
+        //}        
         var version = vm.version || '0.0.0.0'; //need to pass something even if there is nothing
         Browse.files({regionId: vm.regionId, branch: constructBranchPath(), version: version }, function(files) {
           vm.loadingFiles = false;
