@@ -57,11 +57,12 @@ RUN rm /bin/sh && \
 RUN if [ -z ${PROXY_URL+x} ]; then echo "####NO PROXY URL SET####"; \
 else \
 	git config --global http.proxy $PROXY_URL \
-	&& git config --global https.proxy $PROXY_URL \
-	&& git config --global url."http://".insteadOf git:// \
-	&& git config --global http.savecookies true \
+	&& git config --global https.proxy $PROXY_URL  \
 	&& echo "----GIT PROXY SET----"; \
 fi
+
+RUN git config --global url."http://".insteadOf git:// \
+	&& git config --global http.savecookies true
 
 #CONFIGURE NPM
 RUN if [ -z ${PROXY_URL+x} ]; then echo "####NO PROXY URL SET####"; \
