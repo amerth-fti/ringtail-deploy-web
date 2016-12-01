@@ -89,9 +89,9 @@
           vm.region = result;
 
           var browseType = result && result.browseConfig && result.browseConfig.type || null;
-          //if(browseType === 'static' || browseType === 'http') {    // temporarily disabling this check as it prevents LTS environments from being upgraded, which is worse than dropping launch keys.
+          if(browseType === 'static' || browseType === 'http') {   
             vm.keysLoaded = true;    
-          //}
+          }
         }
       });
 
@@ -260,11 +260,11 @@
         vm.selectedBranch.build = null;
         vm.launchKeys = null;
         var browseType = vm.region && vm.region.browseConfig && vm.region.browseConfig.type || null;
-        //if(browseType === 'static' || browseType === 'http') { 
-        //  vm.keysLoaded = true;        
-        //} else {
-        //  vm.keysLoaded = false;
-        //}
+        if(browseType === 'static' || browseType === 'http') { 
+         vm.keysLoaded = true;        
+        } else {
+         vm.keysLoaded = false;
+        }
         vm.hideLaunchKeys = true;
         Browse.builds({regionId: vm.regionId, branch: vm.selectedBranch.branch }, function(builds) {
           vm.loadingBuilds = false;
@@ -283,11 +283,11 @@
         vm.launchKeys = null;
         vm.hideLaunchKeys = true;
         var browseType = vm.region && vm.region.browseConfig && vm.region.browseConfig.type || null;
-        //if(browseType === 'static' || browseType === 'http') { 
-        //  vm.keysLoaded = true;        
-        //} else {
-        //  vm.keysLoaded = false;
-        //}        
+        if(browseType === 'static' || browseType === 'http') { 
+         vm.keysLoaded = true;        
+        } else {
+         vm.keysLoaded = false;
+        }        
         var version = vm.version || '0.0.0.0'; //need to pass something even if there is nothing
         Browse.files({regionId: vm.regionId, branch: constructBranchPath(), version: version }, function(files) {
           vm.loadingFiles = false;
@@ -327,13 +327,16 @@
         return vm.launchKeys;
       }).$promise.then(function() {
         Config.litKeys({envId: vm.tempEnv.envId, branch: constructBranchPath() }, function(keys) {
-           vm.litKeys = keys;
-           return;
+          vm.litKeys = keys;
+          return;
         }).$promise.then(function() {
           formatFeatureTreeData();
           vm.keysLoaded = true;                  
           return;
         });
+      }, function(err) { 
+        vm.keysLoaded = true;
+        vm.hideLaunchKeys = true;
       });
     }
 
