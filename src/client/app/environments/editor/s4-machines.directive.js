@@ -22,9 +22,9 @@
     };
   }
 
-  NewEnvironmentMachinesController.$inject = [ 'MachineEditor' ];
+  NewEnvironmentMachinesController.$inject = [ 'MachineEditor', 'SwarmNode' ];
 
-  function NewEnvironmentMachinesController(MachineEditor) {
+  function NewEnvironmentMachinesController(MachineEditor, SwarmNode) {
     var vm            = this;
     vm.environment    = this.environment;
     vm.configs        = this.configs;
@@ -33,6 +33,7 @@
     vm.next           = next;
     vm.prev           = prev;
     vm.removeMachine  = removeMachine;
+    vm.nodes          = [];
 
     activate();
 
@@ -40,6 +41,7 @@
 
     function activate() {
       vm.machine = {};
+      vm.nodes   = SwarmNode.query({ swarmhost: vm.environment.swarmhost });
     }
 
     function addMachine() {
