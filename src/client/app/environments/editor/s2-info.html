@@ -6,7 +6,7 @@
         <div class="form-group">
           <label for="envName">Name<span class='require'>*</span></label>
           <input type="text" class="form-control" id="envName" placeholder="Name" ng-model="vm.environment.envName" required/>
-          <div class='error name'>{{vm.environment.errorName}}</div>          
+          <div class='error name'>{{vm.environment.errorName}}</div>
         </div>
         <div class="form-group">
           <label for="envDesc">Description</label>
@@ -18,6 +18,10 @@
           <div class='error host'>{{vm.environment.errorHost}}</div>
         </div>
         <div class="form-group">
+          <label for="swarmhost">Docker Swarm Host (eg: swarm)</label>
+          <input type="text" class="form-control" placeholder="Docker Swarm Host" ng-model="vm.environment.swarmhost" required/>
+        </div>
+        <div class="form-group">
           <label for="host">Deployment Ring</label>
           <select ng-model="vm.environment.updatePath" class="form-control" id="updatePath">
             <option value="4">4. SaaS</option>
@@ -27,7 +31,7 @@
             <option value="0">0. Development</option>
           </select>
         </div>
-      </form>      
+      </form>
     </div>
   </div>
 </div>

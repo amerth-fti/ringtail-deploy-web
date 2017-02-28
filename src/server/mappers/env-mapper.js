@@ -47,7 +47,8 @@ EnvMapper.prototype.insert = function insert(env, next) {
     $deployedBranch: env.deployedBranch,
     $deployedJobId: env.deployedJobId,
     $host: env.host,
-    $updatePath: env.updatePath
+    $updatePath: env.updatePath,
+    $swarmhost: env.swarmhost,
   };
 
   return this.run(sql, params, next);
@@ -73,7 +74,8 @@ var sql = envSql.update
     $deployedBranch: env.deployedBranch,
     $deployedJobId: env.deployedJobId,
     $host: env.host,
-    $updatePath: env.updatePath
+    $updatePath: env.updatePath,
+    $swarmhost: env.swarmhost,
   };
 
   return this.run(sql, params, next);

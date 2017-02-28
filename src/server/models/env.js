@@ -25,7 +25,8 @@ schema = {
     { "name": "runstate" },
     { "name": "machines" },
     { "name": "updatePath" },
-    { "name": "newLaunchKeys" }
+    { "name": "newLaunchKeys" },
+    { "name": "swarmhost" },
   ]
 };
 /* eslint-enable */
