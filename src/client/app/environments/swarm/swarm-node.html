@@ -1,9 +1,20 @@
 
 <div class="swarm-node-details">
-  <div class="swarm-node-name">Id: {{ vm.node.ID }}</div>
-  <div class="swarm-node-host">Host: {{ vm.node.Description.Hostname }}</div>
-  <div class="swarm-node-host">State: {{ vm.node.Status.State }}</div>
-  <div class="swarm-node-host">IP: {{ vm.node.Status.Addr }}</div>
-  <div>Roles:</div>
-  <div class="swarm-node-role" ng-repeat="(key, value) in vm.node.Spec.Labels">{{key}}</div>
+  <div class="node-id">
+    <label>Id:</label>
+    {{ vm.node.ID }}
+  </div>
+  <div class="node-hostname">
+    <label>Host:</label>
+    {{ vm.node.Description.Hostname }}</div>
+  <div class="node-state">
+    <label>State:</label>
+    {{ vm.node.Status.State }}
+  </div>
+  <div class="node-address">
+    <label>IP:</label>
+    {{ vm.node.Status.Addr }}
+  </div>
+  <div><label>Roles:</label></div>
+  <div class="node-role" ng-repeat="(key, value) in vm.node.Spec.Labels">{{key}}</div>
 </div>

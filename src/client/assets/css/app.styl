@@ -23,17 +23,17 @@ $good-green-color = #2ECC40;
   min-width: 32px;
   margin: 9px 9px 0 0;
   background-color:transparent;
-  
+
   &.sm {
     background-size:16px 16px;
     min-width:16px;
     min-height: 16px;
   }
-  
+
   &.inline {
     display: inline-block;
   }
-  
+
   &.bar {
     background-image: url('../img/bar-loader.gif');
   }
@@ -55,7 +55,7 @@ $good-green-color = #2ECC40;
 
 .color-danger {
   color: $danger-color;
-  
+
   &:hover {
     color: #c9302c;
   }
@@ -63,7 +63,7 @@ $good-green-color = #2ECC40;
 
 .color-safe {
   color: rgba(92,184,92,1);
-  
+
   &:hover {
     color: rgba(92,184,92,1);
   }
@@ -87,7 +87,7 @@ region-details{
     font-size: 22px;
     cursor: pointer;
     color: $info-color;
-    
+
     &:hover {
       color: #ec971f;
     }
@@ -101,7 +101,7 @@ region-details{
     font-size: 22px;
     cursor: pointer;
     color: $danger-color;
-    
+
     &:hover {
       color: darken($danger-color, 10);
     }
@@ -112,19 +112,19 @@ env-redeploy {
   .environment-loading {
     display: inline-block;
     color: $good-green-color;
-  } 
+  }
 }
 
 
 .animate-show {
   opacity: 1;
-  
+
   &.ng-hide{
     line-height: 0;
     opacity: 0;
-    padding: 0 10px;    
+    padding: 0 10px;
   }
-  
+
   &.ng-hide-add.ng-hide-add-active,
   &.ng-hide-remove.ng-hide-remove-active {
     -webkit-transition: opacity linear 0.25s;
@@ -147,7 +147,7 @@ env-redeploy {
   cursor: pointer;
   color: #5cb85c;
   border-color: #4cae4c;
-  
+
   &:hover {
     color: #449d44 !important;
     border-color: #398439 !important;
@@ -157,7 +157,7 @@ env-redeploy {
 .btn-remove {
   color: #d9534f;
   border-color: #d43f3a;
-  
+
   &:hove{
     color: #c9302c;
     border-color: #ac2925;
@@ -167,26 +167,26 @@ env-redeploy {
 
 .model-body {
   min-height: 50px;
-  
+
   &.pad-all {
     padding-top: 15px;
     padding-bottom: 15px;
     padding-left: 15px;
     padding-right: 15px;
   }
-  
+
   &.pad-left {
     padding-left: 15px;
   }
-  
+
   &.pad-right {
     padding-right: 15px;
   }
-  
+
   &.pad-top {
     padding-top: 15px;
   }
-  
+
   &.pad-bottom {
     padding-bottom: 15px;
   }
@@ -195,7 +195,7 @@ env-redeploy {
 .machine-details {
   text-align: center;
   margin-bottom: 15px;
-  
+
   .machine-config {
     border-radius: 5px;
     padding-top: 15px;
@@ -204,58 +204,58 @@ env-redeploy {
     padding-right: 7.5px;
     font-weight: bold;
   }
-  
+
   .machine-name {
     margin-bottom: 0;
     overflow-x: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
   }
-  
+
   .config- {
     background-color: #b0b0b0;
   }
-  
+
   .config-0 {
     background-color: #ff9999;
   }
-  
+
   .config-1 {
     background-color: #ffff99;
   }
-  
+
   .config-2 {
     background-color: #99ccff;
   }
-  
+
   .config-3 {
     background-color: #99ff99;
   }
-  
+
   .config-4 {
     background-color: #ffb3ff;
   }
-  
+
   .config-5 {
     background-color: #e5ccb3;
   }
-  
+
   .config-6 {
     background-color: #b3e5cc;
   }
-  
+
   .config-7 {
     background-color: #9999ff;
   }
-  
+
   .config-8 {
     background-color: #99ffff;
   }
-  
+
   .config-9 {
     background-color: #ffcc99;
   }
-  
+
   &.editable {
     cursor: pointer;
   }
@@ -264,7 +264,7 @@ env-redeploy {
 .environment-list{
   .inner .row {
     margin-left: 10px;
-  } 
+  }
 
   .environment {
     padding: 0;
@@ -273,20 +273,20 @@ env-redeploy {
     &.remove-item {
       margin-bottom: 5px;
     }
-    
+
     .environment-info {
       margin-left: 10px;
       padding: 10px;
-      
+
       .environment-controls {
         text-align: right;
       }
-      
+
       .deploy-list {
         margin-top: 10px;
       }
     }
-    
+
     .status {
       float: left;
       position: absolute;
@@ -310,7 +310,7 @@ env-redeploy {
       }
       &.status-unknown {
         background-color: rgba(240,173,78,.8);
-      }     
+      }
       &.status-busy, &.status-deploying {
         background-color: rgba(66,139,202,.8);
       }
@@ -318,8 +318,8 @@ env-redeploy {
         background-color: rgba(217,83,79,.8);
       }
     }
-    
-    
+
+
   }
 }
 
@@ -331,15 +331,15 @@ env-redeploy {
 
 .skytap-selectlist {
   min-height: 220px;
-  
+
   .skytap-selectlist-item {
     overflow: hidden;
     text-overflow: ellipsis;
   }
-  
+
   .skytap-selectlist-sm {
     min-height: 30px;
-   }  
+   }
 }
 
 
@@ -370,10 +370,10 @@ env-redeploy {
 /* Top Navigation */
 .navbar-inverse {
   background-color: #242424;
-  
+
   .navbar-brand {
     padding: 10px 10px;
-    
+
     .logo {
       height: 35px;
     }
@@ -390,23 +390,23 @@ env-redeploy {
 
 .sidebar{
   display: none;
-  
+
   .title {
     margin-top: 0;
   }
-  
+
   .nav-sidebar {
     margin-right: -21px; /* 20px padding + 1px border */
     margin-bottom: 20px;
     margin-left: -20px;
-    
+
     li {
       a {
         padding-right: 20px;
         padding-left: 20px;
       }
     }
-    
+
     > .active {
       > a, a:hover, a:focus  {
         color: #fff;
@@ -492,7 +492,7 @@ env-redeploy {
   white-space: nowrap;
   overflow-x: hidden;
   box-sizing: border-box;
-  
+
   &.has-glyph {
     padding-right: 12px;
   }
@@ -503,7 +503,7 @@ env-redeploy {
   right: 8px;
   top: 10px;
   opacity: .75;
-  
+
   &.no-color {
     background-color: inherit !important;
     border: none;
@@ -519,15 +519,15 @@ env-redeploy {
   &.Succeeded {
     color: #3c763d;
   }
-  
+
   &.Failed {
     color: #a94442;
   }
-  
+
   &.Pending {
     color: inherit;
   }
-  
+
   &.Running {
     color: #31708f;
   }
@@ -563,4 +563,24 @@ body[page=login] {
     color: red;
   }
 
+}
+
+.swarm-node-details {
+  margin-bottom: 15px;
+  padding-top: 15px;
+  padding-bottom: 15px;
+  padding-left: 7.5px;
+  padding-right: 7.5px;
+  background-color: #c0c0c0;
+  font-size: 1.1rem;
+
+  label {
+    font-style: bold;
+    display: inline-block;
+    min-width: 30px;
+  }
+
+  .node-role {
+    margin-left: 3rem;
+  }
 }
