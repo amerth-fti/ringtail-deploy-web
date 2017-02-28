@@ -9,5 +9,6 @@ module.exports = {
   tasks:      require('./tasks'),
   auth:       require('./auth'),
   skytap:     require('./skytap'),
-  machine:     require('./machine')  
+  machine:    require('./machine'),
+  swarmNodes: require('./swarm-nodes'),
 };
