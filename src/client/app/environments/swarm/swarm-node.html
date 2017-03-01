@@ -16,5 +16,21 @@
     {{ vm.node.Status.Addr }}
   </div>
   <div><label>Roles:</label></div>
-  <div class="node-role" ng-repeat="(key, value) in vm.node.Spec.Labels">{{key}}</div>
+  <div>
+    <select
+      class="form-control"
+      ng-show="vm.roleOptions.length"
+      ng-model="vm.selectedRole"
+      ng-change="vm.roleSelected()"
+      >
+      <option value="">Add role...</option>
+      <option ng-repeat="option in vm.roleOptions" ng-value="option.name">{{option.name}}</option>
+    </select>
+  </div>
+  <div class="node-role" ng-repeat="(key, value) in vm.node.Spec.Labels">
+    <span>{{key}}</span>
+    &nbsp;-&nbsp;
+    <span ng-click="vm.removeRole(key)">X</span>
+  </div>
+
 </div>

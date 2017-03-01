@@ -10,7 +10,11 @@
   function SwarmNode($resource) {
       return $resource(
       'api/swarm/nodes/:nodeId',
-      { nodeId: '@ID' }
+      { nodeId: '@ID' },
+      {
+        addLabel    : { method: 'POST', url: 'api/swarm/nodes/labels' },
+        removeLabel : { method: 'POST', url: 'api/swarm/nodes/labels/remove' },
+      }
     );
   }
 
