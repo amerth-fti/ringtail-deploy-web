@@ -33,10 +33,12 @@ async function addLabel(req, res) {
     swarmhost,
     nodeId,
     label,
-    value
+    value,
+    sshKey,
+    sshUser,
   } = req.body;
 
-  let node = await swarm.addLabel({ swarmhost, nodeId, label, value });
+  let node = await swarm.addLabel({ swarmhost, nodeId, label, value, sshKey, sshUser });
   res.send(node);
 }
 

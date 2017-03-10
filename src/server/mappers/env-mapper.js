@@ -49,6 +49,8 @@ EnvMapper.prototype.insert = function insert(env, next) {
     $host: env.host,
     $updatePath: env.updatePath,
     $swarmhost: env.swarmhost,
+    $swarmSshKey: env.swawrmSshKey,
+    $swarmSshUser: env.swarmSshUser,
   };
 
   return this.run(sql, params, next);
@@ -76,6 +78,8 @@ var sql = envSql.update
     $host: env.host,
     $updatePath: env.updatePath,
     $swarmhost: env.swarmhost,
+    $swarmSshKey: env.swarmSshKey,
+    $swarmSshUser: env.swarmSshUser,
   };
 
   return this.run(sql, params, next);

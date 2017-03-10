@@ -24,8 +24,8 @@ async function getNodes(swarmhost) {
  * @param {[type]} options.label     [description]
  * @param {[type]} options.value     [description]
  */
-async function addLabel({ swarmhost, nodeId, label, value }) {
-  return await put(`http://${swarmhost}:4111/api/docker/nodes/${nodeId}/labels/${label}`, { json: { label, value }});
+async function addLabel({ swarmhost, nodeId, label, value, sshKey, sshUser }) {
+  return await put(`http://${swarmhost}:4111/api/docker/nodes/${nodeId}/labels/${label}`, { json: { label, value, sshKey, sshUser }});
 }
 
 /**

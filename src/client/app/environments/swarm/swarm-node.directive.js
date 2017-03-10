@@ -49,7 +49,9 @@
         swarmhost: vm.environment.swarmhost,
         nodeId: vm.node.ID,
         label: vm.selectedRole,
-        value: 'true'
+        value: 'true',
+        sshKey: vm.environment.swarmSshKey,
+        sshUser: vm.environment.swarmSshUser,
       };
       SwarmNode.addLabel({}, body).$promise
         .then((node) => {

@@ -27,6 +27,8 @@ schema = {
     { "name": "updatePath" },
     { "name": "newLaunchKeys" },
     { "name": "swarmhost" },
+    { "name": "swarmSshUser" },
+    { "name": "swarmSshKey" },
   ]
 };
 /* eslint-enable */
