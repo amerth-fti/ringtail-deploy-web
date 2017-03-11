@@ -25,7 +25,7 @@
     var vm          = this;
     vm.environment  = this.environment;
     vm.node         = this.node;
-    vm.roles        = [{ name: 'elasticsearch_v5' }, { name: 'mongo_v3' }, { name: 'services' } ];
+    vm.roles        = [{ name: 'elasticsearch_v5' }, { name: 'mongo_v3' }, { name: 'services' } ]; // todo, load from service...
     vm.roleOptions  = [];
     vm.selectedRole = null;
     vm.roleSelected = roleSelected;
@@ -44,15 +44,20 @@
       vm.roleOptions = vm.roleOptions.filter(p => !(vm.node.Spec.Labels && vm.node.Spec.Labels[p.name]));
     }
 
-    function roleSelected(role) {
+    function roleSelected() {
+      let role = vm.selectedRole;
       let body = {
         swarmhost: vm.environment.swarmhost,
         nodeId: vm.node.ID,
-        label: vm.selectedRole,
+        label: role,
         value: 'true',
         sshKey: vm.environment.swarmSshKey,
         sshUser: vm.environment.swarmSshUser,
       };
+      if(!vm.node.Spec.Labels) {
+        vm.node.Spec.Labels = {};
+      }
+      vm.node.Spec.Labels[role] = 'configuring';
       SwarmNode.addLabel({}, body).$promise
         .then((node) => {
           vm.node = node;

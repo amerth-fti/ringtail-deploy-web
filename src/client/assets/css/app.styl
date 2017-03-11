@@ -571,7 +571,7 @@ body[page=login] {
   padding-bottom: 15px;
   padding-left: 7.5px;
   padding-right: 7.5px;
-  background-color: #c0c0c0;
+  background-color: #e0e0e0;
   font-size: 1.1rem;
 
   label {
@@ -581,6 +581,30 @@ body[page=login] {
   }
 
   .node-role {
-    margin-left: 3rem;
+    margin-left: 1.5rem;
+
+    .configured {
+      color: #5cb85c;
+    }
+
+    .configuring {
+      color: #5bc0de;
+    }
+
+    .trash {
+      color: #505050;
+    }
+    .trash:hover {
+      color: #000;
+    }
+  }
+
+  .node-role-selector {
+    margin-bottom: 1.5rem;
+
+    select {
+      font-size: 1rem;
+      height: 2rem;
+    }
   }
 }

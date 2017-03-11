@@ -16,7 +16,7 @@
     {{ vm.node.Status.Addr }}
   </div>
   <div><label>Roles:</label></div>
-  <div>
+<div class="node-role-selector">
     <select
       class="form-control"
       ng-show="vm.roleOptions.length"
@@ -28,9 +28,23 @@
     </select>
   </div>
   <div class="node-role" ng-repeat="(key, value) in vm.node.Spec.Labels">
+    <span
+      class="configured glyphicon glyphicon-ok"
+      ng-if="value === 'true'" /
+      />
+
+    <span
+      class="configuring glyphicon glyphicon-asterisk"
+      ng-if="value === 'configuring'"
+      />
+
     <span>{{key}}</span>
-    &nbsp;-&nbsp;
-    <span ng-click="vm.removeRole(key)">X</span>
+
+    <span
+      class="trash glyphicon glyphicon-trash"
+      ng-if="value === 'true'"
+      ng-click="vm.removeRole(key)"
+      />
   </div>
 
 </div>
