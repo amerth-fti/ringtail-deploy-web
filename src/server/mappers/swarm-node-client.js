@@ -6,6 +6,8 @@ module.exports = {
   getNodes,
   addLabel,
   removeLabel,
+  deployInfrastructure,
+  deployServices,
 };
 
 /**
@@ -38,6 +40,24 @@ async function addLabel({ swarmhost, nodeId, label, value, sshKey, sshUser }) {
  */
 async function removeLabel({ swarmhost, nodeId, label }) {
   return await del(`http://${swarmhost}:4111/api/docker/nodes/${nodeId}/labels/${label}`);
+}
+
+/**
+ * [deployInfrastructure description]
+ * @param  {[type]} options.swarmhost [description]
+ * @return {[type]}                   [description]
+ */
+async function deployInfrastructure({ swarmhost }) {
+  return await put(`http://${swarmhost}:4111/api/stacks/ringtail`);
+}
+
+/**
+ * [deployServices description]
+ * @param  {[type]} options.swarmhost [description]
+ * @return {[type]}                   [description]
+ */
+async function deployServices({ swarmhost }) {
+  return await put(`http://${swarmhost}:4111/api/stacks/services`);
 }
 
 
@@ -95,7 +115,7 @@ function post(url, { json }) {
   });
 }
 
-function put(url, { json }) {
+function put(url, { json = {} } = {}) {
   return new Promise((resolve, reject) => {
     let { hostname, port, path } = urlUtil.parse(url);
     let data = JSON.stringify(json);

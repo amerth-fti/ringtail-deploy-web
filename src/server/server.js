@@ -237,6 +237,7 @@ app.get   ('/api/envs/:envId/branches/:branch/launchKeys', controllers.configs.l
 app.get   ('/api/envs/:envId/branches/:branch/litKeys', controllers.configs.litKeys);
 app.get   ('/api/envs/:envId/remoteId/:remoteId', controllers.envs.updateRemoteId);
 app.put   ('/api/envs/sendLaunchKeys', controllers.configs.sendLaunchKeys);
+app.put   ('/api/envs/:envId/swarm', (req, res, next) => controllers.envs.swarm(req, res).catch(next));
 
 
 

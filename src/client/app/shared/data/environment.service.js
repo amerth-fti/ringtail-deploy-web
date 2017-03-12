@@ -6,10 +6,10 @@
     .service('Environment', Environment);
 
   Environment.$inject = [ '$resource' ];
- 
+
   function Environment($resource) {
     return $resource(
-      'api/envs/:envId', 
+      'api/envs/:envId',
       { envId: '@envId' },
       {
         update  : { method: 'PUT', url: 'api/envs/:envId' },
@@ -18,7 +18,8 @@
         redeploy: { method: 'PUT', url: 'api/envs/:envId/redeploy' },
         reset   : { method: 'PUT', url: 'api/envs/:envId/reset' },
         remove  : { method: 'DELETE', url: 'api/envs/:envId' },
-        region  : { method: 'GET', url: 'api/regions/:regionId/envs', isArray: true }
+        region  : { method: 'GET', url: 'api/regions/:regionId/envs', isArray: true },
+        deploySwarm: { method: 'PUT', url: 'api/envs/:envId/swarm' }
       }
     );
   }

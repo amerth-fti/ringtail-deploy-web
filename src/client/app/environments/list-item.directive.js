@@ -1,12 +1,12 @@
 (function() {
   'use strict';
-  
+
   angular
     .module('app.environments')
     .directive('listItem', listItem);
-  
+
   function listItem() {
-    return { 
+    return {
       restrict: 'E',
       scope: {
         environment: '='
@@ -17,34 +17,36 @@
       bindToController: true
     };
   }
-  
+
   ListItemController.$inject = [ '$timeout', '$scope', 'config', 'EnvironmentEditor', 'EnvironmentStarter', 'EnvironmentRedeploy' ];
-  
+
   function ListItemController($timeout, $scope, config, EnvironmentEditor, EnvironmentStarter, EnvironmentRedeploy) {
-    var vm = this;
-    vm.enableDeploy   = config.enableDeployment;
-    vm.environment    = this.environment;             
-    vm.showBuildNotes = null;    
-    vm.showStartStop  = showStartStop;
-    vm.disableStart   = disableStart;
-    vm.disablePause   = disablePause;
-    vm.showRedeploy   = showRedeploy;
-    vm.showCancel     = showCancel;
-    vm.showDeployLink = showDeployLink;    
-    vm.edit           = edit;
-    vm.pause          = pause;
-    vm.redeploy       = redeploy;
-    vm.reset          = reset;
-    vm.start          = start;
-    vm.poll           = null;
-    
+    var vm             = this;
+    vm.enableDeploy    = config.enableDeployment;
+    vm.environment     = this.environment;
+    vm.showBuildNotes  = null;
+    vm.showStartStop   = showStartStop;
+    vm.disableStart    = disableStart;
+    vm.disablePause    = disablePause;
+    vm.showRedeploy    = showRedeploy;
+    vm.showCancel      = showCancel;
+    vm.showDeployLink  = showDeployLink;
+    vm.showSwarmDeploy = showSwarmDeploy;
+    vm.deploySwarm     = deploySwarm;
+    vm.edit            = edit;
+    vm.pause           = pause;
+    vm.redeploy        = redeploy;
+    vm.reset           = reset;
+    vm.start           = start;
+    vm.poll            = null;
+
     activate(vm.environment);
-    
+
     //////////
-    
-    function activate(environment) {                
-      vm.environment    = environment;      
-      vm.deployStatus   = environment.status;      
+
+    function activate(environment) {
+      vm.environment    = environment;
+      vm.deployStatus   = environment.status;
 
       if(vm.showBuildNotes === null) {
         vm.showBuildNotes = false;
@@ -55,20 +57,20 @@
       } else {
         vm.runStatus = 'running';
       }
-      
+
       pollWhileBusy(environment);
 
       // cancel polling on scope destroy
       $scope.$on('$destroy', function() {
         $timeout.cancel(vm.poll);
       });
-    }    
+    }
 
     function showStartStop() {
       // show buttons if
       // 1) it's a remote environment
       // 2) and the environment has a valid runstate
-      // 3) and the environment is not currently deploying      
+      // 3) and the environment is not currently deploying
       var environment = vm.environment;
       return !!environment.remoteType && !!environment.runstate && environment.status !== 'deploying';
     }
@@ -96,7 +98,14 @@
       // 1) the environment is not currently deploying
       var environment = vm.environment;
       return environment.status !== 'deploying';
-    } 
+    }
+
+    function showSwarmDeploy() {
+      // show button if
+      // 1) the environment has a swarm host configured
+      var environment = vm.environment;
+      return !!environment.swarmhost;
+    }
 
     function showCancel() {
       // show button if
@@ -152,6 +161,15 @@
     function edit() {
       EnvironmentEditor.open(vm.environment);
     }
+
+    function deploySwarm() {
+      var environment = vm.environment;
+      environment
+        .$deploySwarm()
+        .then(function() {
+          // popup modal for swarm deployment
+        });
+    }
   }
-  
+
 }());

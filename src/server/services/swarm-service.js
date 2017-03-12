@@ -5,6 +5,7 @@ module.exports = {
   getNodes,
   addLabel,
   removeLabel,
+  deploy,
 };
 
 /**
@@ -32,4 +33,14 @@ async function addLabel(args) {
  */
 async function removeLabel(args) {
   return await nodeClient.removeLabel(args);
+}
+
+/**
+ * [deploy description]
+ * @param  {[type]} args [description]
+ * @return {[type]}      [description]
+ */
+async function deploy(args) {
+  await nodeClient.deployInfrastructure(args);
+  await nodeClient.deployServices(args);
 }
