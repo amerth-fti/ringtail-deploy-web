@@ -41,13 +41,25 @@
     function refreshDeployments() {
       Swarm.deployments({ swarmhost: vm.environment.swarmhost }).$promise.then((deployments) => {
         vm.deployments = deployments;
+        // map services to task
+        vm.deployments.tasks.forEach(task => {
+          task.service = vm.deployments.services.find(service => service.ID === task.ServiceID);
+        });
         // map tasks to services
         vm.deployments.services.forEach(service => {
-          service.tasks = vm.deployments.tasks.filter(task => task.ServiceID === service.ID);
+          service.tasks = vm.deployments.tasks.filter(task => task.ServiceID === service.ID && validTask(task));
         });
         // map tasks to nodes
+        vm.nodes.forEach(node => {
+          node.tasks = vm.deployments.tasks.filter(task => task.NodeID === node.ID && validTask(task));
+        });
         setTimeout(refreshDeployments, 5000);
       });
+    }
+
+    function validTask(task) {
+      return task && task.Status.State &&
+        (task.Status.State === 'running');
     }
 
     function deploySwarm() {

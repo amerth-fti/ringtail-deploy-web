@@ -1,7 +1,7 @@
 
-<div class="swarm-node-details">
+<div class="swarm-node">
   <div class="node-id">
-    <label>Id:</label>
+    <label>Node:</label>
     {{ vm.node.ID }}
   </div>
   <div class="node-type">
@@ -16,11 +16,11 @@
     <label>Host:</label>
     {{ vm.node.Description.Hostname }}</div>
   <div class="node-address">
-    <label>IP:</label>
+    <label>Addr:</label>
     {{ vm.node.Status.Addr }}
   </div>
   <div><label>Roles:</label></div>
-<div class="node-role-selector">
+  <div class="node-role-selector">
     <select
       class="form-control"
       ng-show="vm.roleOptions.length"
@@ -34,7 +34,7 @@
   <div class="node-role" ng-repeat="(key, value) in vm.node.Spec.Labels">
     <span
       class="configured glyphicon glyphicon-ok"
-      ng-if="value === 'true'" /
+      ng-if="value === 'true'"
       />
 
     <span
@@ -50,5 +50,15 @@
       ng-click="vm.removeRole(key)"
       />
   </div>
+</div>
 
+<div class="node-task" ng-repeat="task in vm.node.tasks">
+  <div>
+    <label>Task:</label>
+    {{task.service.name}}
+  </div>
+  <div>
+    <label>State:</label>
+    {{task.Status.State}}
+  </div>
 </div>

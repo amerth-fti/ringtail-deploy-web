@@ -42,13 +42,17 @@
     function getName() {
       let fullname = vm.service.Spec.Name;
       let stack    = getStack();
-      return fullname.indexOf(stack) === 0
+      let name = fullname.indexOf(stack) === 0
         ? fullname.substr(stack.length + 1)
         : fullname;
+      vm.service.name = name;
+      return name;
     }
 
     function getStack() {
-      return (vm.service.Spec.Labels && vm.service.Spec.Labels['com.docker.stack.namespace']) || '';
+      let stack = (vm.service.Spec.Labels && vm.service.Spec.Labels['com.docker.stack.namespace']) || '';
+      vm.service.stack = stack;
+      return stack;
     }
 
     function getDeploymentMode() {
