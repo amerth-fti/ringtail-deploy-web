@@ -4,6 +4,7 @@ const urlUtil = require('url');
 
 module.exports = {
   getNodes,
+  getDeployments,
   addLabel,
   removeLabel,
   deployInfrastructure,
@@ -17,6 +18,15 @@ module.exports = {
  */
 async function getNodes(swarmhost) {
   return await get(`http://${swarmhost}:4111/api/docker/nodes`);
+}
+
+/**
+ * [getStacks description]
+ * @param  {[type]} swarmhost [description]
+ * @return {[type]}           [description]
+ */
+async function getDeployments(swarmhost) {
+  return await get(`http://${swarmhost}:4111/api/stacks`);
 }
 
 /**

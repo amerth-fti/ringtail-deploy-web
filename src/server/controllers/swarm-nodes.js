@@ -3,6 +3,7 @@ let swarm = require('../services/swarm-service');
 
 module.exports = {
   list,
+  deployments,
   addLabel,
   removeLabel,
 };
@@ -17,11 +18,31 @@ async function list(req, res) {
   let {swarmhost} = req.query;
   if(!swarmhost ) {
     res.send([]);
+    return;
   }
 
   let nodes = await swarm.getNodes(swarmhost);
   res.send(nodes);
 }
+
+
+/**
+ * [deployments description]
+ * @param  {[type]} req [description]
+ * @param  {[type]} res [description]
+ * @return {[type]}     [description]
+ */
+async function deployments(req, res) {
+  let {swarmhost} = req.query;
+  if(!swarmhost) {
+    res.send({ services: [], tasks: [] });
+    return;
+  }
+
+  let deployments = await swarm.getDeployments(swarmhost);
+  res.send(deployments);
+}
+
 
 /**
  * [addLabel description]

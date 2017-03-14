@@ -250,6 +250,7 @@ app.get ('/api/jobs/:last/summary', controllers.jobs.summaryList);
 
 // API - SWARM ROUTES
 app.get ('/api/swarm/nodes', (req, res, next) => controllers.swarmNodes.list(req, res).catch(next));
+app.get ('/api/swarm/deployments', (req, res, next) => controllers.swarmNodes.deployments(req, res).catch(next));
 app.post('/api/swarm/nodes/labels', (req, res, next) => controllers.swarmNodes.addLabel(req, res).catch(next));
 app.post('/api/swarm/nodes/labels/remove', (req, res, next) => controllers.swarmNodes.removeLabel(req, res).catch(next));
 
