@@ -18,8 +18,7 @@
         redeploy: { method: 'PUT', url: 'api/envs/:envId/redeploy' },
         reset   : { method: 'PUT', url: 'api/envs/:envId/reset' },
         remove  : { method: 'DELETE', url: 'api/envs/:envId' },
-        region  : { method: 'GET', url: 'api/regions/:regionId/envs', isArray: true },
-        deploySwarm: { method: 'PUT', url: 'api/envs/:envId/swarm' }
+        region  : { method: 'GET', url: 'api/regions/:regionId/envs', isArray: true }
       }
     );
   }

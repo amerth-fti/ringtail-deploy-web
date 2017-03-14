@@ -4,6 +4,10 @@
     <label>Id:</label>
     {{ vm.node.ID }}
   </div>
+  <div class="node-type">
+    <label>Type: </label>
+    {{ vm.node.Spec.Role }}
+  </div>
   <div class="node-hostname">
     <label>Host:</label>
     {{ vm.node.Description.Hostname }}</div>
@@ -41,7 +45,7 @@
     <span>{{key}}</span>
 
     <span
-      class="trash glyphicon glyphicon-trash"
+      class="glyphicon glyphicon-trash"
       ng-if="value === 'true'"
       ng-click="vm.removeRole(key)"
       />

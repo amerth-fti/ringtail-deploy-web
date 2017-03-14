@@ -108,15 +108,14 @@
         title="Cancel Deployment"
         ng-show="vm.showCancel()"
         ng-click="vm.reset()"></button>
-      <button
-        type="button"
-        class="btn btn-warning glyphicon glyphicon-equalizer"
-        ng-click="vm.deploySwarm()"
-        ng-show="vm.showSwarmDeploy()"
-        title="Deploy swarm services"></button>
-
       <p
         class="deploy-list"
         ng-show="vm.showDeployLink()"><a href="/app/jobs/{{vm.environment.deployedJobId}}">Deployment Info</a></p>
+  </div>
+</div>
+
+<div class="row" ng-if="vm.environment.swarmhost">
+  <div class="col-sm-10 col-sm-push-1">
+    <env-swarm environment="vm.environment" />
   </div>
 </div>

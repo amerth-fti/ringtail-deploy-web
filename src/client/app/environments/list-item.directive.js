@@ -31,8 +31,6 @@
     vm.showRedeploy    = showRedeploy;
     vm.showCancel      = showCancel;
     vm.showDeployLink  = showDeployLink;
-    vm.showSwarmDeploy = showSwarmDeploy;
-    vm.deploySwarm     = deploySwarm;
     vm.edit            = edit;
     vm.pause           = pause;
     vm.redeploy        = redeploy;
@@ -100,13 +98,6 @@
       return environment.status !== 'deploying';
     }
 
-    function showSwarmDeploy() {
-      // show button if
-      // 1) the environment has a swarm host configured
-      var environment = vm.environment;
-      return !!environment.swarmhost;
-    }
-
     function showCancel() {
       // show button if
       // 1) the environment is not currently deploying
@@ -160,15 +151,6 @@
 
     function edit() {
       EnvironmentEditor.open(vm.environment);
-    }
-
-    function deploySwarm() {
-      var environment = vm.environment;
-      environment
-        .$deploySwarm()
-        .then(function() {
-          // popup modal for swarm deployment
-        });
     }
   }
 

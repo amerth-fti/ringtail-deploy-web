@@ -57,7 +57,7 @@ async function removeLabel({ swarmhost, nodeId, label }) {
  * @param  {[type]} options.swarmhost [description]
  * @return {[type]}                   [description]
  */
-async function deployInfrastructure({ swarmhost }) {
+async function deployInfrastructure(swarmhost) {
   return await put(`http://${swarmhost}:4111/api/stacks/ringtail`);
 }
 
@@ -66,7 +66,7 @@ async function deployInfrastructure({ swarmhost }) {
  * @param  {[type]} options.swarmhost [description]
  * @return {[type]}                   [description]
  */
-async function deployServices({ swarmhost }) {
+async function deployServices(swarmhost) {
   return await put(`http://${swarmhost}:4111/api/stacks/services`);
 }
 

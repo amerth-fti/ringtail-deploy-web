@@ -10,5 +10,5 @@ module.exports = {
   auth:       require('./auth'),
   skytap:     require('./skytap'),
   machine:    require('./machine'),
-  swarmNodes: require('./swarm-nodes'),
+  swarm: require('./swarm'),
 };

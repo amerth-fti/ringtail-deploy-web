@@ -165,14 +165,6 @@ exports.updateRemoteId = async function(req, res, next) {
 };
 
 
-exports.swarm = async function(req, res, next) {
-  let envId = req.params.envId;
-  let env = await envService.findById(envId);
-  await swarmService.deploy(env);
-  res.send(env);
-};
-
-
 /*
  * Default functionality returns strings for the
  * values. There don't appear to any good middleware modules

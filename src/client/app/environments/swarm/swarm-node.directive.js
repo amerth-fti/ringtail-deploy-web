@@ -19,9 +19,9 @@
     };
   }
 
-  Controller.$inject = [ '$scope','ValidationMessage', 'SwarmNode' ];
+  Controller.$inject = [ '$scope','ValidationMessage', 'Swarm' ];
 
-  function Controller($scope, ValidationMessage, SwarmNode) {
+  function Controller($scope, ValidationMessage, Swarm) {
     var vm          = this;
     vm.environment  = this.environment;
     vm.node         = this.node;
@@ -58,7 +58,7 @@
         vm.node.Spec.Labels = {};
       }
       vm.node.Spec.Labels[role] = 'configuring';
-      SwarmNode.addLabel({}, body).$promise
+      Swarm.addLabel({}, body).$promise
         .then((node) => {
           vm.node = node;
           getRoleOptions();
@@ -72,7 +72,7 @@
         nodeId: vm.node.ID,
         label: role,
       };
-      SwarmNode.removeLabel({}, body).$promise
+      Swarm.removeLabel({}, body).$promise
         .then((node) => {
           vm.node = node;
           getRoleOptions();

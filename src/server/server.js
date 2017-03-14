@@ -237,7 +237,6 @@ app.get   ('/api/envs/:envId/branches/:branch/launchKeys', controllers.configs.l
 app.get   ('/api/envs/:envId/branches/:branch/litKeys', controllers.configs.litKeys);
 app.get   ('/api/envs/:envId/remoteId/:remoteId', controllers.envs.updateRemoteId);
 app.put   ('/api/envs/sendLaunchKeys', controllers.configs.sendLaunchKeys);
-app.put   ('/api/envs/:envId/swarm', (req, res, next) => controllers.envs.swarm(req, res).catch(next));
 
 
 
@@ -249,10 +248,11 @@ app.get ('/api/jobs/:last/summary', controllers.jobs.summaryList);
 
 
 // API - SWARM ROUTES
-app.get ('/api/swarm/nodes', (req, res, next) => controllers.swarmNodes.list(req, res).catch(next));
-app.get ('/api/swarm/deployments', (req, res, next) => controllers.swarmNodes.deployments(req, res).catch(next));
-app.post('/api/swarm/nodes/labels', (req, res, next) => controllers.swarmNodes.addLabel(req, res).catch(next));
-app.post('/api/swarm/nodes/labels/remove', (req, res, next) => controllers.swarmNodes.removeLabel(req, res).catch(next));
+app.get ('/api/swarm/nodes', (req, res, next) => controllers.swarm.nodes(req, res).catch(next));
+app.post('/api/swarm/nodes/labels', (req, res, next) => controllers.swarm.addLabel(req, res).catch(next));
+app.post('/api/swarm/nodes/labels/remove', (req, res, next) => controllers.swarm.removeLabel(req, res).catch(next));
+app.get ('/api/swarm', (req, res, next) => controllers.swarm.deployments(req, res).catch(next));
+app.put ('/api/swarm/deploy', (req, res, next) => controllers.swarm.deploy(req, res).catch(next));
 
 // API - SKYTAP PROXY ROUTES
 app.get ('/api/skytap/environments', controllers.skytap.environments);

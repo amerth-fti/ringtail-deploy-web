@@ -3,17 +3,18 @@
 
   angular
     .module('shared.data')
-    .service('SwarmNode', SwarmNode);
+    .service('Swarm', Swarm);
 
-  SwarmNode.$inject = [ '$resource' ];
+  Swarm.$inject = [ '$resource' ];
 
-  function SwarmNode($resource) {
+  function Swarm($resource) {
       return $resource(
       'api/swarm/nodes/:nodeId',
       { nodeId: '@ID' },
       {
         addLabel    : { method: 'POST', url: 'api/swarm/nodes/labels' },
         removeLabel : { method: 'POST', url: 'api/swarm/nodes/labels/remove' },
+        deploySwarm : { method: 'PUT', url: 'api/swarm/deploy' }
       }
     );
   }
