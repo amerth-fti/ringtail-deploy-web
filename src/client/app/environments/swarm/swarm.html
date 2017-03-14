@@ -10,9 +10,18 @@
         title="Deploy services"></button>
     </div>
   </div>
+  <h4>Nodes</h4>
   <div class="row">
     <div class="col-sm-3" ng-repeat="node in vm.nodes">
-      <swarm-node-details node="node" environment="vm.environment"></swarm-node-details>
+      <swarm-node-details
+        node="node"
+        environment="vm.environment" />
+    </div>
+  </div>
+  <h4>Services</h4>
+  <div class="row">
+    <div class="col-sm-3" ng-repeat="service in vm.deployments.services">
+      <swarm-service service="service" />
     </div>
   </div>
 </div>

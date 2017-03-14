@@ -21,10 +21,13 @@
   SwarmController.$inject = [ 'Swarm' ];
 
   function SwarmController(Swarm) {
-    var vm         = this;
-    vm.environment = this.environment;
-    vm.nodes       = [];
-    vm.deploySwarm = deploySwarm;
+    var vm             = this;
+    vm.environment     = this.environment;
+    vm.nodes           = [];
+    vm.deployments     = { services: [], tasks: [] };
+    vm.deploySwarm     = deploySwarm;
+    vm.getServiceTasks = getServiceTasks;
+
 
     activate();
 
@@ -32,6 +35,19 @@
 
     function activate() {
       vm.nodes = Swarm.query({ swarmhost: vm.environment.swarmhost });
+      refreshDeployments();
+    }
+
+    function refreshDeployments() {
+      Swarm.deployments({ swarmhost: vm.environment.swarmhost }).$promise.then((deployments) => {
+        vm.deployments = deployments;
+        // map tasks to services
+        vm.deployments.services.forEach(service => {
+          service.tasks = vm.deployments.tasks.filter(task => task.ServiceID === service.ID);
+        });
+        // map tasks to nodes
+        setTimeout(refreshDeployments, 5000);
+      });
     }
 
     function deploySwarm() {
@@ -42,6 +58,10 @@
         .then(function(res) {
 
         });
+    }
+
+    function getServiceTasks(service) {
+      return vm.deployments.tasks.filter(p => p.ServiceID === service.ID);
     }
 
   }
