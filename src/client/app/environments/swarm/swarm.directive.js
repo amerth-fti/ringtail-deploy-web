@@ -38,9 +38,9 @@
       var environment = vm.environment;
       Swarm
         .deploy({ swarmhost: vm.environment.swarmhost })
-        .promise
-        .then(function() {
-          // indicate that deployment has started...
+        .$promise
+        .then(function(res) {
+
         });
     }
 

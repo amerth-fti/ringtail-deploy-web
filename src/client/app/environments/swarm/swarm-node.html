@@ -8,13 +8,13 @@
     <label>Type: </label>
     {{ vm.node.Spec.Role }}
   </div>
-  <div class="node-hostname">
-    <label>Host:</label>
-    {{ vm.node.Description.Hostname }}</div>
   <div class="node-state">
     <label>State:</label>
     {{ vm.node.Status.State }}
   </div>
+  <div class="node-hostname">
+    <label>Host:</label>
+    {{ vm.node.Description.Hostname }}</div>
   <div class="node-address">
     <label>IP:</label>
     {{ vm.node.Status.Addr }}

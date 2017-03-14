@@ -54,7 +54,10 @@ async function deployments(req, res) {
  */
 
 async function deploy(req, res, next) {
-  let {swarmhost} = req.query;
+  let {swarmhost} = req.body;
+  if(!swarmhost) {
+    return res.status(400).send('swarmhost is required');
+  }
   await swarm.deploy(swarmhost);
   res.send({ ok: true });
 };
