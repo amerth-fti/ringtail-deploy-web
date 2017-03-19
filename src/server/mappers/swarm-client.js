@@ -17,7 +17,7 @@ module.exports = {
  * @return {[type]}           [description]
  */
 async function getNodes(swarmhost) {
-  return await get(`http://${swarmhost}:4111/api/docker/nodes`);
+  return await get(`http://${swarmhost}:4111/api/hosts`);
 }
 
 /**
@@ -37,7 +37,7 @@ async function getDeployments(swarmhost) {
  * @param {[type]} options.value     [description]
  */
 async function addLabel({ swarmhost, nodeId, label, value, sshKey, sshUser }) {
-  return await put(`http://${swarmhost}:4111/api/docker/nodes/${nodeId}/labels/${label}`, { json: { label, value, sshKey, sshUser }});
+  return await put(`http://${swarmhost}:4111/api/hosts/${nodeId}/labels/${label}`, { json: { label, value, sshKey, sshUser }});
 }
 
 /**
@@ -49,7 +49,7 @@ async function addLabel({ swarmhost, nodeId, label, value, sshKey, sshUser }) {
  * @return {[type]}                   [description]
  */
 async function removeLabel({ swarmhost, nodeId, label }) {
-  return await del(`http://${swarmhost}:4111/api/docker/nodes/${nodeId}/labels/${label}`);
+  return await del(`http://${swarmhost}:4111/api/hosts/${nodeId}/labels/${label}`);
 }
 
 /**

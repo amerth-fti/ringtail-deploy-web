@@ -1,5 +1,5 @@
 
-let nodeClient = require('../mappers/swarm-node-client');
+let nodeClient = require('../mappers/swarm-client');
 
 module.exports = {
   getNodes,
