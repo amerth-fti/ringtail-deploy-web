@@ -1,5 +1,5 @@
 
-<div class="swarm-node">
+<div class="swarm-node node-{{ vm.node.Status.State }}">
   <div class="node-id">
     <label>Node:</label>
     {{ vm.node.ID }}
@@ -52,7 +52,7 @@
   </div>
 </div>
 
-<div class="node-task" ng-repeat="task in vm.node.tasks">
+<div class="node-task task-{{task.Status.State === 'running' ? 'running' : 'pending' }}" ng-repeat="task in vm.node.tasks">
   <div>
     <label>Task:</label>
     {{task.service.name}}

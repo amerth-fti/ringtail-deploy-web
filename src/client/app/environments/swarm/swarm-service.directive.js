@@ -30,6 +30,7 @@
     vm.getRunningTasks   = getRunningTasks;
     vm.getDesiredTasks   = getDesiredTasks;
     vm.getEndpointMode   = getEndpointMode;
+    vm.getStatus         = getStatus;
 
     activate();
 
@@ -75,6 +76,10 @@
       return vm.service.Endpoint.Spec.Mode === 'vip'
         ? 'Virtual IP'
         : 'DNS Round Robin';
+    }
+
+    function getStatus() {
+      return getRunningTasks() > 0 ? 'running': 'pending';
     }
 
   }
