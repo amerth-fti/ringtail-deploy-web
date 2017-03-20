@@ -59,13 +59,19 @@
 
     function validTask(task) {
       return task && task.Status.State &&
-        (task.Status.State === 'running');
+        (task.Status.State === 'running' || task.Status.State === 'starting' ||
+         task.Status.State === 'assigned' || task.Status.State === 'accepted' ||
+         task.Status.State === 'preparing' );
     }
 
     function deploySwarm() {
       var environment = vm.environment;
       Swarm
-        .deploy({ swarmhost: vm.environment.swarmhost })
+        .deploy({
+          swarmhost: vm.environment.swarmhost,
+          accessKeyId: vm.environment.accessKeyId,
+          secretAccessKey: vm.environment.secretAccessKey,
+        })
         .$promise
         .then(function(res) {
 

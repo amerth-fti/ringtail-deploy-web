@@ -50,7 +50,7 @@ async function removeLabel(args) {
  * @param  {[type]} args [description]
  * @return {[type]}      [description]
  */
-async function deploy(swarmhost) {
-  await nodeClient.deployInfrastructure(swarmhost);
-  await nodeClient.deployServices(swarmhost);
+async function deploy({ swarmhost, accessKeyId, secretAccessKey }) {
+  await nodeClient.deployCore({ swarmhost, accessKeyId, secretAccessKey });
+  await nodeClient.deployServices({ swarmhost, accessKeyId, secretAccessKey });
 }

@@ -302,7 +302,9 @@ CREATE TABLE env (
   updatePath NVARCHAR(255),
   swarmhost NVARCHAR(255),
   swarmSshUser NVARCHAR(255),
-  swarmSshKey NVARCHAR(8000)
+  swarmSshKey NVARCHAR(8000),
+  accessKeyId NVARCHAR(255),
+  secretAccessKey NVARCHAR(255)
 );
 
 INSERT INTO env (envId, envName, envDesc, remoteType, remoteId, status, config, deployedBy, deployedOn, deployedUntil, deployedNotes, deployedBranch, deployedJobId, host)

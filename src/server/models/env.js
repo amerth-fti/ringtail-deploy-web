@@ -29,6 +29,8 @@ schema = {
     { "name": "swarmhost" },
     { "name": "swarmSshUser" },
     { "name": "swarmSshKey" },
+    { "name": "accessKeyId" },
+    { "name": "secretAccessKey" },
   ]
 };
 /* eslint-enable */

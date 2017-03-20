@@ -7,7 +7,7 @@ module.exports = {
   getDeployments,
   addLabel,
   removeLabel,
-  deployInfrastructure,
+  deployCore,
   deployServices,
 };
 
@@ -53,12 +53,12 @@ async function removeLabel({ swarmhost, nodeId, label }) {
 }
 
 /**
- * [deployInfrastructure description]
+ * [deployCore description]
  * @param  {[type]} options.swarmhost [description]
  * @return {[type]}                   [description]
  */
-async function deployInfrastructure(swarmhost) {
-  return await put(`http://${swarmhost}:4111/api/stacks/ringtail`);
+async function deployCore({ swarmhost, accessKeyId, secretAccessKey }) {
+  return await put(`http://${swarmhost}:4111/api/stacks/ringtail`, { json: { accessKeyId, secretAccessKey }});
 }
 
 /**
@@ -66,8 +66,8 @@ async function deployInfrastructure(swarmhost) {
  * @param  {[type]} options.swarmhost [description]
  * @return {[type]}                   [description]
  */
-async function deployServices(swarmhost) {
-  return await put(`http://${swarmhost}:4111/api/stacks/services`);
+async function deployServices({ swarmhost, accessKeyId, secretAccessKey }) {
+  return await put(`http://${swarmhost}:4111/api/stacks/services`, { json: { accessKeyId, secretAccessKey }});
 }
 
 
