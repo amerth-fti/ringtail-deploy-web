@@ -58,7 +58,7 @@ async function removeLabel({ swarmhost, nodeId, label }) {
  * @return {[type]}                   [description]
  */
 async function deployCore({ swarmhost, accessKeyId, secretAccessKey }) {
-  return await put(`http://${swarmhost}:4111/api/stacks/ringtail`, { json: { accessKeyId, secretAccessKey }});
+  return await put(`http://${swarmhost}:4111/api/stacks/core`, { json: { accessKeyId, secretAccessKey }});
 }
 
 /**
