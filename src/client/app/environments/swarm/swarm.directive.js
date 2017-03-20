@@ -22,11 +22,14 @@
 
   function SwarmController(Swarm) {
     var vm             = this;
+    var refreshTimeout = 30000;
+    var timeout        = null;
     vm.environment     = this.environment;
     vm.nodes           = [];
     vm.deployments     = { services: [], tasks: [] };
     vm.deploySwarm     = deploySwarm;
     vm.getServiceTasks = getServiceTasks;
+
 
 
     activate();
@@ -53,7 +56,7 @@
         vm.nodes.forEach(node => {
           node.tasks = vm.deployments.tasks.filter(task => task.NodeID === node.ID && validTask(task));
         });
-        setTimeout(refreshDeployments, 5000);
+        timeout = setTimeout(refreshDeployments, refreshTimeout);
       });
     }
 
@@ -66,6 +69,9 @@
 
     function deploySwarm() {
       var environment = vm.environment;
+      clearTimeout(timeout);
+      refreshTimeout = 1000;
+      refreshDeployments();
       Swarm
         .deploy({
           swarmhost: vm.environment.swarmhost,
@@ -74,7 +80,7 @@
         })
         .$promise
         .then(function(res) {
-
+          refreshTimeout = 30000;
         });
     }
 
