@@ -1,5 +1,6 @@
 
 <div class="swarm-info">
+
   <div class="swarm-info-header">
     <img class="docker-logo" src="/assets/img/docker-logo.png" alt="Docker Swarm" title="Docker Swarm" />
     <div class="pull-right">
@@ -15,15 +16,11 @@
       <img src='/assets/img/bar-loader.gif' alt='Deploying...' />
     </div>
   </div>
-  <h4>Nodes</h4>
-  <div class="row">
-    <div class="col-sm-3" ng-repeat="node in vm.nodes">
-      <swarm-node-details
-        node="node"
-        environment="vm.environment" />
-    </div>
-  </div>
-  <h4>Core Stack</h4>
+
+  <h4>
+    <div class="stack-status {{vm.coreRunning ? 'running' : 'pending' }}"></div>
+    Core Stack
+  </h4>
   <div class="row">
     <div ng-repeat="service in vm.core">
       <div class="clearfix" ng-if="$index % 4 === 0"></div>
@@ -32,7 +29,11 @@
       </div>
     </div>
   </div>
-  <h4>Service Stack</h4>
+
+  <h4>
+    <div class="stack-status {{vm.servicesRunning ? 'running' : 'pending' }}"></div>
+    Service Stack
+  </h4>
   <div class="row">
     <div ng-repeat="service in vm.services">
       <div class="clearfix" ng-if="$index % 4 === 0"></div>
@@ -41,4 +42,14 @@
       </div>
     </div>
   </div>
+
+  <h4>Nodes</h4>
+  <div class="row">
+    <div class="col-sm-3" ng-repeat="node in vm.nodes">
+      <swarm-node-details
+        node="node"
+        environment="vm.environment" />
+    </div>
+  </div>
+
 </div>

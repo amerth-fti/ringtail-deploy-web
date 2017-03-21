@@ -24,11 +24,13 @@
   function Controller() {
     var vm               = this;
     vm.service           = this.service;
+    vm.showDetails       = false;
     vm.getDeploymentMode = getDeploymentMode;
     vm.getRunningTasks   = getRunningTasks;
     vm.getDesiredTasks   = getDesiredTasks;
     vm.getEndpointMode   = getEndpointMode;
     vm.getStatus         = getStatus;
+    vm.toggleDetails     = toggleDetails;
 
     activate();
 
@@ -45,7 +47,7 @@
     }
 
     function getRunningTasks() {
-      return (vm.service.tasks && vm.service.tasks.length) || 0;
+      return (vm.service.tasks && vm.service.tasks.filter(task => task.Status.State === 'running').length) || 0;
     }
 
     function getDesiredTasks() {
@@ -62,6 +64,10 @@
 
     function getStatus() {
       return getRunningTasks() > 0 ? 'running': 'pending';
+    }
+
+    function toggleDetails() {
+      vm.showDetails = !vm.showDetails;
     }
 
   }

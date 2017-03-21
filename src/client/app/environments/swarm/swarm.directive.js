@@ -28,12 +28,12 @@
     vm.environment     = this.environment;
     vm.nodes           = [];
     vm.deployments     = { services: [], tasks: [] };
+    vm.core            = [];
+    vm.services        = [];
     vm.deploySwarm     = deploySwarm;
     vm.getServiceTasks = getServiceTasks;
-    vm.core            = [];
-    vm.services        = []
-
-
+    vm.coreRunning     = false;
+    vm.servicesRunning = false;
 
     activate();
 
@@ -65,6 +65,10 @@
         vm.core = vm.deployments.services.filter(service => getStack(service) === 'rtcore');
         // filter rtsvc services
         vm.services = vm.deployments.services.filter(service => getStack(service) === 'rtsvc');
+        // core status
+        vm.coreRunning = vm.core.length > 0 && vm.core.every(service => hasRunningTask(service));
+        // service status
+        vm.servicesRunning = vm.services.length > 0 && vm.services.every(service => hasRunningTask(service));
 
         // poll again shortly...
         timeout = setTimeout(refreshDeployments, refreshTimeout);
@@ -112,6 +116,10 @@
         ? fullname.substr(stack.length + 1)
         : fullname;
       return name;
+    }
+
+    function hasRunningTask(service) {
+      return service.tasks.some(task => task.Status.State === 'running');
     }
 
   }

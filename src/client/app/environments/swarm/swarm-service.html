@@ -4,16 +4,18 @@
     <label>Name:</label>
     {{vm.service.name}}
   </div>
-  <div class="swarm-service-mode">
-    <label>Mode:</label>
-    {{vm.getDeploymentMode()}}
-  </div>
-  <div class="swarm-service-endpoint">
-    <label>Net:</label>
-    {{vm.getEndpointMode()}}
-  </div>
-  <div class="swarm-service-tasks">
-    <label>Tasks:</label>
-    {{vm.getRunningTasks()}} / {{vm.getDesiredTasks()}}
+  <div ng-show="vm.showDetails">
+    <div class="swarm-service-mode">
+      <label>Mode:</label>
+      {{vm.getDeploymentMode()}}
+    </div>
+    <div class="swarm-service-endpoint">
+      <label>Net:</label>
+      {{vm.getEndpointMode()}}
+    </div>
+    <div class="swarm-service-tasks">
+      <label>Tasks:</label>
+      {{vm.getRunningTasks()}} / {{vm.getDesiredTasks()}}
+    </div>
   </div>
 </div>

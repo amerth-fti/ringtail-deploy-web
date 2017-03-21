@@ -571,8 +571,8 @@ body[page=login] {
 
 .swarm-node {
   margin-bottom: 5px;
-  padding-top: 15px;
-  padding-bottom: 15px;
+  padding-top: 10px;
+  padding-bottom: 10px;
   padding-left: 7.5px;
   padding-right: 7.5px;
   background-color: #f0f0f0;
@@ -583,6 +583,7 @@ body[page=login] {
     font-style: bold;
     display: inline-block;
     min-width: 30px;
+    margin-bottom: 0;
   }
 
   .node-role {
@@ -625,10 +626,24 @@ body[page=login] {
   text-align: center;
 }
 
+.stack-status {
+  border-radius: 50% !important;
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+
+  &.running {
+    background: rgba(92,184,92,0.8);
+  }
+  &.pending {
+    background: rgba(66,139,202,0.8);
+  }
+}
+
 .swarm-service {
-  margin-bottom: 15px;
-  padding-top: 15px;
-  padding-bottom: 15px;
+  margin-bottom: 5px;
+  padding-top: 10px;
+  padding-bottom: 10px;
   padding-left: 7.5px;
   padding-right: 7.5px;
   background-color: #e6e6e6;
@@ -639,6 +654,7 @@ body[page=login] {
     font-style: bold;
     display: inline-block;
     min-width: 30px;
+    margin-bottom: 0;
   }
 
   &.service-running {
@@ -652,8 +668,8 @@ body[page=login] {
 
 .node-task {
   margin-bottom: 5px;
-  padding-top: 15px;
-  padding-bottom: 15px;
+  padding-top: 10px;
+  padding-bottom: 10px;
   padding-left: 7.5px;
   padding-right: 7.5px;
   background-color: #f9f9f9;
@@ -664,6 +680,7 @@ body[page=login] {
     font-style: bold;
     display: inline-block;
     min-width: 30px;
+    margin-bottom: 0;
   }
 
   &.task-running {
