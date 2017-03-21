@@ -24,11 +24,13 @@
     var vm             = this;
     var refreshTimeout = 30000;
     var timeout        = null;
+    vm.deploying       = false;
     vm.environment     = this.environment;
     vm.nodes           = [];
     vm.deployments     = { services: [], tasks: [] };
     vm.deploySwarm     = deploySwarm;
     vm.getServiceTasks = getServiceTasks;
+
 
 
 
@@ -72,6 +74,7 @@
       clearTimeout(timeout);
       refreshTimeout = 1000;
       refreshDeployments();
+      vm.deploying = true;
       Swarm
         .deploy({
           swarmhost: vm.environment.swarmhost,
@@ -81,6 +84,7 @@
         .$promise
         .then(function(res) {
           refreshTimeout = 30000;
+          vm.deploying = false;
         });
     }
 

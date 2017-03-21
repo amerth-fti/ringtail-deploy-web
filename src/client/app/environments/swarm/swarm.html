@@ -9,6 +9,11 @@
         ng-click="vm.deploySwarm()"
         title="Deploy services"></button>
     </div>
+    <div class="pull-right swarm-deploying" ng-show='vm.deploying'>
+      Deploying...
+      <br/>
+      <img src='/assets/img/bar-loader.gif' alt='Deploying...' />
+    </div>
   </div>
   <h4>Nodes</h4>
   <div class="row">

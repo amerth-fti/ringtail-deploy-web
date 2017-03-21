@@ -612,14 +612,18 @@ body[page=login] {
       height: 2rem;
     }
   }
+
+  &.node-ready {
+    border-left: 5px solid rgba(92,184,92,0.8);
+  }
 }
 
-.swarm-node.node-ready {
-  border-left: 5px solid rgba(92,184,92,0.8);
+
+
+.swarm-deploying {
+  margin-right: 1.5rem;
+  text-align: center;
 }
-
-
-
 
 .swarm-service {
   margin-bottom: 15px;
@@ -636,14 +640,14 @@ body[page=login] {
     display: inline-block;
     min-width: 30px;
   }
-}
 
-.swarm-service.service-running {
-  border-left: 5px solid rgba(92,184,92,0.8);
-}
+  &.service-running {
+    border-left: 5px solid rgba(92,184,92,0.8);
+  }
 
-.swarm-service.service-pending {
-  border-left: 5px solid rgba(66,139,202,0.8);
+  &.service-pending {
+    border-left: 5px solid rgba(66,139,202,0.8);
+  }
 }
 
 .node-task {
@@ -661,12 +665,12 @@ body[page=login] {
     display: inline-block;
     min-width: 30px;
   }
-}
 
-.node-task.task-running {
-  border-left: 5px solid rgba(92,184,92,0.8);
-}
+  &.task-running {
+    border-left: 5px solid rgba(92,184,92,0.8);
+  }
 
-.node-task.task-pending {
-  border-left: 5px solid rgba(66,139,202,0.8);
+  &.task-pending {
+    border-left: 5px solid rgba(66,139,202,0.8);
+  }
 }
