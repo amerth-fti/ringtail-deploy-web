@@ -23,10 +23,22 @@
         environment="vm.environment" />
     </div>
   </div>
-  <h4>Services</h4>
+  <h4>Core Stack</h4>
   <div class="row">
-    <div class="col-sm-3" ng-repeat="service in vm.deployments.services">
-      <swarm-service service="service" />
+    <div ng-repeat="service in vm.core">
+      <div class="clearfix" ng-if="$index % 4 === 0"></div>
+      <div class="col-sm-3">
+        <swarm-service service="service" />
+      </div>
+    </div>
+  </div>
+  <h4>Service Stack</h4>
+  <div class="row">
+    <div ng-repeat="service in vm.services">
+      <div class="clearfix" ng-if="$index % 4 === 0"></div>
+      <div class="col-sm-3">
+        <swarm-service service="service" />
+      </div>
     </div>
   </div>
 </div>

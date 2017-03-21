@@ -24,8 +24,6 @@
   function Controller() {
     var vm               = this;
     vm.service           = this.service;
-    vm.getName           = getName;
-    vm.getStack          = getStack;
     vm.getDeploymentMode = getDeploymentMode;
     vm.getRunningTasks   = getRunningTasks;
     vm.getDesiredTasks   = getDesiredTasks;
@@ -38,22 +36,6 @@
 
     function activate() {
 
-    }
-
-    function getName() {
-      let fullname = vm.service.Spec.Name;
-      let stack    = getStack();
-      let name = fullname.indexOf(stack) === 0
-        ? fullname.substr(stack.length + 1)
-        : fullname;
-      vm.service.name = name;
-      return name;
-    }
-
-    function getStack() {
-      let stack = (vm.service.Spec.Labels && vm.service.Spec.Labels['com.docker.stack.namespace']) || '';
-      vm.service.stack = stack;
-      return stack;
     }
 
     function getDeploymentMode() {

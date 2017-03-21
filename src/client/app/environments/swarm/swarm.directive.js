@@ -30,7 +30,8 @@
     vm.deployments     = { services: [], tasks: [] };
     vm.deploySwarm     = deploySwarm;
     vm.getServiceTasks = getServiceTasks;
-
+    vm.core            = [];
+    vm.services        = []
 
 
 
@@ -52,12 +53,20 @@
         });
         // map tasks to services
         vm.deployments.services.forEach(service => {
+          service.name = getName(service);
+          service.stack = getStack(service);
           service.tasks = vm.deployments.tasks.filter(task => task.ServiceID === service.ID && validTask(task));
         });
         // map tasks to nodes
         vm.nodes.forEach(node => {
           node.tasks = vm.deployments.tasks.filter(task => task.NodeID === node.ID && validTask(task));
         });
+        // filter rtcore services
+        vm.core = vm.deployments.services.filter(service => getStack(service) === 'rtcore');
+        // filter rtsvc services
+        vm.services = vm.deployments.services.filter(service => getStack(service) === 'rtsvc');
+
+        // poll again shortly...
         timeout = setTimeout(refreshDeployments, refreshTimeout);
       });
     }
@@ -90,6 +99,19 @@
 
     function getServiceTasks(service) {
       return vm.deployments.tasks.filter(p => p.ServiceID === service.ID);
+    }
+
+    function getStack(service) {
+      return (service.Spec.Labels && service.Spec.Labels['com.docker.stack.namespace']) || '';
+    }
+
+    function getName(service) {
+      let fullname = service.Spec.Name;
+      let stack    = getStack(service);
+      let name = fullname.indexOf(stack) === 0
+        ? fullname.substr(stack.length + 1)
+        : fullname;
+      return name;
     }
 
   }
