@@ -399,8 +399,7 @@
       "key": "RINGTAILCLASSICWEBSITEMAPPING",
       "title": "Ringtail Legal Web Site Mapping",
       "description": "The web site mapping that is used for Ringtail Legal (Classic) (e.g. Classic)",
-      "default": "Classic",
-      "ignoreWhen": "Legal",
+      "default": "Classic"
     },
     {
       "key": "SELFSERVICEAUTHENTICATIONMODE",
