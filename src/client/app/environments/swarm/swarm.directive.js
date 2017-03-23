@@ -98,6 +98,8 @@
         .then(function(res) {
           refreshTimeout = 30000;
           vm.deploying = false;
+          clearTimeout(timeout);
+          refreshDeployments();
         });
     }
 
