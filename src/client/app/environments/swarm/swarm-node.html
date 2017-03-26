@@ -1,64 +1,66 @@
 
-<div class="swarm-node node-{{ vm.node.Status.State }}">
-  <div class="node-id">
-    <label>Node:</label>
-    {{ vm.node.ID }}
-  </div>
-  <div class="node-type">
-    <label>Type: </label>
-    {{ vm.node.Spec.Role }}
-  </div>
-  <div class="node-state">
-    <label>State:</label>
-    {{ vm.node.Status.State }}
-  </div>
-  <div class="node-hostname">
-    <label>Host:</label>
-    {{ vm.node.Description.Hostname }}</div>
-  <div class="node-address">
-    <label>Addr:</label>
-    {{ vm.node.Status.Addr }}
-  </div>
-  <div><label>Roles:</label></div>
-  <div class="node-role-selector">
-    <select
-      class="form-control"
-      ng-show="vm.roleOptions.length"
-      ng-model="vm.selectedRole"
-      ng-change="vm.roleSelected()"
-      >
-      <option value="">Add role...</option>
-      <option ng-repeat="option in vm.roleOptions" ng-value="option.name">{{option.name}}</option>
-    </select>
-  </div>
-  <div class="node-role" ng-repeat="(key, value) in vm.node.Spec.Labels">
-    <span
-      class="configured glyphicon glyphicon-ok"
-      ng-if="value === 'true'"
-      />
+<div class="swarm-node-group clearfix">
+  <div class="swarm-node node-{{ vm.node.Status.State }}">
+    <div class="node-id">
+      <label>Node:</label>
+      {{ vm.node.ID }}
+    </div>
+    <div class="node-type">
+      <label>Type: </label>
+      {{ vm.node.Spec.Role }}
+    </div>
+    <div class="node-state">
+      <label>State:</label>
+      {{ vm.node.Status.State }}
+    </div>
+    <div class="node-hostname">
+      <label>Host:</label>
+      {{ vm.node.Description.Hostname }}</div>
+    <div class="node-address">
+      <label>Addr:</label>
+      {{ vm.node.Status.Addr }}
+    </div>
+    <div><label>Roles:</label></div>
+    <div class="node-role-selector">
+      <select
+        class="form-control"
+        ng-show="vm.roleOptions.length"
+        ng-model="vm.selectedRole"
+        ng-change="vm.roleSelected()"
+        >
+        <option value="">Add role...</option>
+        <option ng-repeat="option in vm.roleOptions" ng-value="option.name">{{option.name}}</option>
+      </select>
+    </div>
+    <div class="node-role" ng-repeat="(key, value) in vm.node.Spec.Labels">
+      <span
+        class="configured glyphicon glyphicon-ok"
+        ng-if="value === 'true'"
+        />
 
-    <span
-      class="configuring glyphicon glyphicon-asterisk"
-      ng-if="value === 'configuring'"
-      />
+      <span
+        class="configuring glyphicon glyphicon-asterisk"
+        ng-if="value === 'configuring'"
+        />
 
-    <span>{{key}}</span>
+      <span>{{key}}</span>
 
-    <span
-      class="glyphicon glyphicon-trash"
-      ng-if="value === 'true'"
-      ng-click="vm.removeRole(key)"
-      />
+      <span
+        class="glyphicon glyphicon-trash"
+        ng-if="value === 'true'"
+        ng-click="vm.removeRole(key)"
+        />
+    </div>
   </div>
-</div>
 
-<div class="node-task task-{{task.Status.State === 'running' ? 'running' : 'pending' }}" ng-repeat="task in vm.node.tasks">
-  <div>
-    <label>Task:</label>
-    {{task.service.name}}
-  </div>
-  <div>
-    <label>State:</label>
-    {{task.Status.State}}
+  <div class="col-sm-11 col-sm-push-1 node-task task-{{task.Status.State === 'running' ? 'running' : 'pending' }}" ng-repeat="task in vm.node.tasks">
+    <div>
+      <label>Task:</label>
+      {{task.service.name}}
+    </div>
+    <div>
+      <label>State:</label>
+      {{task.Status.State}}
+    </div>
   </div>
 </div>

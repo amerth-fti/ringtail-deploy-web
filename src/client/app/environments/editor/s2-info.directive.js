@@ -40,19 +40,19 @@
       if(!vm.environment.envName || vm.environment.envName.trim().length == 0){
         debugger;
         vm.environment.errorName = 'name required';
-        return;        
+        return;
       } else {
         vm.environment.errorName = '';
       }
 
       if(!vm.environment.host || vm.environment.host.trim().length == 0){
         vm.environment.errorHost = 'host required';
-        return;        
+        return;
       } else {
         vm.environment.errorHost = '';
       }
 
-      vm.wizard.stage = 'configs';
+      vm.wizard.stage = 'swarm';
     }
 
     function prev() {

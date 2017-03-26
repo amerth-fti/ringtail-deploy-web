@@ -8,11 +8,11 @@
   <div class="col-sm-12">
       <ul class="nav nav-tabs">
         <li role="presentation" ng-click="vm.wizard.show('info')" ng-class="{ active: vm.wizard.stage === 'info' }"><a>Information</a></li>
+        <li role="presentation" ng-click="vm.wizard.show('swarm')" ng-class="{ active: vm.wizard.stage === 'swarm' }"><a>Swarm</a></li>
         <li role="presentation" ng-click="vm.wizard.show('configs')" ng-class="{ active: vm.wizard.stage === 'configs' }"><a>Configs</a></li>
         <li role="presentation" ng-click="vm.wizard.show('machines')" ng-class="{ active: vm.wizard.stage === 'machines' }" ><a><i style="margin-right: 0.5em; color: #a94442;" ng-class="{ 'glyphicon glyphicon-exclamation-sign': vm.wizard.error === 'machines' }"></i>Machines</a></li>
         <li role="presentation" ng-click="vm.wizard.show('taskdefs')" ng-class="{ active: vm.wizard.stage === 'taskdefs' }"><a>Process</a></li>
         <li role="presentation" ng-click="vm.wizard.show('validation')" ng-class="{ active: vm.wizard.stage === 'validation' }"><a>Validation</a></li>
-        <li role="presentation" ng-click="vm.wizard.show('swarm')" ng-class="{ active: vm.wizard.stage === 'swarm' }"><a>Swarm</a></li>
       </ul>
     </div>
   </div>

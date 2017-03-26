@@ -45,10 +45,13 @@
 
   <h4>Nodes</h4>
   <div class="row">
-    <div class="col-sm-3" ng-repeat="node in vm.nodes">
-      <swarm-node-details
-        node="node"
-        environment="vm.environment" />
+    <div ng-repeat="node in vm.nodes">
+      <div class="clearfix" ng-if="$index % 4 === 0"></div>
+      <div class="col-sm-3">
+        <swarm-node-details
+          node="node"
+          environment="vm.environment" />
+      </div>
     </div>
   </div>
 

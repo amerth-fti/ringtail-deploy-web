@@ -18,26 +18,6 @@
           <div class='error host'>{{vm.environment.errorHost}}</div>
         </div>
         <div class="form-group">
-          <label for="swarmhost">Swarm Host (eg: swarm)</label>
-          <input type="text" class="form-control" placeholder="Docker Swarm Host" ng-model="vm.environment.swarmhost"/>
-        </div>
-        <div class="form-group">
-          <label for="swarmSshUser">Swarm SSH User (eg: ec2-user)</label>
-          <input type="text" class="form-control" placeholder="Swarm SSH User" ng-model="vm.environment.swarmSshUser" />
-        </div>
-        <div class="form-group">
-          <label for="swarmSshKey">Swarm SSH Key</label>
-          <textarea type="text" class="form-control" placeholder="Swarm SSH Key (pem file format)" ng-model="vm.environment.swarmSshKey" />
-        </div>
-        <div class="form-group">
-          <label for="accessKeyID">AWS Access Key Id</label>
-          <input type="text" class="form-control" placeholder="AWS Access Key Id" ng-model="vm.environment.accessKeyId" />
-        </div>
-        <div class="form-group">
-          <label for="secretAccessKey">AWS Secret Access Key</label>
-          <input type="text" class="form-control" placeholder="AWS Secret Access Key" ng-model="vm.environment.secretAccessKey" />
-        </div>
-        <div class="form-group">
           <label for="host">Deployment Ring</label>
           <select ng-model="vm.environment.updatePath" class="form-control" id="updatePath">
             <option value="4">4. SaaS</option>
