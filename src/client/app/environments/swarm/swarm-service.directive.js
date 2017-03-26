@@ -9,6 +9,7 @@
     return {
       restrict: 'E',
       scope: {
+        environment: '=',
         service: '=',
         tasks: '='
       },
@@ -19,9 +20,9 @@
     };
   }
 
-  Controller.$inject = [ ];
+  Controller.$inject = [ 'Swarm' ];
 
-  function Controller() {
+  function Controller(Swarm) {
     var vm               = this;
     vm.service           = this.service;
     vm.showDetails       = false;
@@ -31,6 +32,7 @@
     vm.getEndpointMode   = getEndpointMode;
     vm.getStatus         = getStatus;
     vm.toggleDetails     = toggleDetails;
+    vm.redeploy          = redeploy;
 
     activate();
 
@@ -68,6 +70,19 @@
 
     function toggleDetails() {
       vm.showDetails = !vm.showDetails;
+    }
+
+    function redeploy() {
+      Swarm.deployService({
+        swarmhost: vm.environment.swarmhost,
+        accessKeyId: vm.environment.accessKeyId,
+        secretAccessKey: vm.environment.secretAccessKey,
+        service: vm.service.Spec.Name
+      })
+      .$promise
+      .then(function(res) {
+        console.log(res);
+      });
     }
 
   }

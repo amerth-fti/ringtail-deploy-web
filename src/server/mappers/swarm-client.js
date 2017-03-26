@@ -9,6 +9,7 @@ module.exports = {
   removeLabel,
   deployCore,
   deployServices,
+  deployService,
 };
 
 /**
@@ -68,6 +69,18 @@ async function deployCore({ swarmhost, accessKeyId, secretAccessKey }) {
  */
 async function deployServices({ swarmhost, accessKeyId, secretAccessKey }) {
   return await put(`http://${swarmhost}:4111/api/stacks/services`, { json: { accessKeyId, secretAccessKey }});
+}
+
+/**
+ * [deployService description]
+ * @param  {[type]} options.swarmhost       [description]
+ * @param  {[type]} options.accessKeyId     [description]
+ * @param  {[type]} options.secretAccessKey [description]
+ * @param  {[type]} options.service         [description]
+ * @return {[type]}                         [description]
+ */
+async function deployService({ swarmhost, accessKeyId, secretAccessKey, service }) {
+  return await put(`http://${swarmhost}:4111/api/services/${service}/restart`, { json: { accessKeyId, secretAccessKey }});
 }
 
 

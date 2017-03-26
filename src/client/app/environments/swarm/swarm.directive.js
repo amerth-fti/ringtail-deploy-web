@@ -22,7 +22,7 @@
 
   function SwarmController(Swarm) {
     var vm             = this;
-    var refreshTimeout = 30000;
+    var refreshTimeout = 10000;
     var timeout        = null;
     vm.deploying       = false;
     vm.environment     = this.environment;
@@ -96,7 +96,7 @@
         })
         .$promise
         .then(function(res) {
-          refreshTimeout = 30000;
+          refreshTimeout = 10000;
           vm.deploying = false;
           clearTimeout(timeout);
           refreshDeployments();

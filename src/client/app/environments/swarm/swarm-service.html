@@ -1,5 +1,8 @@
 
 <div class="swarm-service service-{{vm.getStatus()}}">
+  <div class="pull-right">
+    <i class="glyphicon glyphicon-repeat" ng-click="vm.redeploy()" />
+  </div>
   <div class="swarm-service-name">
     <label>Name:</label>
     {{vm.service.name}}

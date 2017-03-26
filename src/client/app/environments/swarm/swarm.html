@@ -38,7 +38,9 @@
     <div ng-repeat="service in vm.services">
       <div class="clearfix" ng-if="$index % 4 === 0"></div>
       <div class="col-sm-3">
-        <swarm-service service="service" />
+        <swarm-service
+          service="service"
+          environment="vm.environment" />
       </div>
     </div>
   </div>

@@ -1,5 +1,5 @@
 
-let nodeClient = require('../mappers/swarm-client');
+let swarmClient = require('../mappers/swarm-client');
 
 module.exports = {
   getNodes,
@@ -7,6 +7,7 @@ module.exports = {
   addLabel,
   removeLabel,
   deploy,
+  deployService,
 };
 
 /**
@@ -15,7 +16,7 @@ module.exports = {
  * @return {[type]}           [description]
  */
 async function getNodes(swarmhost) {
-  return await nodeClient.getNodes(swarmhost);
+  return await swarmClient.getNodes(swarmhost);
 }
 
 /**
@@ -24,7 +25,7 @@ async function getNodes(swarmhost) {
  * @return {[type]}           [description]
  */
 async function getDeployments(swarmhost) {
-  return await nodeClient.getDeployments(swarmhost);
+  return await swarmClient.getDeployments(swarmhost);
 }
 
 
@@ -33,7 +34,7 @@ async function getDeployments(swarmhost) {
  * @param {[type]} args [description]
  */
 async function addLabel(args) {
-  return await nodeClient.addLabel(args);
+  return await swarmClient.addLabel(args);
 }
 
 /**
@@ -42,7 +43,7 @@ async function addLabel(args) {
  * @return {[type]}      [description]
  */
 async function removeLabel(args) {
-  return await nodeClient.removeLabel(args);
+  return await swarmClient.removeLabel(args);
 }
 
 /**
@@ -51,6 +52,18 @@ async function removeLabel(args) {
  * @return {[type]}      [description]
  */
 async function deploy({ swarmhost, accessKeyId, secretAccessKey }) {
-  await nodeClient.deployCore({ swarmhost, accessKeyId, secretAccessKey });
-  await nodeClient.deployServices({ swarmhost, accessKeyId, secretAccessKey });
+  await swarmClient.deployCore({ swarmhost, accessKeyId, secretAccessKey });
+  await swarmClient.deployServices({ swarmhost, accessKeyId, secretAccessKey });
+}
+
+/**
+ * [deployService description]
+ * @param  {[type]} options.swarmhost       [description]
+ * @param  {[type]} options.accessKeyId     [description]
+ * @param  {[type]} options.secretAccessKey [description]
+ * @param  {[type]} options.service         [description]
+ * @return {[type]}                         [description]
+ */
+async function deployService({ swarmhost, accessKeyId, secretAccessKey, service }) {
+  await swarmClient.deployService({ swarmhost, accessKeyId, secretAccessKey, service });
 }
