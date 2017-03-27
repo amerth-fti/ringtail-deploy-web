@@ -6,7 +6,7 @@ module.exports = {
   getDeployments,
   addLabel,
   removeLabel,
-  deploy,
+  deployStacks,
   deployService,
 };
 
@@ -51,9 +51,9 @@ async function removeLabel(args) {
  * @param  {[type]} args [description]
  * @return {[type]}      [description]
  */
-async function deploy({ swarmhost, accessKeyId, secretAccessKey }) {
-  await swarmClient.deployCore({ swarmhost, accessKeyId, secretAccessKey });
-  await swarmClient.deployServices({ swarmhost, accessKeyId, secretAccessKey });
+async function deployStacks({ swarmhost, accessKeyId, secretAccessKey }) {
+  await swarmClient.deployStack({ swarmhost, accessKeyId, secretAccessKey, stack: 'rtcore' });
+  await swarmClient.deployStack({ swarmhost, accessKeyId, secretAccessKey, stack: 'rtsvc' });
 }
 
 /**

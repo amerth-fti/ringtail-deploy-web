@@ -7,8 +7,7 @@ module.exports = {
   getDeployments,
   addLabel,
   removeLabel,
-  deployCore,
-  deployServices,
+  deployStack,
   deployService,
 };
 
@@ -54,22 +53,17 @@ async function removeLabel({ swarmhost, nodeId, label }) {
 }
 
 /**
- * [deployCore description]
- * @param  {[type]} options.swarmhost [description]
- * @return {[type]}                   [description]
+ * [deployStack description]
+ * @param  {[type]} options.swarmhost       [description]
+ * @param  {[type]} options.accessKeyId     [description]
+ * @param  {[type]} options.secretAccessKey [description]
+ * @param  {[type]} options.stack           [description]
+ * @return {[type]}                         [description]
  */
-async function deployCore({ swarmhost, accessKeyId, secretAccessKey }) {
-  return await put(`http://${swarmhost}:4111/api/stacks/core`, { json: { accessKeyId, secretAccessKey }});
+async function deployStack({ swarmhost, accessKeyId, secretAccessKey, stack }) {
+  return await put(`http://${swarmhost}:4111/api/stacks/${stack}`, { json: { accessKeyId, secretAccessKey }});
 }
 
-/**
- * [deployServices description]
- * @param  {[type]} options.swarmhost [description]
- * @return {[type]}                   [description]
- */
-async function deployServices({ swarmhost, accessKeyId, secretAccessKey }) {
-  return await put(`http://${swarmhost}:4111/api/stacks/services`, { json: { accessKeyId, secretAccessKey }});
-}
 
 /**
  * [deployService description]

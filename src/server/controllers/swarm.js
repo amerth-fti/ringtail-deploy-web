@@ -64,7 +64,7 @@ async function deploy(req, res, next) {
     return res.status(400).send('swarmhost is required');
   }
 
-  await swarm.deploy({ swarmhost, accessKeyId, secretAccessKey });
+  await swarm.deployStacks({ swarmhost, accessKeyId, secretAccessKey });
   res.send({ ok: true });
 };
 
