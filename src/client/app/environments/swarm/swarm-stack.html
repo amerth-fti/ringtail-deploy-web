@@ -1,0 +1,16 @@
+
+
+<h4>
+  <div class="stack-status {{vm.stack.running ? 'running' : 'pending' }}"></div>
+  {{vm.stack.name}}
+</h4>
+<div class="row">
+  <div ng-repeat="service in vm.stack.services">
+    <div class="clearfix" ng-if="$index % 4 === 0"></div>
+    <div class="col-sm-3">
+      <swarm-service
+        service="service"
+        environment="vm.environment" />
+    </div>
+  </div>
+</div>

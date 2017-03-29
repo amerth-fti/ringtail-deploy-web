@@ -12,6 +12,7 @@
       'api/swarm/nodes/:nodeId',
       { nodeId: '@ID' },
       {
+        info          : { method: 'GET',  url: 'api/swarm/info' },
         addLabel      : { method: 'POST', url: 'api/swarm/nodes/labels' },
         removeLabel   : { method: 'POST', url: 'api/swarm/nodes/labels/remove' },
         deploy        : { method: 'PUT',  url: 'api/swarm/deploy' },

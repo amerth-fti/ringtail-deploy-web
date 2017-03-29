@@ -2,6 +2,7 @@
 let swarm = require('../services/swarm-service');
 
 module.exports = {
+  info,
   nodes,
   deployments,
   deploy,
@@ -9,6 +10,22 @@ module.exports = {
   addLabel,
   removeLabel,
 };
+
+/**
+ * [config description]
+ * @param  {[type]} req [description]
+ * @param  {[type]} res [description]
+ * @return {[type]}     [description]
+ */
+async function info(req, res) {
+  let {swarmhost} = req.query;
+  if(!swarmhost) {
+    return res.status(404).send('swarmhost is required');
+  }
+
+  let info = await swarm.getInfo(swarmhost);
+  res.send(info);
+}
 
 /**
  * [list description]

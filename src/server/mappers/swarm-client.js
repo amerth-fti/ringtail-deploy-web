@@ -3,6 +3,7 @@ const http    = require('http');
 const urlUtil = require('url');
 
 module.exports = {
+  getInfo,
   getNodes,
   getDeployments,
   addLabel,
@@ -10,6 +11,15 @@ module.exports = {
   deployStack,
   deployService,
 };
+
+/**
+ * [getInfo description]
+ * @param  {[type]} swarmhost [description]
+ * @return {[type]}           [description]
+ */
+async function getInfo(swarmhost) {
+  return await get(`http://${swarmhost}:4111/api/info`);
+}
 
 /**
  * Gets the swarm nodes

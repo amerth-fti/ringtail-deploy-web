@@ -27,19 +27,17 @@
     vm.deploying       = false;
     vm.environment     = this.environment;
     vm.nodes           = [];
+    vm.info            = { stacks: [], roles: [] };
     vm.deployments     = { services: [], tasks: [] };
-    vm.core            = [];
-    vm.services        = [];
     vm.deploySwarm     = deploySwarm;
     vm.getServiceTasks = getServiceTasks;
-    vm.coreRunning     = false;
-    vm.servicesRunning = false;
 
     activate();
 
     //////////
 
     function activate() {
+      vm.info  = Swarm.info({ swarmhost: vm.environment.swarmhost });
       vm.nodes = Swarm.query({ swarmhost: vm.environment.swarmhost });
       refreshDeployments();
     }
@@ -47,6 +45,7 @@
     function refreshDeployments() {
       Swarm.deployments({ swarmhost: vm.environment.swarmhost }).$promise.then((deployments) => {
         vm.deployments = deployments;
+
         // map services to task
         vm.deployments.tasks.forEach(task => {
           task.service = vm.deployments.services.find(service => service.ID === task.ServiceID);
@@ -61,14 +60,20 @@
         vm.nodes.forEach(node => {
           node.tasks = vm.deployments.tasks.filter(task => task.NodeID === node.ID && validTask(task));
         });
-        // filter rtcore services
-        vm.core = vm.deployments.services.filter(service => getStack(service) === 'rtcore');
-        // filter rtsvc services
-        vm.services = vm.deployments.services.filter(service => getStack(service) === 'rtsvc');
-        // core status
-        vm.coreRunning = vm.core.length > 0 && vm.core.every(service => hasRunningTask(service));
-        // service status
-        vm.servicesRunning = vm.services.length > 0 && vm.services.every(service => hasRunningTask(service));
+        // map services to stacks
+        vm.info.stacks.forEach(stack => {
+          stack.services = vm.deployments.services.filter(service => service.stack === stack.id);
+          stack.running = stack.services.length > 0 && stack.services.every(service => hasRunningTask(service));
+        });
+
+        // // filter rtcore services
+        // vm.core = vm.deployments.services.filter(service => getStack(service) === 'rtcore');
+        // // filter rtsvc services
+        // vm.services = vm.deployments.services.filter(service => getStack(service) === 'rtsvc');
+        // // core status
+        // vm.coreRunning = vm.core.length > 0 && vm.core.every(service => hasRunningTask(service));
+        // // service status
+        // vm.servicesRunning = vm.services.length > 0 && vm.services.every(service => hasRunningTask(service));
 
         // poll again shortly...
         timeout = setTimeout(refreshDeployments, refreshTimeout);

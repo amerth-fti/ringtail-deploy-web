@@ -2,6 +2,7 @@
 let swarmClient = require('../mappers/swarm-client');
 
 module.exports = {
+  getInfo,
   getNodes,
   getDeployments,
   addLabel,
@@ -9,6 +10,15 @@ module.exports = {
   deployStacks,
   deployService,
 };
+
+/**
+ * [getInfo description]
+ * @param  {[type]} swarmhost [description]
+ * @return {[type]}           [description]
+ */
+async function getInfo(swarmhost) {
+  return await swarmClient.getInfo(swarmhost);
+}
 
 /**
  * [getNodes description]
