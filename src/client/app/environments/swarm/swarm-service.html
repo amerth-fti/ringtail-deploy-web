@@ -25,7 +25,10 @@
   <div class="failed-tasks" ng-show="vm.service.failedTasks.length">
     <label>Failed Tasks</label>
     <div ng-repeat="task in vm.service.failedTasks">
-      <div>ID: {{task.ID.substring(0,8)}}</div>
+      <div>
+        <div class="task-date">{{ task.Status.Timestamp | date:'M/dd H:mm:ss' }}</div>
+        ID: {{task.ID.substring(0,12)}}
+      </div>
       <div class="failed-task-err">{{task.Status.Err || task.Status.Message}}</div>
     </div>
   </div>

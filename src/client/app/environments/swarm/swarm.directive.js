@@ -55,7 +55,9 @@
           service.name = getName(service);
           service.stack = getStack(service);
           service.tasks = vm.deployments.tasks.filter(task => task.ServiceID === service.ID && validTask(task));
-          service.failedTasks = vm.deployments.tasks.filter(task => task.ServiceID === service.ID && !validTask(task));
+          service.failedTasks = vm.deployments.tasks
+            .filter(task => task.ServiceID === service.ID && !validTask(task))
+            .sort((t1, t2) => t2.UpdatedAt > t1.UpdatedAt);
         });
         // map tasks to nodes
         vm.nodes.forEach(node => {
