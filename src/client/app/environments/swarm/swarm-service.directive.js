@@ -25,7 +25,7 @@
   function Controller(Swarm) {
     var vm               = this;
     vm.service           = this.service;
-    vm.showDetails       = false;
+    vm.showDetails       = true;
     vm.getDeploymentMode = getDeploymentMode;
     vm.getRunningTasks   = getRunningTasks;
     vm.getDesiredTasks   = getDesiredTasks;

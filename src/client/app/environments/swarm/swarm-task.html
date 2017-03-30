@@ -1,0 +1,11 @@
+
+<div class="swarm-task task-{{vm.task.Status.State === 'running' ? 'running' : 'pending' }}">
+  <div>
+    <label>Task:</label>
+    {{vm.task.service.name}}
+  </div>
+  <div ng-show="vm.task.Status.State !== 'running'">
+    <label>State:</label>
+    {{vm.task.Status.State}}
+  </div>
+</div>

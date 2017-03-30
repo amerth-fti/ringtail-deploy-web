@@ -55,6 +55,7 @@
           service.name = getName(service);
           service.stack = getStack(service);
           service.tasks = vm.deployments.tasks.filter(task => task.ServiceID === service.ID && validTask(task));
+          service.failedTasks = vm.deployments.tasks.filter(task => task.ServiceID === service.ID && !validTask(task));
         });
         // map tasks to nodes
         vm.nodes.forEach(node => {
@@ -65,16 +66,6 @@
           stack.services = vm.deployments.services.filter(service => service.stack === stack.id);
           stack.running = stack.services.length > 0 && stack.services.every(service => hasRunningTask(service));
         });
-
-        // // filter rtcore services
-        // vm.core = vm.deployments.services.filter(service => getStack(service) === 'rtcore');
-        // // filter rtsvc services
-        // vm.services = vm.deployments.services.filter(service => getStack(service) === 'rtsvc');
-        // // core status
-        // vm.coreRunning = vm.core.length > 0 && vm.core.every(service => hasRunningTask(service));
-        // // service status
-        // vm.servicesRunning = vm.services.length > 0 && vm.services.every(service => hasRunningTask(service));
-
         // poll again shortly...
         timeout = setTimeout(refreshDeployments, refreshTimeout);
       });

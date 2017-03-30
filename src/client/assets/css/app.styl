@@ -7,6 +7,11 @@ $good-green-color = #2ECC40;
 * {
   border-radius: 0 !important;
 }
+
+.col-no-padding {
+  padding: 0 !important;
+}
+
 .glyphicon-machine{
   font-size: 15px;
 }
@@ -670,7 +675,7 @@ body[page=login] {
   }
 }
 
-.node-task {
+.swarm-task {
   margin-bottom: 5px;
   padding-top: 10px;
   padding-bottom: 10px;
@@ -694,4 +699,13 @@ body[page=login] {
   &.task-pending {
     border-left: 5px solid rgba(66,139,202,0.8);
   }
+}
+
+.failed-tasks {
+  margin-left: 15px;
+  margin-top: 10px;
+}
+.failed-task-err {
+  overflow: hidden;
+  margin-bottom: 5px;
 }

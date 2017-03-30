@@ -53,14 +53,10 @@
     </div>
   </div>
 
-  <div class="col-sm-11 node-task task-{{task.Status.State === 'running' ? 'running' : 'pending' }}" ng-repeat="task in vm.node.tasks">
-    <div>
-      <label>Task:</label>
-      {{task.service.name}}
-    </div>
-    <div ng-show="task.Status.State !== 'running'">
-      <label>State:</label>
-      {{task.Status.State}}
-    </div>
+  <div class="col-sm-11 col-no-padding" ng-repeat="task in vm.node.tasks">
+    <swarm-task
+      task="task"
+      environment="vm.environment"
+      ></swarm-task>
   </div>
 </div>
