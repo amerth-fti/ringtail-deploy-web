@@ -3,7 +3,8 @@
 
   angular
     .module('app.environments.swarm', [
-      'ngResource'
+      'ngResource',
+      'app.environments.swarm.logs',
     ]);
 
 }());

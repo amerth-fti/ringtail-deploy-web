@@ -9,6 +9,7 @@ module.exports = {
   removeLabel,
   deployStacks,
   deployService,
+  serviceLogs,
 };
 
 /**
@@ -76,4 +77,14 @@ async function deployStacks({ swarmhost, accessKeyId, secretAccessKey }) {
  */
 async function deployService({ swarmhost, accessKeyId, secretAccessKey, service }) {
   await swarmClient.deployService({ swarmhost, accessKeyId, secretAccessKey, service });
+}
+
+/**
+ * [serviceLogs description]
+ * @param  {[type]} options.swarmhost [description]
+ * @param  {[type]} options.service   [description]
+ * @return {[type]}                   [description]
+ */
+async function serviceLogs({ swarmhost, service }) {
+  return await swarmClient.serviceLogs({ swarmhost, service });
 }

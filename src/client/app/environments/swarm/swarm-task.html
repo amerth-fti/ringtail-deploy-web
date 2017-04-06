@@ -3,6 +3,10 @@
   <div>
     <label>Task:</label>
     {{vm.task.service.name}}
+
+    <div class="pull-right" ng-click="vm.viewLogs()">
+      <span class="glyphicon glyphicon-info-sign"></span>
+    </div>
   </div>
   <div ng-show="vm.task.Status.State !== 'running'">
     <label>State:</label>

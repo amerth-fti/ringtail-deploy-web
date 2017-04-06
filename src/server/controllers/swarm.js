@@ -9,6 +9,7 @@ module.exports = {
   deployService,
   addLabel,
   removeLabel,
+  serviceLogs,
 };
 
 /**
@@ -148,4 +149,21 @@ async function removeLabel(req, res) {
   console.log('Removing label');
   let node = await swarm.removeLabel({ swarmhost, nodeId, label });
   res.send(node);
+}
+
+/**
+ * [serviceLogs description]
+ * @param  {[type]} req [description]
+ * @param  {[type]} res [description]
+ * @return {[type]}     [description]
+ */
+async function serviceLogs(req, res) {
+  let {
+    swarmhost,
+    service
+  } = req.query;
+
+  console.log('Getting logs for ', service);
+  let logs = await swarm.serviceLogs({ swarmhost, service });
+  res.send(logs);
 }

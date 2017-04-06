@@ -18,6 +18,7 @@
         deploy        : { method: 'PUT',  url: 'api/swarm/deploy' },
         deployments   : { method: 'GET',  url: 'api/swarm/deploy' },
         deployService : { method: 'PUT',  url: 'api/swarm/deployService' },
+        logs          : { method: 'GET',  url: 'api/swarm/logs' },
       }
     );
   }

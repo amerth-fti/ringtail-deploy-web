@@ -8,6 +8,15 @@ $good-green-color = #2ECC40;
   border-radius: 0 !important;
 }
 
+.glyphicon.spinning {
+  animation: spin 1s infinite linear;
+}
+
+@keyframes spin {
+  from { transform: scale(1) rotate(0deg); }
+  to { transform: scale(1) rotate(360deg); }
+}
+
 .col-no-padding {
   padding: 0 !important;
 }
@@ -705,13 +714,37 @@ body[page=login] {
   margin-left: 10px;
   margin-top: 10px;
 }
+.failed-task {
+  margin-top: .75rem;
+  color: #909090;
+
+  .glyphicon {
+    color: #000;
+  }
+}
+.failed-task-id {
+  text-align: right;
+}
 .failed-task-err {
   overflow: hidden;
-  margin-bottom: 5px;
-  color: #909090;
 }
 
-.task-date {
-  float: right;
-  color: #909090;
+.swarm-log {
+  padding: 1.5rem;
+  margin-top: -1px;
+  background-color: #000;
+  overflow-y: scroll;
+  max-height: 600px;
+}
+
+.swarm-log-entry {
+  padding: 0;
+  padding-left: 1.5em;
+  text-indent: -1.5em;
+  word-break: keep-all;
+  margin: 0;
+  border: 0;
+  background-color: inherit;
+  color: #00aa00;
+  white-space: pre-wrap;
 }

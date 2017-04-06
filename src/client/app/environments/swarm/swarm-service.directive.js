@@ -20,10 +20,11 @@
     };
   }
 
-  Controller.$inject = [ 'Swarm' ];
+  Controller.$inject = [ 'Swarm', 'SwarmLogs' ];
 
-  function Controller(Swarm) {
+  function Controller(Swarm, SwarmLogs) {
     var vm               = this;
+    vm.environment       = this.environment;
     vm.service           = this.service;
     vm.showDetails       = true;
     vm.getDeploymentMode = getDeploymentMode;
@@ -33,6 +34,7 @@
     vm.getStatus         = getStatus;
     vm.toggleDetails     = toggleDetails;
     vm.redeploy          = redeploy;
+    vm.viewLogs          = viewLogs;
 
     activate();
 
@@ -83,6 +85,10 @@
       .then(function(res) {
         console.log(res);
       });
+    }
+
+    function viewLogs(task) {
+      SwarmLogs.open(vm.environment, task);
     }
 
   }

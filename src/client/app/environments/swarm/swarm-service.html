@@ -24,12 +24,19 @@
 
   <div class="failed-tasks" ng-show="vm.service.failedTasks.length">
     <label>Failed Tasks</label>
-    <div ng-repeat="task in vm.service.failedTasks">
+    <div
+      class="row failed-task"
+      ng-repeat="task in vm.service.failedTasks"
+      ng-click="vm.viewLogs(task)">
       <div>
-        <div class="task-date">{{ task.Status.Timestamp | date:'M/dd H:mm:ss' }}</div>
-        ID: {{task.ID.substring(0,12)}}
+        <div class="col-sm-5 failed-task-date">{{ task.Status.Timestamp | date:'M/d H:mm:ss' }}</div>
+        <div class="col-sm-7 failed-task-id">
+          {{task.ID.substring(0,12)}}
+          <span class="glyphicon glyphicon-info-sign"></span>
+        </div>
+        <div class="col-sm-12">{{task.Status.State}}</div>
       </div>
-      <div class="failed-task-err">{{task.Status.Err || task.Status.Message}}</div>
+      <div class="col-sm-12 failed-task-err">{{task.Status.Err}}</div>
     </div>
   </div>
 </div>
