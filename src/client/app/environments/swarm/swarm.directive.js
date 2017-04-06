@@ -18,18 +18,16 @@
     };
   }
 
-  SwarmController.$inject = [ 'Swarm' ];
+  SwarmController.$inject = [ '$scope', 'Swarm' ];
 
-  function SwarmController(Swarm) {
+  function SwarmController($scope, Swarm) {
     var vm             = this;
     var refreshTimeout = 10000;
     var timeout        = null;
-    vm.deploying       = false;
     vm.environment     = this.environment;
     vm.nodes           = [];
     vm.info            = { stacks: [], roles: [] };
     vm.deployments     = { services: [], tasks: [] };
-    vm.deploySwarm     = deploySwarm;
     vm.getServiceTasks = getServiceTasks;
 
     activate();
@@ -37,6 +35,8 @@
     //////////
 
     function activate() {
+      $scope.$on('deploy_started', onDeployStart);
+      $scope.$on('deploy_completed', onDeployComplete);
       vm.info  = Swarm.info({ swarmhost: vm.environment.swarmhost });
       vm.nodes = Swarm.query({ swarmhost: vm.environment.swarmhost });
       refreshDeployments();
@@ -80,27 +80,6 @@
          task.Status.State === 'preparing' );
     }
 
-    function deploySwarm() {
-      var environment = vm.environment;
-      clearTimeout(timeout);
-      refreshTimeout = 1000;
-      refreshDeployments();
-      vm.deploying = true;
-      Swarm
-        .deploy({
-          swarmhost: vm.environment.swarmhost,
-          accessKeyId: vm.environment.accessKeyId,
-          secretAccessKey: vm.environment.secretAccessKey,
-        })
-        .$promise
-        .then(function(res) {
-          refreshTimeout = 10000;
-          vm.deploying = false;
-          clearTimeout(timeout);
-          refreshDeployments();
-        });
-    }
-
     function getServiceTasks(service) {
       return vm.deployments.tasks.filter(p => p.ServiceID === service.ID);
     }
@@ -120,6 +99,20 @@
 
     function hasRunningTask(service) {
       return service.tasks.some(task => task.Status.State === 'running');
+    }
+
+    function onDeployStart() {
+      console.log('started');
+      clearTimeout(timeout);
+      refreshTimeout = 1000;
+      refreshDeployments();
+    }
+
+    function onDeployComplete() {
+      console.log('completed');
+      clearTimeout(timeout);
+      refreshTimeout = 10000;
+      refreshDeployments();
     }
 
   }

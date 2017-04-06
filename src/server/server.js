@@ -253,8 +253,8 @@ app.get ('/api/swarm/nodes', (req, res, next) => controllers.swarm.nodes(req, re
 app.post('/api/swarm/nodes/labels', (req, res, next) => controllers.swarm.addLabel(req, res).catch(next));
 app.post('/api/swarm/nodes/labels/remove', (req, res, next) => controllers.swarm.removeLabel(req, res).catch(next));
 app.get ('/api/swarm/deploy', (req, res, next) => controllers.swarm.deployments(req, res).catch(next));
-app.put ('/api/swarm/deploy', (req, res, next) => controllers.swarm.deploy(req, res).catch(next));
-app.put ('/api/swarm/deployService', (req, res, next) => controllers.swarm.deployService(req, res).catch(next));
+app.put ('/api/swarm/deploy/stack', (req, res, next) => controllers.swarm.deployStack(req, res).catch(next));
+app.put ('/api/swarm/deploy/service', (req, res, next) => controllers.swarm.deployService(req, res).catch(next));
 app.get ('/api/swarm/logs', (req, res, next) => controllers.swarm.serviceLogs(req, res).catch(next));
 
 // API - SKYTAP PROXY ROUTES

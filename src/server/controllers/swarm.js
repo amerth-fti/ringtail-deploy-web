@@ -5,7 +5,7 @@ module.exports = {
   info,
   nodes,
   deployments,
-  deploy,
+  deployStack,
   deployService,
   addLabel,
   removeLabel,
@@ -71,9 +71,10 @@ async function deployments(req, res) {
  * @param  {Function} next [description]
  * @return {[type]}        [description]
  */
-async function deploy(req, res, next) {
+async function deployStack(req, res, next) {
   let {
     swarmhost,
+    stack,
     accessKeyId,
     secretAccessKey,
   } = req.body;
@@ -82,7 +83,11 @@ async function deploy(req, res, next) {
     return res.status(400).send('swarmhost is required');
   }
 
-  await swarm.deployStacks({ swarmhost, accessKeyId, secretAccessKey });
+  if(!stack) {
+    return res.status(400).send('stack is required');
+  }
+
+  await swarm.deployStack({ swarmhost, accessKeyId, secretAccessKey, stack });
   res.send({ ok: true });
 };
 

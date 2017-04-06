@@ -3,6 +3,9 @@
 <h4>
   <div class="stack-status {{vm.stack.running ? 'running' : 'pending' }}"></div>
   {{vm.stack.name}}
+  <div
+    class="{{ 'glyphicon glyphicon-repeat' + (vm.deploying ? ' spinner': '') }}"
+    ng-click="vm.deploy()"></div>
 </h4>
 <div class="row">
   <div ng-repeat="service in vm.stack.services">

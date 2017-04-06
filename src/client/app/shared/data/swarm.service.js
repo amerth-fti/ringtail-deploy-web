@@ -15,9 +15,9 @@
         info          : { method: 'GET',  url: 'api/swarm/info' },
         addLabel      : { method: 'POST', url: 'api/swarm/nodes/labels' },
         removeLabel   : { method: 'POST', url: 'api/swarm/nodes/labels/remove' },
-        deploy        : { method: 'PUT',  url: 'api/swarm/deploy' },
         deployments   : { method: 'GET',  url: 'api/swarm/deploy' },
-        deployService : { method: 'PUT',  url: 'api/swarm/deployService' },
+        deployStack   : { method: 'PUT',  url: 'api/swarm/deploy/stack' },
+        deployService : { method: 'PUT',  url: 'api/swarm/deploy/service' },
         logs          : { method: 'GET',  url: 'api/swarm/logs' },
       }
     );

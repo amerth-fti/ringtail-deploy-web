@@ -20,9 +20,9 @@
     };
   }
 
-  Controller.$inject = [ 'Swarm', 'SwarmLogs' ];
+  Controller.$inject = [ '$scope', 'Swarm', 'SwarmLogs' ];
 
-  function Controller(Swarm, SwarmLogs) {
+  function Controller($scope, Swarm, SwarmLogs) {
     var vm               = this;
     vm.environment       = this.environment;
     vm.service           = this.service;
@@ -76,6 +76,8 @@
     }
 
     function redeploy() {
+      let eventData = { type: 'service', id: vm.service.ID };
+      $scope.$emit('deploy_started', eventData);
       vm.redeploying = true;
       Swarm.deployService({
         swarmhost: vm.environment.swarmhost,
@@ -85,6 +87,7 @@
       })
       .$promise
       .then(function(res) {
+        $scope.$emit('deploy_completed', eventData);
         vm.redeploying = false;
       });
     }
