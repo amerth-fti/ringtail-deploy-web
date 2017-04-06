@@ -34,6 +34,7 @@
     vm.getStatus         = getStatus;
     vm.toggleDetails     = toggleDetails;
     vm.redeploy          = redeploy;
+    vm.redeploying       = false;
     vm.viewLogs          = viewLogs;
 
     activate();
@@ -75,6 +76,7 @@
     }
 
     function redeploy() {
+      vm.redeploying = true;
       Swarm.deployService({
         swarmhost: vm.environment.swarmhost,
         accessKeyId: vm.environment.accessKeyId,
@@ -83,7 +85,7 @@
       })
       .$promise
       .then(function(res) {
-        console.log(res);
+        vm.redeploying = false;
       });
     }
 
