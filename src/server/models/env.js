@@ -31,6 +31,7 @@ schema = {
     { "name": "swarmSshKey" },
     { "name": "accessKeyId" },
     { "name": "secretAccessKey" },
+    { "name": "dockerHub" },
   ]
 };
 /* eslint-enable */
