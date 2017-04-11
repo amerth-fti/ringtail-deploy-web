@@ -62,8 +62,8 @@ async function removeLabel(args) {
  * @param  {[type]} args [description]
  * @return {[type]}      [description]
  */
-async function deployStack({ swarmhost, accessKeyId, secretAccessKey, stack }) {
-  await swarmClient.deployStack({ swarmhost, accessKeyId, secretAccessKey, stack });
+async function deployStack({ swarmhost, accessKeyId, secretAccessKey, stack, dockerHub }) {
+  await swarmClient.deployStack({ swarmhost, accessKeyId, secretAccessKey, stack, dockerHub });
 }
 
 /**

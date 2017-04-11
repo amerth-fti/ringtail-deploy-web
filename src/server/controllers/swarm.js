@@ -77,6 +77,7 @@ async function deployStack(req, res, next) {
     stack,
     accessKeyId,
     secretAccessKey,
+    dockerHub,
   } = req.body;
 
   if(!swarmhost) {
@@ -87,7 +88,7 @@ async function deployStack(req, res, next) {
     return res.status(400).send('stack is required');
   }
 
-  await swarm.deployStack({ swarmhost, accessKeyId, secretAccessKey, stack });
+  await swarm.deployStack({ swarmhost, accessKeyId, secretAccessKey, stack, dockerHub });
   res.send({ ok: true });
 };
 

@@ -69,10 +69,11 @@ async function removeLabel({ swarmhost, nodeId, label }) {
  * @param  {[type]} options.accessKeyId     [description]
  * @param  {[type]} options.secretAccessKey [description]
  * @param  {[type]} options.stack           [description]
+ * @param  {[type]} options.dockerHub       [description]
  * @return {[type]}                         [description]
  */
-async function deployStack({ swarmhost, accessKeyId, secretAccessKey, stack }) {
-  return await put(`http://${swarmhost}:4111/api/stacks/${stack}`, { json: { accessKeyId, secretAccessKey }});
+async function deployStack({ swarmhost, accessKeyId, secretAccessKey, stack, dockerHub }) {
+  return await put(`http://${swarmhost}:4111/api/stacks/${stack}`, { json: { accessKeyId, secretAccessKey, dockerHub }});
 }
 
 
