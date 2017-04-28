@@ -10,6 +10,8 @@ var debug             = require('debug')('deployer-redeployservice')
   , taskfactory       = require('../taskfactory')
   , jobrunner         = require('../jobrunner')
   , Job               = require('../job')
+  , Validation        = require('../validation')  
+  , validationRunner  = require('../validationrunner')    
   ;
 
 
@@ -149,4 +151,40 @@ exports.quickRedeploy = async function redeploy(data, next) {
   }
 };
 
+exports.validateDeploy = async function redeploy(data, next) {
+  debug('starting deployment validation');
 
+  let me = this;
+  let environment = await envService.findById(data.envId);
+  let env = new Env(environment);
+  let selectedTasks = [{
+    "task": "3-validate-many",
+    "options": {
+      "name": "Validate Deployment",
+      "installs": "all"
+    }
+  }];
+
+  env.deployedBranch = data.branch;
+  let validKeys = [];
+
+  try {
+    await envService.update(env);
+
+    // create redeploy task
+    let validation = new Validation({
+      name: 'Validate environment ' + env.envName,
+      tasks: taskfactory.createTasks(selectedTasks),
+      rundata: { me: env, options: {}},
+      env: env
+    });
+
+    let validationId = await validationRunner.add(validation);
+    await validation.start();
+    return { validationId: validationId };
+  } 
+  catch(err) {
+    debug('got error %s', err);
+    throw err;
+  }
+};

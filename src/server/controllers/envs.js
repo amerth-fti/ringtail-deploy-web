@@ -131,6 +131,26 @@ exports.quickdeploy = async function quickdeploy(req, res, next) {
   return res.json(response);
 };
 
+exports.validate = async function validate(req, res, next) {
+  debug('validate');
+  var data = {};
+  data.envId = req.param('envId');
+  data.branch = req.param('branch');
+  debug('validate - env: ' + data.envId + ' branch: %s', data.branch);
+  let response = {};
+  try {
+    response = await redeployService.validateDeploy(data);
+    response.success = true;
+  } 
+  catch (err) {
+    debug('validate - error: %s', err);
+    response = { message: err };
+    response.success = false;
+  }
+  return res.json(response);
+};
+
+
 
 exports.reset = function reset(req, res, next) {
   debug('reset');
