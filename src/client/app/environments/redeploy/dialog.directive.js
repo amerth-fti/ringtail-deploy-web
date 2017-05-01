@@ -19,9 +19,9 @@
     };
   }
 
-  Controller.$inject = [ '_', '$timeout', '$rootScope', '$location', 'Browse', 'EnvironmentStarter', 'Config', 'uiGridConstants', 'Region' ];
+  Controller.$inject = [ '_', '$timeout', '$rootScope', '$location', 'Browse', 'EnvironmentStarter', 'Config', 'uiGridConstants', 'Region', 'Validation' ];
 
-  function Controller(_, $timeout, $rootScope, $location, Browse, EnvironmentStarter, Config, uiGridConstants, Region) {
+  function Controller(_, $timeout, $rootScope, $location, Browse, EnvironmentStarter, Config, uiGridConstants, Region, Validation) {
     var vm = this;
     vm.modalInstance      = this.modalInstance;
     vm.branches           = null;
@@ -37,6 +37,7 @@
     vm.selectedTasks      = null;
     vm.selectedBranch     = null;
     vm.showAdvanced       = false;
+    vm.hideValidations    = true;
     vm.hideLaunchKeys     = true;
     vm.hasRpf             = false;
     vm.keepRpfwInstalls   = null;
@@ -45,6 +46,7 @@
     vm.buildChanged       = buildChanged;
     vm.cancel             = cancel;
     vm.rebuild            = rebuild;
+    vm.validate           = validate;
     vm.toggleAdvanced     = toggleAdvanced;
     vm.toggleSelectedTask = toggleSelectedTask;
     vm.regionId           = null;
@@ -217,6 +219,44 @@
         });          
       });          
     }
+
+    function validate() {
+      vm.message = 'Validating';
+      vm.hideValidations = false;
+      doValidate();
+    }
+
+    function doValidate() {
+      angular.copy(vm.tempEnv, vm.environment);
+      vm.environment.deployedBranch = constructBranchPath();
+      vm.environment.selectedTasks = vm.selectedTasks;
+
+      saveLaunchKeys().$promise.then(function() {
+        vm.environment.newLaunchKeys = vm.newLaunchKeys;
+        
+        // trigger the validation
+        vm.environment.$validate({ keepRpfwInstalls: vm.keepRpfwInstalls, wipeRpfWorkers: vm.wipeRpfWorkers })
+        // shut the dialog since we had success
+        .then(function(response) {
+          Validation.get({ validationId: response.validationId }, loadValidationComplete);
+        })
+      });          
+    }
+
+    function loadValidationComplete(result) {
+      vm.job = result;
+      pollWhileRunning(result);
+    }
+
+    function pollWhileRunning(job) {
+      if(job.status === 'Running') {
+        vm.poll = $timeout(function() {
+          job.$get(loadValidationComplete);
+        }, 5000);
+      } else {
+        vm.message = null;
+      }
+    }    
 
     function toggleAdvanced() {
       vm.showAdvanced = !vm.showAdvanced;

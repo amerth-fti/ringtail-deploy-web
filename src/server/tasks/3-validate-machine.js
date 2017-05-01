@@ -31,7 +31,6 @@ function TaskImpl(options) {
       , me = this
       ;
 
-    branch = 'MAIN/LATEST';
     if(branch === undefined) {
       log('alert|Incomplete data - no branch was selected.');
       return;
