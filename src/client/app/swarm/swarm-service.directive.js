@@ -2,7 +2,7 @@
   'use strict';
 
   angular
-    .module('app.environments.swarm')
+    .module('app.swarm')
     .directive('swarmService', swarmService);
 
   function swarmService() {
@@ -13,7 +13,7 @@
         service: '=',
         tasks: '='
       },
-      templateUrl: '/app/environments/swarm/swarm-service.html',
+      templateUrl: '/app/swarm/swarm-service.html',
       controller: Controller,
       controllerAs: 'vm',
       bindToController: true

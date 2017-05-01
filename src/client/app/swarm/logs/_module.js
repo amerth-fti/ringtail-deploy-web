@@ -2,7 +2,7 @@
   'use strict';
 
   angular
-    .module('app.environments.swarm.logs', [
+    .module('app.swarm.logs', [
       'ngResource'
     ]);
 

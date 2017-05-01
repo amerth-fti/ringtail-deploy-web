@@ -2,7 +2,7 @@
   'use strict';
 
   angular
-    .module('app.environments.swarm.logs')
+    .module('app.swarm.logs')
     .factory('SwarmLogs', SwarmLogs);
 
   SwarmLogs.$inject = [ '$modal' ];
@@ -16,7 +16,7 @@
       return $modal.open({
         size: 'lg',
         backdrop: false,
-        templateUrl: '/app/environments/swarm/logs/dialog.html',
+        templateUrl: '/app/swarm/logs/dialog.html',
         controller: Controller,
         controllerAs: 'vm',
         resolve: {

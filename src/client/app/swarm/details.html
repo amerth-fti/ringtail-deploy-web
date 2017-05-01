@@ -1,0 +1,31 @@
+
+<div class="swarm-info">
+
+  <div class="swarm-info-header">
+    <img class="docker-logo" src="/assets/img/docker-logo.png" alt="Docker Swarm" title="Docker Swarm" />
+  </div>
+
+  <div
+    class="swarm-stack"
+    ng-repeat="stack in vm.info.stacks">
+    <swarm-stack
+      stack="stack"
+      environment="vm.environment"
+      ></swarm-stack>
+  </div>
+
+  <h4>Nodes</h4>
+  <div class="row">
+    <div ng-repeat="node in vm.nodes">
+      <div class="clearfix" ng-if="$index % 4 === 0"></div>
+      <div class="col-sm-3">
+        <swarm-node
+          roles="vm.info.roles"
+          environment="vm.environment"
+          node="node"
+          ></swarm-node>
+      </div>
+    </div>
+  </div>
+
+</div>

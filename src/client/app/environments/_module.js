@@ -10,7 +10,7 @@
       'app.environments.starter',
       'app.environments.redeploy',
       'app.environments.taskdefs',
-      'app.environments.swarm',
+      'app.swarm',
     ]);
 
 }());

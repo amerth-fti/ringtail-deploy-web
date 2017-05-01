@@ -2,7 +2,7 @@
   'use strict';
 
   angular
-    .module('app.environments.swarm')
+    .module('app.swarm')
     .directive('swarmNode', swarmNode);
 
   function swarmNode() {
@@ -13,7 +13,7 @@
         environment: '=',
         node: '='
       },
-      templateUrl: '/app/environments/swarm/swarm-node.html',
+      templateUrl: '/app/swarm/swarm-node.html',
       controller: Controller,
       controllerAs: 'vm',
       bindToController: true
