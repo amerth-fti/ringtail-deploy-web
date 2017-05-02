@@ -151,8 +151,8 @@ exports.quickRedeploy = async function redeploy(data, next) {
   }
 };
 
-exports.validateDeploy = async function redeploy(data, next) {
-  debug('starting deployment validation');
+exports.validateDeploy = async function redeploy(data, opts, next) {
+  debug('starting deployment validation %j', data);
 
   let me = this;
   let environment = await envService.findById(data.envId);

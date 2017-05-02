@@ -25,12 +25,17 @@ exports.getValidations = (req, res) => {
   validationrunner.getValidation(jobId, (err, data) => {
     let runLogs = [];
 
+    // data.tasks structure looks like this:
+    //    data: { tasks: [{ subtask: {name: '', runLog: ['message']}]}
+    // we're trying to flatten it here like this:
+    //    runLogs: [message: 'message', machine: subtask.name] }
+
     _.each(data.tasks, function(task) {
       //runLogs.push(task.tasks);
       try {
         _.each(task.tasks, function(subTask) {
           _.each(subTask.runlog, function(logItem) {
-            runLogs.push(logItem.data);
+            runLogs.push({ message: logItem.data, machine: subTask.name});
           });
         });
       } catch (e) {
@@ -38,20 +43,28 @@ exports.getValidations = (req, res) => {
       }
     });
 
-    let alerts = _.filter(runLogs, function(log) {
-      return log.startsWith('alert|');
-    });
+    let bucketize = function(collection, key) { 
+      // filter items to the key, and extract the message content.
+      let bucket = _.filter(collection, function(log) {
+        return log.message.startsWith(key);
+      });
+      bucket = _.map(bucket, function(item) {
+        return { message: item.message.split('|')[1], machine: item.machine };
+      });
+      return bucket;
+    };
 
-    let okay = _.filter(runLogs, function(log) {
-      return log.startsWith('end|');
-    });
+    let groupToMostRecentByMachine = function(collection) {
+      let groupByMachine = _.groupBy(collection, function(item) { return item.machine});
+      let keys = _.keys(groupByMachine);
+      return _.map(keys, function(key) {
+        return _.last(groupByMachine[key]);
+      });
+    };
 
-    alerts = _.map(alerts, function(item) {
-      return item.split('|')[1];
-    });
-    okay = _.map(okay, function(item) {
-      return item.split('|')[1];
-    });
+    let alerts = _.pluck(bucketize(runLogs, 'alert|'), 'message');
+    let okay = _.pluck(groupToMostRecentByMachine(bucketize(runLogs, 'end|')), 'message');
+    let start = _.pluck(groupToMostRecentByMachine(bucketize(runLogs, 'start|')), 'message');
 
     let status = data.status === 'Succeeded' ? alerts.length > 0 ? 'Failed' : 'Succeeded' : data.status;
 
@@ -59,6 +72,7 @@ exports.getValidations = (req, res) => {
       id: data.id,
       status: status,
       alerts: alerts,
+      started: start,
       finished: okay
     }
 

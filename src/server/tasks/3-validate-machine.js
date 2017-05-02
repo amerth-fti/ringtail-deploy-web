@@ -37,16 +37,16 @@ function TaskImpl(options) {
     }
 
     let error = '';
-    log('start|starting validation');
-
     let machine = await machineSvc.get(machineId);
     let serviceIP = machine.intIP;
     let config = await configSvc.get(configId);
     let client = me.serviceClient = new RingtailClient({ serviceHost: serviceIP });
     let machineIdentity = machine.machineName + ' ' + machine.intIP ;
 
+    log('start|' + machineIdentity + ' starting validation');
+
     // check if the service is available.
-    log('start|waiting until the service is responsive ' + client.statusUrl);
+    log('start|Checking to see if the service is responsive ' + client.statusUrl);
     try{
       await client.waitForServiceLimited(20);
     } catch(e) {
@@ -54,43 +54,43 @@ function TaskImpl(options) {
       log('alert|' + str);
       return { message: str};
     }
-    log('end|The service is responding on ' + machineIdentity);
+    log('end|(1 of 5) The service is responding on ' + machineIdentity);
 
-    // // make sure we can set the self-update location.
-    // if(this.region && this.region.serviceConfig && this.region.serviceConfig.updatePath) {
-    //   // point the installer service to the desired regional path.
-    //   let path = this.region.serviceConfig.updatePath;
-    //   log('start|setting the install update location to ' + path);
-    //   try{
-    //     await client.setUpdatePath(path);
-    //   } catch(e) {
-    //     let str = machineIdentity + ' is having a problem with setting the self-update path.  The service is online, but it may have a permissions problem.  Check C:/Upgrade/InstallService/config.config credentials.';
-    //     log('alert|' + str);
-    //     return { message: str};
-    //   }
-    // }
+    // make sure we can set the self-update location.
+    if(this.region && this.region.serviceConfig && this.region.serviceConfig.updatePath) {
+      // point the installer service to the desired regional path.
+      let path = this.region.serviceConfig.updatePath;
+      log('start|' + machineIdentity + ' is setting the install update location to ' + path);
+      try{
+        await client.setUpdatePath(path);
+      } catch(e) {
+        let str = machineIdentity + ' is having a problem with setting the self-update path.  The service is online, but it may have a permissions problem.  Check C:/Upgrade/InstallService/config.config credentials.';
+        log('alert|' + str);
+        return { message: str};
+      }
+    }
 
-    // // self-update the install service.
-    // log('start|updating install service to latest version');
-    // try{
-    //   await client.update();
-    // } catch(e) {
-    //   let str = machineIdentity + ' is having a problem self-updating.  The service is online, but it may have a permissions problem.  Check C:/Upgrade/InstallService/config.config credentials.';
-    //   log('alert|' + str);
-    //   return { message: str};
-    // }
+    // self-update the install service.
+    log('start|' + machineIdentity + ' is updating install service to latest version.');
+    try{
+      await client.update();
+    } catch(e) {
+      let str = machineIdentity + ' is having a problem self-updating.  The service is online, but it may have a permissions problem.  Check C:/Upgrade/InstallService/config.config credentials.';
+      log('alert|' + str);
+      return { message: str};
+    }
 
-    // // wait for the self-update to complete.
-    // log('start|waiting for the service update to complete');
-    // try{
-    //   await client.waitForService();
-    // } catch(e) {
-    //   let str = machineIdentity + ' is having a problem self-updating the deployment service.  The service was online, and the update started, but its not responding anymore.';
-    //   log('alert|' + str + ' err details: %j', e);
-    //   return { message: str};
-    // }
+    // wait for the self-update to complete.
+    log('start|' + machineIdentity + ' is waiting for the service update to complete');
+    try{
+      await client.waitForService();
+    } catch(e) {
+      let str = machineIdentity + ' is having a problem self-updating the deployment service.  The service was online, and the update started, but its not responding anymore.';
+      log('alert|' + str + ' err details: %j', e);
+      return { message: str};
+    }
 
-    log('end|The service self-update looks good on ' + machineIdentity);
+    log('end|(2 of 5) The service self-update looks good on ' + machineIdentity);
 
     // configure install service
     debug('configuring install service' + machineId);
@@ -119,7 +119,9 @@ function TaskImpl(options) {
     }
     _.extend(configs, getConfigsFromOptions(options));
 
-    log('start|sending configuration');
+    configs['Common|BRANCH_NAME'] = branch;
+
+    log('start|Checking that we can send configuration to ' + machineIdentity);
     try{
       await client.setConfigs(configs);
 
@@ -129,9 +131,9 @@ function TaskImpl(options) {
       return { message: str};
     }  
 
-    log('end|Sending deployment configuration succeeded on ' + machineIdentity);
+    log('end|(3 of 5) Sending deployment configuration succeeded on ' + machineIdentity);
       
-    log('start|checking machine prerequisites');
+    log('start|Checking to see if the machine is healthy ' + machineIdentity);
     let prereqs = {};
     try{
       prereqs = await client.prerequisites();
@@ -165,9 +167,9 @@ function TaskImpl(options) {
         return { message: str};      
     }
 
-    log('end|Machine Health Check is ok on ' + machineIdentity);
+    log('end|(4 of 5) Machine Health Check is ok on ' + machineIdentity);
 
-    log('start|validation');
+    log('start|Running installation package validation on ' + machineIdentity);
     try{
       await client.validate();
     } catch(e) {
@@ -177,7 +179,7 @@ function TaskImpl(options) {
     }    
    
     // wait for Validate to complete
-    log('start|waiting for validations to complete');
+    log('start|Waiting for installation package validations to complete on ' + machineIdentity);
     let retry = false;
     try {
       await client.waitForValidate(function(status) {

@@ -229,7 +229,7 @@ app.delete('/api/envs/:envId', controllers.envs.remove);
 app.put   ('/api/envs/:envId/start', controllers.envs.start);
 app.put   ('/api/envs/:envId/pause', controllers.envs.pause);
 app.put   ('/api/envs/:envId/redeploy', controllers.envs.redeploy);
-app.get   ('/api/envs/:envId/validate', controllers.envs.validate);
+app.put   ('/api/envs/:envId/validate', controllers.envs.validate);
 app.get   ('/api/envs/:envId/quickdeploy/:branch', controllers.envs.quickdeploy);
 app.put   ('/api/envs/:envId/reset', controllers.envs.reset);
 app.get   ('/api/envs/:envId/configs', controllers.configs.findByEnv);

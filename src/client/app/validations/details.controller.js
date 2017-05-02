@@ -28,6 +28,10 @@
     function loadComplete(result) {
       vm.job = result;
       pollWhileRunning(result);
+
+      if(job.status !== 'Running') {
+        vm.job.started = [];
+      }
     }
 
     function pollWhileRunning(job) {
@@ -35,6 +39,8 @@
         vm.poll = $timeout(function() {
           job.$get(loadComplete);
         }, 5000);
+      } else {
+        vm.job.started = [];
       }
     }
   }

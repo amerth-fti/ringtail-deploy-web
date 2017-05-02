@@ -19,9 +19,9 @@
     };
   }
 
-  Controller.$inject = [ '_', '$timeout', '$rootScope', '$location', 'Browse', 'EnvironmentStarter', 'Config', 'uiGridConstants', 'Region', 'Validation' ];
+  Controller.$inject = [ '_', '$timeout', '$rootScope', '$location', 'Browse', 'EnvironmentStarter', 'Config', 'uiGridConstants', 'Region', 'Validation', 'Environment' ];
 
-  function Controller(_, $timeout, $rootScope, $location, Browse, EnvironmentStarter, Config, uiGridConstants, Region, Validation) {
+  function Controller(_, $timeout, $rootScope, $location, Browse, EnvironmentStarter, Config, uiGridConstants, Region, Validation, Environment) {
     var vm = this;
     vm.modalInstance      = this.modalInstance;
     vm.branches           = null;
@@ -49,6 +49,7 @@
     vm.validate           = validate;
     vm.toggleAdvanced     = toggleAdvanced;
     vm.toggleSelectedTask = toggleSelectedTask;
+    vm.validationId       = 0;
     vm.regionId           = null;
     vm.filesInvalid       = false;
     vm.isDeployed         = true;
@@ -61,8 +62,9 @@
     vm.click              = onFeatureKeyCheckClick;
     vm.featureGrid        = initFeatureGrid();
     vm.taskArray          = ['3-install-many'];
-    vm.version            = null,
-    vm.region             = null,
+    vm.version            = null;
+    vm.region             = null;
+    vm.validationJob      = null;
     vm.newLaunchKeys      = [];
     vm.rosettaStone       = {
       'DEVELOPMENT' : '0. Development',
@@ -194,7 +196,8 @@
 
     function rebuild() {
       vm.message = 'Processing';
-      checkEnvironmentStatus(doRebuild);
+      //checkEnvironmentStatus(doRebuild);
+      doRebuild();
     }
 
     function doRebuild() {
@@ -227,34 +230,28 @@
     }
 
     function doValidate() {
-      angular.copy(vm.tempEnv, vm.environment);
-      vm.environment.deployedBranch = constructBranchPath();
-      vm.environment.selectedTasks = vm.selectedTasks;
-
-      saveLaunchKeys().$promise.then(function() {
-        vm.environment.newLaunchKeys = vm.newLaunchKeys;
-        
-        // trigger the validation
-        vm.environment.$validate({ keepRpfwInstalls: vm.keepRpfwInstalls, wipeRpfWorkers: vm.wipeRpfWorkers })
-        // shut the dialog since we had success
+      Environment.validate({ envId: vm.tempEnv.envId, branch: constructBranchPath() }).$promise
         .then(function(response) {
-          Validation.get({ validationId: response.validationId }, loadValidationComplete);
-        })
-      });          
-    }
+          vm.validationId = response.validationId;
+          Validation.get({ validationId: vm.validationId }, loadValidationComplete)
+          return;
+        });
+    };
 
     function loadValidationComplete(result) {
-      vm.job = result;
+      vm.validationJob = result;
       pollWhileRunning(result);
     }
 
-    function pollWhileRunning(job) {
-      if(job.status === 'Running') {
+    function pollWhileRunning(validationJob) {
+      if(validationJob.status === 'Running') {
         vm.poll = $timeout(function() {
-          job.$get(loadValidationComplete);
+          validationJob.$get(loadValidationComplete);
         }, 5000);
       } else {
         vm.message = null;
+        vm.poll = null;
+        vm.validationJob.started = [];
       }
     }    
 

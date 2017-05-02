@@ -18,7 +18,7 @@ exports.list = function list(req, res, next) {
 
 exports.get = function get(req, res, next) {
   var envId = req.params.envId;
-  debug('getting environment - findById %s', req.params.envId);
+  //debug('getting environment - findById %s', req.params.envId);
   envService
     .findById(envId, function(err, result) {
       res.result  = result;
@@ -132,8 +132,8 @@ exports.quickdeploy = async function quickdeploy(req, res, next) {
 };
 
 exports.validate = async function validate(req, res, next) {
-  debug('validate');
-  var data = {};
+  var data = {}
+    , opts = parseQueryString(req.query);
   data.envId = req.param('envId');
   data.branch = req.param('branch');
   debug('validate - env: ' + data.envId + ' branch: %s', data.branch);
