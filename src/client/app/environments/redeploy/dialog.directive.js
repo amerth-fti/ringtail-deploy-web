@@ -247,7 +247,7 @@
       if(validationJob.status === 'Running') {
         vm.poll = $timeout(function() {
           validationJob.$get(loadValidationComplete);
-        }, 5000);
+        }, 3000);
       } else {
         vm.message = null;
         vm.poll = null;

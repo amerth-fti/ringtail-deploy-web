@@ -54,7 +54,7 @@ function TaskImpl(options) {
       log('alert|' + str);
       return { message: str};
     }
-    log('end|(1 of 5) The service is responding on ' + machineIdentity);
+    log('end|The service is responding on ' + machineIdentity);
 
     // make sure we can set the self-update location.
     if(this.region && this.region.serviceConfig && this.region.serviceConfig.updatePath) {
@@ -90,7 +90,7 @@ function TaskImpl(options) {
       return { message: str};
     }
 
-    log('end|(2 of 5) The service self-update looks good on ' + machineIdentity);
+    log('end|The service self-update looks good on ' + machineIdentity);
 
     // configure install service
     debug('configuring install service' + machineId);
@@ -131,7 +131,7 @@ function TaskImpl(options) {
       return { message: str};
     }  
 
-    log('end|(3 of 5) Sending deployment configuration succeeded on ' + machineIdentity);
+    log('end|Sending deployment configuration succeeded on ' + machineIdentity);
       
     log('start|Checking to see if the machine is healthy ' + machineIdentity);
     let prereqs = {};
@@ -167,7 +167,7 @@ function TaskImpl(options) {
         return { message: str};      
     }
 
-    log('end|(4 of 5) Machine Health Check is ok on ' + machineIdentity);
+    log('end|Machine Health Check is ok on ' + machineIdentity);
 
     log('start|Running installation package validation on ' + machineIdentity);
     try{
@@ -191,6 +191,7 @@ function TaskImpl(options) {
     }
 
     try {
+      log('start|Reading validation response from ' + machineIdentity);
       let messages = parseInstallDiagnostic(me.rundetails);
 
       _.each(messages, function(message) {
