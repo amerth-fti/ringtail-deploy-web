@@ -48,7 +48,7 @@ function TaskImpl(options) {
     // check if the service is available.
     log('start|Checking to see if the service is responsive ' + client.statusUrl);
     try{
-      await client.waitForServiceLimited(20);
+      await client.waitForServiceLimited(20 * 1000);
     } catch(e) {
       let str = machineIdentity + ' is offline or service unreachable. Try starting your machine, or if it is already started, log onto this machine and make sure the service RingtailDeployService is running.';
       log('alert|' + str);
@@ -83,7 +83,7 @@ function TaskImpl(options) {
     // wait for the self-update to complete.
     log('start|' + machineIdentity + ' is waiting for the service update to complete');
     try{
-      await client.waitForService();
+      await client.waitForServiceLimited();
     } catch(e) {
       let str = machineIdentity + ' is having a problem self-updating the deployment service.  The service was online, and the update started, but its not responding anymore.';
       log('alert|' + str + ' err details: %j', e);
