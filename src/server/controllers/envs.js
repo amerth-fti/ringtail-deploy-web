@@ -18,7 +18,6 @@ exports.list = function list(req, res, next) {
 
 exports.get = function get(req, res, next) {
   var envId = req.params.envId;
-  debug('getting environment - findById %s', req.params.envId);
   envService
     .findById(envId, function(err, result) {
       res.result  = result;
@@ -29,7 +28,6 @@ exports.get = function get(req, res, next) {
 
 exports.version = function get(req, res, next) {
   var envId = req.params.envId;
-  debug('getting environment - version %s', req.params.envId);
   envService
     .version(envId, function(err, result) {
       res.result  = result;
@@ -130,6 +128,26 @@ exports.quickdeploy = async function quickdeploy(req, res, next) {
   }
   return res.json(response);
 };
+
+exports.validate = async function validate(req, res, next) {
+  var data = {}
+    , opts = parseQueryString(req.query);
+  data.envId = req.param('envId');
+  data.branch = req.param('branch');
+  debug('validate - env: ' + data.envId + ' branch: %s', data.branch);
+  let response = {};
+  try {
+    response = await redeployService.validateDeploy(data);
+    response.success = true;
+  } 
+  catch (err) {
+    debug('validate - error: %s', err);
+    response = { message: err };
+    response.success = false;
+  }
+  return res.json(response);
+};
+
 
 
 exports.reset = function reset(req, res, next) {

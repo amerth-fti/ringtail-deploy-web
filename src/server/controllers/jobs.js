@@ -2,13 +2,82 @@ let debug       = require('debug')('deployer-projects');
 let Q           = require('q');
 let _           = require('underscore');
 let jobrunner   = require('../jobrunner');
+let validationrunner   = require('../validationrunner');
 let cheerio     = require('cheerio');
 let jobservice  = require('../services/job-service');
+
 
 exports.list = (req, res) => {
   let jobs = jobrunner.getJobs();
   debug('jobs - ' + jobs.length);
   res.send(jobs);
+};
+
+exports.listValidations = (req, res) => {
+  let validations = validationrunner.getValidations();
+  debug('validations - ' + validations.length);
+  res.send([]);
+};
+
+exports.getValidations = (req, res) => {
+  let jobId = req.param('validationId');
+  debug('getValidations ' + jobId);
+  validationrunner.getValidation(jobId, (err, data) => {
+    let runLogs = [];
+
+    // data.tasks structure looks like this:
+    //    data: { tasks: [{ subtask: {name: '', runLog: ['message']}]}
+    // we're trying to flatten it here like this:
+    //    runLogs: [message: 'message', machine: subtask.name] }
+
+    _.each(data.tasks, function(task) {
+      //runLogs.push(task.tasks);
+      try {
+        _.each(task.tasks, function(subTask) {
+          _.each(subTask.runlog, function(logItem) {
+            runLogs.push({ message: logItem.data, machine: subTask.name});
+          });
+        });
+      } catch (e) {
+        runLogs.push('Something unknown went wrong with the validation job. %j', e);
+      }
+    });
+
+    let bucketize = function(collection, key) { 
+      // filter items to the key, and extract the message content.
+      let bucket = _.filter(collection, function(log) {
+        return log.message.startsWith(key);
+      });
+      bucket = _.map(bucket, function(item) {
+        return { message: item.message.split('|')[1], machine: item.machine };
+      });
+      return bucket;
+    };
+
+    let groupToMostRecentByMachine = function(collection) {
+      let groupByMachine = _.groupBy(collection, function(item) { return item.machine; });
+      let keys = _.keys(groupByMachine);
+      return _.map(keys, function(key) {
+        return _.last(groupByMachine[key]);
+      });
+    };
+
+    let alerts = _.pluck(bucketize(runLogs, 'alert|'), 'message');
+    let okay = _.pluck(groupToMostRecentByMachine(bucketize(runLogs, 'end|')), 'message');
+    let start = _.pluck(groupToMostRecentByMachine(bucketize(runLogs, 'start|')), 'message');
+
+    let status = data.status === 'Succeeded' ? alerts.length > 0 ? 'Failed' : 'Succeeded' : data.status;
+
+    let response = {
+      id: data.id,
+      status: status,
+      alerts: alerts,
+      started: start,
+      finished: okay
+    };
+
+    res.send(response);    
+  });
 };
 
 exports.summaryList = function summaryList(req, res, next) {
@@ -18,7 +87,14 @@ exports.summaryList = function summaryList(req, res, next) {
     timeframe = 365;
   }
   jobservice.list(null, function(err, result) {
-    let friendlyResult = _.map(result, function(job) {
+    let tmpResult = _.filter(result, function (job) {
+      return job.log !== null; 
+    });
+
+    let friendlyResult = _.map(tmpResult, function(job) {
+      if(job.log === null) {
+        return;
+      }
       return {id: job.log.id, status: job.log.status, started: job.log.started, stopped: job.log.stopped, name: job.log.name};
     });
 
@@ -40,6 +116,131 @@ exports.summaryList = function summaryList(req, res, next) {
     });
 
     res.result = {successRates: successRates, jobsOverTime: jobsOverTime, outcomesByEnv: outcomesByEnv};
+    res.err = err;
+    next();
+  });
+};
+
+exports.failureDetailsList = function failureDetailsList(req, res, next) {
+  let timeframe = req.params.last;
+  let timeShift = 0 ;
+  if(!timeframe || timeframe == 0) {
+    timeframe = 365;
+  }
+  if(timeframe) {
+    if(timeframe.split('-').length > 1) {
+      timeShift = parseInt(timeframe.split('-')[0]);
+      timeframe = parseInt(timeframe.split('-')[1]);
+    }
+  }
+
+  jobservice.list(null, function(err, result) {
+    let tmpResult = _.filter(result, function (job) {
+      return job.log !== null; 
+    });
+
+    let friendlyResult = _.map(tmpResult, function(job) {
+      if(job.log) {
+        return {id: job.log.id, status: job.log.status, started: job.log.started, stopped: job.log.stopped, name: job.log.name, text: job.log};
+      }
+    });
+
+    let jobsSince = new Date();
+    jobsSince = jobsSince.setDate(jobsSince.getDate() - timeframe);
+
+    let jobsBefore = new Date();
+    jobsBefore = jobsBefore.setDate(jobsBefore.getDate() - timeShift);
+
+    let recent = _.filter(friendlyResult, function(item) {
+      return Date.parse(item.started) > jobsSince && Date.parse(item.started) < jobsBefore;
+    });
+
+    let recentFailures = _.filter(recent, function(item) {
+      return item.status === 'Failed';
+    });
+
+    let recentSuccesses = _.filter(recent, function(item) {
+      return item.status.startsWith('Suc');
+    });
+
+    let outcomesByEnv = _.mapObject(_.groupBy(recent, 'name'), function(val) {
+       return _.map(val, function(v) {
+          return v.id;
+       });
+    });
+
+    let failedMachines = {};
+    let failureContent = {failureCtx: []};
+
+    let byMachine = {};
+    _.each(recent, function(job) {
+        var tasks = job.text.tasks;
+        let regionName = '';
+        try {
+          regionName = job.text.tasks[0].taskdefs[0].options.region.regionName.toLowerCase();
+        } catch (e) {
+          regionName = 'unknown';
+        }
+        _.each(tasks, function(task) {
+          var subTask = task.tasks;
+          _.each(subTask, function(subTask) {
+            let name = subTask.name.toLowerCase();
+            name = name.split('-')[0];
+
+            if(name.startsWith('all')) {
+              name = name + '-' + regionName;
+            }
+
+            if(name.startsWith('anv') || name.startsWith('ued')) {
+              // skip;
+            } else {
+              if(!byMachine[name]) {
+                byMachine[name] = {success: 0, failed: 0};
+              }
+              if(subTask.status === 'Failed') {
+                byMachine[name].failed += 1;
+                if(!failedMachines[name]) {
+                  failedMachines[name] = {failures: []};
+                } 
+                failedMachines[name].failures.push(job.id);
+                let ctx = subTask.rundetails;
+                if(ctx) {
+                let ctxs = ctx.split('-----------');
+                if(ctxs.length > 1) {
+                  var last = ctxs[ctxs.length-1];
+                  last = last.replace(/<p\>/g, ' ');
+                  last = last.replace(/<\/p\>/g, ' ');
+                  last = last.replace(/\\"/g, '"');
+                  last = last.replace(/\\\\/g, '\\');
+                  last = last.replace(/C:\\Upgrade\\AutoDeploy\\/g, '');
+                  last = last.replace(/starting: /g, '');
+                  last = last.split('*')[2];
+                  if(last.length > 100) {
+                    last = last.substring(0, 100);
+                  }
+                  //failureContent.failureCtx.push(last);
+
+                  if(!failureContent[last]) {
+                    failureContent[last] = 0;
+                  }
+
+                  failureContent[last] += 1;
+                }
+              }
+              } else {
+                byMachine[name].success += 1;
+              }
+            }
+          });
+        });
+    });
+
+    let jobsOverTime = _.countBy(recentFailures, function(job) {    // count by days, so we can see how many jobs run per day.
+      let date = new Date(Date.parse(job.started));
+      return (date.getMonth() + 1) + '-' + date.getDate();
+    });
+
+    res.result = {failuresOverTime: jobsOverTime, byMachine: byMachine, failedMachines: failedMachines, failureContent: failureContent};
     res.err = err;
     next();
   });
