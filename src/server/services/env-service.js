@@ -295,7 +295,6 @@ function joinEnvSkytap(env) {
         env.runstate = skyenv.runstate;
         return env;
       }, function() {
-        //debug('Could not find env %d', env.remoteId);
         return env;
       });
   } else {

@@ -163,19 +163,9 @@ exports.failureDetailsList = function failureDetailsList(req, res, next) {
       return item.status.startsWith('Suc');
     });
 
-    // let nonAllinone = _.filter(recentFailures, function(item) {
-    //   let isAllInOne = false;
-    //     try {
-    //         isAllInOne = item.text.tasks[0].tasks[0].name.toLowerCase().startsWith('all');
-    //     }
-    //     catch (e) {
-    //       isAllInOne = false;
-    //     }
-    //   return isAllInOne;
-    // });
     let outcomesByEnv = _.mapObject(_.groupBy(recent, 'name'), function(val) {
        return _.map(val, function(v) {
-          return 'http://localhost:11234/app/jobs/' + v.id;
+          return v.id;
        });
     });
 
