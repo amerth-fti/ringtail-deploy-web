@@ -148,7 +148,6 @@ function TaskImpl(options) {
     } catch(e) {
         let str = 'Machine Health Check: ' + machineIdentity + ' had an unknown failure with the machine health checks.  This is unexpected, please contact a system administrator to investigate.';  // i dont' know why this would fail, since the site is known to be up at this point.
         log('alert|' + str + ' err details: %j', e);
-        return { message: str};      
     }
 
     try {
