@@ -55,7 +55,7 @@ exports.getValidations = (req, res) => {
     };
 
     let groupToMostRecentByMachine = function(collection) {
-      let groupByMachine = _.groupBy(collection, function(item) { return item.machine});
+      let groupByMachine = _.groupBy(collection, function(item) { return item.machine; });
       let keys = _.keys(groupByMachine);
       return _.map(keys, function(key) {
         return _.last(groupByMachine[key]);
@@ -74,7 +74,7 @@ exports.getValidations = (req, res) => {
       alerts: alerts,
       started: start,
       finished: okay
-    }
+    };
 
     res.send(response);    
   });

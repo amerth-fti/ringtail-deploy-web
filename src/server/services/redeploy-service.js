@@ -158,10 +158,10 @@ exports.validateDeploy = async function redeploy(data, opts, next) {
   let environment = await envService.findById(data.envId);
   let env = new Env(environment);
   let selectedTasks = [{
-    "task": "3-validate-many",
-    "options": {
-      "name": "Validate Deployment",
-      "installs": "all"
+    'task': '3-validate-many',
+    'options': {
+      'name': 'Validate Deployment',
+      'installs': 'all'
     }
   }];
 

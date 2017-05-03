@@ -29,7 +29,7 @@
       vm.job = result;
       pollWhileRunning(result);
 
-      if(job.status !== 'Running') {
+      if(result.status !== 'Running') {
         vm.job.started = [];
       }
     }

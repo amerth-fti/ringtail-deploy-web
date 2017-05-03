@@ -53,7 +53,7 @@ Validation.prototype.start = function start() {
       // mark as complete
       validation.status = status;
       validation.stopped = new Date();
-      validation.messsage 
+      validation.messsage;
     }
     catch(err) {
       // mark as failed

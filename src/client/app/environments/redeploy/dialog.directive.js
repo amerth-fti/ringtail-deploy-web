@@ -233,7 +233,7 @@
       Environment.validate({ envId: vm.tempEnv.envId, branch: constructBranchPath() }).$promise
         .then(function(response) {
           vm.validationId = response.validationId;
-          Validation.get({ validationId: vm.validationId }, loadValidationComplete)
+          Validation.get({ validationId: vm.validationId }, loadValidationComplete);
           return;
         });
     };
