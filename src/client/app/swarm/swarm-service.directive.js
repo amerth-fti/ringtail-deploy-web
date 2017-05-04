@@ -26,13 +26,13 @@
     var vm               = this;
     vm.environment       = this.environment;
     vm.service           = this.service;
-    vm.showDetails       = true;
     vm.getDeploymentMode = getDeploymentMode;
     vm.getRunningTasks   = getRunningTasks;
     vm.getDesiredTasks   = getDesiredTasks;
     vm.getEndpointMode   = getEndpointMode;
     vm.getStatus         = getStatus;
-    vm.toggleDetails     = toggleDetails;
+    vm.showTaskDetails   = false;
+    vm.toggleTaskDetails = toggleTaskDetails;
     vm.redeploy          = redeploy;
     vm.redeploying       = false;
     vm.viewLogs          = viewLogs;
@@ -42,7 +42,7 @@
     //////////
 
     function activate() {
-
+      console.log(vm.showTaskDetails);
     }
 
     function getDeploymentMode() {
@@ -71,8 +71,8 @@
       return getRunningTasks() > 0 ? 'running': 'pending';
     }
 
-    function toggleDetails() {
-      vm.showDetails = !vm.showDetails;
+    function toggleTaskDetails() {
+      vm.showTaskDetails = !vm.showTaskDetails;
     }
 
     function redeploy() {

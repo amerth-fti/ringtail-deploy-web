@@ -18,9 +18,9 @@
     };
   }
 
-  ListItemController.$inject = [ '$timeout', '$scope', 'config', 'EnvironmentEditor', 'EnvironmentStarter', 'EnvironmentRedeploy' ];
+  ListItemController.$inject = [ '$timeout', '$scope', '$location', 'config', 'EnvironmentEditor', 'EnvironmentStarter', 'EnvironmentRedeploy' ];
 
-  function ListItemController($timeout, $scope, config, EnvironmentEditor, EnvironmentStarter, EnvironmentRedeploy) {
+  function ListItemController($timeout, $scope, $location, config, EnvironmentEditor, EnvironmentStarter, EnvironmentRedeploy) {
     var vm             = this;
     vm.enableDeploy    = config.enableDeployment;
     vm.environment     = this.environment;
@@ -31,6 +31,8 @@
     vm.showRedeploy    = showRedeploy;
     vm.showCancel      = showCancel;
     vm.showDeployLink  = showDeployLink;
+    vm.swarmConfigured = swarmConfigured;
+    vm.viewSwarm       = viewSwarm;
     vm.edit            = edit;
     vm.pause           = pause;
     vm.redeploy        = redeploy;
@@ -111,6 +113,14 @@
       // 2) the environment deployment failed
       var environment = vm.environment;
       return environment.status === 'deploying' || environment.status === 'failed';
+    }
+
+    function swarmConfigured() {
+      return !!vm.environment.swarmhost;
+    }
+
+    function viewSwarm() {
+      $location.path('/app/swarm/' + vm.environment.envId);
     }
 
     function pollWhileBusy(environment) {

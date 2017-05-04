@@ -20,17 +20,19 @@
     };
   }
 
-  Controller.$inject = [ '$scope','ValidationMessage', 'Swarm' ];
+  Controller.$inject = [ '$scope', 'Swarm' ];
 
-  function Controller($scope, ValidationMessage, Swarm) {
-    var vm          = this;
-    vm.environment  = this.environment;
-    vm.node         = this.node;
-    vm.roles        = this.roles;
-    vm.roleOptions  = [];
-    vm.selectedRole = null;
-    vm.roleSelected = roleSelected;
-    vm.removeRole   = removeRole;
+  function Controller($scope, Swarm) {
+    var vm               = this;
+    vm.environment       = this.environment;
+    vm.node              = this.node;
+    vm.roles             = this.roles;
+    vm.roleOptions       = [];
+    vm.selectedRole      = null;
+    vm.roleSelected      = roleSelected;
+    vm.removeRole        = removeRole;
+    vm.showTaskDetails   = false;
+    vm.toggleTaskDetails = toggleTaskDetails;
 
     activate();
 
@@ -78,6 +80,10 @@
           vm.node = node;
           getRoleOptions();
         });
+    }
+
+    function toggleTaskDetails() {
+      vm.showTaskDetails = !vm.showTaskDetails;
     }
 
   }

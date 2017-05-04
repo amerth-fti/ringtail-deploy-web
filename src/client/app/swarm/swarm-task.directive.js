@@ -26,6 +26,7 @@
     vm.task        = this.task;
     vm.environemnt = this.environment;
     vm.viewLogs    = viewLogs;
+    vm.getStatus   = getStatus;
 
     activate();
 
@@ -37,6 +38,10 @@
 
     function viewLogs() {
       SwarmLogs.open(vm.environment, vm.task);
+    }
+
+    function getStatus() {
+
     }
 
   }

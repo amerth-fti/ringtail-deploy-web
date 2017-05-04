@@ -1,5 +1,5 @@
 
-<div class="swarm-node-group clearfix">
+<div class="swarm-node-container clearfix">
   <div class="swarm-node node-{{ vm.node.Status.State }}">
     <div class="node-id">
       <label>Node:</label>
@@ -21,6 +21,22 @@
       {{ vm.node.Status.Addr }}
     </div>
     <div><label>Roles:</label></div>
+    <div class="node-role" ng-repeat="(key, value) in vm.node.Spec.Labels">
+      <span
+        class="trash glyphicon glyphicon-trash"
+        ng-if="value === 'true'"
+        ng-click="vm.removeRole(key)"
+        />
+      <span
+        class="configured glyphicon glyphicon-ok"
+        ng-if="value === 'true'"
+        />
+      <span
+        class="configuring glyphicon glyphicon-asterisk"
+        ng-if="value === 'configuring'"
+        />
+      <span>{{key}}</span>
+    </div>
     <div class="node-role-selector">
       <select
         class="form-control"
@@ -32,28 +48,21 @@
         <option ng-repeat="option in vm.roleOptions" ng-value="option.name">{{option.name}}</option>
       </select>
     </div>
-    <div class="node-role" ng-repeat="(key, value) in vm.node.Spec.Labels">
-      <span
-        class="configured glyphicon glyphicon-ok"
-        ng-if="value === 'true'"
-        />
-
-      <span
-        class="configuring glyphicon glyphicon-asterisk"
-        ng-if="value === 'configuring'"
-        />
-
-      <span>{{key}}</span>
-
-      <span
-        class="glyphicon glyphicon-trash"
-        ng-if="value === 'true'"
-        ng-click="vm.removeRole(key)"
-        />
+    <div>
+      <label>Tasks:</label> {{vm.node.tasks.length}}
+      <div class="pull-right">
+        <i
+          class="glyphicon"
+          ng-click="vm.toggleTaskDetails()"
+          ng-class="vm.showTaskDetails ? 'glyphicon-chevron-down' : 'glyphicon-chevron-left'" />
+      </div>
     </div>
   </div>
 
-  <div class="col-sm-11 col-no-padding" ng-repeat="task in vm.node.tasks">
+  <div
+    ng-show="vm.showTaskDetails"
+    class="col-sm-11 col-no-padding"
+    ng-repeat="task in vm.node.tasks">
     <swarm-task
       task="task"
       environment="vm.environment"

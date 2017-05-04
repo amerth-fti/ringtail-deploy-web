@@ -579,11 +579,21 @@ body[page=login] {
 
 }
 
-.docker-logo {
-  height: 50px;
+
+.swarm-info-header {
+  .glyphicon {
+    /* color: #009bc3; */
+    /* color: #00b9eb; */
+    color: #0190c9;
+  }
+
+  .docker-logo {
+    float: right;
+    margin-left: -15px;
+  }
 }
 
-.swarm-node-group {
+.swarm-node-container {
   margin-bottom: 15px;
 }
 
@@ -605,39 +615,56 @@ body[page=login] {
   }
 
   .node-role {
-    margin-left: 1.5rem;
+    margin-left: .75rem;
 
     .configured {
       color: #5cb85c;
+      pointer: none;
     }
 
     .configuring {
       color: #5bc0de;
+      pointer: none;
     }
 
     .trash {
-      color: #505050;
+      float: right;
+      color: #777;
     }
+
     .trash:hover {
       color: #000;
     }
   }
 
   .node-role-selector {
-    margin-bottom: 1.5rem;
-
+    margin-bottom: .75rem;
     select {
       font-size: 1rem;
-      height: 2rem;
+      height: 2.25rem;
+      padding-top: 0.125rem;
+      padding-bottom: 0.125rem;
     }
   }
 
   &.node-ready {
     border-left: 5px solid rgba(92,184,92,0.8);
   }
+
+  .glyphicon {
+    color: #777;
+    cursor: pointer;
+
+    &:hover {
+      color: #333;
+    }
+  }
 }
 
 
+.swarm-stack {
+  border-bottom: 1px dotted #e0e0e0;
+}
 
 .swarm-deploying {
   margin-right: 1.5rem;
@@ -656,6 +683,10 @@ body[page=login] {
   &.pending {
     background: rgba(66,139,202,0.8);
   }
+}
+
+.stack-redeploy {
+  font-size: 1.3rem;
 }
 
 .swarm-service {
@@ -682,6 +713,15 @@ body[page=login] {
   &.service-pending {
     border-left: 5px solid rgba(66,139,202,0.8);
   }
+
+  .glyphicon {
+    color: #777;
+    cursor: pointer;
+
+    &:hover {
+      color: #333;
+    }
+  }
 }
 
 .swarm-task {
@@ -701,6 +741,15 @@ body[page=login] {
     margin-bottom: 0;
   }
 
+  .glyphicon {
+    color: #777;
+    cursor: pointer;
+
+    &:hover {
+      color: #333;
+    }
+  }
+
   &.task-running {
     border-left: 5px solid rgba(92,184,92,0.8);
   }
@@ -708,25 +757,15 @@ body[page=login] {
   &.task-pending {
     border-left: 5px solid rgba(66,139,202,0.8);
   }
-}
 
-.failed-tasks {
-  margin-left: 10px;
-  margin-top: 10px;
-}
-.failed-task {
-  margin-top: .75rem;
-  color: #909090;
-
-  .glyphicon {
-    color: #000;
+  &.task-stopped {
+    border-left: 5px solid rgba(221,221,221,0.8);
   }
-}
-.failed-task-id {
-  text-align: right;
-}
-.failed-task-err {
-  overflow: hidden;
+
+  &.task-failed,
+  &.task-rejected {
+    border-left: 5px solid rgba(221,56,56,0.8)
+  }
 }
 
 .swarm-log {

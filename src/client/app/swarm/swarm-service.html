@@ -7,7 +7,7 @@
     <label>Name:</label>
     {{vm.service.name}}
   </div>
-  <div ng-show="vm.showDetails">
+  <div class="swarm-service-details">
     <div class="swarm-service-mode">
       <label>Mode:</label>
       {{vm.getDeploymentMode()}}
@@ -17,26 +17,28 @@
       {{vm.getEndpointMode()}}
     </div>
     <div class="swarm-service-tasks">
+      <div class="pull-right">
+        <i
+          class="glyphicon"
+          ng-click="vm.toggleTaskDetails()"
+          ng-class="vm.showTaskDetails ? 'glyphicon-chevron-down' : 'glyphicon-chevron-left'" />
+      </div>
       <label>Tasks:</label>
       {{vm.getRunningTasks()}} / {{vm.getDesiredTasks()}}
     </div>
   </div>
-
-  <div class="failed-tasks" ng-show="vm.service.failedTasks.length">
-    <label>Failed Tasks</label>
-    <div
-      class="row failed-task"
-      ng-repeat="task in vm.service.failedTasks"
-      ng-click="vm.viewLogs(task)">
-      <div>
-        <div class="col-sm-5 failed-task-date">{{ task.Status.Timestamp | date:'M/d H:mm:ss' }}</div>
-        <div class="col-sm-7 failed-task-id">
-          {{task.ID.substring(0,12)}}
-          <span class="glyphicon glyphicon-info-sign"></span>
-        </div>
-        <div class="col-sm-12">{{task.Status.State}}</div>
-      </div>
-      <div class="col-sm-12 failed-task-err">{{task.Status.Err}}</div>
-    </div>
+</div>
+<div class="swarm-service-tasks" ng-show="vm.showTaskDetails">
+  <div class="col-sm-11 col-no-padding" ng-repeat="task in vm.service.tasks">
+    <swarm-task
+      task="task"
+      environment="vm.environment"
+      ></swarm-task>
+  </div>
+  <div class="col-sm-11 col-no-padding" ng-repeat="task in vm.service.failedTasks">
+    <swarm-task
+      task="task"
+      environment="vm.environment"
+      ></swarm-task>
   </div>
 </div>
