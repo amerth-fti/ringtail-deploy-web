@@ -593,6 +593,10 @@ body[page=login] {
   }
 }
 
+.swarm-nodes-container {
+  border-top: 1px dotted #e0e0e0;
+}
+
 .swarm-node-container {
   margin-bottom: 15px;
 }
@@ -663,7 +667,8 @@ body[page=login] {
 
 
 .swarm-stack {
-  border-bottom: 1px dotted #e0e0e0;
+  border-top: 1px dotted #e0e0e0;
+  margin-bottom: 1rem;
 }
 
 .swarm-deploying {
@@ -754,12 +759,18 @@ body[page=login] {
     border-left: 5px solid rgba(92,184,92,0.8);
   }
 
-  &.task-pending {
+  &.task-assigned,
+  &.task-pending,
+  &.task-preparing,
+  &.task-ready,
+  &.task-starting
+  &.task-started {
     border-left: 5px solid rgba(66,139,202,0.8);
   }
 
-  &.task-stopped {
-    border-left: 5px solid rgba(221,221,221,0.8);
+  &.task-stopped,
+  &.task-shutdown {
+    border-left: 5px solid rgba(48,48,48,0.8);
   }
 
   &.task-failed,

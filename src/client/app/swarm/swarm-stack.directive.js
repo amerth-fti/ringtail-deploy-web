@@ -51,6 +51,11 @@
         .then(function(res) {
           $scope.$emit('deploy_completed', eventData);
           vm.deploying = false;
+        })
+        .catch(function(res) {
+          $scope.$emit('deploy_completed', eventData);
+          vm.deploying = false;
+          setTimeout(alert('Deployment failed with ' + res.statusText));
         });
     }
 

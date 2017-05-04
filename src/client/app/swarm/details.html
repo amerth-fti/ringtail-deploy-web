@@ -18,16 +18,18 @@
       ></swarm-stack>
   </div>
 
-  <h4>Nodes</h4>
-  <div class="row">
-    <div ng-repeat="node in vm.nodes">
-      <div class="clearfix" ng-if="$index % 4 === 0"></div>
-      <div class="col-sm-3">
-        <swarm-node
-          roles="vm.info.roles"
-          environment="vm.environment"
-          node="node"
-          ></swarm-node>
+  <div class="swarm-nodes-container">
+    <h4>Nodes</h4>
+    <div class="row">
+      <div ng-repeat="node in vm.nodes">
+        <div class="clearfix" ng-if="$index % 4 === 0"></div>
+        <div class="col-sm-3">
+          <swarm-node
+            roles="vm.info.roles"
+            environment="vm.environment"
+            node="node"
+            ></swarm-node>
+        </div>
       </div>
     </div>
   </div>

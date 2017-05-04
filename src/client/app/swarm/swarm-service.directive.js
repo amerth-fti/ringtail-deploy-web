@@ -42,7 +42,6 @@
     //////////
 
     function activate() {
-      console.log(vm.showTaskDetails);
     }
 
     function getDeploymentMode() {
@@ -89,6 +88,11 @@
       .then(function(res) {
         $scope.$emit('deploy_completed', eventData);
         vm.redeploying = false;
+      })
+      .catch(function(res) {
+        $scope.$emit('deploy_completed', eventData);
+        vm.redeploying = false;
+        setTimeout(alert('Deployment failed with ' + res.statusText));
       });
     }
 

@@ -29,13 +29,13 @@
   </div>
 </div>
 <div class="swarm-service-tasks" ng-show="vm.showTaskDetails">
-  <div class="col-sm-11 col-no-padding" ng-repeat="task in vm.service.tasks">
+  <div class="col-sm-11 col-sm-push-1 col-no-padding" ng-repeat="task in vm.service.tasks">
     <swarm-task
       task="task"
       environment="vm.environment"
       ></swarm-task>
   </div>
-  <div class="col-sm-11 col-no-padding" ng-repeat="task in vm.service.failedTasks">
+  <div class="col-sm-11 col-sm-push-1 col-no-padding" ng-repeat="task in vm.service.failedTasks">
     <swarm-task
       task="task"
       environment="vm.environment"

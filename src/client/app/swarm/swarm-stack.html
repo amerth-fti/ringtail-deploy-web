@@ -3,7 +3,7 @@
 
   <h4>
     <div class="stack-status {{vm.stack.running ? 'running' : 'pending' }}"></div>
-    {{vm.stack.name}}
+    Stack: {{vm.stack.name}}
     <div
       class="stack-redeploy {{ 'glyphicon glyphicon-repeat' + (vm.deploying ? ' spinner': '') }}"
       ng-click="vm.deploy()"></div>
