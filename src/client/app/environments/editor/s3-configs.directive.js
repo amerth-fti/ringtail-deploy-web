@@ -87,7 +87,7 @@
     }
 
     function prev() {
-      vm.wizard.stage = 'swarm';
+      vm.wizard.stage = 'info';
     }
   }
 

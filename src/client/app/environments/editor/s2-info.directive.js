@@ -52,7 +52,7 @@
         vm.environment.errorHost = '';
       }
 
-      vm.wizard.stage = 'swarm';
+      vm.wizard.stage = 'configs';
     }
 
     function prev() {
