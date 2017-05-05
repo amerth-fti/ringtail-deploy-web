@@ -6,10 +6,10 @@
     .service('Environment', Environment);
 
   Environment.$inject = [ '$resource' ];
-
+ 
   function Environment($resource) {
     return $resource(
-      'api/envs/:envId',
+      'api/envs/:envId', 
       { envId: '@envId' },
       {
         update  : { method: 'PUT', url: 'api/envs/:envId' },

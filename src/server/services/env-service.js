@@ -2,7 +2,7 @@ var debug           = require('debug')('deployer-envservice')
   , Q               = require('q')
   , Skytap          = require('node-skytap')
   , EnvMapper       = require('../mappers/env-mapper')
-  , JobMapper       = require('../mappers/jobs-mapper')
+  , JobMapper       = require('../mappers/jobs-mapper') 
   , MachineMapper   = require('../mappers/machine-mapper')
   , Env             = require('../models/env')
   , config          = require('../../../config')
@@ -14,7 +14,7 @@ var debug           = require('debug')('deployer-envservice')
   , machineMapper   = new MachineMapper(dbPath)
   , RingtailClient  = require('ringtail-deploy-client')
   , ConfigMapper    = require('../mappers/config-mapper')
-  , configMapper    = new ConfigMapper(dbPath)
+  , configMapper    = new ConfigMapper(dbPath)  
   , _               = require('underscore')
   , async           = require('async')
   , findById
@@ -92,7 +92,7 @@ exports.version = function version(envId, next) {
               var roles = conf.roles;
               var possibleRoles = ['SKYTAP-ALLINONE', 'WEBAGENT', 'DEV-FULL', 'WEB', 'SKYTAP-WEB'];
               var matchingRole = _.intersection(roles, possibleRoles);
-
+             
               if(matchingRole.length > 0) {
                 if(!serviceip)  serviceip = machine.intIP;
                 return callback(null, serviceip);
@@ -119,7 +119,7 @@ exports.version = function version(envId, next) {
               version: version || '0.0.0.0'
             };
           }).fail(function(err) {
-
+            
           })
           .nodeify(next);
       });

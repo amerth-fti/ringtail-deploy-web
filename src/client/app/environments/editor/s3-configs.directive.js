@@ -87,7 +87,7 @@
     }
 
     function prev() {
-      vm.wizard.stage = 'info';
+      vm.wizard.stage = 'method';
     }
   }
 

@@ -2,7 +2,6 @@ var debug           = require('debug')('deployer-environments')
   , Q               = require('q')
   , envService      = require('../services/env-service')
   , redeployService = require('../services/redeploy-service')
-  , swarmService    = require('../services/swarm-service')
   ;
 
 
@@ -102,13 +101,13 @@ exports.redeploy = async function redeploy(req, res, next) {
   var data = req.body
     , opts = parseQueryString(req.query)
     ;
-
+  
   try {
     res.result = await redeployService.redeploy(data, opts);
   } catch(err) {
     res.err = err;
   }
-
+  
   return next();
 };
 
@@ -121,7 +120,7 @@ exports.quickdeploy = async function quickdeploy(req, res, next) {
   try {
     response = await redeployService.quickRedeploy(data);
     response.success = true;
-  }
+  } 
   catch (err) {
     debug('quickdeploy - error: %s', err);
     response = { message: err };
@@ -179,7 +178,7 @@ exports.updateRemoteId = async function(req, res, next) {
         res.err = err;
     }
 
-    next();
+    next();    
 };
 
 
