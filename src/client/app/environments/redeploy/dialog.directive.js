@@ -252,6 +252,10 @@
         vm.message = null;
         vm.poll = null;
         vm.validationJob.started = [];
+
+        if(validationJob.status === 'Succeeded') {
+          vm.rebuild();
+        }
       }
     }    
 

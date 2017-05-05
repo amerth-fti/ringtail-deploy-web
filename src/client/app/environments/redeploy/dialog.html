@@ -118,7 +118,7 @@
 <div class="modal-footer">  
   <a style="float: left" ng-show="vm.tempEnv.config.taskdefs.length > 1" ng-click="vm.toggleAdvanced()">Advanced</a> 
   <div class='environment-loading' ng-show="!!vm.message">{{vm.message}} <div class='loading sm inline bar'/></div>
-  <button ng-hide="!vm.hideValidations" type="button" class="btn btn-primary" ng-disabled="vm.filesInvalid || !vm.isDeployed || !vm.keysLoaded || vm.message " ng-click="vm.validate()">Validate</button>  
-  <button type="button" ng-hide="vm.hideValidations" class="btn btn-primary" ng-disabled="vm.filesInvalid || !vm.isDeployed || !vm.keysLoaded || vm.message " ng-click="vm.rebuild()">Start</button>
+  <button ng-hide="!vm.hideValidations" type="button" class="btn btn-primary" ng-disabled="vm.filesInvalid || !vm.isDeployed || !vm.keysLoaded || vm.message " ng-click="vm.validate()">Start</button>  
+  <button type="button" ng-hide="vm.hideValidations" class="btn btn-primary" ng-disabled="vm.filesInvalid || !vm.isDeployed || !vm.keysLoaded || vm.message " ng-click="vm.rebuild()">Deploy</button>
   <button type="button" class="btn btn-default" ng-click="vm.cancel()">Cancel</button>
 </div>
