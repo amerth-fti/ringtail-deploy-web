@@ -19,9 +19,9 @@
     };
   }
 
-  Controller.$inject = [ '_', '$timeout', '$rootScope', '$location', 'Browse', 'EnvironmentStarter', 'Config', 'uiGridConstants', 'Region' ];
+  Controller.$inject = [ '_', '$timeout', '$rootScope', '$location', 'Browse', 'EnvironmentStarter', 'Config', 'uiGridConstants', 'Region', 'Validation', 'Environment' ];
 
-  function Controller(_, $timeout, $rootScope, $location, Browse, EnvironmentStarter, Config, uiGridConstants, Region) {
+  function Controller(_, $timeout, $rootScope, $location, Browse, EnvironmentStarter, Config, uiGridConstants, Region, Validation, Environment) {
     var vm = this;
     vm.modalInstance      = this.modalInstance;
     vm.branches           = null;
@@ -37,6 +37,7 @@
     vm.selectedTasks      = null;
     vm.selectedBranch     = null;
     vm.showAdvanced       = false;
+    vm.hideValidations    = true;
     vm.hideLaunchKeys     = true;
     vm.hasRpf             = false;
     vm.keepRpfwInstalls   = null;
@@ -45,8 +46,10 @@
     vm.buildChanged       = buildChanged;
     vm.cancel             = cancel;
     vm.rebuild            = rebuild;
+    vm.validate           = validate;
     vm.toggleAdvanced     = toggleAdvanced;
     vm.toggleSelectedTask = toggleSelectedTask;
+    vm.validationId       = 0;
     vm.regionId           = null;
     vm.filesInvalid       = false;
     vm.isDeployed         = true;
@@ -59,8 +62,9 @@
     vm.click              = onFeatureKeyCheckClick;
     vm.featureGrid        = initFeatureGrid();
     vm.taskArray          = ['3-install-many'];
-    vm.version            = null,
-    vm.region             = null,
+    vm.version            = null;
+    vm.region             = null;
+    vm.validationJob      = null;
     vm.newLaunchKeys      = [];
     vm.rosettaStone       = {
       'DEVELOPMENT' : '0. Development',
@@ -192,7 +196,8 @@
 
     function rebuild() {
       vm.message = 'Processing';
-      checkEnvironmentStatus(doRebuild);
+      //checkEnvironmentStatus(doRebuild);
+      doRebuild();
     }
 
     function doRebuild() {
@@ -217,6 +222,38 @@
         });          
       });          
     }
+
+    function validate() {
+      vm.message = 'Validating';
+      vm.hideValidations = false;
+      doValidate();
+    }
+
+    function doValidate() {
+      Environment.validate({ envId: vm.tempEnv.envId, branch: constructBranchPath() }).$promise
+        .then(function(response) {
+          vm.validationId = response.validationId;
+          Validation.get({ validationId: vm.validationId }, loadValidationComplete);
+          return;
+        });
+    };
+
+    function loadValidationComplete(result) {
+      vm.validationJob = result;
+      pollWhileRunning(result);
+    }
+
+    function pollWhileRunning(validationJob) {
+      if(validationJob.status === 'Running') {
+        vm.poll = $timeout(function() {
+          validationJob.$get(loadValidationComplete);
+        }, 3000);
+      } else {
+        vm.message = null;
+        vm.poll = null;
+        vm.validationJob.started = [];
+      }
+    }    
 
     function toggleAdvanced() {
       vm.showAdvanced = !vm.showAdvanced;

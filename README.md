@@ -4,7 +4,7 @@ ringtail-deploy-web
 
 This project is a web-driven Ringtail environment management tool. At present it works with Local and Skytap environments and can be used to environments machines in various regions.
 
-##Getting Started
+## Getting Started
 
 * Download the latest v6.x release of [Node.JS](http://nodejs.org/dist/)
 
@@ -48,10 +48,10 @@ debug=deployer* node src/server/server
 set DEBUG=deployer* & node src/server/server
 ```
 
-##Deployment Tasks
+## Deployment Tasks
 Refer to the [Deploy Task Definitions Guide](TASKDEFS.md) for information on creating and working with deployment tasks.
 
-##Running As A Windows Service
+## Running As A Windows Service
 Prerequisites 
 - Likely, you will need node-gyp ```npm install node-gyp -g``` 
 - Install http://landinghub.visualstudio.com/visual-cpp-build-tools
@@ -60,10 +60,10 @@ Prerequisites
  
 From there you should be able to run ```node service-windows``` to see a list of options. 
 
-##Using Docker
+## Using Docker
 Refer to the [Docker Guide](DOCKERGUIDE.md) for information on creating and working with docker.
 
-##Contributing
+## Contributing
 
 In lieu of a formal style guide, please maintain consistency with style and patterns in place in the application. Add appropriate unit tests to client and server code.
 
