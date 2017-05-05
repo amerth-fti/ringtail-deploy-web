@@ -63,7 +63,7 @@
       vm.node.Spec.Labels[role] = 'configuring';
       Swarm.addLabel({}, body).$promise
         .then((node) => {
-          vm.node = node;
+          vm.node = angular.extend(vm.node, node);
           getRoleOptions();
           vm.selectedRole = '';
         });
@@ -77,7 +77,7 @@
       };
       Swarm.removeLabel({}, body).$promise
         .then((node) => {
-          vm.node = node;
+          vm.node = angular.extend(vm.node, node);
           getRoleOptions();
         });
     }

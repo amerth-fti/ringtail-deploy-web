@@ -53,28 +53,65 @@
       Swarm.deployments({ swarmhost: vm.environment.swarmhost }).$promise.then((deployments) => {
         vm.deployments = deployments;
 
-        // map services to task
+        // attach services to task
         vm.deployments.tasks.forEach(task => {
           task.service = vm.deployments.services.find(service => service.ID === task.ServiceID);
         });
-        // map tasks to services
+
+        // get name and stack for services
         vm.deployments.services.forEach(service => {
           service.name = getName(service);
           service.stack = getStack(service);
-          service.tasks = vm.deployments.tasks.filter(task => task.ServiceID === service.ID && validTask(task));
-          service.failedTasks = vm.deployments.tasks
-            .filter(task => task.ServiceID === service.ID && !validTask(task))
-            .sort((t1, t2) => t2.UpdatedAt > t1.UpdatedAt);
         });
+
         // map tasks to nodes
         vm.nodes.forEach(node => {
-          node.tasks = vm.deployments.tasks.filter(task => task.NodeID === node.ID && validTask(task));
+          node.tasks = angular.copy(vm.deployments.tasks.filter(task => task.NodeID === node.ID && validTask(task)), node.tasks);
         });
+
         // map services to stacks
         vm.info.stacks.forEach(stack => {
-          stack.services = vm.deployments.services.filter(service => service.stack === stack.id);
+
+          // filter services for the stack
+          if(!stack.services) {
+            stack.services = [];
+          }
+
+          // update existing services
+          stack.services.forEach(oldService => {
+            let newService = vm.deployments.services.find(service => service.ID === oldService.ID);
+            if(newService) {
+              angular.extend(oldService, newService);
+              newService.merged = true;
+            }
+            else {
+              oldService.remove = true;
+            }
+          });
+
+          // add unmerged services
+          vm.deployments.services
+            .filter(service => !service.merged && stack.id === service.stack)
+            .forEach(service => stack.services.push(service));
+
+          // remove services without changing array reference
+          while(stack.services.find(service => service.remove)) {
+            let index = stack.services.findIndex(service => service.remove);
+            stack.services.splice(index, 1);
+          }
+
+          // filter tasks to each service
+          stack.services.forEach(service => {
+            service.tasks = vm.deployments.tasks.filter(task => task.ServiceID === service.ID && validTask(task));
+            service.failedTasks = vm.deployments.tasks.filter(task => task.ServiceID === service.ID && !validTask(task)).sort((t1, t2) => t2.UpdatedAt > t1.UpdatedAt);
+          });
+        });
+
+        // determine stack of stack
+        vm.info.stacks.forEach(stack => {
           stack.running = stack.services.length > 0 && stack.services.every(service => hasRunningTask(service));
         });
+
         // poll again shortly...
         timeout = setTimeout(refreshDeployments, refreshTimeout);
       });
