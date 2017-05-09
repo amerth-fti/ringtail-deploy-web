@@ -626,7 +626,7 @@ body[page=login] {
   label {
     font-style: bold;
     display: inline-block;
-    min-width: 30px;
+    min-width: 50px;
     margin-bottom: 0;
   }
 
@@ -665,6 +665,10 @@ body[page=login] {
 
   &.node-ready {
     border-left: 5px solid rgba(92,184,92,0.8);
+  }
+
+  &.node-down {
+    border-left: 5px solid rgba(48,48,48,0.8);
   }
 
   .glyphicon {
@@ -719,7 +723,7 @@ body[page=login] {
   label {
     font-style: bold;
     display: inline-block;
-    min-width: 30px;
+    min-width: 50px;
     margin-bottom: 0;
   }
 
@@ -781,7 +785,8 @@ body[page=login] {
   }
 
   &.task-stopped,
-  &.task-shutdown {
+  &.task-shutdown,
+  &.task-orphaned {
     border-left: 5px solid rgba(48,48,48,0.8);
   }
 

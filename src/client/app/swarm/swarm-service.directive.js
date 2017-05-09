@@ -31,6 +31,9 @@
     vm.getDesiredTasks   = getDesiredTasks;
     vm.getEndpointMode   = getEndpointMode;
     vm.getStatus         = getStatus;
+    vm.getImage          = getImage;
+    vm.getImageVersion   = getImageVersion;
+    vm.getShaHash        = getShaHash;
     vm.showTaskDetails   = false;
     vm.toggleTaskDetails = toggleTaskDetails;
     vm.redeploy          = redeploy;
@@ -42,6 +45,7 @@
     //////////
 
     function activate() {
+      console.log(vm.service);
     }
 
     function getDeploymentMode() {
@@ -58,6 +62,21 @@
       return vm.service.Spec.Mode.Replicated
         ? vm.service.Spec.Mode.Replicated.Replicas
         : getRunningTasks();
+    }
+
+    function getImage() {
+      let image = vm.service.Spec.TaskTemplate.ContainerSpec.Image.split('@')[0].split(':')[0];
+      let pathIndex = image.indexOf('/');
+      return image.substr(pathIndex + 1);
+    }
+
+    function getImageVersion() {
+      return vm.service.Spec.TaskTemplate.ContainerSpec.Image.split('@')[0].split(':')[1];
+    }
+
+    function getShaHash() {
+      let hash = vm.service.Spec.TaskTemplate.ContainerSpec.Image.split('@')[0];
+      return hash.replace('sha256:', '').substr(0, 16);
     }
 
     function getEndpointMode() {

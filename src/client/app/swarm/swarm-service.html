@@ -4,8 +4,16 @@
     <i class="{{ 'glyphicon glyphicon-repeat' + (vm.redeploying ? ' spinner' : '') }}" ng-click="vm.redeploy()" />
   </div>
   <div class="swarm-service-name">
-    <label>Name:</label>
+    <label>Service:</label>
     {{vm.service.name}}
+  </div>
+  <div class="swarm-image">
+    <label>Image:</label>
+    {{vm.getImage()}}
+  </div>
+  <div class="swarm-version">
+    <label>Version:</label>
+    {{vm.getImageVersion()}}
   </div>
   <div class="swarm-service-details">
     <div class="swarm-service-mode">
@@ -13,7 +21,7 @@
       {{vm.getDeploymentMode()}}
     </div>
     <div class="swarm-service-endpoint">
-      <label>Net:</label>
+      <label>Network:</label>
       {{vm.getEndpointMode()}}
     </div>
     <div class="swarm-service-tasks">

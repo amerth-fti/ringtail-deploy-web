@@ -1,23 +1,15 @@
 
 <div class="swarm-node-container clearfix">
   <div class="swarm-node node-{{ vm.node.Status.State }}">
-    <div class="node-id">
-      <label>Node:</label>
-      {{ vm.node.ID }}
-    </div>
     <div class="node-type">
       <label>Type: </label>
       {{ vm.node.Spec.Role }}
-    </div>
-    <div class="node-state">
-      <label>State:</label>
-      {{ vm.node.Status.State }}
     </div>
     <div class="node-hostname">
       <label>Host:</label>
       {{ vm.node.Description.Hostname }}</div>
     <div class="node-address">
-      <label>Addr:</label>
+      <label>Address:</label>
       {{ vm.node.Status.Addr }}
     </div>
     <div><label>Roles:</label></div>
