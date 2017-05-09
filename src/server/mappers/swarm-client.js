@@ -1,5 +1,6 @@
 
 const http    = require('http');
+const qs      = require('qs');
 const urlUtil = require('url');
 
 module.exports = {
@@ -11,6 +12,8 @@ module.exports = {
   deployStack,
   deployService,
   serviceLogs,
+  getManagerVersions,
+  updateManager,
 };
 
 /**
@@ -97,6 +100,29 @@ async function deployService({ swarmhost, accessKeyId, secretAccessKey, service 
  */
 async function serviceLogs({ swarmhost, service }) {
   return await get(`http://${swarmhost}:4111/api/services/${service}/logs`);
+}
+
+/**
+ * [getManagerVersion description]
+ * @param  {[type]} options.swarmhost       [description]
+ * @param  {[type]} options.accessKeyId     [description]
+ * @param  {[type]} options.secretAccessKey [description]
+ * @return {[type]}                         [description]
+ */
+async function getManagerVersions({ swarmhost, accessKeyId, secretAccessKey }) {
+  return await get(`http://${swarmhost}:4111/api/manager/versions?` + qs.stringify({ accessKeyId, secretAccessKey }));
+}
+
+/**
+ * [updateManager description]
+ * @param  {[type]} options.swarmhost       [description]
+ * @param  {[type]} options.accessKeyId     [description]
+ * @param  {[type]} options.secretAccessKey [description]
+ * @param  {[type]} options.version         [description]
+ * @return {[type]}                         [description]
+ */
+async function updateManager({ swarmhost, accessKeyId, secretAccessKey, version }) {
+  return await put(`http://${swarmhost}:4111/api/manager/update`, { json: { accessKeyId, secretAccessKey, version }});
 }
 
 

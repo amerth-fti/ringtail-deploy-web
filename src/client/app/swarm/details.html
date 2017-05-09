@@ -1,22 +1,35 @@
 
 <div class="swarm-info">
-
-  <div class="swarm-info-header">
+  <div class="swarm-info-header clearfix">
     <img class="docker-logo" src="/assets/img/docker-logo.png" alt="Docker Swarm" title="Docker Swarm" />
     <h1>
       <i class="glyphicon glyphicon-th" />
       {{vm.environment.envName}}
     </h1>
+    <div class="version" ng-show="vm.loaded">
+      <span>Version: </span>
+      <span>{{vm.info.version}}</span>
+      <i
+        title="Change version"
+        class="glyphicon glyphicon-download"
+        ng-click="vm.changeVersion()" />
+    </div>
   </div>
 
-  <div ng-repeat="stack in vm.info.stacks">
+  <div ng-show="!vm.loaded">Loading...</div>
+
+  <div
+    ng-repeat="stack in vm.info.stacks"
+    ng-show="vm.loaded">
     <swarm-stack
       stack="stack"
       environment="vm.environment"
       ></swarm-stack>
   </div>
 
-  <div class="swarm-nodes-container">
+  <div
+    class="swarm-nodes-container"
+    ng-show="vm.loaded">
     <h4>Nodes</h4>
     <div class="row">
       <div ng-repeat="node in vm.nodes">

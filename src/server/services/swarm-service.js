@@ -10,6 +10,8 @@ module.exports = {
   deployStack,
   deployService,
   serviceLogs,
+  getManagerVersions,
+  updateManager,
 };
 
 /**
@@ -86,4 +88,27 @@ async function deployService({ swarmhost, accessKeyId, secretAccessKey, service 
  */
 async function serviceLogs({ swarmhost, service }) {
   return await swarmClient.serviceLogs({ swarmhost, service });
+}
+
+/**
+ * [getManagerVersions description]
+ * @param  {[type]} options.swarmhost       [description]
+ * @param  {[type]} options.accessKeyId     [description]
+ * @param  {[type]} options.secretAccessKey [description]
+ * @return {[type]}                         [description]
+ */
+async function getManagerVersions({ swarmhost, accessKeyId, secretAccessKey }) {
+  return await swarmClient.getManagerVersions({ swarmhost, accessKeyId, secretAccessKey });
+}
+
+/**
+ * [updateManager description]
+ * @param  {[type]} options.swarmhost       [description]
+ * @param  {[type]} options.accessKeyId     [description]
+ * @param  {[type]} options.secretAccessKey [description]
+ * @param  {[type]} options.version         [description]
+ * @return {[type]}                         [description]
+ */
+async function updateManager({ swarmhost, accessKeyId, secretAccessKey, version }) {
+  return await swarmClient.updateManager({ swarmhost, accessKeyId, secretAccessKey, version });
 }

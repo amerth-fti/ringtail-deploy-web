@@ -10,6 +10,8 @@ module.exports = {
   addLabel,
   removeLabel,
   serviceLogs,
+  getManagerVersions,
+  updateManager,
 };
 
 /**
@@ -172,4 +174,42 @@ async function serviceLogs(req, res) {
   console.log('Getting logs for ', service);
   let logs = await swarm.serviceLogs({ swarmhost, service });
   res.send(logs);
+}
+
+
+/**
+ * [getManagerVersions description]
+ * @param  {[type]} req [description]
+ * @param  {[type]} res [description]
+ * @return {[type]}     [description]
+ */
+async function getManagerVersions(req, res) {
+  let {
+    swarmhost,
+    accessKeyId,
+    secretAccessKey,
+  } = req.query;
+
+  console.log('Loading service versions');
+  let results = await swarm.getManagerVersions({ swarmhost, accessKeyId, secretAccessKey });
+  res.send(results);
+}
+
+/**
+ * [updateManager description]
+ * @param  {[type]} req [description]
+ * @param  {[type]} res [description]
+ * @return {[type]}     [description]
+ */
+async function updateManager(req, res) {
+  let {
+    version,
+    swarmhost,
+    accessKeyId,
+    secretAccessKey,
+  } = req.body;
+
+  console.log('Updating manager service to ' + version);
+  await swarm.updateManager({ swarmhost, accessKeyId, secretAccessKey, version });
+  res.send({ ok: true });
 }

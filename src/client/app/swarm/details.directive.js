@@ -18,9 +18,9 @@
     };
   }
 
-  Controller.$inject = [ '$scope', 'Environment', 'Swarm' ];
+  Controller.$inject = [ '$scope', 'Environment', 'Swarm', 'SwarmUpdate' ];
 
-  function Controller($scope, Environment, Swarm) {
+  function Controller($scope, Environment, Swarm, SwarmUpdate) {
     var vm             = this;
     var refreshTimeout = 10000;
     var timeout        = null;
@@ -30,6 +30,8 @@
     vm.info            = { stacks: [], roles: [] };
     vm.deployments     = { services: [], tasks: [] };
     vm.getServiceTasks = getServiceTasks;
+    vm.changeVersion   = changeVersion;
+    vm.loaded          = false;
 
     activate();
 
@@ -38,7 +40,6 @@
     function activate() {
       vm.environment = Environment.get({ envId: vm.envId }, function() {
         fetchStatus();
-        refreshDeployments();
       });
     }
 
@@ -47,6 +48,11 @@
       $scope.$on('deploy_completed', onDeployComplete);
       vm.info  = Swarm.info({ swarmhost: vm.environment.swarmhost });
       vm.nodes = Swarm.query({ swarmhost: vm.environment.swarmhost });
+
+      // refresh deployments after info and nodes have loaded
+      Promise
+        .all([vm.info.$promise, vm.nodes.$promise]).then(refreshDeployments)
+        .catch(() => setTimeout(fetchStatus, 5000));
     }
 
     function refreshDeployments() {
@@ -114,6 +120,9 @@
 
         // poll again shortly...
         timeout = setTimeout(refreshDeployments, refreshTimeout);
+
+        // stop loading
+        vm.loaded = true;
       });
     }
 
@@ -157,6 +166,17 @@
       clearTimeout(timeout);
       refreshTimeout = 10000;
       refreshDeployments();
+    }
+
+    function changeVersion() {
+      SwarmUpdate
+      .open(vm.environment, vm.info.version)
+      .result
+      .then((result) => {
+        vm.loaded = false;
+        clearTimeout(timeout);
+        setTimeout(fetchStatus, 15000);
+      });
     }
 
   }

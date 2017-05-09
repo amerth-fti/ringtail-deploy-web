@@ -260,6 +260,8 @@ app.get ('/api/swarm/deploy', (req, res, next) => controllers.swarm.deployments(
 app.put ('/api/swarm/deploy/stack', (req, res, next) => controllers.swarm.deployStack(req, res).catch(next));
 app.put ('/api/swarm/deploy/service', (req, res, next) => controllers.swarm.deployService(req, res).catch(next));
 app.get ('/api/swarm/logs', (req, res, next) => controllers.swarm.serviceLogs(req, res).catch(next));
+app.get ('/api/swarm/manager/versions', (req, res, next) => controllers.swarm.getManagerVersions(req, res).catch(next));
+app.put ('/api/swarm/manager/update', (req, res, next) => controllers.swarm.updateManager(req, res).catch(next));
 
 
 // API - SKYTAP PROXY ROUTES
