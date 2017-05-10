@@ -41,6 +41,11 @@
       vm.environment = Environment.get({ envId: vm.envId }, function() {
         fetchStatus();
       });
+
+      // cancel polling on scope destroy
+      $scope.$on('$destroy', function() {
+        clearTimeout(timeout);
+      });
     }
 
     function fetchStatus() {

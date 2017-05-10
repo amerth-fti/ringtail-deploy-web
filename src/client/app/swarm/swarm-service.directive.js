@@ -45,7 +45,6 @@
     //////////
 
     function activate() {
-      console.log(vm.service);
     }
 
     function getDeploymentMode() {

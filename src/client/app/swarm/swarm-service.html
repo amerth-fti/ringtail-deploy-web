@@ -1,7 +1,10 @@
 
 <div class="swarm-service service-{{vm.getStatus()}}">
   <div class="pull-right">
-    <i class="{{ 'glyphicon glyphicon-repeat' + (vm.redeploying ? ' spinner' : '') }}" ng-click="vm.redeploy()" />
+    <div data-tooltip ng-click="vm.redeploy()">
+      <i class="{{ 'glyphicon glyphicon-repeat' + (vm.redeploying ? ' spinner' : '') }}" />
+      <span class="tip">Restart service via <br/><em>docker service update</em></span>
+    </div>
   </div>
   <div class="swarm-service-name">
     <label>Service:</label>

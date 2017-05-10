@@ -822,3 +822,39 @@ body[page=login] {
     font-weight: normal;
   }
 }
+
+
+[data-tooltip] {
+  position: relative;
+  display: inline-block;
+}
+[data-tooltip] .tip {
+  position: absolute;
+  min-width: 150px;
+  color: #fff;
+  background: #000000;
+  visibility: hidden;
+  border-radius: 3px !important;
+  font-weight: normal;
+  font-style: normal;
+  font-size: 1rem;
+  padding: 1rem;
+}
+[data-tooltip] .tip:after {
+  content: '';
+  position: absolute;
+  bottom: 100%;
+  left: 13px
+  margin-left: -5px;
+  width: 0; height: 0;
+  border-bottom: 5px solid #000000;
+  border-right: 5px solid transparent;
+  border-left: 5px solid transparent;
+}
+[data-tooltip]:hover .tip {
+  visibility: visible;
+  opacity: 0.87;
+  top: 25px;
+  margin-left: -5px;
+  z-index: 999;
+}

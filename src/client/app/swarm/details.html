@@ -9,10 +9,12 @@
     <div class="version" ng-show="vm.loaded">
       <span>Version: </span>
       <span>{{vm.info.version}}</span>
-      <i
-        title="Change version"
-        class="glyphicon glyphicon-download"
-        ng-click="vm.changeVersion()" />
+      <div
+        data-tooltip
+        ng-click="vm.changeVersion()">
+        <i class="glyphicon glyphicon-download" />
+        <span class="tip">Update Manager Service</span>
+      </div>
     </div>
   </div>
 
