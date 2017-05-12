@@ -1,0 +1,21 @@
+<div class="modal-header bg-primary">
+  <div class="close" style="margin-left: 1em;" ng-click="vm.close()"><span class="glyphicon glyphicon-remove" /></div>
+  <h4 class="modal-title">Update Manager Service</h4>
+</div>
+<div class="modal-body swarm-manager-update">
+  Select a version:
+  <div ng-repeat="version in vm.versions | limitTo: 15">
+    <label>
+      <input
+        type="radio"
+        name="manager-version"
+        value="{{version.imageTag}}"
+        ng-model="vm.version" />
+      {{version.imageTag}} - {{version.imageDigest.replace('sha256:','')}}
+    </label>
+  </div>
+</div>
+<div class="modal-footer">
+  <button type="button" class="btn btn-primary" ng-click="vm.update()">Update</button>
+  <button type="button" class="btn btn-warning" ng-click="vm.close()">Cancel</button>
+</div>

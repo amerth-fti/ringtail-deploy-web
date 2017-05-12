@@ -3,10 +3,10 @@
 <head>
   <meta charset="utf-8">
   <meta http-equiv="x-ua-compatible" content="IE=Edge"/>
-  
+
   <title>Ringtail Deploy</title>
 
-  <link rel="Stylesheet" type="text/css" href="/assets/lib/bootstrap/dist/css/bootstrap.css" />  
+  <link rel="Stylesheet" type="text/css" href="/assets/lib/bootstrap/dist/css/bootstrap.css" />
   <link rel="Stylesheet" type="text/css" href="/assets/css/app.css" />
   <link rel="stylesheet" href="/assets/lib/angular-ui-grid/ui-grid.css" />
 
@@ -22,12 +22,12 @@
   <script type="text/javascript" src="/assets/lib/angular-ui-grid/ui-grid.js"></script>
 
   <script type="text/javascript" src="/config"></script>
-  <script type="text/javascript" src="/app/_module.js"></script>  
+  <script type="text/javascript" src="/app/_module.js"></script>
   <script type="text/javascript" src="/app/_config.js"></script>
-  <script type="text/javascript" src="/app/_routes.js"></script>  
+  <script type="text/javascript" src="/app/_routes.js"></script>
   <script type="text/javascript" src="/app/_run.js"></script>
   <script type="text/javascript" src="/app/config.constant.js"></script>
-  <script type="text/javascript" src="/app/globals.constant.js"></script>  
+  <script type="text/javascript" src="/app/globals.constant.js"></script>
 
   <script type="text/javascript" src="/app/layout/main.controller.js"></script>
 
@@ -39,7 +39,7 @@
   <script type="text/javascript" src="/app/environments/config/_module.js"></script>
   <script type="text/javascript" src="/app/environments/config/dialog.factory.js"></script>
   <script type="text/javascript" src="/app/environments/config/editor.directive.js"></script>
-  <script type="text/javascript" src="/app/environments/config/ringtail-config.service.js"></script>  
+  <script type="text/javascript" src="/app/environments/config/ringtail-config.service.js"></script>
   <script type="text/javascript" src="/app/environments/config/ringtail-field-editor.directive.js"></script>
   <script type="text/javascript" src="/app/environments/config/ringtail-field.service.js"></script>
 
@@ -52,6 +52,7 @@
   <script type="text/javascript" src="/app/environments/editor/s5-taskdefs.directive.js"></script>
   <script type="text/javascript" src="/app/environments/editor/s6-skytap.directive.js"></script>
   <script type="text/javascript" src="/app/environments/editor/s7-validation.directive.js"></script>
+  <script type="text/javascript" src="/app/environments/editor/s8-swarm.directive.js"></script>
   <script type="text/javascript" src="/app/environments/editor/wizard.factory.js"></script>
   <script type="text/javascript" src="/app/environments/editor/validation-message.service.js"></script>
 
@@ -68,7 +69,7 @@
   <script type="text/javascript" src="/app/environments/redeploy/dialog.factory.js"></script>
 
   <script type="text/javascript" src="/app/environments/taskdefs/_module.js"></script>
-  <script type="text/javascript" src="/app/environments/taskdefs/list.directive.js"></script>  
+  <script type="text/javascript" src="/app/environments/taskdefs/list.directive.js"></script>
   <script type="text/javascript" src="/app/environments/taskdefs/taskdef.service.js"></script>
   <script type="text/javascript" src="/app/environments/taskdefs/raw/_module.js"></script>
   <script type="text/javascript" src="/app/environments/taskdefs/raw/editor.directive.js"></script>
@@ -86,17 +87,17 @@
   <script type="text/javascript" src="/app/regions/edit.directive.js"></script>
   <script type="text/javascript" src="/app/regions/list-route.controller.js"></script>
   <script type="text/javascript" src="/app/regions/list.directive.js"></script>
-  <script type="text/javascript" src="/app/regions/environment-edit-route.controller.js"></script>  
+  <script type="text/javascript" src="/app/regions/environment-edit-route.controller.js"></script>
   <script type="text/javascript" src="/app/regions/environment-edit.directive.js"></script>
 
   <script type="text/javascript" src="/app/shared/_module.js"></script>
   <script type="text/javascript" src="/app/shared/date-helpers.service.js"></script>
   <script type="text/javascript" src="/app/shared/datepicker-popup.directive.js"></script>
   <script type="text/javascript" src="/app/shared/environment.factory.js"></script>
-  <script type="text/javascript" src="/app/shared/loading.factory.js"></script>  
+  <script type="text/javascript" src="/app/shared/loading.factory.js"></script>
   <script type="text/javascript" src="/app/shared/underscore.js"></script>
-  
-  <script type="text/javascript" src="/app/shared/data/_module.js"></script>  
+
+  <script type="text/javascript" src="/app/shared/data/_module.js"></script>
   <script type="text/javascript" src="/app/shared/data/browse.service.js"></script>
   <script type="text/javascript" src="/app/shared/data/config.service.js"></script>
   <script type="text/javascript" src="/app/shared/data/environment.service.js"></script>
@@ -105,10 +106,11 @@
   <script type="text/javascript" src="/app/shared/data/region.service.js"></script>
   <script type="text/javascript" src="/app/shared/data/role.service.js"></script>
   <script type="text/javascript" src="/app/shared/data/skytap-environment.service.js"></script>
+  <script type="text/javascript" src="/app/shared/data/swarm.service.js"></script>
   <script type="text/javascript" src="/app/shared/data/task.service.js"></script>
   <script type="text/javascript" src="/app/shared/data/session.service.js"></script>
   <script type="text/javascript" src="/app/shared/data/validation.service.js"></script>
-  
+
   <script type="text/javascript" src="/app/shared/filters/_module.js"></script>
   <script type="text/javascript" src="/app/shared/filters/anchors.filter.js"></script>
   <script type="text/javascript" src="/app/shared/filters/elapsed.filter.js"></script>
@@ -117,7 +119,20 @@
   <script type="text/javascript" src="/app/shared/filters/newlines.filter.js"></script>
   <script type="text/javascript" src="/app/shared/filters/reverse.filter.js"></script>
   <script type="text/javascript" src="/app/shared/filters/trust.filter.js"></script>
-  
+
+  <script type="text/javascript" src="/app/swarm/_module.js"></script>
+  <script type="text/javascript" src="/app/swarm/_routes.js"></script>
+  <script type="text/javascript" src="/app/swarm/details-route.controller.js"></script>
+  <script type="text/javascript" src="/app/swarm/details.directive.js"></script>
+  <script type="text/javascript" src="/app/swarm/swarm-node.directive.js"></script>
+  <script type="text/javascript" src="/app/swarm/swarm-service.directive.js"></script>
+  <script type="text/javascript" src="/app/swarm/swarm-stack.directive.js"></script>
+  <script type="text/javascript" src="/app/swarm/swarm-task.directive.js"></script>
+  <script type="text/javascript" src="/app/swarm/logs/_module.js"></script>
+  <script type="text/javascript" src="/app/swarm/logs/dialog.factory.js"></script>
+  <script type="text/javascript" src="/app/swarm/update/_module.js"></script>
+  <script type="text/javascript" src="/app/swarm/update/dialog.factory.js"></script>
+
   <base href="/app" />
 </head>
 <body ng-app="app">
@@ -140,13 +155,13 @@
       <div class="row">
         <div class="col-sm-3 col-md-2 sidebar">
           <h3 class="title">Regions</h3>
-          <ul class="nav nav-sidebar">            
+          <ul class="nav nav-sidebar">
             <li ng-repeat="region in vm.regions" ng-class="{ active: region.regionId === vm.selectedRegion }">
               <a href="/app/regions/{{region.regionId}}">
                 {{region.regionName}}
               </a>
             </li>
-          </ul>                    
+          </ul>
         </div>
         <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main" ng-view>
         </div>

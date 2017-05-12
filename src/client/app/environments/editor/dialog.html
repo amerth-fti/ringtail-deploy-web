@@ -12,6 +12,7 @@
         <li role="presentation" ng-click="vm.wizard.show('machines')" ng-class="{ active: vm.wizard.stage === 'machines' }" ><a><i style="margin-right: 0.5em; color: #a94442;" ng-class="{ 'glyphicon glyphicon-exclamation-sign': vm.wizard.error === 'machines' }"></i>Machines</a></li>
         <li role="presentation" ng-click="vm.wizard.show('taskdefs')" ng-class="{ active: vm.wizard.stage === 'taskdefs' }"><a>Process</a></li>
         <li role="presentation" ng-click="vm.wizard.show('validation')" ng-class="{ active: vm.wizard.stage === 'validation' }"><a>Validation</a></li>
+        <li role="presentation" ng-click="vm.wizard.show('swarm')" ng-class="{ active: vm.wizard.stage === 'swarm' }"><a>Swarm</a></li>
       </ul>
     </div>
   </div>
@@ -80,3 +81,12 @@
   update="vm.update"
   >
 </envwizard-validation>
+
+<envwizard-swarm
+  ng-show="vm.wizard.stage === 'swarm'"
+  environment="vm.environment"
+  wizard="vm.wizard"
+  cancel="vm.cancel"
+  update="vm.update"
+  >
+</envwizard-swarm>

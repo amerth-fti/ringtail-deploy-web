@@ -29,8 +29,8 @@ if(process.env.proxy) {
   let proxyVal = process.env.proxy;
   if(proxyVal == 'none') proxyVal = '';
 
-  process.env['http_proxy'] = proxyVal; 
-  process.env['https_proxy'] = proxyVal; 
+  process.env['http_proxy'] = proxyVal;
+  process.env['https_proxy'] = proxyVal;
   process.env['HTTP_PROXY'] = proxyVal;
   process.env['HTTPS_PROXY'] = proxyVal;
 }
@@ -91,7 +91,7 @@ function getRedirectUrl(req) {
     let returnUrl = protocol + hostname + pathname + search;
     let redirectUrl = config.ringtail.url + returnUrl;
 
-    return redirectUrl;  
+    return redirectUrl;
 }
 
 // DEFAULT ROUTE
@@ -101,7 +101,7 @@ function defaultRoute(req, res) {
 
 function checkLogin(req, res, next) {
   let isLoggedin = false;
-  
+
   if( (!config.ldap || !config.ldap.enabled) &&
     (!config.ringtail || !config.ringtail.enabled) ) {
     return next('route');
@@ -142,7 +142,7 @@ function checkLogin(req, res, next) {
 
     return res.sendFile(path.resolve(__dirname +'/../client/login.html'));
   } else {
-    
+
     return next('route');
   }
 }
@@ -163,7 +163,7 @@ app.get   ('/api/session', (req, res) => {
   }
   else if(req.signedCookies && req.signedCookies['auth']) {
     let user = req.signedCookies['auth'].sub || req.signedCookies['auth'].user ||null;
-    
+
     return res.send({
       loggedIn: true,
       user: user
@@ -171,7 +171,7 @@ app.get   ('/api/session', (req, res) => {
   }
   else if(req.signedCookies && req.signedCookies[config.ringtail.cookieName] ){
     let user = req.signedCookies[config.ringtail.cookieName].user || null;
-    
+
     return res.send({
       loggedIn: true,
       user: user
@@ -250,6 +250,20 @@ app.get ('/api/jobs/:last/failureDetails', controllers.jobs.failureDetailsList);
 app.get ('/api/validations', controllers.jobs.listValidations);
 app.get ('/api/validations/:validationId', controllers.jobs.getValidations);
 
+
+// API - SWARM ROUTES
+app.get ('/api/swarm/info', (req, res, next) => controllers.swarm.info(req, res).catch(next));
+app.get ('/api/swarm/nodes', (req, res, next) => controllers.swarm.nodes(req, res).catch(next));
+app.post('/api/swarm/nodes/labels', (req, res, next) => controllers.swarm.addLabel(req, res).catch(next));
+app.post('/api/swarm/nodes/labels/remove', (req, res, next) => controllers.swarm.removeLabel(req, res).catch(next));
+app.get ('/api/swarm/deploy', (req, res, next) => controllers.swarm.deployments(req, res).catch(next));
+app.put ('/api/swarm/deploy/stack', (req, res, next) => controllers.swarm.deployStack(req, res).catch(next));
+app.put ('/api/swarm/deploy/service', (req, res, next) => controllers.swarm.deployService(req, res).catch(next));
+app.get ('/api/swarm/logs', (req, res, next) => controllers.swarm.serviceLogs(req, res).catch(next));
+app.get ('/api/swarm/manager/versions', (req, res, next) => controllers.swarm.getManagerVersions(req, res).catch(next));
+app.put ('/api/swarm/manager/update', (req, res, next) => controllers.swarm.updateManager(req, res).catch(next));
+
+
 // API - SKYTAP PROXY ROUTES
 app.get ('/api/skytap/environments', controllers.skytap.environments);
 app.get ('/api/skytap/environments/:configuration_id', controllers.skytap.environment);
@@ -315,7 +329,7 @@ set.up(function (err) {
     throw err;
   }
   console.log('DB Tasks Completed');
-  
+
   if(config.host) {
     app.listen(config.port, config.host, function() {
       debug('Listening on %s:%d ', (config.host ? config.host : '*'), config.port);

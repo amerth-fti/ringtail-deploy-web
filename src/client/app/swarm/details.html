@@ -1,0 +1,50 @@
+
+<div class="swarm-info">
+  <div class="swarm-info-header clearfix">
+    <img class="docker-logo" src="/assets/img/docker-logo.png" alt="Docker Swarm" title="Docker Swarm" />
+    <h1>
+      <i class="glyphicon glyphicon-th" />
+      {{vm.environment.envName}}
+    </h1>
+    <div class="version" ng-show="vm.loaded">
+      <span>Version: </span>
+      <span>{{vm.info.version}}</span>
+      <div
+        data-tooltip
+        ng-click="vm.changeVersion()">
+        <i class="glyphicon glyphicon-download" />
+        <span class="tip">Update Manager Service</span>
+      </div>
+    </div>
+  </div>
+
+  <div ng-show="!vm.loaded">Loading...</div>
+
+  <div
+    ng-repeat="stack in vm.info.stacks"
+    ng-show="vm.loaded">
+    <swarm-stack
+      stack="stack"
+      environment="vm.environment"
+      ></swarm-stack>
+  </div>
+
+  <div
+    class="swarm-nodes-container"
+    ng-show="vm.loaded">
+    <h4>Nodes</h4>
+    <div class="row">
+      <div ng-repeat="node in vm.nodes">
+        <div class="clearfix" ng-if="$index % 4 === 0"></div>
+        <div class="col-sm-3">
+          <swarm-node
+            roles="vm.info.roles"
+            environment="vm.environment"
+            node="node"
+            ></swarm-node>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>

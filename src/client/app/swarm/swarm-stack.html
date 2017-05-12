@@ -1,0 +1,25 @@
+
+<div class="swarm-stack">
+
+  <h4>
+    <div class="stack-status {{vm.stack.running ? 'running' : 'pending' }}"></div>
+    Stack: {{vm.stack.name}}
+    <div
+      data-tooltip
+      ng-click="vm.deploy()">
+      <i class="stack-redeploy {{ 'glyphicon glyphicon-repeat' + (vm.deploying ? ' spinner': '') }}" />
+      <span class="tip">Deploy {{vm.stack.id}} stack via <br/> <em>docker stack deploy</em>
+    </div>
+  </h4>
+  <div class="row">
+    <div ng-repeat="service in vm.stack.services">
+      <div class="clearfix" ng-if="$index % 4 === 0"></div>
+      <div class="col-sm-3">
+        <swarm-service
+          service="service"
+          environment="vm.environment" />
+      </div>
+    </div>
+  </div>
+
+</div>

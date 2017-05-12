@@ -1,0 +1,55 @@
+
+<div class="swarm-service service-{{vm.getStatus()}}">
+  <div class="pull-right">
+    <div data-tooltip ng-click="vm.redeploy()">
+      <i class="{{ 'glyphicon glyphicon-repeat' + (vm.redeploying ? ' spinner' : '') }}" />
+      <span class="tip">Restart service via <br/><em>docker service update</em></span>
+    </div>
+  </div>
+  <div class="swarm-service-name">
+    <label>Service:</label>
+    {{vm.service.name}}
+  </div>
+  <div class="swarm-image">
+    <label>Image:</label>
+    {{vm.getImage()}}
+  </div>
+  <div class="swarm-version">
+    <label>Version:</label>
+    {{vm.getImageVersion()}}
+  </div>
+  <div class="swarm-service-details">
+    <div class="swarm-service-mode">
+      <label>Mode:</label>
+      {{vm.getDeploymentMode()}}
+    </div>
+    <div class="swarm-service-endpoint">
+      <label>Network:</label>
+      {{vm.getEndpointMode()}}
+    </div>
+    <div class="swarm-service-tasks">
+      <div class="pull-right">
+        <i
+          class="glyphicon"
+          ng-click="vm.toggleTaskDetails()"
+          ng-class="vm.showTaskDetails ? 'glyphicon-chevron-down' : 'glyphicon-chevron-left'" />
+      </div>
+      <label>Tasks:</label>
+      {{vm.getRunningTasks()}} / {{vm.getDesiredTasks()}}
+    </div>
+  </div>
+</div>
+<div class="swarm-service-tasks" ng-show="vm.showTaskDetails">
+  <div class="col-sm-11 col-sm-push-1 col-no-padding" ng-repeat="task in vm.service.tasks">
+    <swarm-task
+      task="task"
+      environment="vm.environment"
+      ></swarm-task>
+  </div>
+  <div class="col-sm-11 col-sm-push-1 col-no-padding" ng-repeat="task in vm.service.failedTasks">
+    <swarm-task
+      task="task"
+      environment="vm.environment"
+      ></swarm-task>
+  </div>
+</div>
