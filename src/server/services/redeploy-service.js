@@ -71,8 +71,11 @@ exports.quickRedeploy = async function redeploy(data, next) {
       // validate the files on protocols that support file checking.   otherwise, Chuck and Pray.
       if(browser.type === 'ftp' || browser.type === 'smb') {  
         let getFiles = await browser.files(data.branch);
-        getFiles = JSON.parse(getFiles);
-      
+
+        if(!Array.isArray(getFiles)) {
+          getFiles = JSON.parse(getFiles);
+        }
+
         if(getFiles[0] === 'OK') {
           debug('got files okay');
         } else {
