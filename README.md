@@ -27,7 +27,7 @@ npm install -g bower
 bower install
 ```
 
-* Copy the config.json.example file to config.json and modify it with the correct credentials
+* Copy the config.js.example file to config.js and modify it with the correct credentials
 
 * Migrate the Sqlite Database
 Do not manually run the migrate script. It is now part of the server start up. The ```.migrate``` file is now stored in the ```data``` folder.
