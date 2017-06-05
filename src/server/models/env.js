@@ -25,7 +25,13 @@ schema = {
     { "name": "runstate" },
     { "name": "machines" },
     { "name": "updatePath" },
-    { "name": "newLaunchKeys" }
+    { "name": "newLaunchKeys" },
+    { "name": "swarmhost" },
+    { "name": "swarmSshUser" },
+    { "name": "swarmSshKey" },
+    { "name": "accessKeyId" },
+    { "name": "secretAccessKey" },
+    { "name": "dockerHub" },
   ]
 };
 /* eslint-enable */

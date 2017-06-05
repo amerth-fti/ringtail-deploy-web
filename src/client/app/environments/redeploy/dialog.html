@@ -2,64 +2,105 @@
   <button type="button" class="close" data-dismiss="modal" ng-click="vm.cancel()"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
   <h4 class="modal-title">Redeploy '{{vm.tempEnv.envName}}'</h4>
 </div>
+
 <div class="modal-body">
-  
   <form role="form">
-    <div class="form-group">
-      <label>Install from Branch:</label>
-      <div class="list-loading" ng-show="vm.loadingBranches">
-        <img src="/assets/img/bar-loader.gif">
-      </div>
-      <select 
-        class="form-control" 
-        ng-disabled="vm.loadingBranches"
-        ng-model="vm.selectedBranch.branch"         
-        ng-change="vm.branchChanged()">
-        <option ng-repeat="branch in vm.branches" value="{{branch}}" ng-selected="branch === vm.selectedBranch.branch">{{branch}}</option>
-      </select>
-    </div>
-    <div class="form-group">
-      <label>Install Build: <span ng-show='vm.version'>({{vm.version}} is currently installed.)</span></label>
-      <div class="list-loading" ng-show="vm.loadingBuilds">
-        <img src="/assets/img/bar-loader.gif">
-      </div>
-      <select 
-        class="form-control"         
-        ng-disabled="vm.loadingBuilds || vm.loadingBranches || !vm.selectedBranch.branch"
-        ng-model="vm.selectedBranch.build"
-        ng-change="vm.buildChanged()">
-        <option ng-repeat="build in vm.builds" value="{{build}}">{{build}}</option>
-      </select>
-    </div>
-    <div class="form-group skytap-selectlist-sm" ng-hide="vm.hideFiles">
-      <label>Health check of chosen location:</label>
-      <div class="list-loading" ng-show="vm.loadingFiles">
-        <img src="/assets/img/bar-loader.gif">
-      </div>
-      <span class="glyphicon" ng-class="{ 'glyphicon-fire color-danger': vm.filesOk, 'glyphicon-ok color-safe': !vm.filesOk}"></span>      
-      <div class="list-group">      
-        <list
-          ng-readonly="true"      
-          ng-model="vm.selectedBranch.file">
-          <option ng-repeat="file in vm.files" disabled="disabled" value="{{file}}">{{file}}</option>
-        </list>
-      </div>
-    </div>
-     <div class="form-group skytap-selectlist-sm" ng-hide="vm.hideLaunchKeys" >
-      <label>Select feature keys:</label>
-      <div id="grid1" ui-grid="vm.featureGrid" ng-click="vm.launchKeySelection" ui-grid-tree-view class="ui-grid" ui-grid-auto-resize ng-disabled="vm.loadingBuilds || vm.loadingBranches || !vm.selectedBranch.branch"></div>
-    </div>  
-    <div ng-show="vm.hasRpf || vm.hasSql">      
-      <p> 
-        <input type="checkbox" id="wipeRpfWorkers" ng-model="vm.wipeRpfWorkers" />
-        <label for="wipeRpfWorkers">Wipe RPF Workers from Supervisors</label>      
-      </p>
+    <div ng-hide="!vm.hideValidations">
+      <div class="form-group">
+        <label>Install from Branch:</label>
+        <div class="list-loading" ng-show="vm.loadingBranches">
+          <img src="/assets/img/bar-loader.gif">
+        </div>
+        <select 
+          class="form-control" 
+          ng-disabled="vm.loadingBranches"
+          ng-model="vm.selectedBranch.branch"         
+          ng-change="vm.branchChanged()">
+          <option ng-repeat="branch in vm.branches" value="{{branch}}" ng-selected="branch === vm.selectedBranch.branch">{{branch}}</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Install Build: <span ng-show='vm.version'>({{vm.version}} is currently installed.)</span></label>
+          <div class="list-loading" ng-show="vm.loadingBuilds">
+            <img src="/assets/img/bar-loader.gif">
+          </div>
+          <select 
+            class="form-control"         
+            ng-disabled="vm.loadingBuilds || vm.loadingBranches || !vm.selectedBranch.branch"
+            ng-model="vm.selectedBranch.build"
+            ng-change="vm.buildChanged()">
+            <option ng-repeat="build in vm.builds" value="{{build}}">{{build}}</option>
+          </select>
+        </div>
+        <div class="form-group skytap-selectlist-sm" ng-hide="vm.hideFiles">
+          <label>Health check of chosen location:</label>
+          <div class="list-loading" ng-show="vm.loadingFiles">
+            <img src="/assets/img/bar-loader.gif">
+          </div>
+          <span class="glyphicon" ng-class="{ 'glyphicon-fire color-danger': vm.filesOk, 'glyphicon-ok color-safe': !vm.filesOk}"></span>      
+          <div class="list-group">      
+            <list
+              ng-readonly="true"      
+              ng-model="vm.selectedBranch.file">
+              <option ng-repeat="file in vm.files" disabled="disabled" value="{{file}}">{{file}}</option>
+            </list>
+          </div>
+        </div>
+         <div class="form-group skytap-selectlist-sm" ng-hide="vm.hideLaunchKeys" >
+          <label>Select feature keys:</label>
+          <div id="grid1" ui-grid="vm.featureGrid" ng-click="vm.launchKeySelection" ui-grid-tree-view class="ui-grid" ui-grid-auto-resize ng-disabled="vm.loadingBuilds || vm.loadingBranches || !vm.selectedBranch.branch"></div>
+        </div>  
+        <div ng-show="vm.hasRpf || vm.hasSql">      
+          <p> 
+            <input type="checkbox" id="wipeRpfWorkers" ng-model="vm.wipeRpfWorkers" />
+            <label for="wipeRpfWorkers">Wipe RPF Workers from Supervisors</label>      
+          </p>
+        </div>
+        <deployinfo environment="vm.tempEnv"></deployinfo>    
     </div>
 
-    <deployinfo environment="vm.tempEnv"></deployinfo>    
+    <div ng-hide="vm.hideValidations">
+      <div class="job-details-header">
+        <h4>Validation: <span class="status-glyph {{vm.validationJob.status}}"><span class="glyphicon" ng-class="{ 'glyphicon-exclamation-sign': vm.validationJob.alerts.length > 0 || vm.validationJob.status === 'Failed', 'glyphicon-hourglass': vm.validationJob.status === 'Running', 'glyphicon-ok-circle': vm.validationJob.status === 'Succeeded' }"></span></h4>
+        <h6 ng-hide="vm.validationJob.status !== 'Running'">(Takes about a minute to complete.)</h6>
+      </div>
+      <div ng-show="vm.validationJob.alerts.length > 0"class="panel panel-default">
+        <div class="panel-heading">Alerts</div>
+        <ul class="list-group">
+        <a class="list-group-item " 
+           ng-repeat="message in vm.validationJob.alerts">
+          <span class="nowrap">
+            <span class="status-glyph Failed glyphicon glyphicon-wrench"></span>
+            <span class="has-glyph" title="{{message}}">{{message}}</span>
+          </span>
+        </a>
+      </div>
+      <div ng-show="vm.validationJob.finished.length > 0"class="panel panel-default">
+        <div class="panel-heading">Passed</div>
+        <ul class="list-group">
+        <a class="list-group-item " 
+           ng-repeat="message in vm.validationJob.finished">   
+          <span class="nowrap">
+            <span class="status-glyph Succeeded glyphicon glyphicon-ok"></span>
+            <span class="has-glyph">{{message}}</span>
+          </span>
+        </a>
+      </div>
+      <div ng-show="vm.validationJob.started.length > 0" class="panel panel-default">
+        <div class="panel-heading">Started</div>
+        <ul class="list-group">
+        <a class="list-group-item " 
+           ng-repeat="message in vm.validationJob.started">   
+          <span class="nowrap">
+            <span class="status-glyph Succeeded glyphicon glyphicon-hourglass"></span>
+            <span class="has-glyph">{{message}}</span>
+          </span>
+        </a>
+      </div>      
+    </div>
   </form>
 
-  <div class="advanced" ng-show="vm.showAdvanced">    
+  <div class="advanced" ng-show="vm.showAdvanced">
     <div ng-repeat="taskdef in vm.tempEnv.config.taskdefs">
       <input 
         type="checkbox"
@@ -73,9 +114,11 @@
   </div>
 
 </div>
+
 <div class="modal-footer">  
-  <a style="float: left" ng-click="vm.toggleAdvanced()">Advanced</a> 
+  <a style="float: left" ng-show="vm.tempEnv.config.taskdefs.length > 1" ng-click="vm.toggleAdvanced()">Advanced</a> 
   <div class='environment-loading' ng-show="!!vm.message">{{vm.message}} <div class='loading sm inline bar'/></div>
-  <button type="button" class="btn btn-primary" ng-disabled="vm.filesInvalid || !vm.isDeployed || !vm.keysLoaded || vm.message " ng-click="vm.rebuild()">Start</button>
-  <button type="button" class="btn btn-default" ng-hide="true" ng-click="vm.cancel()">Cancel</button>
+  <button ng-hide="!vm.hideValidations" type="button" class="btn btn-primary" ng-disabled="vm.filesInvalid || !vm.isDeployed || !vm.keysLoaded || vm.message " ng-click="vm.validate()">Start</button>  
+  <button type="button" ng-hide="vm.hideValidations" class="btn btn-primary" ng-disabled="vm.filesInvalid || !vm.isDeployed || !vm.keysLoaded || vm.message " ng-click="vm.rebuild()">Deploy</button>
+  <button type="button" class="btn btn-default" ng-click="vm.cancel()">Cancel</button>
 </div>

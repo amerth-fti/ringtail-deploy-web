@@ -1,23 +1,26 @@
 -- insert
 insert into env (
   envId, envName, envDesc, status, remoteType, remoteId, config,
-  deployedBy, deployedOn, deployedUntil, deployedNotes, deployedBranch, 
-  deployedJobId, host, updatePath
+  deployedBy, deployedOn, deployedUntil, deployedNotes, deployedBranch,
+  deployedJobId, host, updatePath, swarmhost, swarmSshUser, swarmSshKey,
+  accessKeyId, secretAccessKey
 )
 values (
   $envId, $envName, $envDesc, $status, $remoteType, $remoteId, $config,
-  $deployedBy, $deployedOn, $deployedUntil, $deployedNotes, $deployedBranch, 
-  $deployedJobId, $host, $updatePath
+  $deployedBy, $deployedOn, $deployedUntil, $deployedNotes, $deployedBranch,
+  $deployedJobId, $host, $updatePath, $swarmhost, $swarmSshUser, $swarmSshKey,
+  $accessKeyId, $secretAccessKey
 );
 
 
 -- update
 update env
 set
-  envName = $envName, envDesc = $envDesc, status = $status, remoteType = $remoteType, remoteId = $remoteId, 
-  config = $config, deployedBy = $deployedBy, deployedOn = $deployedOn, deployedUntil = $deployedUntil, 
+  envName = $envName, envDesc = $envDesc, status = $status, remoteType = $remoteType, remoteId = $remoteId,
+  config = $config, deployedBy = $deployedBy, deployedOn = $deployedOn, deployedUntil = $deployedUntil,
   deployedNotes = $deployedNotes, deployedBranch = $deployedBranch, deployedJobId = $deployedJobId,
-  host = $host, updatePath = $updatePath
+  host = $host, updatePath = $updatePath, swarmhost = $swarmhost, swarmSshUser = $swarmSshUser, swarmSshKey = $swarmSshKey,
+  accessKeyId = $accessKeyId, secretAccessKey = $secretAccessKey
 
 where envId = $envId;
 

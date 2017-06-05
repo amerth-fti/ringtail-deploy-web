@@ -1,0 +1,40 @@
+
+<div class="model-body pad-all">
+  <div class="row">
+    <div class="col-sm-12">
+      <form>
+        <div class="form-group">
+          <label for="swarmhost">Swarm Host (eg: swarm)</label>
+          <input type="text" class="form-control" placeholder="Docker Swarm Host" ng-model="vm.environment.swarmhost"/>
+        </div>
+        <div class="form-group">
+          <label for="swarmSshUser">Swarm SSH User (eg: ec2-user)</label>
+          <input type="text" class="form-control" placeholder="Swarm SSH User" ng-model="vm.environment.swarmSshUser" />
+        </div>
+        <div class="form-group">
+          <label for="swarmSshKey">Swarm SSH Key</label>
+          <textarea type="text" class="form-control" placeholder="Swarm SSH Key (pem file format)" ng-model="vm.environment.swarmSshKey" />
+        </div>
+        <div class="form-group">
+          <label for="accessKeyID">AWS Access Key Id</label>
+          <input type="text" class="form-control" placeholder="AWS Access Key Id" ng-model="vm.environment.accessKeyId" />
+        </div>
+        <div class="form-group">
+          <label for="secretAccessKey">AWS Secret Access Key</label>
+          <input type="text" class="form-control" placeholder="AWS Secret Access Key" ng-model="vm.environment.secretAccessKey" />
+        </div>
+        <div class="form-group">
+          <label for="dockerHub">Docker Hub Registry Name</label>
+          <input type="text" class="form-control" placeholder="Docker Hub Registry Name" ng-model="vm.environment.dockerHub" />
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<div class="modal-footer">
+  <button type="button" class="btn btn-default" ng-click="vm.prev()" ng-show="vm.wizard.mode === 'new'">Previous</button>
+  <button type="button" class="btn btn-primary" ng-click="vm.next()" ng-show="vm.wizard.mode === 'new'">Next</button>
+  <button type="button" class="btn btn-primary" ng-click="vm.update()" ng-show="vm.wizard.mode === 'edit'">Update</button>
+  <button type="button" class="btn btn-warning" ng-click="vm.cancel()">Cancel</button>
+</div>

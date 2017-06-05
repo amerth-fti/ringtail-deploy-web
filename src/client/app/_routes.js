@@ -13,6 +13,11 @@
       templateUrl: '/app/jobs/details.html',
       controller: 'JobDetailsController',
       controllerAs: 'vm'
+    })
+    .when('/app/validations/:validationId', {
+      templateUrl: '/app/validations/details.html',
+      controller: 'ValidationDetailsController',
+      controllerAs: 'vm'
     });    
   }
 

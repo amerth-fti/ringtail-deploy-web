@@ -1,12 +1,12 @@
-<div 
+<div
   class="status status-{{vm.runStatus}} status-{{vm.deployStatus}}"
-  title="Run Status: {{vm.runStatus | uppercase}}, Deploy Status: {{vm.deployStatus | uppercase}}"></div>    
-<div class="row environment-info">  
-  <div class="col-md-9">    
-    <h4>          
+  title="Run Status: {{vm.runStatus | uppercase}}, Deploy Status: {{vm.deployStatus | uppercase}}"></div>
+<div class="row environment-info">
+  <div class="col-md-9">
+    <h4>
       <span ng-click="vm.edit(environment)" class="configure glyphicon glyphicon-cog" />
       {{vm.environment.envName}}
-    </h4>  
+    </h4>
 
     <div class="row">
       <div class="col-md-3"><strong>Environment Info:</strong></div>
@@ -25,32 +25,32 @@
 
     <div class="row top-buffer">
       <div class="col-md-3"><strong>Branch:</strong></div>
-      <div class="col-md-9">{{vm.environment.deployedBranch}}</div>        
+      <div class="col-md-9">{{vm.environment.deployedBranch}}</div>
     </div>
-    
+
     <div class="row">
       <div class="col-md-3"><strong>Deployment Ring:</strong></div>
       <div class="col-md-9">{{vm.environment.updatePath}}</div>
     </div>
-    
+
     <div class="row">
       <div class="col-md-3"><strong>Build installed:</strong></div>
-      <div class="col-md-9">{{vm.environment.deployedOn | fromDateString | date: 'EEE, MMM dd, yyyy, hh:mma (LOCAL)'}}</div>        
+      <div class="col-md-9">{{vm.environment.deployedOn | fromDateString | date: 'EEE, MMM dd, yyyy, hh:mma (LOCAL)'}}</div>
     </div>
 
     <div class="row">
       <div class="col-md-3"><strong>Environment Id: </strong></div>
-      <div class="col-md-9">{{vm.environment.envId}}</div>      
-    </div>    
+      <div class="col-md-9">{{vm.environment.envId}}</div>
+    </div>
 
     <div class="row">
-      <div class="col-md-3"><strong>Build notes:</strong>        
-        <span 
-          class="small toggle-icon glyphicon" 
+      <div class="col-md-3"><strong>Build notes:</strong>
+        <span
+          class="small toggle-icon glyphicon"
           ng-click="vm.showBuildNotes = !vm.showBuildNotes;"
-          ng-class="{ 'glyphicon-collapse-down': !vm.showBuildNotes, 'glyphicon-collapse-up': vm.showBuildNotes }"></span>        
+          ng-class="{ 'glyphicon-collapse-down': !vm.showBuildNotes, 'glyphicon-collapse-up': vm.showBuildNotes }"></span>
       </div>
-      <div class="col-md-9" ng-show="vm.showBuildNotes">              
+      <div class="col-md-9" ng-show="vm.showBuildNotes">
         <div ng-repeat="machine in vm.environment.machines">
           <div ng-show="machine.installNotes">
             {{machine.machineName}}
@@ -62,14 +62,14 @@
 
     <div class="row" ng-show="vm.environment.deployedJobId">
       <div class="col-md-3"><strong>Last Job:</strong></div>
-      <div class="col-md-9"><a href='/app/jobs/{{vm.environment.deployedJobId}}'>Job #{{vm.environment.deployedJobId}}</a></div> 
+      <div class="col-md-9"><a href='/app/jobs/{{vm.environment.deployedJobId}}'>Job #{{vm.environment.deployedJobId}}</a></div>
     </div>
 
     <div class="row top-buffer" ng-show="vm.environment.remoteType === 'skytap'">
       <div class="col-md-3"><strong>Skytap Info:</strong></div>
       <div class="col-md-9">
         <a href="https://cloud.skytap.com/configurations/{{vm.environment.remoteId}}" target="_blank">Environment {{vm.environment.remoteId}}</a>
-        <span 
+        <span
           class="color-warning glyphicon glyphicon-exclamation-sign"
           ng-show="vm.runStatus === 'unknown'"
           title="Could not find environment {{vm.environmnet.remoteId}}. Ringtail Deploy may be out of sync with Skytap."
@@ -78,39 +78,50 @@
       </div>
     </div>
   </div>
-  <div class="col-md-3 environment-controls">    
-      <button 
-        type="button" 
-        class="btn glyphicon glyphicon-play"         
-        ng-click="vm.start()" 
+  <div class="col-md-3 environment-controls">
+      <button
+        type="button"
+        class="btn btn-primary glyphicon glyphicon-th"
+        ng-show="vm.swarmConfigured()"
+        ng-click="vm.viewSwarm()"
+        title="Docker Swarm Deploy"></button>
+      <button
+        type="button"
+        class="btn glyphicon glyphicon-play"
+        ng-click="vm.start()"
         ng-show="vm.showStartStop()"
-        ng-disabled="vm.disableStart()" 
-        ng-class="{'btn-primary': !vm.disableStart()}"          
+        ng-disabled="vm.disableStart()"
+        ng-class="{'btn-primary': !vm.disableStart()}"
         title="Start the environment"></button>
-      <button 
-        type="button" 
-        class="btn glyphicon glyphicon-pause" 
-        ng-click="vm.pause()" 
+      <button
+        type="button"
+        class="btn glyphicon glyphicon-pause"
+        ng-click="vm.pause()"
         ng-show="vm.showStartStop()"
-        ng-disabled="vm.disablePause()" 
-        ng-class="{'btn-primary': !vm.disablePause()}"          
+        ng-disabled="vm.disablePause()"
+        ng-class="{'btn-primary': !vm.disablePause()}"
         title="Stop the environment"></button>
-      <button 
-        type="button" 
-        class="btn btn-warning glyphicon glyphicon-refresh" 
-        ng-click="vm.redeploy()"          
+      <button
+        type="button"
+        class="btn btn-warning glyphicon glyphicon-refresh"
+        ng-click="vm.redeploy()"
         ng-show="vm.showRedeploy()"
         title="Refresh the environment"
         ng-show="vm.enableDeploy"></button>
       <button
         type="button"
         class="btn btn-danger glyphicon glyphicon-remove-sign"
-        title="Cancel Deployment"        
+        title="Cancel Deployment"
         ng-show="vm.showCancel()"
         ng-click="vm.reset()"></button>
-      
-      <p 
-        class="deploy-list" 
-        ng-show="vm.showDeployLink()"><a href="/app/jobs/{{vm.environment.deployedJobId}}">Deployment Info</a></p>      
-  </div>        
+      <p
+        class="deploy-list"
+        ng-show="vm.showDeployLink()"><a href="/app/jobs/{{vm.environment.deployedJobId}}">Deployment Info</a></p>
+  </div>
+</div>
+
+<div class="row" ng-if="vm.environment.swarmhost">
+  <div class="col-sm-10 col-sm-push-1">
+    <env-swarm environment="vm.environment" />
+  </div>
 </div>

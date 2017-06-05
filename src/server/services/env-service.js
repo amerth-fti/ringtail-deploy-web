@@ -182,6 +182,15 @@ exports.relog = function log(job, next) {
   };
 
   return jobMapper.update(data).nodeify(next);
+}
+
+exports.logValidation = function logValidation(job, next) {
+  var data = {
+    validationId: job.id,
+    log: JSON.stringify(job)
+  };
+
+  return jobMapper.insert(data).nodeify(next);
 };
 
 exports.remove = function remove(envId, next) {
@@ -295,7 +304,6 @@ function joinEnvSkytap(env) {
         env.runstate = skyenv.runstate;
         return env;
       }, function() {
-        debug('Could not find env %d', env.remoteId);
         return env;
       });
   } else {

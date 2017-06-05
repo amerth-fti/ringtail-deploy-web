@@ -1,0 +1,11 @@
+<div class="modal-header bg-primary">
+  <div class="close" style="margin-left: 1em;" ng-click="vm.close()"><span class="glyphicon glyphicon-remove" /></div>
+  <div class="close" ng-click="vm.refresh()"><span class="{{ 'glyphicon glyphicon-repeat' + (vm.loading ? ' spinner' : '')  }}" /></div>
+  <h4 class="modal-title">Task Logs</h4>
+</div>
+
+<div class="swarm-log">
+  <pre
+    class="swarm-log-entry"
+    ng-repeat="log in vm.logs track by $index">{{log}}</pre>
+</div>

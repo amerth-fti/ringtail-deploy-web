@@ -2,15 +2,16 @@
   'use strict';
 
   angular.module('app', [
-    'ngRoute',  
+    'ngRoute',
     'ngAnimate',
     'ui.bootstrap',
     'underscore',
     'shared',
     'app.environments',
     'app.regions',
-    'ui.grid', 
-    'ui.grid.treeView'    
+    'app.swarm',
+    'ui.grid',
+    'ui.grid.treeView'
   ]);
 
 }());

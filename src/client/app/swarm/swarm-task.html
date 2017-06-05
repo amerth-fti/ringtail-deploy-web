@@ -1,0 +1,15 @@
+
+<div class="swarm-task task-{{vm.task.Status.State}}">
+  <div>
+    <label>Task:</label>
+    <span class="task-name" title="{{vm.task.service.name}}">{{vm.task.service.name}}</span>
+
+    <div class="pull-right" ng-click="vm.viewLogs()">
+      <span class="glyphicon glyphicon-info-sign"></span>
+    </div>
+  </div>
+  <div ng-show="vm.task.Status.State !== 'running'">
+    <label>State:</label>
+    {{vm.task.Status.State}}
+  </div>
+</div>
