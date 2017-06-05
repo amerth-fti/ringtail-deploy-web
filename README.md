@@ -30,7 +30,7 @@ bower install
 * Copy the config.js.example file to config.js and modify it with the correct credentials
 
 * Migrate the Sqlite Database
-Do not manually run the migrate script. It is now part of the server start up. The ```.migrate``` file is now stored in the ```data``` folder.
+Do not manually run the migrate script. It is now part of the server start up. The ```.migrate``` file is now stored in the ```data``` folder.   ...if the './data/deployer.db' file does not exist, you will need to manually create it.
 
 
 * Start the server
