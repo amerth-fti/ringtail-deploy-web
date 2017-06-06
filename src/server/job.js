@@ -33,6 +33,10 @@ Job.prototype.start = function start() {
   this.status = 'Pending';
   this.started = new Date();
 
+  setTimeout(async function(){
+    await envService.log(job);
+  }, 0);
+  
   // start job on next tick
   process.nextTick(async function() {
     job.status = 'Running';
@@ -76,7 +80,7 @@ Job.prototype.start = function start() {
 
     }
     finally {
-      await envService.log(job);
+      await envService.relog(job);
     }
   });
 };

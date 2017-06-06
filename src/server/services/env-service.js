@@ -175,6 +175,15 @@ exports.log = function log(job, next) {
   return jobMapper.insert(data).nodeify(next);
 };
 
+exports.relog = function log(job, next) {
+  var data = {
+    jobId: job.id,
+    log: JSON.stringify(job)
+  };
+
+  return jobMapper.update(data).nodeify(next);
+};
+
 exports.logValidation = function logValidation(job, next) {
   var data = {
     validationId: job.id,
