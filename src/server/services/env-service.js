@@ -182,7 +182,7 @@ exports.relog = function log(job, next) {
   };
 
   return jobMapper.update(data).nodeify(next);
-}
+};
 
 exports.logValidation = function logValidation(job, next) {
   var data = {
