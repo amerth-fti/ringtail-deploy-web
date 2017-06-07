@@ -7,7 +7,7 @@ let skytap = Skytap.init(config.skytap);
 
 if(config.skytap.username == 'SKYTAP_USERNAME')
 {
-  console.log("We are not configuring skytap");
+  //console.log("We are not configuring skytap");
   // create some empty api calls so theres no 500 errors 
   exports.environment = function environment(req, res, next) { };
   exports.environments = function environments(req, res, next) { }; 
