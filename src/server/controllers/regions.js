@@ -17,7 +17,7 @@ exports.list = function list(req, res, next) {
 
 exports.get = function get(req, res, next) {
   debug('getting region');
-  var regionId = req.param('regionId');
+  var regionId = req.params.regionId;
   regionService
     .findById(regionId, function(err, result) {
       res.result  = result;
@@ -51,7 +51,7 @@ exports.update = function update(req, res, next) {
 
 exports.del = function del(req, res, next) {
   debug('deleting region');
-  var id = req.param('regionid');
+  var id = req.params.regionid;
   regionService
     .del(id, function(err, result) {
       res.result = result;

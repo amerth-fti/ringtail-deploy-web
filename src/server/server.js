@@ -68,6 +68,8 @@ app.use(cookieParser(config.cookieSecret));
 app.use(session({
    secret : config.cookieSecret,
    name : 'sessionId',
+   resave: false,
+   //saveUninitialized: false,
    rolling: true
   })
 );

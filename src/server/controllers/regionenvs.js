@@ -6,9 +6,9 @@ var debug           = require('debug')('deployer-regions')
 
 exports.list = function region(req, res, next) {
   debug('listing environments for region');
-  var regionId = req.param('regionId')
-    , page     = req.query.page
-    , pagesize = req.query.pagesize
+  var regionId = req.params.regionId,
+      page     = req.query.page,
+      pagesize = req.query.pagesize
     ;
   envService
     .findByRegion(regionId, { page: page, pagesize: pagesize }, function(err, result) {
@@ -20,8 +20,8 @@ exports.list = function region(req, res, next) {
 
 
 exports.add = function add(req, res, next) {
-  var regionId = req.param('regionId')
-    , envId    = req.param('envId')
+  var regionId = req.params.regionId,
+      envId    = req.params.envId
     ;
   regionService
     .addEnv(regionId, envId, function(err, result) {
@@ -33,8 +33,8 @@ exports.add = function add(req, res, next) {
 
 
 exports.remove = function remove(req, res, next) {
-  var regionId = req.param('regionId')
-    , envId    = req.param('envId')
+  var regionId = req.params.regionId,
+      envId    = req.params.envId
     ;
   regionService
     .removeEnv(regionId, envId, function(err, result) {
