@@ -20,7 +20,7 @@ exports.listValidations = (req, res) => {
 };
 
 exports.getValidations = (req, res) => {
-  let jobId = req.param('validationId');
+  let jobId = req.params.validationId;
   debug('getValidations ' + jobId);
   validationrunner.getValidation(jobId, (err, data) => {
     let runLogs = [];
@@ -247,7 +247,7 @@ exports.failureDetailsList = function failureDetailsList(req, res, next) {
 };
 
 exports.get = (req, res) => {
-  let jobId = req.param('jobId');
+  let jobId = req.params.jobId;
 
   jobrunner.getJob(jobId, (err, data) => {
     res.send(data);
@@ -255,7 +255,7 @@ exports.get = (req, res) => {
 };
 
 exports.downloadLog = function downloadLog(req, res) {
-  let jobId = req.param('jobId');
+  let jobId = req.params.jobId;
 
   jobrunner.getJob(jobId, function(err, data){
     let filename = 'deployer.' +jobId + '.log.txt';

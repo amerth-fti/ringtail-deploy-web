@@ -73,7 +73,7 @@ exports.remove = function remove(req, res, next) {
 exports.start = function start(req, res, next) {
   debug('starting environment');
   var data          = req.body
-    , suspendOnIdle = req.param('suspend_on_idle');
+    , suspendOnIdle = req.params.suspend_on_idle;
 
   envService
     .start(data, suspendOnIdle, function(err, result) {
@@ -113,8 +113,13 @@ exports.redeploy = async function redeploy(req, res, next) {
 
 exports.quickdeploy = async function quickdeploy(req, res, next) {
   var data = {};
-  data.envId = req.param('envId');
-  data.branch = req.param('branch');
+  data.envId = req.params.envId;
+  /** data.branch = req.params.branch; // doesn't work causes a bug.
+   *  Express 4 will treat this param as a string and process the '\\' as an escape character
+   *  changing the string value from 'Main\\Latest' to 'Main\Latest', which will cause an error down the road
+   */
+  data.branch = req.param('branch'); 
+  
   debug('quickdeploy - env: ' + data.envId + ' branch: %s', data.branch);
   let response = {};
   try {
@@ -132,7 +137,7 @@ exports.quickdeploy = async function quickdeploy(req, res, next) {
 exports.validate = async function validate(req, res, next) {
   var data = {}
     , opts = parseQueryString(req.query);
-  data.envId = req.param('envId');
+  data.envId = req.params.envId;
   data.branch = req.param('branch');
   debug('validate - env: ' + data.envId + ' branch: %s', data.branch);
   let response = {};
@@ -152,7 +157,7 @@ exports.validate = async function validate(req, res, next) {
 
 exports.reset = function reset(req, res, next) {
   debug('reset');
-  var envId = req.param('envId');
+  var envId = req.params.envId;
 
   envService
     .reset(envId, function(err, result) {
