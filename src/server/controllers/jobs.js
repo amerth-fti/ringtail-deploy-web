@@ -269,7 +269,7 @@ exports.downloadLog = function downloadLog(req, res) {
         formattedlog += 'JOB ID : ' + (task.id || jobId) + '\n';
         formattedlog += 'TASK NAME: ' + task.name + '\n';
         formattedlog += 'STARTED: ' + task.started + '\n';
-        formattedlog += 'ENDED: ' + (task.stopped||task.endTime) + '\n';
+        formattedlog += 'ENDED: ' + (task.stopped||task.endTime||task.status) + '\n';
         formattedlog += 'STATUS: ' + task.status + '\n\n';
 
         if(task.taskdefs) {
