@@ -266,10 +266,10 @@ exports.downloadLog = function downloadLog(req, res) {
       content = JSON.stringify(content, null, 4);
 
       for(let task of data.tasks) {
-        formattedlog += 'JOB ID: ' + task.id + '\n';
+        formattedlog += 'JOB ID : ' + (task.id || jobId) + '\n';
         formattedlog += 'TASK NAME: ' + task.name + '\n';
         formattedlog += 'STARTED: ' + task.started + '\n';
-        formattedlog += 'ENDED: ' + (task.stopped||task.endTime) + '\n';
+        formattedlog += 'ENDED: ' + (task.stopped||task.endTime||task.status) + '\n';
         formattedlog += 'STATUS: ' + task.status + '\n\n';
 
         if(task.taskdefs) {
