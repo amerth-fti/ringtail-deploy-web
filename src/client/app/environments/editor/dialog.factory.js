@@ -77,8 +77,12 @@
           Region.addEnv({regionId:currentRegion, envId: environment.envId});
         });
     }
-
-    function update(skipValidation = false) {
+     // function update(skipValidation = false) {
+     // ES5 IE11 comp 
+     function update(skipValidation ) {
+      if( skipValidation === undefined || null) {
+        skipValidation = false; 
+      }
       ValidationMessage.clearMessage();
       if(environment) {
         angular.copy(vm.environment, environment);
