@@ -1,11 +1,12 @@
 -- insert
-insert into region (regionName, regionDesc, serviceConfig, browseConfig)
-values ($regionName, $regionDesc, $serviceConfig, $browseConfig);
+insert into region (regionName, regionDesc, serviceConfig, browseConfig, runasUser, runasPassword)
+values ($regionName, $regionDesc, $serviceConfig, $browseConfig, $runasUser, $runasPassword);
 
 -- update
 update region
-set regionName = $regionName, regionDesc = $regionDesc, 
- serviceConfig = $serviceConfig, browseConfig = $browseConfig
+set regionName = $regionName, regionDesc = $regionDesc,
+ serviceConfig = $serviceConfig, browseConfig = $browseConfig,
+ runasUser = $runasUser, runasPassword = $runasPassword
 where regionId = $regionId;
 
 -- delete

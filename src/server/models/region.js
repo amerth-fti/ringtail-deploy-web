@@ -10,7 +10,9 @@ schema = {
     { "name": "regionName", "required": true },
     { "name": "regionDesc" },
     { "name": "serviceConfig" },
-    { "name": "browseConfig" }
+    { "name": "browseConfig" },
+    { "name": "runasUser"},
+    { "name": "runasPassword"}
   ]
 };
 /* eslint-enable */

@@ -36,7 +36,9 @@ RegionMapper.prototype.insert = function insert(instance, next) {
     $regionName: instance.regionName,
     $regionDesc: instance.regionDesc,
     $serviceConfig: stringifyJSON(instance.serviceConfig),
-    $browseConfig: stringifyJSON(instance.browseConfig)
+    $browseConfig: stringifyJSON(instance.browseConfig),
+    $runasUser: instance.runasUser,
+    $runasPassword: instance.runasPassword
   };
 
   return this.run(sql, params, next);
@@ -52,7 +54,9 @@ RegionMapper.prototype.update = function update(instance, next) {
     $regionName: instance.regionName,
     $regionDesc: instance.regionDesc,
     $serviceConfig: stringifyJSON(instance.serviceConfig),
-    $browseConfig: stringifyJSON(instance.browseConfig)   
+    $browseConfig: stringifyJSON(instance.browseConfig),
+    $runasUser: instance.runasUser,
+    $runasPassword: instance.runasPassword
   };
 
   return this.run(sql, params, next);
