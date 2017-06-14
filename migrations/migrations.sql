@@ -309,7 +309,3 @@ CREATE TABLE env (
 
 INSERT INTO env (envId, envName, envDesc, remoteType, remoteId, status, config, deployedBy, deployedOn, deployedUntil, deployedNotes, deployedBranch, deployedJobId, host)
 SELECT envId, envName, envDesc, remoteType, remoteId, status, config, deployedBy, deployedOn, deployedUntil, deployedNotes, deployedBranch, deployedJobId, host FROM envtemp;
-
--- 015-addRegionCreds
-ALTER TABLE region ADD COLUMN runasUser NVARCHAR(255);
-ALTER TABLE region ADD COLUMN runasPassword NVARCHAR(255);
