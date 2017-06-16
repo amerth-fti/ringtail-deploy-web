@@ -59,9 +59,14 @@ function TaskImpl(options) {
     // check to see if a job is already in progress.
     log('start|Checking to see if a job is already running ' + client.statusUrl);
     try{
-      await client.isJobRunning();
+      let isRunning = await client.isJobRunning();
+      if (isRunning) {
+        let str = machineIdentity + ' is already running a job. Try again in a few minutes.';
+        log('alert|' + str);
+        return { message: str};
+      }
     } catch(e) {
-      let str = machineIdentity + ' is already running a job. Try again in a few minutes.';
+      let str = machineIdentity + ' is having a problem checking whether or not a job is already running.';
       log('alert|' + str);
       return { message: str};
     }
