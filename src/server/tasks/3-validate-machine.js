@@ -61,11 +61,14 @@ function TaskImpl(options) {
     try{
       let isRunning = await client.isJobRunning();
       if (isRunning) {
-        let str = machineIdentity + ' is already running a job. Try again in a few minutes.';
-        log('alert|' + str);
-        return { message: str};
+        throw new IsRunningError(machineIdentity + " is already running a job. Try again in a few minutes.");
+        //let str = machineIdentity + ' is already running a job. Try again in a few minutes.';
+        //log('alert|' + str);
+        //return { message: str};
       }
     } catch(e) {
+      console.log(e);
+      log('error', e.name + " " + e.message);
       let str = machineIdentity + ' is having a problem checking whether or not a job is already running.';
       log('alert|' + str);
       return { message: str};
