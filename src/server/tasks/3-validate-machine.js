@@ -56,6 +56,17 @@ function TaskImpl(options) {
     }
     log('end|The service is responding on ' + machineIdentity);
 
+    // check to see if a job is already in progress.
+    log('start|Checking to see if a job is already running ' + client.statusUrl);
+    try{
+      await client.isJobRunning();
+    } catch(e) {
+      let str = machineIdentity + ' is already running a job. Try again in a few minutes.';
+      log('alert|' + str);
+      return { message: str};
+    }
+    log('end|A job is already running on ' + machineIdentity);
+
     // make sure we can set the self-update location.
     if(this.region && this.region.serviceConfig && this.region.serviceConfig.updatePath) {
       // point the installer service to the desired regional path.
