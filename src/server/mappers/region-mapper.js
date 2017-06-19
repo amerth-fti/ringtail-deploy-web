@@ -52,7 +52,7 @@ RegionMapper.prototype.update = function update(instance, next) {
     $regionName: instance.regionName,
     $regionDesc: instance.regionDesc,
     $serviceConfig: stringifyJSON(instance.serviceConfig),
-    $browseConfig: stringifyJSON(instance.browseConfig)   
+    $browseConfig: stringifyJSON(instance.browseConfig)
   };
 
   return this.run(sql, params, next);

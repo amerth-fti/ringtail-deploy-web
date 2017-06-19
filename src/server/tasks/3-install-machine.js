@@ -50,11 +50,20 @@ function TaskImpl(options) {
     log('waiting until the service is responsive ' + client.statusUrl);
     await client.waitForService();
 
-    if(this.region && this.region.serviceConfig && this.region.serviceConfig.updatePath) {
-      // point the installer service to the desired regional path.
-      let path = this.region.serviceConfig.updatePath;
-      log('setting the install update location to ' + path);
-      await client.setUpdatePath(path);
+    if(this.region && this.region.serviceConfig) {
+      if(this.region.serviceConfig.updatePath) { 
+        // point the installer service to the desired regional path.
+        let path = this.region.serviceConfig.updatePath;
+        log('setting the install update location to ' + path);
+        await client.setUpdatePath(path);
+      }
+
+      if(this.region.serviceConfig.runasUser && this.region.serviceConfig.runasPassword) {
+        let user = this.region.serviceConfig.runasUser;
+        let pass = this.region.serviceConfig.runasPassword;
+        log('setting the master user to ' + user);
+        await client.setMasterCredentials({'MasterRunnerUser': user, 'MasterRunnerPass': pass});
+      }
     }
 
     // upgrade install service

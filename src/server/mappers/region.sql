@@ -4,7 +4,7 @@ values ($regionName, $regionDesc, $serviceConfig, $browseConfig);
 
 -- update
 update region
-set regionName = $regionName, regionDesc = $regionDesc, 
+set regionName = $regionName, regionDesc = $regionDesc,
  serviceConfig = $serviceConfig, browseConfig = $browseConfig
 where regionId = $regionId;
 
