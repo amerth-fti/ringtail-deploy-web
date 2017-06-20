@@ -58,22 +58,26 @@ function TaskImpl(options) {
 
     // check to see if a job is already in progress.
     log('start|Checking to see if a job is already running ' + client.statusUrl);
+    class IsRunningError extends Error {};
+
     try{
       let isRunning = await client.isJobRunning();
+      debug('isRunning result ' + isRunning);
       if (isRunning) {
         throw new IsRunningError(machineIdentity + " is already running a job. Try again in a few minutes.");
-        //let str = machineIdentity + ' is already running a job. Try again in a few minutes.';
-        //log('alert|' + str);
-        //return { message: str};
-      }
+      }      
     } catch(e) {
-      console.log(e);
-      log('error', e.name + " " + e.message);
-      let str = machineIdentity + ' is having a problem checking whether or not a job is already running.';
+      let str = '';
+      if (e instanceof IsRunningError) {
+        str = machineIdentity + ' is already running a job. Try again in a few minutes.';
+      }
+      else {
+        str = machineIdentity + ' is having a problem checking whether or not a job is already running.';
+      }  
       log('alert|' + str);
       return { message: str};
     }
-    log('end|A job is already running on ' + machineIdentity);
+    log('end|The service reports no running jobs on ' + machineIdentity);
 
     // make sure we can set the self-update location.
     if(this.region && this.region.serviceConfig && this.region.serviceConfig.updatePath) {
