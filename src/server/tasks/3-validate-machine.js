@@ -62,7 +62,7 @@ function TaskImpl(options) {
       let isRunning = await client.isJobRunning();
       debug('isRunning result ' + isRunning);
       if (isRunning) {
-        let str = = machineIdentity + ' an upgrade is already in progress.';
+        let str = machineIdentity + ' an upgrade is already in progress.';
         log('alert|' + str);
         return { message: str};        
       }   
