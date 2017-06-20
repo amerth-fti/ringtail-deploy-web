@@ -27,6 +27,7 @@ describe('3-validate-machine', function() {
       , stubGetMachine
       , stubGetConfig
       , stubWaitForService
+      , stubIsRunning
       , stubUpdate
       , stubSetConfigs
       , stubValidate      
@@ -84,6 +85,7 @@ describe('3-validate-machine', function() {
       stubGetMachine      = sinon.stub(machineSvc, 'get').returns(new Q(machine));
       stubGetConfig       = sinon.stub(configSvc, 'get').returns(new Q(config));
       stubWaitForService  = sinon.stub(RingtailClient.prototype, 'waitForServiceLimited');
+      stubIsRunning       = sinon.stub(RingtailClient.prototype, 'isJobRunning');
       stubUpdate          = sinon.stub(RingtailClient.prototype, 'update');
       stubSetConfigs      = sinon.stub(RingtailClient.prototype, 'setConfigs');
       stubInstall         = sinon.stub(RingtailClient.prototype, 'install');
@@ -99,6 +101,7 @@ describe('3-validate-machine', function() {
       machineSvc.get.restore();
       configSvc.get.restore();
       stubWaitForService.restore();
+      stubIsRunning.restore();
       stubUpdate.restore();
       stubSetConfigs.restore();
       stubInstall.restore();
@@ -148,6 +151,14 @@ describe('3-validate-machine', function() {
           expect(stubUpdate.called).to.be.true;
           expect(stubWaitForService.callCount).to.equal(2);
         })
+        .then(() => done())
+        .catch(done);
+    });
+
+    it('checks if upgrade is already running', function(done) {
+      task
+        .execute(scope, log)
+        .then(() => expect(stubIsRunning.called).to.be.true)
         .then(() => done())
         .catch(done);
     });
