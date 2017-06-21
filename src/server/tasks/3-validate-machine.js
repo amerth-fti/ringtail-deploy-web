@@ -85,6 +85,22 @@ function TaskImpl(options) {
         log('alert|' + str);
         return { message: str};
       }
+
+
+      if(this.region && this.region.serviceConfig) {
+        if(this.region.serviceConfig.runasUser && this.region.serviceConfig.runasPassword) {
+          let user = this.region.serviceConfig.runasUser;
+          let pass = this.region.serviceConfig.runasPassword;
+          try {
+            log('start|' + machineIdentity + ' is trying to set the service account credentials.');
+            await client.setMasterCredentials({'MasterRunnerUser': user, 'MasterRunnerPass': pass});
+          }  catch(e) {
+            let str = machineIdentity + ' is having a problem with setting the service account credentials.';
+            log('alert|' + str + ' err details: %j', e);
+            return { message: str};
+          }
+        }
+      }      
     }
 
     // self-update the install service.
@@ -232,6 +248,7 @@ function TaskImpl(options) {
     let messages = [];
     let runDetailLines = status.split('<p>');
     let keys = [
+      'service user or password does not appear to be correct',
       'could not find a build for:',
       'error:'
     ];    
