@@ -35,6 +35,7 @@ describe('3-install-machine', function() {
       , stubInstalled
       , stubPrerequisites
       , stubSetMasterCredentials
+      , stubSetDeploymentConfig
       ;
 
     options = {
@@ -96,6 +97,7 @@ describe('3-install-machine', function() {
       stubInstalled            = sinon.stub(RingtailClient.prototype, 'installed', returnInstalled);
       stubPrerequisites        = sinon.stub(RingtailClient.prototype, 'prerequisites', returnSuccess);
       stubSetMasterCredentials = sinon.stub(RingtailClient.prototype, 'setMasterCredentials');
+      stubSetDeploymentConfig  = sinon.stub(RingtailClient.prototype, 'setDeploymentConfig');
 
       sinon.stub(machineSvc, 'update');
     });
@@ -110,8 +112,9 @@ describe('3-install-machine', function() {
       stubWaitForInstall.restore();
       stubInstalled.restore();
       stubPrerequisites.restore();
-      machineSvc.update.restore();
       stubSetMasterCredentials.restore();
+      stubSetDeploymentConfig.restore();
+      machineSvc.update.restore();
     });
 
     it('loads the machine', function(done) {
@@ -175,6 +178,7 @@ describe('3-install-machine', function() {
       task
         .execute(scope, log)
         .then(function() {
+          //expect(stubSetMasterCredentials.calledOnce).to.be.true;
           expect(true).to.be.true;
           // var args = stubSetMasterCredentials.getCall(0).args[0];
           // for (var key in serviceConfig) {
