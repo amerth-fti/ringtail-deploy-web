@@ -93,6 +93,7 @@ function TaskImpl(options) {
           let pass = this.region.serviceConfig.runasPassword;
           try {
             log('start|' + machineIdentity + ' is trying to set the service account credentials.');
+            user = user.replace(/\\/g, "\\\\").trim();
             await client.setMasterCredentials({'MasterRunnerUser': user, 'MasterRunnerPass': pass});
           }  catch(e) {
             let str = machineIdentity + ' is having a problem with setting the service account credentials.';
