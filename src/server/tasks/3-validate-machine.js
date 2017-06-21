@@ -57,7 +57,7 @@ function TaskImpl(options) {
     log('end|The service is responding on ' + machineIdentity);
 
     // check to see if a job is already in progress.
-    log('start|Checking to see if a job is already running ' + client.statusUrl);
+    log('start|Checking to see if a job is already running ' + client.isRunningUrl);
     try{
       let isRunning = await client.isJobRunning();
       debug('isRunning result ' + isRunning);
