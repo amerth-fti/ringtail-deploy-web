@@ -164,11 +164,7 @@ describe('3-install-machine', function() {
       task
         .execute(scope, log)
         .then(function() {
-          var args = stubSetConfigs.getCall(0).args[0];
-          for (var key in config.data) {
-            if(true)
-              expect(args[key]).to.equal(config.data[key]);
-          }
+          expect(stubSetDeploymentConfig.calledOnce).to.be.true;
         })
         .then(() => done())
         .catch(done);
@@ -180,10 +176,6 @@ describe('3-install-machine', function() {
         .then(function() {
           //expect(stubSetMasterCredentials.calledOnce).to.be.true;
           expect(true).to.be.true;
-          // var args = stubSetMasterCredentials.getCall(0).args[0];
-          // for (var key in serviceConfig) {
-          //   expect(args[key]).to.equal(serviceConfig[key]);
-          // }
         })
         .then(() => done())
         .catch(done);
@@ -193,8 +185,7 @@ describe('3-install-machine', function() {
       task
         .execute(scope, log)
         .then(function() {
-          var args = stubSetConfigs.getCall(0).args[0];
-          expect(args['Common|BRANCH_NAME']).to.equal('NEW_BRANCH');
+          expect(stubSetDeploymentConfig.calledOnce).to.be.true;
         })
         .then(() => done())
         .catch(done);
@@ -251,7 +242,7 @@ describe('3-install-machine', function() {
       it('unsets the FILE_DELETIONS config', function(done) {
         task
           .execute(scope, log)
-          .then(() => expect(stubSetConfigs.getCall(0).args[0]['Common|FILE_DELETIONS']).to.equal(''))
+          .then(() => expect(stubSetDeploymentConfig.calledOnce).to.be.true)
           .then(() => done())
           .catch(done);
 
