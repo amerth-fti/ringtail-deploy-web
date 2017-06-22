@@ -61,6 +61,7 @@ function TaskImpl(options) {
       if(this.region.serviceConfig.runasUser && this.region.serviceConfig.runasPassword) {
         let user = this.region.serviceConfig.runasUser;
         let pass = this.region.serviceConfig.runasPassword;
+        user = user.replace(/\\/g, "\\\\").trim();
         log('setting the master user to ' + user);
         await client.setMasterCredentials({'MasterRunnerUser': user, 'MasterRunnerPass': pass});
       }
