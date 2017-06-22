@@ -106,7 +106,13 @@ function TaskImpl(options) {
 
     debug('sending config object ' + machineId);
     log('sending configuration');
-    await client.setConfigs(configs);
+    try {
+      //use volatile data endpoint if it exists
+      await client.setDeploymentConfig(configs);
+    } catch(e) {
+      //use the old config setup if not
+      await client.setConfigs(configs);
+    }
 
     debug('checking machine prerequisites ' + serviceIP);    
     log('checking machine prerequisites');
